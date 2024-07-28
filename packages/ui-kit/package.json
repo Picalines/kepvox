@@ -1,5 +1,26 @@
 {
     "name": "@repo/ui-kit",
     "version": "0.1.0",
-    "private": true
+    "private": true,
+    "sideEffects": ["**/*.css"],
+    "files": ["dist"],
+    "exports": {
+        "./style.css": "./dist/index.css",
+        "./classnames": "./src/lib/classnames.ts",
+        "./button": "./src/components/button.tsx"
+    },
+    "devDependencies": {
+        "@repo/tailwind-config": "workspace:*",
+        "@repo/tsconfig": "workspace:*",
+        "@types/react": "^18.3.3",
+        "tailwindcss": "^3.4.7",
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "@radix-ui/react-slot": "^1.1.0",
+        "class-variance-authority": "^0.7.0",
+        "clsx": "^2.1.1",
+        "react": "^18.3.1",
+        "tailwind-merge": "^2.4.0"
+    }
 }
