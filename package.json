@@ -8,13 +8,15 @@
         "dev": "turbo dev",
         "format": "biome format --write .",
         "lint": "biome lint .",
-        "lint:fix": "biome lint --write ."
+        "lint:fix": "biome lint --write .",
+        "ci:pre-commit": "biome check --write"
     },
     "keywords": [],
     "author": "picalines",
     "license": "ISC",
     "packageManager": "pnpm@9.6.0",
     "devDependencies": {
-        "@biomejs/biome": "1.8.3"
+        "@biomejs/biome": "1.8.3",
+        "lefthook": "^1.7.9"
     }
 }
