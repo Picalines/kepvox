@@ -7,7 +7,7 @@
     "exports": {
         "./style.css": "./dist/index.css",
         "./classnames": "./src/lib/classnames.ts",
-        "./button": "./src/components/button.tsx"
+        "./components/*": "./src/components/*/index.ts"
     },
     "devDependencies": {
         "@repo/tailwind-config": "workspace:*",
