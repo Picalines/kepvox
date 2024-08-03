@@ -6,6 +6,9 @@ export type OptionalConfig = { [K in keyof Config as 'content' extends K ? never
 
 const config: OptionalConfig = {
   plugins: [tailwindAnimatePlugin],
+
+  darkMode: 'class',
+
   theme: {
     container: {
       center: true,

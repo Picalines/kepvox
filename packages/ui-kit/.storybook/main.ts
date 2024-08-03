@@ -10,9 +10,10 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 
   addons: [
-    packagePath('@storybook/addon-links'),
     packagePath('@storybook/addon-essentials'),
     packagePath('@storybook/addon-interactions'),
+    packagePath('@storybook/addon-links'),
+    packagePath('@storybook/addon-themes'),
   ],
 
   framework: {

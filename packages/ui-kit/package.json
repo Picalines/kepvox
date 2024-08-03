@@ -13,7 +13,7 @@
         "build:styles": "postcss ./src/styles/index.css -o ./dist/index.css",
         "build:storybook": "storybook build",
         "dev:storybook": "concurrently 'pnpm dev:storybook:server' 'pnpm dev:storybook:styles'",
-        "dev:storybook:server": "storybook dev -p 6006",
+        "dev:storybook:server": "storybook dev -p 6006 --no-open",
         "dev:storybook:styles": "postcss -w ./src/styles/index.css -o ./.storybook/index.css"
     },
     "devDependencies": {
