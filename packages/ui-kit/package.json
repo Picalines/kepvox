@@ -17,7 +17,6 @@
         "dev:storybook:styles": "postcss -w ./src/styles/index.css -o ./.storybook/index.css"
     },
     "devDependencies": {
-        "@chromatic-com/storybook": "^1.6.1",
         "@repo/tailwind-config": "workspace:*",
         "@repo/tsconfig": "workspace:*",
         "@storybook/addon-essentials": "^8.2.6",
