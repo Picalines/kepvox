@@ -1,17 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Button } from './button'
+import { Button, type ButtonProps } from './button'
+
+type StoryArgs = ButtonProps & { text: string }
 
 export default {
   title: 'components/Button',
   component: Button,
-  render: args => <Button {...args}>Button</Button>,
-} as Meta<typeof Button>
+  render: ({ text, ...args }) => <Button {...args}>{text}</Button>,
+} as Meta<StoryArgs>
 
-type Story = StoryObj<typeof Button>
+type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
+    text: 'Button',
     variant: 'default',
     size: 'default',
     asChild: false,
