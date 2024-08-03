@@ -16,6 +16,10 @@
                 "useArrayLiterals": "error"
             },
 
+            "suspicious": {
+                "noExplicitAny": "off"
+            },
+
             "style": {
                 "useFilenamingConvention": {
                     "level": "error",
