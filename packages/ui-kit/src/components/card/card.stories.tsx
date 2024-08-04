@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { cn } from '@/lib/classnames'
 import { Card, type CardProps } from './card'
 
-type StoryArgs = CardProps & { title: string; description: string; content: string; footer: string }
+type StoryArgs = CardProps & Partial<{ title: string; description: string; content: string; footer: string }>
 
 export default {
   title: 'components/Card',
@@ -18,7 +18,7 @@ export default {
       {footer ? <Card.Footer>{footer}</Card.Footer> : null}
     </Card>
   ),
-} as Meta<StoryArgs>
+} satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>
 

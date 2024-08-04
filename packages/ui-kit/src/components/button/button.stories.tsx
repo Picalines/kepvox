@@ -8,7 +8,7 @@ export default {
   title: 'components/Button',
   component: Button,
   render: ({ text, ...args }) => <Button {...args}>{text}</Button>,
-} as Meta<StoryArgs>
+} satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>
 

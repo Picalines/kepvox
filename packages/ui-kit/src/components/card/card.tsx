@@ -43,7 +43,7 @@ const Header = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, c
   )
 })
 
-const _Card = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, children, ...props }, ref) => {
+const Root = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, children, ...props }, ref) => {
   const slots = useSlots({ children, defaultSlot: ContentSlot })
 
   const header = slots.get(HeaderSlot)
@@ -73,11 +73,11 @@ const _Card = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, ch
   )
 })
 
-_Card.displayName = 'Card'
+Root.displayName = 'Card'
 
 export type CardProps = ComponentProps<typeof Card>
 
-export const Card = Object.assign(_Card, {
+export const Card = Object.assign(Root, {
   Header: Object.assign(HeaderSlot, {
     Title: TitleSlot,
     Description: DescriptionSlot,
