@@ -52,17 +52,18 @@ const Root: FC<RootProps> = ({ children, ...props }) => {
   )
 }
 
-export const Tooltip = Object.assign(Root, {
+const Tooltip = Object.assign(Root, {
   Provider,
   Trigger: TriggerSlot,
   Content: ContentSlot,
   Arrow: ArrowSlot,
 })
 
-export type {
-  RootProps as TooltipProps,
-  ProviderProps as TooltipProviderProps,
-  TriggerProps as TooltipTriggerProps,
-  ContentProps as TooltipContentProps,
-  ArrowProps as TooltipArrowProps,
+export {
+  Tooltip,
+  type RootProps as TooltipProps,
+  type ProviderProps as TooltipProviderProps,
+  type TriggerProps as TooltipTriggerProps,
+  type ContentProps as TooltipContentProps,
+  type ArrowProps as TooltipArrowProps,
 }

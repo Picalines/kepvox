@@ -8,6 +8,11 @@ export default {
   title: 'components/Button',
   component: Button,
   render: ({ text, ...args }) => <Button {...args}>{text}</Button>,
+  argTypes: {
+    size: {
+      control: 'select',
+    },
+  },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>

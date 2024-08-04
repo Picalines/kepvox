@@ -2,13 +2,20 @@ import { cn } from '@/lib/classnames'
 import { createSlot, useSlots } from '@/lib/slots'
 import { type ComponentProps, forwardRef } from 'react'
 
-const HeaderSlot = createSlot<ComponentProps<'div'>>('Header')
-const TitleSlot = createSlot<ComponentProps<'h3'>>('Header.Title')
-const DescriptionSlot = createSlot<ComponentProps<'p'>>('Header.Description')
-const ContentSlot = createSlot<ComponentProps<'div'>>('Content')
-const FooterSlot = createSlot<ComponentProps<'div'>>('Footer')
+type RootProps = ComponentProps<'div'>
+type HeaderProps = ComponentProps<'div'>
+type TitleProps = ComponentProps<'h3'>
+type DescriptionProps = ComponentProps<'p'>
+type ContentProps = ComponentProps<'div'>
+type FooterProps = ComponentProps<'div'>
 
-const Header = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, children, ...props }, ref) => {
+const HeaderSlot = createSlot<HeaderProps, HTMLDivElement>('Header')
+const TitleSlot = createSlot<TitleProps, HTMLHeadingElement>('Header.Title')
+const DescriptionSlot = createSlot<DescriptionProps, HTMLParagraphElement>('Header.Description')
+const ContentSlot = createSlot<ContentProps, HTMLDivElement>('Content')
+const FooterSlot = createSlot<FooterProps, HTMLDivElement>('Footer')
+
+const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className, children, ...props }, ref) => {
   const slots = useSlots({ children, defaultSlot: TitleSlot })
 
   const title = slots.get(TitleSlot)
@@ -43,7 +50,7 @@ const Header = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, c
   )
 })
 
-const Root = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, children, ...props }, ref) => {
+const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...props }, ref) => {
   const slots = useSlots({ children, defaultSlot: ContentSlot })
 
   const header = slots.get(HeaderSlot)
@@ -73,11 +80,7 @@ const Root = forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, chi
   )
 })
 
-Root.displayName = 'Card'
-
-export type CardProps = ComponentProps<typeof Card>
-
-export const Card = Object.assign(Root, {
+const Card = Object.assign(Root, {
   Header: Object.assign(HeaderSlot, {
     Title: TitleSlot,
     Description: DescriptionSlot,
@@ -85,3 +88,15 @@ export const Card = Object.assign(Root, {
   Content: ContentSlot,
   Footer: FooterSlot,
 })
+
+Card.displayName = 'Card'
+
+export {
+  Card,
+  type RootProps as CardProps,
+  type HeaderProps as CardHeaderProps,
+  type TitleProps as CardTitleProps,
+  type DescriptionProps as CardDescriptionProps,
+  type ContentProps as CardContentProps,
+  type FooterProps as CardFooterProps,
+}

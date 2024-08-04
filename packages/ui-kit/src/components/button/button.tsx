@@ -28,7 +28,7 @@ const buttonVariants = cva(
   },
 )
 
-export type ButtonProps = ComponentProps<'button'> &
+type ButtonProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }
@@ -39,6 +39,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return <Component className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
   },
 )
+
 Button.displayName = 'Button'
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, type ButtonProps }
