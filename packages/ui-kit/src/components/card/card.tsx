@@ -9,11 +9,11 @@ type DescriptionProps = ComponentProps<'p'>
 type ContentProps = ComponentProps<'div'>
 type FooterProps = ComponentProps<'div'>
 
-const HeaderSlot = createSlot<HeaderProps, HTMLDivElement>('Header')
-const TitleSlot = createSlot<TitleProps, HTMLHeadingElement>('Header.Title')
-const DescriptionSlot = createSlot<DescriptionProps, HTMLParagraphElement>('Header.Description')
-const ContentSlot = createSlot<ContentProps, HTMLDivElement>('Content')
-const FooterSlot = createSlot<FooterProps, HTMLDivElement>('Footer')
+const HeaderSlot = createSlot<HeaderProps>('Header')
+const TitleSlot = createSlot<TitleProps>('Header.Title')
+const DescriptionSlot = createSlot<DescriptionProps>('Header.Description')
+const ContentSlot = createSlot<ContentProps>('Content')
+const FooterSlot = createSlot<FooterProps>('Footer')
 
 const Header = forwardRef<HTMLDivElement, HeaderProps>(({ className, children, ...props }, ref) => {
   const slots = useSlots({ children, defaultSlot: TitleSlot })
