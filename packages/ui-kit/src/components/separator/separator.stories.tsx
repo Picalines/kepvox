@@ -17,7 +17,8 @@ export default {
   ),
   argTypes: {
     orientation: {
-      table: { disable: true },
+      control: 'select',
+      options: ['horizontal', 'vertical'] satisfies StoryArgs['orientation'][],
     },
     asChild: {
       table: { disable: true },
@@ -27,14 +28,9 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-export const Horizontal: Story = {
+export const Default: Story = {
   args: {
     orientation: 'horizontal',
-  },
-}
-
-export const Vertical: Story = {
-  args: {
-    orientation: 'vertical',
+    decorative: true,
   },
 }

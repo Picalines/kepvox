@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { fn } from '@storybook/test'
 
 import { Button, type ButtonProps } from './button'
 
@@ -8,6 +9,9 @@ export default {
   title: 'components/Button',
   component: Button,
   render: ({ text, ...args }) => <Button {...args}>{text}</Button>,
+  args: {
+    onClick: fn(),
+  },
   argTypes: {
     size: {
       control: 'select',

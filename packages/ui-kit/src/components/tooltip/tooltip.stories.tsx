@@ -3,23 +3,25 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Button } from '../button'
 import { Tooltip, type TooltipContentProps, type TooltipProps } from './tooltip'
 
-type StoryArgs = TooltipProps & {
-  text: string
-  side: TooltipContentProps['side']
-  hasArrow: boolean
-}
+type StoryArgs = TooltipProps &
+  TooltipContentProps & {
+    text: string
+    hasArrow: boolean
+  }
 
 export default {
   title: 'components/Tooltip',
   component: Tooltip,
-  render: ({ text, side, hasArrow, ...args }) => (
+  render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
     <Tooltip.Provider>
-      <div className="flex max-w-[400px] justify-center rounded-lg border border-primary border-dashed p-20">
-        <Tooltip {...args}>
+      <div className="flex max-w-[400px] justify-center rounded-lg border border-dashed p-20">
+        <Tooltip {...rootProps}>
           <Tooltip.Trigger asChild>
             <Button>Button</Button>
           </Tooltip.Trigger>
-          <Tooltip.Content side={side}>{text}</Tooltip.Content>
+          <Tooltip.Content side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset}>
+            {text}
+          </Tooltip.Content>
           {hasArrow && <Tooltip.Arrow />}
         </Tooltip>
       </div>
@@ -27,41 +29,26 @@ export default {
   ),
   argTypes: {
     side: {
-      table: {
-        disable: true,
-      },
+      control: 'select',
+      options: ['top', 'right', 'bottom', 'left'] satisfies StoryArgs['side'][],
+    },
+    align: {
+      control: 'inline-radio',
+      options: ['start', 'center', 'end'] satisfies StoryArgs['align'][],
     },
   },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>
 
-export const Top: Story = {
+export const Default: Story = {
   args: {
+    defaultOpen: true,
     text: 'Tooltip',
     side: 'top',
+    align: 'center',
+    sideOffset: 4,
+    alignOffset: 0,
     hasArrow: true,
-    defaultOpen: true,
-  },
-}
-
-export const Left: Story = {
-  args: {
-    ...Top.args,
-    side: 'left',
-  },
-}
-
-export const Bottom: Story = {
-  args: {
-    ...Top.args,
-    side: 'bottom',
-  },
-}
-
-export const Right: Story = {
-  args: {
-    ...Top.args,
-    side: 'right',
   },
 }
