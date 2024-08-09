@@ -8,7 +8,8 @@
         "./style.css": "./dist/index.css",
         "./classnames": "./src/lib/classnames.ts",
         "./slots": "./src/lib/slots/index.ts",
-        "./components/*": "./src/components/*/index.ts"
+        "./components/*": "./src/components/*/index.ts",
+        "./icons": "./src/icons/index.ts"
     },
     "scripts": {
         "build:styles": "postcss ./src/styles/index.css -o ./dist/index.css",
@@ -43,6 +44,7 @@
         "autoprefixer": "^10.4.19",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "lucide-react": "^0.427.0",
         "postcss": "^8.4.40",
         "postcss-cli": "^11.0.0",
         "react": "^18.3.1",
