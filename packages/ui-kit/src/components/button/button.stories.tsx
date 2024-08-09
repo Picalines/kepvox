@@ -3,18 +3,23 @@ import { fn } from '@storybook/test'
 
 import { Button, type ButtonProps } from './button'
 
-type StoryArgs = ButtonProps & { text: string }
+type StoryArgs = ButtonProps
 
 export default {
   title: 'components/Button',
   component: Button,
-  render: ({ text, ...args }) => <Button {...args}>{text}</Button>,
   args: {
     onClick: fn(),
   },
   argTypes: {
     size: {
       control: 'select',
+    },
+    onClick: {
+      table: { disable: true },
+    },
+    asChild: {
+      table: { disable: true },
     },
   },
 } satisfies Meta<StoryArgs>
@@ -23,9 +28,8 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
-    text: 'Button',
+    children: 'Button',
     variant: 'default',
     size: 'default',
-    asChild: false,
   },
 }

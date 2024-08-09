@@ -36,7 +36,7 @@ type ButtonProps = ComponentProps<'button'> &
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Component = asChild ? Slot : 'button'
-    return <Component className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    return <Component {...props} ref={ref} className={cn(buttonVariants({ variant, size }), className)} />
   },
 )
 
