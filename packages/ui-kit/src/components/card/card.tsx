@@ -58,7 +58,11 @@ const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...pr
   const footer = slots.get(FooterSlot)
 
   return (
-    <div ref={ref} className={cn('rounded-lg border bg-card text-card-foreground shadow-sm', className)} {...props}>
+    <div
+      ref={ref}
+      className={cn('rounded-lg border border-border bg-card text-card-foreground shadow-sm', className)}
+      {...props}
+    >
       {header && (
         <Header {...header.props} ref={header.ref}>
           {header.children}
