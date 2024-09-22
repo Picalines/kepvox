@@ -16,14 +16,14 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-4 py-2',
+        md: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
       },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
+      size: 'md',
     },
   },
 )
@@ -32,6 +32,10 @@ type ButtonProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }
+
+type ButtonVariant = NonNullable<ButtonProps['variant']>
+
+type ButtonSize = NonNullable<ButtonProps['size']>
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
@@ -42,4 +46,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button'
 
-export { Button, buttonVariants, type ButtonProps }
+export { Button, buttonVariants, type ButtonProps, type ButtonVariant, type ButtonSize }
