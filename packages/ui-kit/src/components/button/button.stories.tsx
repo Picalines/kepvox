@@ -29,7 +29,7 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     children: 'Button',
-    variant: 'default',
+    variant: 'primary',
     size: 'default',
   },
 }
