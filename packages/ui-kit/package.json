@@ -8,6 +8,7 @@
         "./style.css": "./dist/index.css",
         "./classnames": "./src/lib/classnames.ts",
         "./slots": "./src/lib/slots/index.ts",
+        "./types": "./src/lib/types.ts",
         "./components/*": "./src/components/*/index.ts",
         "./icons": "./src/icons/index.ts"
     },
