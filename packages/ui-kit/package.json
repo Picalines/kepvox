@@ -21,7 +21,7 @@
     },
     "devDependencies": {
         "@repo/tailwind-config": "workspace:*",
-        "@repo/tsconfig": "workspace:*",
+        "@repo/ts-config": "workspace:*",
         "@storybook/addon-essentials": "^8.2.7",
         "@storybook/addon-interactions": "^8.2.7",
         "@storybook/addon-links": "^8.2.7",
