@@ -13,7 +13,7 @@
         "./icons": "./src/icons/index.ts"
     },
     "scripts": {
-        "build:styles": "postcss ./src/styles/index.css -o ./dist/index.css",
+        "build:styles": "NODE_ENV=production postcss ./src/styles/index.css -o ./dist/index.css",
         "build:storybook": "storybook build",
         "dev:storybook": "concurrently 'pnpm dev:storybook:server' 'pnpm dev:storybook:styles'",
         "dev:storybook:server": "storybook dev -p 6006 --no-open",
@@ -31,6 +31,7 @@
         "@storybook/test": "^8.2.7",
         "@types/react": "^18.3.3",
         "concurrently": "^8.2.2",
+        "cssnano": "^7.0.6",
         "postcss-import": "^16.1.0",
         "storybook": "^8.2.7",
         "tailwindcss": "^3.4.7",
