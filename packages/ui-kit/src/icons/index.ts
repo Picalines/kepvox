@@ -15,6 +15,7 @@ export {
   Rows3Icon,
   SquareIcon,
   SquarePlusIcon,
+  XIcon,
   ZoomInIcon,
   ZoomOutIcon,
 } from 'lucide-react'
