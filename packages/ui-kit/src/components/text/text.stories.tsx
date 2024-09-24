@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Text, type TextColor, type TextProps, type TextVariant } from './text'
+import { Text, type TextColor, type TextProps, type TextVariant, type TextWeight } from './text'
 
 type StoryArgs = TextProps & { text: string }
 
@@ -24,12 +24,25 @@ export default {
     </div>
   ),
   argTypes: {
+    as: {
+      table: { disable: true },
+    },
     variant: {
       table: { disable: true },
     },
     color: {
       control: 'select',
       options: ['primary', 'secondary', 'positive', 'negative'] satisfies TextColor[],
+    },
+    weight: {
+      control: 'select',
+      options: ['light', 'normal', 'medium', 'semibold', 'bold'] satisfies TextWeight[],
+    },
+    italic: {
+      control: 'boolean',
+    },
+    underline: {
+      control: 'boolean',
     },
   },
 } satisfies Meta<StoryArgs>
@@ -40,5 +53,8 @@ export const Default: Story = {
   args: {
     text: 'The quick brown fox jumps over the lazy dog',
     color: 'primary',
+    weight: undefined,
+    italic: false,
+    underline: false,
   },
 }

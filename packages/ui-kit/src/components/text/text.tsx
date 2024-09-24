@@ -19,6 +19,21 @@ const textVariants = cva('', {
       positive: 'text-green-500 dark:text-green-400',
       negative: 'text-red-500 dark:text-red-500',
     },
+    weight: {
+      light: 'font-light',
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
+    },
+    italic: {
+      true: 'italic',
+      false: 'not-italic',
+    },
+    underline: {
+      true: 'underline underline-offset-2',
+      false: 'no-underline',
+    },
   },
   defaultVariants: {
     variant: 'text-m',
@@ -35,11 +50,20 @@ type TextVariant = NonNullable<TextProps['variant']>
 
 type TextColor = NonNullable<TextProps['color']>
 
+type TextWeight = NonNullable<TextProps['weight']>
+
 const Text = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
-  const { as: Element = 'span', className, variant, color, ...restProps } = props
-  return <Element {...restProps} ref={ref} className={cn(textVariants({ variant, color }), className)} />
+  const { as: Element = 'span', className, variant, color, weight, italic, underline, ...restProps } = props
+
+  return (
+    <Element
+      {...restProps}
+      ref={ref}
+      className={cn(textVariants({ variant, color, weight, italic, underline }), className)}
+    />
+  )
 })
 
 Text.displayName = 'Text'
 
-export { Text, textVariants, type TextProps, type TextVariant, type TextColor }
+export { Text, textVariants, type TextProps, type TextVariant, type TextColor, type TextWeight }
