@@ -1,5 +1,5 @@
-import { cn } from '@/lib/classnames'
-import { createSlot, useSlots } from '@/lib/slots'
+import { cn } from '~/lib/classnames'
+import { createSlot, useSlots } from '~/lib/slots'
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 import { type ComponentProps, type FC, type ReactNode, useCallback } from 'react'
 

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/classnames'
+import { cn } from '~/lib/classnames'
 import { Slot } from '@radix-ui/react-slot'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, forwardRef } from 'react'

@@ -1,5 +1,5 @@
-import { cn } from '@/lib/classnames'
-import { createSlot, useSlots } from '@/lib/slots'
+import { cn } from '~/lib/classnames'
+import { createSlot, useSlots } from '~/lib/slots'
 import { type ComponentProps, forwardRef } from 'react'
 
 type RootProps = ComponentProps<'div'>

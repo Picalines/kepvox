@@ -1,4 +1,4 @@
-import { Tooltip } from '@/components/tooltip'
+import { Tooltip } from '~/components/tooltip'
 import type { Meta, StoryObj } from '@storybook/react'
 import * as icons from './index'
 

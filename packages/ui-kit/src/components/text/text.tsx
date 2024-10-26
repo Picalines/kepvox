@@ -1,4 +1,4 @@
-import { cn } from '@/lib/classnames'
+import { cn } from '~/lib/classnames'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, type ElementType, forwardRef } from 'react'
 

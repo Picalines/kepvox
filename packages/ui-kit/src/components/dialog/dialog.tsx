@@ -1,6 +1,6 @@
-import { XIcon } from '@/icons'
-import { cn } from '@/lib/classnames'
-import { createSlot, useSlots } from '@/lib/slots'
+import { XIcon } from '~/icons'
+import { cn } from '~/lib/classnames'
+import { createSlot, useSlots } from '~/lib/slots'
 import * as RadixDialog from '@radix-ui/react-dialog'
 import { type FC, type ReactNode, useCallback } from 'react'
 

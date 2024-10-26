@@ -1,4 +1,4 @@
-import { cn } from '@/lib/classnames'
+import { cn } from '~/lib/classnames'
 import * as RadixSeparator from '@radix-ui/react-separator'
 import { type ComponentProps, forwardRef } from 'react'
 

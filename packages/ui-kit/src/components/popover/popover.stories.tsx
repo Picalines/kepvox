@@ -1,4 +1,4 @@
-import { cn } from '@/lib/classnames'
+import { cn } from '~/lib/classnames'
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { Button } from '../button'
