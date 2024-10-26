@@ -7,8 +7,6 @@ const config: Config = {
 
   content: ['./src/**/*.tsx'],
 
-  darkMode: 'class',
-
   theme: {
     extend: {
       colors: {
