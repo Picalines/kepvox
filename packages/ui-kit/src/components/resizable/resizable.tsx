@@ -1,3 +1,5 @@
+'use client'
+
 import type { FC, HTMLAttributes, ReactNode } from 'react'
 import * as ResizablePrimitive from 'react-resizable-panels'
 import { cn } from '~/lib/classnames'

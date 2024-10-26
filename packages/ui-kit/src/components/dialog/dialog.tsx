@@ -1,3 +1,5 @@
+'use client'
+
 import * as RadixDialog from '@radix-ui/react-dialog'
 import { type FC, type ReactNode, useCallback } from 'react'
 import { XIcon } from '~/icons'
