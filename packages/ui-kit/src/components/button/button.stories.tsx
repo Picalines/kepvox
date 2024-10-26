@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 
-import { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from './button'
+import { Button, type ButtonProps, type ButtonShape, type ButtonSize, type ButtonVariant } from './button'
 
 type StoryArgs = ButtonProps
 
@@ -20,6 +20,10 @@ export default {
       control: 'select',
       options: ['sm', 'md', 'lg'] satisfies ButtonSize[],
     },
+    shape: {
+      control: 'select',
+      options: ['pill', 'square'] satisfies ButtonShape[],
+    },
     onClick: {
       table: { disable: true },
     },
@@ -36,5 +40,6 @@ export const Default: Story = {
     children: 'Button',
     variant: 'primary',
     size: 'md',
+    shape: 'pill',
   },
 }

@@ -18,14 +18,36 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
+        sm: 'h-8 rounded-md px-3',
         md: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
+        lg: 'h-12 rounded-md px-8',
+      },
+      shape: {
+        pill: '',
+        square: '',
       },
     },
+    compoundVariants: [
+      {
+        size: 'sm',
+        shape: 'square',
+        className: 'p-4',
+      },
+      {
+        size: 'md',
+        shape: 'square',
+        className: 'p-5',
+      },
+      {
+        size: 'lg',
+        shape: 'square',
+        className: 'p-6',
+      },
+    ],
     defaultVariants: {
       variant: 'primary',
       size: 'md',
+      shape: 'pill',
     },
   },
 )
@@ -39,13 +61,15 @@ type ButtonVariant = NonNullable<ButtonProps['variant']>
 
 type ButtonSize = NonNullable<ButtonProps['size']>
 
+type ButtonShape = NonNullable<ButtonProps['shape']>
+
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, shape, asChild = false, ...props }, ref) => {
     const Component = asChild ? Slot : 'button'
-    return <Component {...props} ref={ref} className={cn(buttonVariants({ variant, size }), className)} />
+    return <Component {...props} ref={ref} className={cn(buttonVariants({ variant, size, shape }), className)} />
   },
 )
 
 Button.displayName = 'Button'
 
-export { Button, buttonVariants, type ButtonProps, type ButtonVariant, type ButtonSize }
+export { Button, buttonVariants, type ButtonProps, type ButtonVariant, type ButtonSize, type ButtonShape }
