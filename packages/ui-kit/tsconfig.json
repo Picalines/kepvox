@@ -3,9 +3,9 @@
     "extends": "@repo/ts-config/tsconfig.react-lib.json",
     "compilerOptions": {
         "outDir": "dist",
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "paths": {
-            "~/*": ["./*"]
+            "~/*": ["./src/*"]
         }
     },
     "include": ["."],
