@@ -1,5 +1,5 @@
-import { Tooltip } from '~/components/tooltip'
 import type { Meta, StoryObj } from '@storybook/react'
+import { Tooltip } from '~/components/tooltip'
 import * as icons from './index'
 
 export default {

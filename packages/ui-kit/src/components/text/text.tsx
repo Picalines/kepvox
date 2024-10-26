@@ -1,6 +1,6 @@
-import { cn } from '~/lib/classnames'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, type ElementType, forwardRef } from 'react'
+import { cn } from '~/lib/classnames'
 
 const textVariants = cva('', {
   variants: {

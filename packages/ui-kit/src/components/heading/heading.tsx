@@ -1,6 +1,6 @@
+import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '~/lib/classnames'
 import { createSlot, useSlots } from '~/lib/slots'
-import { type ComponentProps, forwardRef } from 'react'
 import { Text, type TextProps } from '../text'
 
 type SuperTitleProps = TextProps

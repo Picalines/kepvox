@@ -1,5 +1,5 @@
-import { cn } from '~/lib/classnames'
 import type { Meta, StoryObj } from '@storybook/react'
+import { cn } from '~/lib/classnames'
 import { Resizable, type ResizableProps } from './resizable'
 
 type StoryArgs = ResizableProps & { handleContent: string }
