@@ -3,7 +3,7 @@
 
     "files": {
         "include": ["./*.json", "apps/**", "packages/**"],
-        "ignore": [".next"]
+        "ignore": [".next", "dist"]
     },
 
     "extends": [
