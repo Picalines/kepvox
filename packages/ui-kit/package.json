@@ -10,7 +10,8 @@
         "./slots": "./src/lib/slots/index.ts",
         "./types": "./src/lib/types.ts",
         "./components/*": "./src/components/*/index.ts",
-        "./icons": "./src/icons/index.ts"
+        "./icons": "./src/icons/index.ts",
+        "./tailwind-config": "./tailwind.config.ts"
     },
     "scripts": {
         "build:storybook": "storybook build",
