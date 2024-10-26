@@ -1,6 +1,11 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 
 import { dirname, join } from 'node:path'
+import autoprefixer from 'autoprefixer'
+import postcssImport from 'postcss-import'
+import tailwindcss from 'tailwindcss'
+import { mergeConfig } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 function packagePath(value: string) {
   return dirname(require.resolve(join(value, 'package.json')))
@@ -29,13 +34,12 @@ const config: StorybookConfig = {
     },
   },
 
-  async viteFinal(config) {
-    const { mergeConfig } = await import('vite')
-
+  viteFinal(config) {
     return mergeConfig(config, {
-      resolve: {
-        alias: {
-          '@': join(packagePath('..'), 'src'),
+      plugins: [tsconfigPaths()],
+      css: {
+        postcss: {
+          plugins: [tailwindcss(), postcssImport(), autoprefixer()],
         },
       },
     })

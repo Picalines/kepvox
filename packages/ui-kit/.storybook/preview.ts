@@ -2,7 +2,7 @@ import { withThemeByClassName } from '@storybook/addon-themes'
 
 import type { Preview } from '@storybook/react'
 
-import './index.css'
+import '../src/styles/index.css'
 
 const preview: Preview = {
   parameters: {

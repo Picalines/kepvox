@@ -5,7 +5,7 @@
     "sideEffects": ["**/*.css"],
     "files": ["dist"],
     "exports": {
-        "./style.css": "./dist/index.css",
+        "./style.css": "./src/styles/index.css",
         "./classnames": "./src/lib/classnames.ts",
         "./slots": "./src/lib/slots/index.ts",
         "./types": "./src/lib/types.ts",
@@ -13,11 +13,9 @@
         "./icons": "./src/icons/index.ts"
     },
     "scripts": {
-        "build:styles": "NODE_ENV=production postcss ./src/styles/index.css -o ./dist/index.css",
         "build:storybook": "storybook build",
-        "dev:storybook": "concurrently 'pnpm dev:storybook:server' 'pnpm dev:storybook:styles'",
-        "dev:storybook:server": "storybook dev -p 6006 --no-open",
-        "dev:storybook:styles": "postcss -w ./src/styles/index.css -o ./.storybook/index.css"
+        "dev:storybook": "pnpm dev:storybook:server",
+        "dev:storybook:server": "storybook dev -p 6006 --no-open"
     },
     "devDependencies": {
         "@repo/tailwind-config": "workspace:*",
@@ -29,14 +27,14 @@
         "@storybook/react": "^8.2.7",
         "@storybook/react-vite": "^8.2.7",
         "@storybook/test": "^8.2.7",
+        "@types/postcss-import": "^14.0.3",
         "@types/react": "^18.3.3",
-        "concurrently": "^8.2.2",
-        "cssnano": "^7.0.6",
         "postcss-import": "^16.1.0",
         "storybook": "^8.2.7",
         "tailwindcss": "^3.4.7",
         "typescript": "^5.5.4",
-        "vite": "^5.3.5"
+        "vite": "^5.3.5",
+        "vite-tsconfig-paths": "^5.0.1"
     },
     "dependencies": {
         "@radix-ui/react-dialog": "^1.1.1",
