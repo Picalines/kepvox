@@ -14,7 +14,7 @@
         "./tailwind-config": "./tailwind.config.ts"
     },
     "scripts": {
-        "build:storybook": "storybook build",
+        "dev": "pnpm dev:storybook",
         "dev:storybook": "pnpm dev:storybook:server",
         "dev:storybook:server": "storybook dev -p 6006 --no-open"
     },

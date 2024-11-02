@@ -1,19 +1,14 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "tasks": {
-        "//#format": {
-            "cache": false
-        },
 
-        "//#lint": {
-            "cache": false
-        },
-        "//#lint:fix": {
-            "cache": false
-        },
-        "//#lint:fix-unsafe": {
-            "cache": false
-        },
+    "ui": "tui",
+
+    "tasks": {
+        "//#format": {},
+
+        "//#lint": {},
+        "//#lint:fix": {},
+        "//#lint:fix-unsafe": {},
 
         "build": {},
 
