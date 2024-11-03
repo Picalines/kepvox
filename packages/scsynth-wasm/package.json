@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/scsynth-wasm",
+    "private": true,
+    "files": ["build"],
+    "scripts": {
+        "clean": "rimraf build",
+        "build": "pnpm run clean && pnpm run build:docker",
+        "build:docker": "docker build -o dist ."
+    },
+    "devDependencies": {
+        "rimraf": "^6.0.1"
+    }
+}
