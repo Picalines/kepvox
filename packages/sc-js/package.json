@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/sc-js",
+    "private": true,
+    "exports": {
+        ".": {
+            "default": "./dist/sc.js"
+        }
+    },
+    "scripts": {
+        "build": "sbt fullOptJS"
+    }
+}
