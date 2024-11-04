@@ -4,6 +4,7 @@ export {
   BoxSelectIcon,
   CirclePlusIcon,
   Columns3Icon,
+  Loader2Icon as LoaderIcon,
   MousePointer2Icon as MousePointerIcon,
   MousePointerClickIcon,
   PaletteIcon,
