@@ -4,7 +4,6 @@
     "version": "0.1.0",
     "private": true,
     "sideEffects": ["**/*.css"],
-    "files": ["dist"],
     "exports": {
         "./style.css": "./src/styles/index.css",
         "./classnames": "./src/lib/classnames.ts",
