@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/package",
-    "name": "sc-playground",
+    "name": "sc-js-playground",
     "version": "0.1.0",
     "private": true,
     "type": "module",
@@ -10,6 +10,8 @@
         "start": "next start"
     },
     "dependencies": {
+        "@repo/sc-js": "workspace:*",
+        "@repo/scsynth-wasm": "workspace:*",
         "@repo/ui-kit": "workspace:*",
         "next": "15.0.1",
         "react": "19.0.0-rc-69d4b800-20241021",
@@ -21,6 +23,7 @@
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
+        "copy-webpack-plugin": "^12.0.2",
         "tailwindcss": "^3.4.7",
         "typescript": "^5"
     }
