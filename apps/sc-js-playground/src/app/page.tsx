@@ -6,6 +6,8 @@ import { Text } from '@repo/ui-kit/components/text'
 import { LoaderIcon, PlayIcon } from '@repo/ui-kit/icons'
 import { useCallback, useState } from 'react'
 
+const SC_PORT = 57110
+
 let booted = false
 
 const bootSuperCollider = () => {
@@ -16,6 +18,7 @@ const bootSuperCollider = () => {
   const SC = Module
   const args = [...SC.arguments]
   args[args.indexOf('-o') + 1] = '2'
+  args[args.indexOf('-u') + 1] = String(SC_PORT)
   SC.callMain(args)
 
   booted = true
@@ -32,7 +35,7 @@ export default function Home() {
     bootSuperCollider()
 
     setConnecting(true)
-    const client = await ScClient.connect()
+    const client = await ScClient.connect({ port: SC_PORT, timeout: 10_000 })
     setConnecting(false)
 
     // biome-ignore lint: temporary
