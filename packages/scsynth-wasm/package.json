@@ -3,12 +3,16 @@
     "name": "@repo/scsynth-wasm",
     "private": true,
     "files": ["build"],
+    "exports": {
+        ".": "./src/index.ts"
+    },
     "scripts": {
         "clean": "rimraf build",
         "build": "pnpm run clean && pnpm run build:docker",
         "build:docker": "docker build -o dist ."
     },
     "devDependencies": {
+        "@repo/ts-config": "workspace:*",
         "rimraf": "^6.0.1"
     }
 }

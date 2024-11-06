@@ -1,28 +1,13 @@
 'use client'
 
 import { ScClient } from '@repo/sc-js'
+import { bootSuperCollider } from '@repo/scsynth-wasm'
 import { Button } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
 import { LoaderIcon, PlayIcon } from '@repo/ui-kit/icons'
 import { useCallback, useState } from 'react'
 
 const SC_PORT = 57110
-
-let booted = false
-
-const bootSuperCollider = () => {
-  if (booted) {
-    return
-  }
-
-  const SC = Module
-  const args = [...SC.arguments]
-  args[args.indexOf('-o') + 1] = '2'
-  args[args.indexOf('-u') + 1] = String(SC_PORT)
-  SC.callMain(args)
-
-  booted = true
-}
 
 export default function Home() {
   const [connecting, setConnecting] = useState(false)
@@ -32,7 +17,7 @@ export default function Home() {
       return
     }
 
-    bootSuperCollider()
+    await bootSuperCollider({ port: SC_PORT })
 
     setConnecting(true)
     const client = await ScClient.connect({ port: SC_PORT, timeout: 10_000 })

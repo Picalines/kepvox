@@ -70,6 +70,9 @@ importers:
 
   packages/scsynth-wasm:
     devDependencies:
+      '@repo/ts-config':
+        specifier: workspace:*
+        version: link:../ts-config
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
