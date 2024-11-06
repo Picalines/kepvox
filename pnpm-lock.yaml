@@ -23,9 +23,9 @@ importers:
       '@repo/sc-js':
         specifier: workspace:*
         version: link:../../packages/sc-js
-      '@repo/scsynth-wasm':
+      '@repo/sc-synth':
         specifier: workspace:*
-        version: link:../../packages/scsynth-wasm
+        version: link:../../packages/sc-synth
       '@repo/ui-kit':
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -68,7 +68,7 @@ importers:
 
   packages/sc-js: {}
 
-  packages/scsynth-wasm:
+  packages/sc-synth:
     devDependencies:
       '@repo/ts-config':
         specifier: workspace:*

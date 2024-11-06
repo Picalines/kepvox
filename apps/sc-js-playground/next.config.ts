@@ -24,8 +24,8 @@ const nextConfig: NextConfig = {
       new CopyPlugin({
         patterns: [
           {
-            from: '../../packages/scsynth-wasm/dist',
-            to: '../public/scsynth',
+            from: '../../packages/sc-synth/dist',
+            to: '../public/sc-synth',
           },
         ],
       }),

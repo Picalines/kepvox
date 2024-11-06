@@ -18,8 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <Script src="scsynth/osc.min.js" />
-      <Script src="scsynth/scsynth.js" async />
+      <Script src="sc-synth/osc.min.js" />
+      <Script src="sc-synth/scsynth.js" async />
       <body className={monoFont.className}>{children}</body>
     </html>
   )

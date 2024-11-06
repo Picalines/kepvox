@@ -1,7 +1,7 @@
 'use client'
 
 import { ScClient } from '@repo/sc-js'
-import { bootSuperCollider } from '@repo/scsynth-wasm'
+import { bootSuperCollider } from '@repo/sc-synth'
 import { Button } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
 import { LoaderIcon, PlayIcon } from '@repo/ui-kit/icons'

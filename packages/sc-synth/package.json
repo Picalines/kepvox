@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/package",
-    "name": "@repo/scsynth-wasm",
+    "name": "@repo/sc-synth",
     "private": true,
     "files": ["build"],
     "exports": {

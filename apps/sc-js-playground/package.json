@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "@repo/sc-js": "workspace:*",
-        "@repo/scsynth-wasm": "workspace:*",
+        "@repo/sc-synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
         "next": "15.0.1",
         "react": "19.0.0-rc-69d4b800-20241021",
