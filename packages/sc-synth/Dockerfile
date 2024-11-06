@@ -38,6 +38,9 @@ RUN emcmake cmake .. \
 
 RUN ../wasm/make.sh
 
+# pre.js is imbedded inside scsynth.js
+RUN rm ../wasm/pre.js
+
 RUN mkdir -p /scsynth-build/out
 RUN cp ../wasm/*.js /scsynth-build/out
 RUN cp ../wasm/*.wasm /scsynth-build/out
