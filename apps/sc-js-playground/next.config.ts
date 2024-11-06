@@ -1,4 +1,4 @@
-import CopyPlugin from 'copy-webpack-plugin'
+import FileManagerPlugin from 'filemanager-webpack-plugin'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -21,13 +21,11 @@ const nextConfig: NextConfig = {
 
   webpack: config => {
     config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: '../../packages/sc-synth/dist',
-            to: '../public/sc-synth',
-          },
-        ],
+      new FileManagerPlugin({
+        events: {
+          onStart: [{ delete: ['./public/sc-synth'] }],
+          onEnd: [{ copy: [{ source: '../../packages/sc-synth/dist', destination: './public/sc-synth' }] }],
+        },
       }),
     )
 
