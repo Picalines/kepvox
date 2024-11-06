@@ -4,6 +4,7 @@
     "private": true,
     "exports": {
         ".": {
+            "types": "./src/main/ts/scjs/index.d.ts",
             "default": "./dist/sc.js"
         }
     },
