@@ -2,38 +2,24 @@
 
 import type { FC } from 'react'
 
-import { ScClient } from '@repo/sc-js'
-import { bootSuperCollider } from '@repo/sc-synth'
 import { Button } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
 import { LoaderIcon, PlayIcon } from '@repo/ui-kit/icons'
-import { useCallback, useState } from 'react'
+import { useUnit } from 'effector-react'
 
-const SC_PORT = 57110
+import * as model from '../model'
 
 export const EditorScreen: FC = () => {
-  const [connecting, setConnecting] = useState(false)
-
-  const onPlay = useCallback(async () => {
-    if (connecting) {
-      return
-    }
-
-    await bootSuperCollider({ port: SC_PORT })
-
-    setConnecting(true)
-    const client = await ScClient.connect({ port: SC_PORT, timeout: 10_000 })
-    setConnecting(false)
-
-    // biome-ignore lint: temporary
-    console.log(client ? 'connected!' : 'not connected', client)
-  }, [connecting])
+  const { isConnecting, startConnection } = useUnit({
+    isConnecting: model.$isConnecting,
+    startConnection: model.connectionStarted,
+  })
 
   return (
     <div className="p-2">
       <Text className="block">Welcome to sc-js-playground!</Text>
-      <Button size="md" shape="square" className="relative" onClick={onPlay}>
-        {connecting ? <LoaderIcon className="absolute animate-spin" /> : <PlayIcon className="absolute" />}
+      <Button size="md" shape="square" className="relative" onClick={startConnection}>
+        {isConnecting ? <LoaderIcon className="absolute animate-spin" /> : <PlayIcon className="absolute" />}
       </Button>
     </div>
   )

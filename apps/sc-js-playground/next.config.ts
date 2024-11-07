@@ -2,6 +2,10 @@ import FileManagerPlugin from 'filemanager-webpack-plugin'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  experimental: {
+    swcPlugins: [['@effector/swc-plugin', {}]],
+  },
+
   // NOTE: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer#security_requirements
   headers: async () => [
     {

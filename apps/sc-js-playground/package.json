@@ -10,14 +10,19 @@
         "start": "next start"
     },
     "dependencies": {
+        "@effector/next": "^0.7.0",
         "@repo/sc-js": "workspace:*",
         "@repo/sc-synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
-        "next": "15.0.1",
-        "react": "19.0.0-rc-69d4b800-20241021",
-        "react-dom": "19.0.0-rc-69d4b800-20241021"
+        "@withease/factories": "^1.0.5",
+        "effector": "^23.2.3",
+        "effector-react": "^23.2.1",
+        "next": "15.0.2",
+        "react": "19.0.0-rc-02c0e824-20241028",
+        "react-dom": "19.0.0-rc-02c0e824-20241028"
     },
     "devDependencies": {
+        "@effector/swc-plugin": "0.5.2-swc1.7.0",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@types/node": "^20",
