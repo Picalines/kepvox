@@ -2,25 +2,18 @@
 
 import type { FC } from 'react'
 
-import { Button } from '@repo/ui-kit/components/button'
-import { Text } from '@repo/ui-kit/components/text'
-import { LoaderIcon, PlayIcon } from '@repo/ui-kit/icons'
-import { useUnit } from 'effector-react'
+import { Tooltip } from '@repo/ui-kit/components/tooltip'
+import { SCServerProvider, createSCServer } from '~/entities/sc-server'
+import { EditorHeader } from './editor-header'
 
-import * as model from '../model'
+const SCServer = createSCServer()
 
 export const EditorScreen: FC = () => {
-  const { isConnecting, startConnection } = useUnit({
-    isConnecting: model.$isConnecting,
-    startConnection: model.connectionStarted,
-  })
-
   return (
-    <div className="p-2">
-      <Text className="block">Welcome to sc-js-playground!</Text>
-      <Button size="md" shape="square" className="relative" onClick={startConnection}>
-        {isConnecting ? <LoaderIcon className="absolute animate-spin" /> : <PlayIcon className="absolute" />}
-      </Button>
-    </div>
+    <SCServerProvider value={SCServer}>
+      <Tooltip.Provider>
+        <EditorHeader />
+      </Tooltip.Provider>
+    </SCServerProvider>
   )
 }

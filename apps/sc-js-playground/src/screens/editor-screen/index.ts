@@ -1,1 +1,1 @@
-export * from './ui'
+export { EditorScreen } from './ui'
