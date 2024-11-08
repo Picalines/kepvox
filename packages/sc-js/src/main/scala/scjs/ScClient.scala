@@ -20,14 +20,9 @@ class ScClient(private val server: Server) extends js.Object {
   def quit(): Unit = server.quit()
 }
 
+@unused
 private object ScClient {
-  private val timer: Timer = new Timer(true)
-
-  @js.native
-  trait ConnectionConfig extends js.Object {
-    val port: Int = js.native
-    val timeout: js.UndefOr[Int] = js.native
-  }
+  private lazy val timer = new Timer(true)
 
   @unused
   @JSExportStatic
@@ -41,7 +36,11 @@ private object ScClient {
     val promise = Promise[ScClient | Null]()
     val future = promise.future
 
-    val connection = Server.connect("browser", serverConfig, clientConfig) {
+    val connection = Server.connect(
+      config.serverName.getOrElse("browser"),
+      serverConfig,
+      clientConfig
+    ) {
       case ServerConnection.Running(server) =>
         promise.success(new ScClient(server))
       case ServerConnection.Aborted =>
@@ -58,5 +57,12 @@ private object ScClient {
     }
 
     future.toJSPromise
+  }
+
+  @js.native
+  trait ConnectionConfig extends js.Object {
+    val port: Int = js.native
+    val timeout: js.UndefOr[Int] = js.native
+    val serverName: js.UndefOr[String] = js.native
   }
 }
