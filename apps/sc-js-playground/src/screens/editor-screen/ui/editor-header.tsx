@@ -1,8 +1,8 @@
 import { Button } from '@repo/ui-kit/components/button'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import type { FC } from 'react'
+import { ConnectionStatus } from './connection-status'
 import { PlaybackButton } from './playback-button'
-import { SCStatus } from './sc-status'
 
 export const EditorHeader: FC = () => {
   return (
@@ -15,7 +15,7 @@ export const EditorHeader: FC = () => {
         <Tooltip.Arrow />
       </Tooltip>
       <PlaybackButton />
-      <SCStatus />
+      <ConnectionStatus />
     </div>
   )
 }

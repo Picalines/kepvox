@@ -3,17 +3,20 @@
 import type { FC } from 'react'
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
-import { SCServerProvider, createSCServer } from '~/entities/sc-server'
+import { ScClientProvider } from '~/entities/sc-client'
+import { ScServerProvider } from '~/entities/sc-server'
 import { EditorHeader } from './editor-header'
 
-const SCServer = createSCServer()
+import * as model from '../model'
 
 export const EditorScreen: FC = () => {
   return (
-    <SCServerProvider value={SCServer}>
-      <Tooltip.Provider>
-        <EditorHeader />
-      </Tooltip.Provider>
-    </SCServerProvider>
+    <ScServerProvider value={model.scServer}>
+      <ScClientProvider value={model.scClient}>
+        <Tooltip.Provider>
+          <EditorHeader />
+        </Tooltip.Provider>
+      </ScClientProvider>
+    </ScServerProvider>
   )
 }
