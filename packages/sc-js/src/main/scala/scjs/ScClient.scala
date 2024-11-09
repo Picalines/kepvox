@@ -2,6 +2,7 @@ package scjs
 
 import de.sciss.osc
 import de.sciss.synth.{Client, Server, ServerConnection}
+import de.sciss.synth.Ops._
 
 import java.util.{Timer, TimerTask}
 import scala.annotation.unused
@@ -17,7 +18,7 @@ import scala.util.chaining.scalaUtilChainingOps
 @JSExportTopLevel("ScClient")
 class ScClient(private val server: Server) extends js.Object {
   @unused
-  def quit(): Unit = server.quit()
+  def freeAll(): Unit = server.freeAll()
 }
 
 @unused

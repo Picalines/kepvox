@@ -1,7 +1,13 @@
+export type ScClientConfig = {
+  port: number
+  timeout?: number
+  serverName?: string
+}
+
 export class ScClient {
   private constructor()
 
-  static connect(config: { port: number; timeout?: number; serverName?: string }): Promise<ScClient | null>
+  static connect(config: ScClientConfig): Promise<ScClient | null>
 
-  quit(): void
+  freeAll(): void
 }
