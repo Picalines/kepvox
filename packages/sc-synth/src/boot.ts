@@ -1,13 +1,13 @@
 let booted = false
 
-type BootConfig = {
+export type ScServerConfig = {
   port: number
   numberOfOutputs?: number
   numberOfInputs?: number
 }
 
 // TODO: actually wait for ready status
-export async function bootSuperCollider(config: BootConfig) {
+export async function bootSuperCollider(config: ScServerConfig) {
   if (booted) {
     return
   }

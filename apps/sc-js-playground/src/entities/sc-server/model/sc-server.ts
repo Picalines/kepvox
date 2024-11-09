@@ -1,12 +1,11 @@
-import { bootSuperCollider } from '@repo/sc-synth'
+import { type ScServerConfig, bootSuperCollider } from '@repo/sc-synth'
 import { createEffect, createEvent, createStore, sample } from 'effector'
-import { readonly, spread } from 'patronum'
+import { readonly } from 'patronum/readonly'
+import { spread } from 'patronum/spread'
 import { createModelApi } from '~/shared/lib/model-api'
 
-type BootConfig = Parameters<typeof bootSuperCollider>[0]
-
-export enum SCServerStatus {
-  None = 'NONE',
+export enum ScServerStatus {
+  Offline = 'OFFLINE',
   Booting = 'BOOTING',
   Running = 'RUNNING',
 }
@@ -14,34 +13,31 @@ export enum SCServerStatus {
 const { createModel, Provider, useModel } = createModelApi(() => {
   const bootFx = createEffect(bootSuperCollider)
 
-  const $status = createStore(SCServerStatus.None)
+  const $status = createStore(ScServerStatus.Offline)
 
-  const $bootConfig = createStore<BootConfig | null>(null)
-
-  const bootInitiated = createEvent<BootConfig>()
+  const bootAttempted = createEvent<ScServerConfig>()
 
   sample({
-    clock: bootInitiated,
+    clock: bootAttempted,
     source: $status,
-    filter: status => status === SCServerStatus.None,
-    fn: (_, config) => ({ config, status: SCServerStatus.Booting }),
+    filter: status => status === ScServerStatus.Offline,
+    fn: (_, config) => ({ status: ScServerStatus.Booting, config }),
     target: spread({
-      config: [$bootConfig, bootFx],
       status: $status,
+      config: bootFx,
     }),
   })
 
   sample({
     clock: bootFx.finally,
     target: $status,
-    fn: ({ status: fxStatus }) => (fxStatus === 'done' ? SCServerStatus.Running : SCServerStatus.None),
+    fn: ({ status: fxStatus }) => (fxStatus === 'done' ? ScServerStatus.Running : ScServerStatus.Offline),
   })
 
   return {
     $status: readonly($status),
-    $bootConfig: readonly($bootConfig),
-    bootInitiated,
+    bootInitiated: bootAttempted,
   }
 })
 
-export { createModel as createSCServer, Provider as SCServerProvider, useModel as useSCServer }
+export { createModel as createScServer, Provider as ScServerProvider, useModel as useScServer }
