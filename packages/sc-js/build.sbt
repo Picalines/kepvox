@@ -9,15 +9,32 @@ initialize := {
   }
 }
 
-lazy val root = project.in(file("."))
+lazy val root = project
+  .in(file("."))
+  .aggregate(
+    scjs,
+    scjsDts
+  )
+
+lazy val scjs = project
+  .in(file("scjs"))
   .enablePlugins(ScalaJSPlugin)
   .settings(
     name := "sc-js",
     scalaVersion := "2.13.6",
     libraryDependencies += "de.sciss" %%% "scalacollider" % "2.7.4",
     Global / onChangedBuildSource := ReloadOnSourceChanges,
-    Compile / fullOptJS / artifactPath := baseDirectory.value / "dist" / "sc.js",
+    Compile / fullOptJS / artifactPath := baseDirectory.value / ".." / "dist" / "sc.js",
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.ESModule)
-    },
+    }
   )
+
+lazy val scjsDts = project
+  .in(file("scjs-dts"))
+  .settings(
+    name := "scjs-dts",
+    scalaVersion := "2.13.6",
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+  )
+  .dependsOn(scjs)

@@ -4,11 +4,11 @@
     "private": true,
     "exports": {
         ".": {
-            "types": "./src/main/ts/scjs/index.d.ts",
+            "types": "./dist/sc.d.ts",
             "default": "./dist/sc.js"
         }
     },
     "scripts": {
-        "build": "sbt fullOptJS"
+        "build": "sbt \"project scjs\" \"fullOptJS\" \"project scjsDts\" \"run dist/sc.d.ts\""
     }
 }

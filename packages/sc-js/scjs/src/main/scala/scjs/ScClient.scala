@@ -21,8 +21,15 @@ class ScClient(private val server: Server) extends js.Object {
   def freeAll(): Unit = server.freeAll()
 }
 
+@js.native
+private trait ConnectionConfig extends js.Object {
+  val port: Int = js.native
+  val timeout: js.UndefOr[Int] = js.native
+  val serverName: js.UndefOr[String] = js.native
+}
+
 @unused
-private object ScClient {
+object ScClient {
   private lazy val timer = new Timer(true)
 
   @unused
@@ -58,12 +65,5 @@ private object ScClient {
     }
 
     future.toJSPromise
-  }
-
-  @js.native
-  trait ConnectionConfig extends js.Object {
-    val port: Int = js.native
-    val timeout: js.UndefOr[Int] = js.native
-    val serverName: js.UndefOr[String] = js.native
   }
 }
