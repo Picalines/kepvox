@@ -8,13 +8,17 @@ import { ScServerProvider } from '~/entities/sc-server'
 import { EditorHeader } from './editor-header'
 
 import * as model from '../model'
+import { JSEditor } from './js-editor'
 
 export const EditorScreen: FC = () => {
   return (
     <ScServerProvider value={model.scServer}>
       <ScClientProvider value={model.scClient}>
         <Tooltip.Provider>
-          <EditorHeader />
+          <div className="h-screen">
+            <EditorHeader />
+            <JSEditor />
+          </div>
         </Tooltip.Provider>
       </ScClientProvider>
     </ScServerProvider>

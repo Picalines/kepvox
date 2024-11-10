@@ -6,6 +6,9 @@
         ".": {
             "types": "./dist/sc.d.ts",
             "default": "./dist/sc.js"
+        },
+        "./sc.d.ts": {
+            "default": "./dist/sc.d.ts"
         }
     },
     "scripts": {
