@@ -7,6 +7,5 @@
             "~/*": ["../../packages/ui-kit/src/*", "./src/*"]
         }
     },
-    "include": [".", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-    "exclude": ["node_modules", "public/sc-synth"]
+    "include": [".", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }
