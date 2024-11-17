@@ -70,6 +70,14 @@ object ast {
     }
   }
 
+  case class ShapeType(members: Seq[Member]) extends ValueType {
+    override def write(implicit writer: Writer): Unit = {
+      writer.write('{')
+      writeSeq(members, ",")
+      writer.write('}')
+    }
+  }
+
   sealed trait Member extends Writable
 
   case class Field(name: String, valueType: ValueType, isOptional: Boolean)
@@ -90,27 +98,14 @@ object ast {
     }
   }
 
-  case class InstanceMethod(
+  case class Method(
       name: String,
       parameters: Seq[Parameter],
-      returns: ValueType
+      returns: ValueType,
+      isStatic: Boolean
   ) extends Member {
     override def write(implicit writer: Writer): Unit = {
-      writer.write(name)
-      writer.write('(')
-      writeSeq(parameters, ",")
-      writer.write("):")
-      returns.write
-    }
-  }
-
-  case class ClassMethod(
-      name: String,
-      parameters: Seq[Parameter],
-      returns: ValueType
-  ) extends Member {
-    override def write(implicit writer: Writer): Unit = {
-      writer.write("static ")
+      if (isStatic) writer.write("static ")
       writer.write(name)
       writer.write('(')
       writeSeq(parameters, ",")
@@ -123,14 +118,13 @@ object ast {
     def name: String
   }
 
-  case class ShapeType(name: String, members: Seq[Member])
+  case class TypeAlias(name: String, valueType: ValueType)
       extends TypeDeclaration {
     override def write(implicit writer: Writer): Unit = {
       writer.write("type ")
       writer.write(name)
-      writer.write(" = {")
-      writeSeq(members, ",")
-      writer.write('}')
+      writer.write(" = ")
+      valueType.write
     }
   }
 

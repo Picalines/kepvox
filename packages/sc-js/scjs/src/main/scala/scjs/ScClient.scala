@@ -22,7 +22,7 @@ class ScClient(private val server: Server) extends js.Object {
 }
 
 @js.native
-private trait ConnectionConfig extends js.Object {
+trait ScClientConfig extends js.Object {
   val port: Int = js.native
   val timeout: js.UndefOr[Int] = js.native
   val serverName: js.UndefOr[String] = js.native
@@ -34,7 +34,7 @@ object ScClient {
 
   @unused
   @JSExportStatic
-  def connect(config: ConnectionConfig): js.Promise[ScClient | Null] = {
+  def connect(config: ScClientConfig): js.Promise[ScClient | Null] = {
     val clientConfig = Client.Config()
     val serverConfig = Server.Config().tap { it =>
       it.transport = osc.Browser
