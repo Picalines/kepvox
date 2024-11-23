@@ -9,6 +9,9 @@
         "build": "next build",
         "start": "next start"
     },
+    "imports": {
+        "#screens/*": "./src/screens/*/index.ts"
+    },
     "dependencies": {
         "@effector/next": "^0.7.0",
         "@monaco-editor/react": "^4.6.0",

@@ -1,6 +1,6 @@
 import * as RadixSeparator from '@radix-ui/react-separator'
 import { type ComponentProps, forwardRef } from 'react'
-import { cn } from '~/lib/classnames'
+import { cn } from '#lib/classnames'
 
 type SeparatorProps = ComponentProps<'div'> & {
   asChild?: boolean

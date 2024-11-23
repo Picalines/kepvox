@@ -1,6 +1,6 @@
 import { type ComponentProps, forwardRef } from 'react'
-import { cn } from '~/lib/classnames'
-import { createSlot, useSlots } from '~/lib/slots'
+import { cn } from '#lib/classnames'
+import { createSlot, useSlots } from '#lib/slots'
 
 type RootProps = ComponentProps<'div'>
 type HeaderProps = ComponentProps<'div'>

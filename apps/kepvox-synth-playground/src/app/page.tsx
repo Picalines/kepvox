@@ -1,4 +1,4 @@
-import { EditorScreen } from '~/screens/editor-screen'
+import { EditorScreen } from '#screens/editor-screen'
 
 export default function Home() {
   return <EditorScreen />

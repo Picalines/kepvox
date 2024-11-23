@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { cn } from '~/lib/classnames'
+import { cn } from '#lib/classnames'
 import { Heading } from '../heading'
 import { Card, type CardProps } from './card'
 

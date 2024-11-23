@@ -4,6 +4,11 @@
     "version": "0.1.0",
     "private": true,
     "sideEffects": ["**/*.css"],
+    "scripts": {
+        "dev": "pnpm dev:storybook",
+        "dev:storybook": "pnpm dev:storybook:server",
+        "dev:storybook:server": "storybook dev -p 6006 --no-open"
+    },
     "exports": {
         "./style.css": "./src/styles/index.css",
         "./classnames": "./src/lib/classnames.ts",
@@ -13,10 +18,11 @@
         "./icons": "./src/icons/index.ts",
         "./tailwind-config": "./tailwind.config.ts"
     },
-    "scripts": {
-        "dev": "pnpm dev:storybook",
-        "dev:storybook": "pnpm dev:storybook:server",
-        "dev:storybook:server": "storybook dev -p 6006 --no-open"
+    "imports": {
+        "#lib/classnames": "./src/lib/classnames.ts",
+        "#lib/slots": "./src/lib/slots/index.ts",
+        "#icons": "./src/icons/index.ts",
+        "#components/*": "./src/components/*/index.ts"
     },
     "devDependencies": {
         "@repo/tailwind-config": "workspace:*",

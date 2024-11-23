@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { cn } from '~/lib/classnames'
+import { cn } from '#lib/classnames'
 import { Separator, type SeparatorProps } from './separator'
 
 type StoryArgs = SeparatorProps
