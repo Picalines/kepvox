@@ -2,7 +2,7 @@ import { Children, type ReactNode } from 'react'
 import { type RenderedSlot, type SlotComponent, isSlotComponent, isSlotElement } from './slot'
 
 export type SlotMapOptions = {
-  defaultSlot?: SlotComponent<any, any>
+  defaultSlot?: SlotComponent
 }
 
 export class SlotMap {
@@ -33,7 +33,6 @@ export class SlotMap {
           name: type.__slotName,
           props,
           children: props.children,
-          // @ts-expect-error #slots is a generic collection, can't expect concrete inference
           ref,
         })
       } else if (child !== null && child !== undefined && child !== '') {
@@ -57,7 +56,7 @@ export class SlotMap {
     }
   }
 
-  get<Props, Type>(slot: SlotComponent<Props, Type>): RenderedSlot<Props, Type> | undefined {
+  get<Props>(slot: SlotComponent<Props>): RenderedSlot<Props> | undefined {
     if (!isSlotComponent(slot)) {
       throw new Error('invalid slot component, should be created by createSlot')
     }
