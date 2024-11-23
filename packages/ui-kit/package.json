@@ -3,7 +3,9 @@
     "name": "@repo/ui-kit",
     "version": "0.1.0",
     "private": true,
-    "sideEffects": ["**/*.css"],
+    "sideEffects": [
+        "**/*.css"
+    ],
     "scripts": {
         "dev": "pnpm dev:storybook",
         "dev:storybook": "pnpm dev:storybook:server",
@@ -40,8 +42,7 @@
         "storybook": "^8.2.7",
         "tailwindcss": "^3.4.7",
         "typescript": "^5.5.4",
-        "vite": "^5.3.5",
-        "vite-tsconfig-paths": "^5.0.1"
+        "vite": "^5.3.5"
     },
     "dependencies": {
         "@radix-ui/react-dialog": "^1.1.1",

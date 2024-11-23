@@ -5,7 +5,6 @@ import autoprefixer from 'autoprefixer'
 import postcssImport from 'postcss-import'
 import tailwindcss from 'tailwindcss'
 import { mergeConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 function packagePath(value: string) {
   return dirname(require.resolve(join(value, 'package.json')))
@@ -36,7 +35,6 @@ const config: StorybookConfig = {
 
   viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [tsconfigPaths()],
       css: {
         postcss: {
           plugins: [tailwindcss(), postcssImport(), autoprefixer()],
