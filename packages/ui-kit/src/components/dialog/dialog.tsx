@@ -23,9 +23,8 @@ type ContentProps = {
   children: ReactNode
   ref?: Ref<HTMLDivElement>
   className?: string
-  showClose?: boolean
+  closable?: boolean
   trapFocus?: boolean
-  closeOnOutside?: boolean
 }
 
 const Trigger = createSlot<TriggerProps>('Trigger')
@@ -41,23 +40,13 @@ const Root: FC<RootProps> = props => {
   const trigger = slots.get(Trigger)
   const content = slots.get(Content)
 
-  const { showClose = true, closeOnOutside = true, ...contentProps } = content?.props ?? {}
+  const { closable = true, ...contentProps } = content?.props ?? {}
 
-  const onOpenChange = useCallback(
-    (opened: boolean) => {
-      const handler = opened ? onOpen : onClose
-      handler?.()
-    },
-    [onOpen, onClose],
-  )
+  const onOpenChange = useCallback((opened: boolean) => (opened ? onOpen : onClose)?.(), [onOpen, onClose])
 
   const onInteractOutside = useCallback<OnInteractOutside>(
-    event => {
-      if (!closeOnOutside) {
-        event.preventDefault()
-      }
-    },
-    [closeOnOutside],
+    event => (closable ? null : event)?.preventDefault(),
+    [closable],
   )
 
   return (
@@ -80,7 +69,7 @@ const Root: FC<RootProps> = props => {
             onInteractOutside={onInteractOutside}
           >
             <div>{content.children}</div>
-            {showClose ? (
+            {closable ? (
               <RadixDialog.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
                 <XIcon className="h-4 w-4" />
                 <span className="sr-only">Close</span>

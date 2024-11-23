@@ -5,8 +5,7 @@ import { Button } from '../button'
 import { Heading } from '../heading'
 import { Dialog, type DialogProps } from './dialog'
 
-type StoryArgs = DialogProps &
-  Partial<{ title: string; description: string; showClose: boolean; closeOnOutside: boolean }>
+type StoryArgs = DialogProps & Partial<{ title: string; description: string; closable: boolean }>
 
 export default {
   title: 'components/Dialog',
@@ -15,12 +14,12 @@ export default {
     onOpen: fn(),
     onClose: fn(),
   },
-  render: ({ title, description, showClose, closeOnOutside, ...args }) => (
+  render: ({ title, description, closable, ...args }) => (
     <Dialog {...args}>
       <Dialog.Trigger asChild>
         <Button>Button</Button>
       </Dialog.Trigger>
-      <Dialog.Content showClose={showClose} closeOnOutside={closeOnOutside}>
+      <Dialog.Content closable={closable}>
         <Heading>
           <Heading.Title>{title}</Heading.Title>
           <Heading.Description color="secondary">{description}</Heading.Description>
@@ -46,9 +45,8 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     defaultOpen: false,
-    showClose: true,
+    closable: true,
     title: 'Title',
     description: 'Description',
-    closeOnOutside: true,
   },
 }
