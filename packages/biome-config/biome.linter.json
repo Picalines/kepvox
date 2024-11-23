@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 
     "linter": {
         "enabled": true,
@@ -17,7 +17,8 @@
             },
 
             "suspicious": {
-                "noExplicitAny": "off"
+                "noExplicitAny": "off",
+                "noConsoleLog": "error"
             },
 
             "style": {
@@ -30,7 +31,8 @@
                 },
 
                 "noNamespace": "error",
-                "noNegationElse": "error"
+                "noNegationElse": "error",
+                "noYodaExpression": "error"
             },
 
             "nursery": {
@@ -43,10 +45,7 @@
                     }
                 },
 
-                "useImportRestrictions": "error",
-
-                "noConsole": "error",
-                "noYodaExpression": "error"
+                "useImportRestrictions": "error"
             }
         }
     }
