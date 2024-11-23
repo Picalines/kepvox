@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Text, type TextColor, type TextProps, type TextVariant, type TextWeight } from './text'
+import { Text, type TextColor, type TextProps, type TextVariant } from './text'
 
 type StoryArgs = TextProps & { text: string }
 
@@ -33,10 +33,6 @@ export default {
     color: {
       control: 'select',
       options: ['primary', 'secondary', 'positive', 'negative'] satisfies TextColor[],
-    },
-    weight: {
-      control: 'select',
-      options: ['light', 'normal', 'medium', 'semibold', 'bold'] satisfies TextWeight[],
     },
     italic: {
       control: 'boolean',

@@ -16,12 +16,6 @@ export default {
       </Resizable>
     </div>
   ),
-  argTypes: {
-    direction: {
-      control: 'select',
-      options: ['horizontal', 'vertical'] satisfies StoryArgs['direction'][],
-    },
-  },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>

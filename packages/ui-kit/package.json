@@ -3,9 +3,7 @@
     "name": "@repo/ui-kit",
     "version": "0.1.0",
     "private": true,
-    "sideEffects": [
-        "**/*.css"
-    ],
+    "sideEffects": ["**/*.css"],
     "scripts": {
         "dev": "pnpm dev:storybook",
         "dev:storybook": "pnpm dev:storybook:server",

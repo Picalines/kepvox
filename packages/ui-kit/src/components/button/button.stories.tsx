@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 
-import { Button, type ButtonProps, type ButtonShape, type ButtonSize, type ButtonVariant } from './button'
+import { Button, type ButtonProps } from './button'
 
 type StoryArgs = ButtonProps
 
@@ -12,18 +12,6 @@ export default {
     onClick: fn(),
   },
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'ghost', 'outline', 'link'] satisfies ButtonVariant[],
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'] satisfies ButtonSize[],
-    },
-    shape: {
-      control: 'select',
-      options: ['pill', 'square'] satisfies ButtonShape[],
-    },
     onClick: {
       table: { disable: true },
     },

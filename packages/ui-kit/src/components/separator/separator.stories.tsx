@@ -16,10 +16,6 @@ export default {
     </div>
   ),
   argTypes: {
-    orientation: {
-      control: 'select',
-      options: ['horizontal', 'vertical'] satisfies StoryArgs['orientation'][],
-    },
     asChild: {
       table: { disable: true },
     },
