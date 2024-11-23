@@ -1,7 +1,7 @@
 'use client'
 
 import * as RadixPopover from '@radix-ui/react-popover'
-import { type ComponentPropsWithoutRef, type FC, type ReactNode, type RefAttributes, useCallback } from 'react'
+import { type ComponentPropsWithoutRef, type FC, type ReactNode, type RefObject, useCallback } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -18,8 +18,9 @@ type TriggerProps = ComponentPropsWithoutRef<'button'> & {
   asChild?: boolean
 }
 
-type ContentProps = RefAttributes<HTMLDivElement> & {
+type ContentProps = {
   children: ReactNode
+  ref?: RefObject<HTMLDivElement>
   asChild?: boolean
   className?: string
   side?: 'top' | 'right' | 'bottom' | 'left'
@@ -53,9 +54,7 @@ const Root: FC<RootProps> = props => {
 
   return (
     <RadixPopover.Root {...rootProps} onOpenChange={onOpenChange}>
-      <RadixPopover.Trigger {...trigger.props} ref={trigger.ref}>
-        {trigger.children}
-      </RadixPopover.Trigger>
+      <RadixPopover.Trigger {...trigger.props}>{trigger.children}</RadixPopover.Trigger>
       <RadixPopover.Portal>
         <RadixPopover.Content
           align="center"
