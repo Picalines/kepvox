@@ -1,7 +1,7 @@
 'use client'
 
 import * as RadixDialog from '@radix-ui/react-dialog'
-import { type FC, type ReactNode, useCallback } from 'react'
+import { type FC, type ReactNode, type Ref, useCallback } from 'react'
 import { XIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -21,6 +21,7 @@ type TriggerProps = {
 
 type ContentProps = {
   children: ReactNode
+  ref?: Ref<HTMLDivElement>
   className?: string
   showClose?: boolean
   trapFocus?: boolean
@@ -61,11 +62,7 @@ const Root: FC<RootProps> = props => {
 
   return (
     <RadixDialog.Root {...rootProps} onOpenChange={onOpenChange}>
-      {trigger && (
-        <RadixDialog.Trigger {...trigger.props} ref={trigger.ref}>
-          {trigger.children}
-        </RadixDialog.Trigger>
-      )}
+      {trigger && <RadixDialog.Trigger {...trigger.props}>{trigger.children}</RadixDialog.Trigger>}
       <RadixDialog.Portal>
         <RadixDialog.Overlay
           className={cn(
