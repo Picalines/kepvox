@@ -33,7 +33,7 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     children: 'Toggle',
-    variant: 'default',
-    size: 'default',
+    variant: 'ghost',
+    size: 'md',
   },
 }
