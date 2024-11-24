@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 
+import { PaletteIcon } from '#icons'
 import { Button, type ButtonProps } from './button'
 
 type StoryArgs = ButtonProps
@@ -29,5 +30,19 @@ export const Default: Story = {
     variant: 'primary',
     size: 'md',
     shape: 'pill',
+  },
+}
+
+export const Icon: Story = {
+  args: {
+    ...Default.args,
+    children: <PaletteIcon className="absolute" />,
+    size: 'md',
+    shape: 'square',
+  },
+  argTypes: {
+    children: {
+      table: { disable: true },
+    },
   },
 }
