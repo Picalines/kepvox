@@ -29,10 +29,8 @@
         "@effector/swc-plugin": "0.5.2-swc1.7.0",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
-        "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
-        "tailwindcss": "^3.4.7",
-        "typescript": "^5"
+        "tailwindcss": "^3.4.7"
     }
 }
