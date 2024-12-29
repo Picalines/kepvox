@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Tooltip } from '#components/tooltip'
+import { Tooltip, TooltipProvider } from '#components/tooltip'
 import * as icons from './index'
 
 export default {
   title: 'icons/All',
 
   render: () => (
-    <Tooltip.Provider delayDuration={0}>
+    <TooltipProvider delayDuration={0}>
       <div className="flex flex-wrap gap-2">
         {Object.entries(icons).map(([name, Icon]) => (
           <Tooltip.Root key={name}>
@@ -19,7 +19,7 @@ export default {
           </Tooltip.Root>
         ))}
       </div>
-    </Tooltip.Provider>
+    </TooltipProvider>
   ),
 } satisfies Meta
 

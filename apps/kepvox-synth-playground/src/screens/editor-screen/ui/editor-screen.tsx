@@ -1,19 +1,19 @@
-'use client'
+'use server'
 
 import type { FC } from 'react'
 
-import { Tooltip } from '@repo/ui-kit/components/tooltip'
+import { TooltipProvider } from '@repo/ui-kit/components/tooltip'
 import { EditorHeader } from './editor-header'
 
 import { JSEditor } from './js-editor'
 
-export const EditorScreen: FC = () => {
+export const EditorScreen: FC = async () => {
   return (
-    <Tooltip.Provider>
+    <TooltipProvider>
       <div className="h-screen">
         <EditorHeader />
         <JSEditor />
       </div>
-    </Tooltip.Provider>
+    </TooltipProvider>
   )
 }

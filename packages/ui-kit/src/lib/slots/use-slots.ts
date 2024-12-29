@@ -1,3 +1,5 @@
+'use client'
+
 import { type ReactNode, useMemo } from 'react'
 import { SlotMap, type SlotMapOptions } from './slot-map'
 

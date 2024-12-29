@@ -1,5 +1,3 @@
-'use client'
-
 import * as RadixPopover from '@radix-ui/react-popover'
 import { type ComponentPropsWithoutRef, type FC, type ReactNode, type RefObject, useCallback } from 'react'
 import { cn } from '#lib/classnames'

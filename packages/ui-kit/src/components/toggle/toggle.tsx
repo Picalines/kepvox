@@ -1,5 +1,3 @@
-'use client'
-
 import * as RadixToggle from '@radix-ui/react-toggle'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, forwardRef } from 'react'

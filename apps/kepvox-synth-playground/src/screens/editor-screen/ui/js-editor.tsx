@@ -1,3 +1,5 @@
+'use client'
+
 import type { FC } from 'react'
 
 import { Editor as MonacoEditor, type OnMount } from '@monaco-editor/react'

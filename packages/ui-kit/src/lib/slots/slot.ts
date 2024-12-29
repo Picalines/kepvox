@@ -24,6 +24,15 @@ export type RenderedSlot<Props = {}> = {
   children: ReactNode
 } & ExplicitRefProps<Props>
 
+export function createSlot<Props = {}>(name: string): SlotComponent<Props> {
+  const Slot: SlotComponent<Props> = () => null
+
+  Slot.displayName = `Slot(${name})`
+  Slot.__slotName = name
+
+  return Slot
+}
+
 export function isSlotElement<Props = {}>(
   node: ReactNode,
 ): node is ReactElement<PropsWithChildren<Props>, SlotComponent<Props>> & ExplicitRefProps<Props> {

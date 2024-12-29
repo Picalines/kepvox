@@ -1,5 +1,3 @@
-'use client'
-
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 import { type ComponentProps, type FC, type ReactNode, useCallback } from 'react'
 import { cn } from '#lib/classnames'
@@ -12,11 +10,6 @@ export type RootProps = {
   delayDuration?: number
   onOpen?: () => void
   onClose?: () => void
-}
-
-export type ProviderProps = {
-  children: ReactNode
-  delayDuration?: number
 }
 
 export type TriggerProps = ComponentProps<'button'> & {
@@ -38,9 +31,6 @@ export type ArrowProps = ComponentProps<'svg'> & {
   width?: number
   height?: number
 }
-
-export const Provider: FC<ProviderProps> = RadixTooltip.Provider
-Provider.displayName = 'Tooltip.Provider'
 
 export const Trigger = createSlot<TriggerProps>('Trigger')
 export const Content = createSlot<ContentProps>('Content')

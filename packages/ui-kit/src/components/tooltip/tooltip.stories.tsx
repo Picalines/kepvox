@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Tooltip } from '.'
+import { Tooltip, TooltipProvider } from '.'
 import { Button } from '../button'
 
 type StoryArgs = Tooltip.RootProps &
@@ -13,7 +13,7 @@ export default {
   title: 'components/Tooltip',
   component: Tooltip.Root,
   render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
-    <Tooltip.Provider>
+    <TooltipProvider>
       <div className="flex max-w-[400px] justify-center rounded-lg border border-dashed p-20">
         <Tooltip.Root {...rootProps}>
           <Tooltip.Trigger asChild>
@@ -25,7 +25,7 @@ export default {
           {hasArrow && <Tooltip.Arrow />}
         </Tooltip.Root>
       </div>
-    </Tooltip.Provider>
+    </TooltipProvider>
   ),
   argTypes: {
     side: {
