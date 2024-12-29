@@ -6,7 +6,7 @@ import { XIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-type RootProps = {
+export type RootProps = {
   children: ReactNode
   open?: boolean
   defaultOpen?: boolean
@@ -14,12 +14,12 @@ type RootProps = {
   onClose?: () => void
 }
 
-type TriggerProps = {
+export type TriggerProps = {
   children: ReactNode
   asChild?: boolean
 }
 
-type ContentProps = {
+export type ContentProps = {
   children: ReactNode
   ref?: Ref<HTMLDivElement>
   className?: string
@@ -27,12 +27,12 @@ type ContentProps = {
   trapFocus?: boolean
 }
 
-const Trigger = createSlot<TriggerProps>('Trigger')
-const Content = createSlot<ContentProps>('Content')
+export const Trigger = createSlot<TriggerProps>('Trigger')
+export const Content = createSlot<ContentProps>('Content')
 
 type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractOutside']>
 
-const Root: FC<RootProps> = props => {
+export const Root: FC<RootProps> = props => {
   const { children, onOpen, onClose, ...rootProps } = props
 
   const slots = useSlots({ children })
@@ -80,16 +80,4 @@ const Root: FC<RootProps> = props => {
       </RadixDialog.Portal>
     </RadixDialog.Root>
   )
-}
-
-const Dialog = Object.assign(Root, {
-  Trigger,
-  Content,
-})
-
-export {
-  Dialog,
-  type RootProps as DialogProps,
-  type TriggerProps as DialogTriggerProps,
-  type ContentProps as DialogContentProps,
 }

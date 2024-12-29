@@ -5,7 +5,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   'relative inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
@@ -52,18 +52,18 @@ const buttonVariants = cva(
   },
 )
 
-type ButtonProps = ComponentProps<'button'> &
+export type ButtonProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }
 
-type ButtonVariant = NonNullable<ButtonProps['variant']>
+export type ButtonVariant = NonNullable<ButtonProps['variant']>
 
-type ButtonSize = NonNullable<ButtonProps['size']>
+export type ButtonSize = NonNullable<ButtonProps['size']>
 
-type ButtonShape = NonNullable<ButtonProps['shape']>
+export type ButtonShape = NonNullable<ButtonProps['shape']>
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, shape, asChild = false, ...props }, ref) => {
     const Component = asChild ? Slot : 'button'
     return <Component {...props} ref={ref} className={cn(buttonVariants({ variant, size, shape }), className)} />
@@ -71,5 +71,3 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 )
 
 Button.displayName = 'Button'
-
-export { Button, buttonVariants, type ButtonProps, type ButtonVariant, type ButtonSize, type ButtonShape }

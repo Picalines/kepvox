@@ -41,18 +41,18 @@ const textVariants = cva('', {
   },
 })
 
-type TextProps = ComponentProps<'span'> &
+export type TextProps = ComponentProps<'span'> &
   VariantProps<typeof textVariants> & {
     as?: ElementType
   }
 
-type TextVariant = NonNullable<TextProps['variant']>
+export type TextVariant = NonNullable<TextProps['variant']>
 
-type TextColor = NonNullable<TextProps['color']>
+export type TextColor = NonNullable<TextProps['color']>
 
-type TextWeight = NonNullable<TextProps['weight']>
+export type TextWeight = NonNullable<TextProps['weight']>
 
-const Text = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
+export const Text = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
   const { as: Element = 'span', className, variant, color, weight, italic, underline, ...restProps } = props
 
   return (
@@ -65,5 +65,3 @@ const Text = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
 })
 
 Text.displayName = 'Text'
-
-export { Text, textVariants, type TextProps, type TextVariant, type TextColor, type TextWeight }

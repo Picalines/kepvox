@@ -1,24 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { cn } from '#lib/classnames'
+import { Popover } from '.'
 import { Button } from '../button'
-import { Popover, type PopoverContentProps, type PopoverProps } from './popover'
 
-type StoryArgs = PopoverProps & PopoverContentProps
+type StoryArgs = Popover.RootProps & Popover.ContentProps
 
 export default {
   title: 'components/Popover',
-  component: Popover,
+  component: Popover.Root,
   render: ({ open, defaultOpen, onOpen, onClose, ...contentProps }) => (
     <div className="w-min rounded-lg border border-dashed p-20">
-      <Popover open={open} defaultOpen={defaultOpen} onOpen={onOpen} onClose={onClose}>
+      <Popover.Root open={open} defaultOpen={defaultOpen} onOpen={onOpen} onClose={onClose}>
         <Popover.Trigger asChild>
           <Button>Button</Button>
         </Popover.Trigger>
         <Popover.Content {...contentProps} className={cn('w-min', contentProps.className)}>
           Content
         </Popover.Content>
-      </Popover>
+      </Popover.Root>
     </div>
   ),
   args: {

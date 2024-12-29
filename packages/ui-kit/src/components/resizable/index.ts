@@ -1,1 +1,1 @@
-export * from './resizable'
+export * as Resizable from './resizable'

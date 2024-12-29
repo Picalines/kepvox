@@ -2,21 +2,21 @@ import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-type RootProps = ComponentProps<'div'>
-type HeaderProps = ComponentProps<'div'>
-type ContentProps = ComponentProps<'div'>
-type FooterProps = ComponentProps<'div'>
+export type RootProps = ComponentProps<'div'>
+export type HeaderProps = ComponentProps<'div'>
+export type ContentProps = ComponentProps<'div'>
+export type FooterProps = ComponentProps<'div'>
 
-const HeaderSlot = createSlot<HeaderProps>('Header')
-const ContentSlot = createSlot<ContentProps>('Content')
-const FooterSlot = createSlot<FooterProps>('Footer')
+export const Header = createSlot<HeaderProps>('Header')
+export const Content = createSlot<ContentProps>('Content')
+export const Footer = createSlot<FooterProps>('Footer')
 
-const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...props }, ref) => {
-  const slots = useSlots({ children, defaultSlot: ContentSlot })
+export const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...props }, ref) => {
+  const slots = useSlots({ children, defaultSlot: Content })
 
-  const header = slots.get(HeaderSlot)
-  const content = slots.get(ContentSlot)
-  const footer = slots.get(FooterSlot)
+  const header = slots.get(Header)
+  const content = slots.get(Content)
+  const footer = slots.get(Footer)
 
   if (!header && !content && !footer) {
     return null
@@ -51,19 +51,3 @@ const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...pr
     </div>
   )
 })
-
-const Card = Object.assign(Root, {
-  Header: HeaderSlot,
-  Content: ContentSlot,
-  Footer: FooterSlot,
-})
-
-Card.displayName = 'Card'
-
-export {
-  Card,
-  type RootProps as CardProps,
-  type HeaderProps as CardHeaderProps,
-  type ContentProps as CardContentProps,
-  type FooterProps as CardFooterProps,
-}

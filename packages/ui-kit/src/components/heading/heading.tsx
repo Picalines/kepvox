@@ -3,17 +3,17 @@ import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
 
-type SuperTitleProps = TextProps
-type TitleProps = TextProps
-type DescriptionProps = TextProps
+export type SuperTitleProps = TextProps
+export type TitleProps = TextProps
+export type DescriptionProps = TextProps
 
-const SuperTitle = createSlot<SuperTitleProps>('SuperTitle')
-const Title = createSlot<TitleProps>('Title')
-const Description = createSlot<DescriptionProps>('Description')
+export const SuperTitle = createSlot<SuperTitleProps>('SuperTitle')
+export const Title = createSlot<TitleProps>('Title')
+export const Description = createSlot<DescriptionProps>('Description')
 
-type RootProps = ComponentProps<'div'>
+export type RootProps = ComponentProps<'div'>
 
-const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
+export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
   const { children, className, ...rootProps } = props
 
   const slots = useSlots({ children, defaultSlot: Title })
@@ -46,19 +46,3 @@ const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
     </div>
   )
 })
-
-const Heading = Object.assign(Root, {
-  SuperTitle,
-  Title,
-  Description,
-})
-
-Heading.displayName = 'Heading'
-
-export {
-  Heading,
-  type RootProps as HeadingProps,
-  type SuperTitleProps as HeaderSuperTitleProps,
-  type TitleProps as HeaderTitleProps,
-  type DescriptionProps as HeaderDescriptionProps,
-}

@@ -6,13 +6,13 @@ import { cn } from '#lib/classnames'
 
 type HTMLElementTagName = keyof HTMLElementTagNameMap
 
-type GroupProps = HTMLAttributes<HTMLElementTagName> & {
+export type GroupProps = HTMLAttributes<HTMLElementTagName> & {
   direction: 'horizontal' | 'vertical'
   children: ReactNode
   as?: HTMLElementTagName
 }
 
-type PanelProps = HTMLAttributes<HTMLElementTagName> & {
+export type PanelProps = HTMLAttributes<HTMLElementTagName> & {
   children: ReactNode
   as?: HTMLElementTagName
   defaultSize?: number
@@ -22,7 +22,7 @@ type PanelProps = HTMLAttributes<HTMLElementTagName> & {
   onResize?: (size: number) => void
 }
 
-type HandleProps = HTMLAttributes<HTMLElementTagName> & {
+export type HandleProps = HTMLAttributes<HTMLElementTagName> & {
   children?: ReactNode
   as?: HTMLElementTagName
   disabled?: boolean
@@ -30,7 +30,7 @@ type HandleProps = HTMLAttributes<HTMLElementTagName> & {
   onBlur?: () => void
 }
 
-const Group: FC<GroupProps> = ({ className, as, ...props }) => (
+export const Group: FC<GroupProps> = ({ className, as, ...props }) => (
   <ResizablePrimitive.PanelGroup
     {...props}
     tagName={as}
@@ -38,9 +38,9 @@ const Group: FC<GroupProps> = ({ className, as, ...props }) => (
   />
 )
 
-const Panel: FC<PanelProps> = ({ as, ...props }) => <ResizablePrimitive.Panel {...props} tagName={as} />
+export const Panel: FC<PanelProps> = ({ as, ...props }) => <ResizablePrimitive.Panel {...props} tagName={as} />
 
-const Handle: FC<HandleProps> = ({ className, as, children, ...props }) => (
+export const Handle: FC<HandleProps> = ({ className, as, children, ...props }) => (
   <ResizablePrimitive.PanelResizeHandle
     {...props}
     tagName={as}
@@ -52,15 +52,3 @@ const Handle: FC<HandleProps> = ({ className, as, children, ...props }) => (
     {children && <div className="rounded-sm bg-border p-1">{children}</div>}
   </ResizablePrimitive.PanelResizeHandle>
 )
-
-const Resizable = Object.assign(Group, {
-  Panel,
-  Handle,
-})
-
-export {
-  Resizable,
-  type GroupProps as ResizableProps,
-  type PanelProps as ResizablePanelProps,
-  type HandleProps as ResizableHandleProps,
-}

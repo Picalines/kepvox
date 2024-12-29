@@ -5,7 +5,7 @@ import { type ComponentPropsWithoutRef, type FC, type ReactNode, type RefObject,
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-type RootProps = {
+export type RootProps = {
   children: ReactNode
   open?: boolean
   defaultOpen?: boolean
@@ -13,12 +13,12 @@ type RootProps = {
   onClose?: () => void
 }
 
-type TriggerProps = ComponentPropsWithoutRef<'button'> & {
+export type TriggerProps = ComponentPropsWithoutRef<'button'> & {
   children: ReactNode
   asChild?: boolean
 }
 
-type ContentProps = {
+export type ContentProps = {
   children: ReactNode
   ref?: RefObject<HTMLDivElement>
   asChild?: boolean
@@ -29,16 +29,16 @@ type ContentProps = {
   alignOffset?: number
 }
 
-const TriggerSlot = createSlot<TriggerProps>('Trigger')
-const ContentSlot = createSlot<ContentProps>('Content')
+export const Trigger = createSlot<TriggerProps>('Trigger')
+export const Content = createSlot<ContentProps>('Content')
 
-const Root: FC<RootProps> = props => {
+export const Root: FC<RootProps> = props => {
   const { children, onOpen, onClose, ...rootProps } = props
 
   const slots = useSlots({ children })
 
-  const trigger = slots.get(TriggerSlot)
-  const content = slots.get(ContentSlot)
+  const trigger = slots.get(Trigger)
+  const content = slots.get(Content)
 
   const onOpenChange = useCallback(
     (opened: boolean) => {
@@ -71,18 +71,4 @@ const Root: FC<RootProps> = props => {
       </RadixPopover.Portal>
     </RadixPopover.Root>
   )
-}
-
-const Popover = Object.assign(Root, {
-  Trigger: TriggerSlot,
-  Content: ContentSlot,
-})
-
-Popover.displayName = 'Popover'
-
-export {
-  Popover,
-  type RootProps as PopoverProps,
-  type TriggerProps as PopoverTriggerProps,
-  type ContentProps as PopoverContentProps,
 }

@@ -1,21 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { Tooltip } from '.'
 import { Button } from '../button'
-import { Tooltip, type TooltipContentProps, type TooltipProps } from './tooltip'
 
-type StoryArgs = TooltipProps &
-  TooltipContentProps & {
+type StoryArgs = Tooltip.RootProps &
+  Tooltip.ContentProps & {
     text: string
     hasArrow: boolean
   }
 
 export default {
   title: 'components/Tooltip',
-  component: Tooltip,
+  component: Tooltip.Root,
   render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
     <Tooltip.Provider>
       <div className="flex max-w-[400px] justify-center rounded-lg border border-dashed p-20">
-        <Tooltip {...rootProps}>
+        <Tooltip.Root {...rootProps}>
           <Tooltip.Trigger asChild>
             <Button>Button</Button>
           </Tooltip.Trigger>
@@ -23,7 +23,7 @@ export default {
             {text}
           </Tooltip.Content>
           {hasArrow && <Tooltip.Arrow />}
-        </Tooltip>
+        </Tooltip.Root>
       </div>
     </Tooltip.Provider>
   ),

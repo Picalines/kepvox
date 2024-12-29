@@ -1,31 +1,31 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { fn } from '@storybook/test'
+import { Dialog } from '.'
 import { Button } from '../button'
 import { Heading } from '../heading'
-import { Dialog, type DialogProps } from './dialog'
 
-type StoryArgs = DialogProps & Partial<{ title: string; description: string; closable: boolean }>
+type StoryArgs = Dialog.RootProps & Partial<{ title: string; description: string; closable: boolean }>
 
 export default {
   title: 'components/Dialog',
-  component: Dialog,
+  component: Dialog.Root,
   args: {
     onOpen: fn(),
     onClose: fn(),
   },
   render: ({ title, description, closable, ...args }) => (
-    <Dialog {...args}>
+    <Dialog.Root {...args}>
       <Dialog.Trigger asChild>
         <Button>Button</Button>
       </Dialog.Trigger>
       <Dialog.Content closable={closable}>
-        <Heading>
+        <Heading.Root>
           <Heading.Title>{title}</Heading.Title>
           <Heading.Description color="secondary">{description}</Heading.Description>
-        </Heading>
+        </Heading.Root>
       </Dialog.Content>
-    </Dialog>
+    </Dialog.Root>
   ),
   argTypes: {
     open: {

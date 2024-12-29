@@ -2,13 +2,13 @@ import * as RadixSeparator from '@radix-ui/react-separator'
 import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 
-type SeparatorProps = ComponentProps<'div'> & {
+export type SeparatorProps = ComponentProps<'div'> & {
   asChild?: boolean
   orientation?: 'horizontal' | 'vertical'
   decorative?: boolean
 }
 
-const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
+export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
   ({ className, asChild = false, orientation = 'horizontal', decorative = true, ...props }, ref) => (
     <RadixSeparator.Root
       ref={ref}
@@ -25,5 +25,3 @@ const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
 )
 
 Separator.displayName = 'Separator'
-
-export { Separator, type SeparatorProps }

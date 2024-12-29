@@ -9,14 +9,14 @@ export default {
     <Tooltip.Provider delayDuration={0}>
       <div className="flex flex-wrap gap-2">
         {Object.entries(icons).map(([name, Icon]) => (
-          <Tooltip key={name}>
+          <Tooltip.Root key={name}>
             <Tooltip.Trigger asChild>
               <div className="rounded-md border border-dashed p-1">
                 <Icon size={40} />
               </div>
             </Tooltip.Trigger>
             <Tooltip.Content>{name.replace('Icon', '')}</Tooltip.Content>
-          </Tooltip>
+          </Tooltip.Root>
         ))}
       </div>
     </Tooltip.Provider>

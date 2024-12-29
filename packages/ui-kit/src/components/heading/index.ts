@@ -1,1 +1,1 @@
-export * from './heading'
+export * as Heading from './heading'

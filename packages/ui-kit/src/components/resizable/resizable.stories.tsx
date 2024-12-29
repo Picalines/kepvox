@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { cn } from '#lib/classnames'
-import { Resizable, type ResizableProps } from './resizable'
+import { Resizable } from '.'
 
-type StoryArgs = ResizableProps & { handleContent: string }
+type StoryArgs = Resizable.GroupProps & { handleContent: string }
 
 export default {
   title: 'components/Resizable',
-  component: Resizable,
+  component: Resizable.Group,
   render: ({ handleContent, ...args }) => (
     <div className="size-[400px]">
-      <Resizable {...args} className={cn('size-full rounded-lg border', args.className)}>
+      <Resizable.Group {...args} className={cn('size-full rounded-lg border', args.className)}>
         <Resizable.Panel className="flex items-center justify-center p-5">Panel 1</Resizable.Panel>
         <Resizable.Handle>{handleContent}</Resizable.Handle>
         <Resizable.Panel className="flex items-center justify-center p-5">Panel 2</Resizable.Panel>
-      </Resizable>
+      </Resizable.Group>
     </div>
   ),
 } satisfies Meta<StoryArgs>

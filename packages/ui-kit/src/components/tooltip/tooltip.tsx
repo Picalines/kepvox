@@ -5,7 +5,7 @@ import { type ComponentProps, type FC, type ReactNode, useCallback } from 'react
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-type RootProps = {
+export type RootProps = {
   children: ReactNode
   open?: boolean
   defaultOpen?: boolean
@@ -14,17 +14,17 @@ type RootProps = {
   onClose?: () => void
 }
 
-type ProviderProps = {
+export type ProviderProps = {
   children: ReactNode
   delayDuration?: number
 }
 
-type TriggerProps = ComponentProps<'button'> & {
+export type TriggerProps = ComponentProps<'button'> & {
   children: ReactNode
   asChild?: boolean
 }
 
-type ContentProps = ComponentProps<'div'> & {
+export type ContentProps = ComponentProps<'div'> & {
   children: ReactNode
   asChild?: boolean
   side?: 'top' | 'right' | 'bottom' | 'left'
@@ -33,27 +33,27 @@ type ContentProps = ComponentProps<'div'> & {
   alignOffset?: number
 }
 
-type ArrowProps = ComponentProps<'svg'> & {
+export type ArrowProps = ComponentProps<'svg'> & {
   asChild?: boolean
   width?: number
   height?: number
 }
 
-const Provider: FC<ProviderProps> = RadixTooltip.Provider
+export const Provider: FC<ProviderProps> = RadixTooltip.Provider
 Provider.displayName = 'Tooltip.Provider'
 
-const TriggerSlot = createSlot<TriggerProps>('Trigger')
-const ContentSlot = createSlot<ContentProps>('Content')
-const ArrowSlot = createSlot<ArrowProps>('Arrow')
+export const Trigger = createSlot<TriggerProps>('Trigger')
+export const Content = createSlot<ContentProps>('Content')
+export const Arrow = createSlot<ArrowProps>('Arrow')
 
-const Root: FC<RootProps> = props => {
+export const Root: FC<RootProps> = props => {
   const { children, onOpen, onClose, ...rootProps } = props
 
   const slots = useSlots({ children })
 
-  const trigger = slots.get(TriggerSlot)
-  const content = slots.get(ContentSlot)
-  const arrow = slots.get(ArrowSlot)
+  const trigger = slots.get(Trigger)
+  const content = slots.get(Content)
+  const arrow = slots.get(Arrow)
 
   const onOpenChange = useCallback(
     (opened: boolean) => {
@@ -90,20 +90,4 @@ const Root: FC<RootProps> = props => {
       )}
     </RadixTooltip.Root>
   )
-}
-
-const Tooltip = Object.assign(Root, {
-  Provider,
-  Trigger: TriggerSlot,
-  Content: ContentSlot,
-  Arrow: ArrowSlot,
-})
-
-export {
-  Tooltip,
-  type RootProps as TooltipProps,
-  type ProviderProps as TooltipProviderProps,
-  type TriggerProps as TooltipTriggerProps,
-  type ContentProps as TooltipContentProps,
-  type ArrowProps as TooltipArrowProps,
 }

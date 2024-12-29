@@ -5,7 +5,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 
-const toggleVariants = cva(
+export const toggleVariants = cva(
   'inline-flex items-center justify-center rounded-md border-input font-medium text-sm ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground',
   {
     variants: {
@@ -26,21 +26,21 @@ const toggleVariants = cva(
   },
 )
 
-type ToggleProps = ComponentProps<'button'> &
+export type ToggleProps = ComponentProps<'button'> &
   VariantProps<typeof toggleVariants> & {
     onToggle?: (pressed: boolean) => void
     asChild?: boolean
   }
 
-const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(({ className, variant, size, onToggle, ...props }, ref) => (
-  <RadixToggle.Root
-    {...props}
-    ref={ref}
-    className={cn(toggleVariants({ variant, size, className }))}
-    onPressedChange={onToggle}
-  />
-))
+export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
+  ({ className, variant, size, onToggle, ...props }, ref) => (
+    <RadixToggle.Root
+      {...props}
+      ref={ref}
+      className={cn(toggleVariants({ variant, size, className }))}
+      onPressedChange={onToggle}
+    />
+  ),
+)
 
 Toggle.displayName = 'Toggle'
-
-export { Toggle, toggleVariants, type ToggleProps }
