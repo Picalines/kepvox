@@ -10,7 +10,8 @@
         "start": "next start"
     },
     "imports": {
-        "#screens/*": "./src/screens/*/index.ts"
+        "#screens/*": "./src/screens/*/index.ts",
+        "#shared/lib/*": "./src/shared/lib/*/index.ts"
     },
     "dependencies": {
         "@effector/next": "^0.7.0",
