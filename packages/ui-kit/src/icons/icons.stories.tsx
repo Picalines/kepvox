@@ -3,7 +3,7 @@ import { Tooltip, TooltipProvider } from '#components/tooltip'
 import * as icons from './index'
 
 export default {
-  title: 'icons/All',
+  title: 'icons/Icons',
 
   render: () => (
     <TooltipProvider delayDuration={0}>
