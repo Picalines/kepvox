@@ -41,7 +41,7 @@
                     "fix": "unsafe",
                     "options": {
                         "attributes": ["className"],
-                        "functions": ["clsx", "cx", "cva", "tw"]
+                        "functions": ["clsx", "cx", "cva", "tw", "withClassNames"]
                     }
                 },
 
