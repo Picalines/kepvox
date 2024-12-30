@@ -17,7 +17,8 @@ const textVariants = cva('', {
       primary: 'text-black dark:text-white',
       secondary: 'text-gray-500 dark:text-gray-400',
       positive: 'text-green-500 dark:text-green-400',
-      negative: 'text-red-500 dark:text-red-500',
+      negative: 'text-red-500 dark:text-red-400',
+      warning: 'text-yellow-500 dark:text-yellow-400',
     },
     weight: {
       light: 'font-light',
@@ -41,7 +42,7 @@ const textVariants = cva('', {
   },
 })
 
-export type TextProps = ComponentProps<'span'> &
+export type TextProps = (ComponentProps<'span'> | ComponentProps<'label'>) &
   VariantProps<typeof textVariants> & {
     as?: ElementType
   }

@@ -32,7 +32,7 @@ export default {
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'positive', 'negative'] satisfies TextColor[],
+      options: ['primary', 'secondary', 'positive', 'negative', 'warning'] satisfies TextColor[],
     },
     italic: {
       control: 'boolean',
