@@ -2,6 +2,7 @@ export {
   ArrowLeftIcon,
   ArrowRightIcon,
   BoxSelectIcon,
+  CheckIcon,
   CirclePlusIcon,
   Columns3Icon,
   Loader2Icon as LoaderIcon,
