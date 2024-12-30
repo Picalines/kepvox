@@ -16,6 +16,7 @@ export {
   Rows3Icon,
   SquareIcon,
   SquarePlusIcon,
+  TriangleAlertIcon as WarningIcon,
   XIcon,
   ZoomInIcon,
   ZoomOutIcon,
