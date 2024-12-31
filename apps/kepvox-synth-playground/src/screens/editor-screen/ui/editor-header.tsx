@@ -1,5 +1,3 @@
-'use client'
-
 import { Heading } from '@repo/ui-kit/components/heading'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import type { FC } from 'react'

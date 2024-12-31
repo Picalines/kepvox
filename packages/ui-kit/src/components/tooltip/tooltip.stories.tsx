@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Tooltip, TooltipProvider } from '.'
+import { Tooltip } from '.'
 import { Button } from '../button'
 
 type StoryArgs = Tooltip.RootProps &
@@ -13,20 +13,25 @@ export default {
   title: 'components/Tooltip',
   component: Tooltip.Root,
   render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
-    <TooltipProvider>
-      <div className="flex max-w-[400px] justify-center rounded-lg border border-dashed p-20">
-        <Tooltip.Root {...rootProps}>
-          <Tooltip.Trigger asChild>
-            <Button>Button</Button>
-          </Tooltip.Trigger>
-          <Tooltip.Content side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset}>
-            {text}
-          </Tooltip.Content>
-          {hasArrow && <Tooltip.Arrow />}
-        </Tooltip.Root>
-      </div>
-    </TooltipProvider>
+    <Tooltip.Root {...rootProps}>
+      <Tooltip.Trigger asChild>
+        <Button>Button</Button>
+      </Tooltip.Trigger>
+      <Tooltip.Content side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset}>
+        {text}
+      </Tooltip.Content>
+      {hasArrow && <Tooltip.Arrow />}
+    </Tooltip.Root>
   ),
+  decorators: [
+    Story => (
+      <Tooltip.Provider>
+        <div className="flex max-w-[400px] justify-center rounded-lg border border-dashed p-20">
+          <Story />
+        </div>
+      </Tooltip.Provider>
+    ),
+  ],
   argTypes: {
     side: {
       control: 'select',

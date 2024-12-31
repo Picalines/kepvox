@@ -1,15 +1,23 @@
 import * as RadixTooltip from '@radix-ui/react-tooltip'
-import { type ComponentProps, type FC, type ReactNode, useCallback } from 'react'
+import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
+
+export type ProviderProps = {
+  children: ReactNode
+  delayDuration?: number
+}
+
+export const Provider: FC<ProviderProps> = props => <RadixTooltip.Provider {...props} />
+
+Provider.displayName = 'Tooltip.Provider'
 
 export type RootProps = {
   children: ReactNode
   open?: boolean
   defaultOpen?: boolean
   delayDuration?: number
-  onOpen?: () => void
-  onClose?: () => void
+  onOpenChange?: (opened: boolean) => void
 }
 
 export type TriggerProps = ComponentProps<'button'> & {
@@ -37,7 +45,7 @@ export const Content = createSlot<ContentProps>('Content')
 export const Arrow = createSlot<ArrowProps>('Arrow')
 
 export const Root: FC<RootProps> = props => {
-  const { children, onOpen, onClose, ...rootProps } = props
+  const { children, ...rootProps } = props
 
   const slots = useSlots({ children })
 
@@ -45,16 +53,8 @@ export const Root: FC<RootProps> = props => {
   const content = slots.get(Content)
   const arrow = slots.get(Arrow)
 
-  const onOpenChange = useCallback(
-    (opened: boolean) => {
-      const handler = opened ? onOpen : onClose
-      handler?.()
-    },
-    [onOpen, onClose],
-  )
-
   return (
-    <RadixTooltip.Root {...rootProps} onOpenChange={onOpenChange}>
+    <RadixTooltip.Root {...rootProps}>
       {trigger && (
         <RadixTooltip.Trigger {...trigger.props} ref={trigger.ref}>
           {trigger.children}
