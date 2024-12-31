@@ -9,21 +9,25 @@ type StoryArgs = Popover.RootProps & Popover.ContentProps
 export default {
   title: 'components/Popover',
   component: Popover.Root,
-  render: ({ open, defaultOpen, onOpen, onClose, ...contentProps }) => (
-    <div className="w-min rounded-lg border border-dashed p-20">
-      <Popover.Root open={open} defaultOpen={defaultOpen} onOpen={onOpen} onClose={onClose}>
-        <Popover.Trigger asChild>
-          <Button>Button</Button>
-        </Popover.Trigger>
-        <Popover.Content {...contentProps} className={cn('w-min', contentProps.className)}>
-          Content
-        </Popover.Content>
-      </Popover.Root>
-    </div>
+  render: ({ open, defaultOpen, onOpenChange, ...contentProps }) => (
+    <Popover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+      <Popover.Trigger asChild>
+        <Button>Button</Button>
+      </Popover.Trigger>
+      <Popover.Content {...contentProps} className={cn('w-min', contentProps.className)}>
+        Content
+      </Popover.Content>
+    </Popover.Root>
   ),
+  decorators: [
+    Story => (
+      <div className="w-min rounded-lg border border-dashed p-20">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
-    onOpen: fn(),
-    onClose: fn(),
+    onOpenChange: fn(),
   },
   argTypes: {
     side: {
@@ -34,10 +38,7 @@ export default {
       control: 'inline-radio',
       options: ['start', 'center', 'end'] satisfies StoryArgs['align'][],
     },
-    onOpen: {
-      table: { disable: true },
-    },
-    onClose: {
+    onOpenChange: {
       table: { disable: true },
     },
   },
