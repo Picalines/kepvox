@@ -1,5 +1,5 @@
 import * as RadixDialog from '@radix-ui/react-dialog'
-import { type FC, type ReactNode, type Ref, useCallback } from 'react'
+import type { FC, ReactNode, Ref } from 'react'
 import { XIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -8,8 +8,7 @@ export type RootProps = {
   children: ReactNode
   open?: boolean
   defaultOpen?: boolean
-  onOpen?: () => void
-  onClose?: () => void
+  onOpenChange?: (opened: boolean) => void
 }
 
 export type TriggerProps = {
@@ -30,8 +29,10 @@ export const Content = createSlot<ContentProps>('Content')
 
 type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractOutside']>
 
+const preventClosing: OnInteractOutside = event => event.preventDefault()
+
 export const Root: FC<RootProps> = props => {
-  const { children, onOpen, onClose, ...rootProps } = props
+  const { children, ...rootProps } = props
 
   const slots = useSlots({ children })
 
@@ -40,15 +41,12 @@ export const Root: FC<RootProps> = props => {
 
   const { closable = true, ...contentProps } = content?.props ?? {}
 
-  const onOpenChange = useCallback((opened: boolean) => (opened ? onOpen : onClose)?.(), [onOpen, onClose])
-
-  const onInteractOutside = useCallback<OnInteractOutside>(
-    event => (closable ? null : event)?.preventDefault(),
-    [closable],
-  )
+  // TODO: move content to client component, so closable=false
+  // would be available in SSR
+  const onInteractOutside = closable ? undefined : preventClosing
 
   return (
-    <RadixDialog.Root {...rootProps} onOpenChange={onOpenChange}>
+    <RadixDialog.Root {...rootProps}>
       {trigger && <RadixDialog.Trigger {...trigger.props}>{trigger.children}</RadixDialog.Trigger>}
       <RadixDialog.Portal>
         <RadixDialog.Overlay
