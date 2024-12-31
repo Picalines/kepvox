@@ -6,8 +6,6 @@ export type SlotMapOptions = {
 }
 
 export class SlotMap {
-  readonly children?: ReactNode = undefined
-
   #slots: Map<SlotComponent, RenderedSlot>
 
   constructor(children: ReactNode, options: SlotMapOptions = {}) {
@@ -19,7 +17,7 @@ export class SlotMap {
       throw new Error('defaultSlot should be a component created by createSlot')
     }
 
-    const defaultContent: ReactNode[] = []
+    const nonSlotNodes: ReactNode[] = []
 
     Children.forEach(children, child => {
       if (isSlotElement(child)) {
@@ -36,23 +34,24 @@ export class SlotMap {
           ref,
         })
       } else if (child !== null && child !== undefined && child !== '') {
-        defaultContent.push(child)
+        nonSlotNodes.push(child)
       }
     })
 
-    const defaultSlotItem = defaultSlot ? this.#slots.get(defaultSlot) : undefined
-    const hasContent = defaultContent.length > 0
+    if (nonSlotNodes.length) {
+      if (!defaultSlot) {
+        throw new Error('non-slot components without the defaultSlot option are not allowed')
+      }
 
-    if (defaultSlotItem && hasContent) {
-      throw new Error(
-        `cannot append children to default slot '${defaultSlotItem.name}' while it's being used explicitly`,
-      )
-    }
+      if (this.#slots.size) {
+        throw new Error('mixing slot and non-slot components is not allowed')
+      }
 
-    if (defaultSlotItem) {
-      this.children = defaultSlotItem.children
-    } else if (hasContent) {
-      this.children = defaultContent
+      this.#slots.set(defaultSlot, {
+        name: defaultSlot.__slotName,
+        props: {},
+        children: nonSlotNodes,
+      })
     }
   }
 
