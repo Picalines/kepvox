@@ -1,6 +1,4 @@
-'use client'
-
-import { type ReactNode, useMemo } from 'react'
+import type { ReactNode } from 'react'
 import { SlotMap, type SlotMapOptions } from './slot-map'
 
 export type UseSlotsProps = SlotMapOptions & {
@@ -10,5 +8,5 @@ export type UseSlotsProps = SlotMapOptions & {
 export function useSlots(props: UseSlotsProps): SlotMap {
   const { children, defaultSlot } = props
 
-  return useMemo(() => new SlotMap(children, { defaultSlot }), [children, defaultSlot])
+  return new SlotMap(children, { defaultSlot })
 }
