@@ -15,7 +15,7 @@ export default {
         <Card.Header>
           <Heading.Root>
             <Heading.Title>{title}</Heading.Title>
-            <Heading.Description color="secondary">{description}</Heading.Description>
+            <Heading.Description>{description}</Heading.Description>
           </Heading.Root>
         </Card.Header>
       ) : null}

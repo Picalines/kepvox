@@ -39,7 +39,7 @@ export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
         </Text>
       )}
       {description && (
-        <Text variant="text-m" color="primary" {...description.props} ref={description.ref}>
+        <Text variant="text-m" color="secondary" {...description.props} ref={description.ref}>
           {description.children}
         </Text>
       )}
