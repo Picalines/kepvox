@@ -3,13 +3,12 @@ import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 
 export type SeparatorProps = ComponentProps<'div'> & {
-  asChild?: boolean
   orientation?: 'horizontal' | 'vertical'
   decorative?: boolean
 }
 
 export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
-  ({ className, asChild = false, orientation = 'horizontal', decorative = true, ...props }, ref) => (
+  ({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (
     <RadixSeparator.Root
       ref={ref}
       decorative={decorative}

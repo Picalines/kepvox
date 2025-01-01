@@ -15,18 +15,20 @@ export default {
       <div className="flex-1 rounded-lg border border-dashed" />
     </div>
   ),
-  argTypes: {
-    asChild: {
-      table: { disable: true },
-    },
-  },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>
 
-export const Default: Story = {
+export const Horizontal: Story = {
   args: {
     orientation: 'horizontal',
     decorative: true,
+  },
+}
+
+export const Vertical: Story = {
+  args: {
+    ...Horizontal.args,
+    orientation: 'vertical',
   },
 }

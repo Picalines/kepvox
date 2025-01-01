@@ -24,7 +24,7 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-export const Default: Story = {
+export const Primary: Story = {
   args: {
     children: 'Button',
     variant: 'primary',
@@ -33,9 +33,30 @@ export const Default: Story = {
   },
 }
 
+export const Secondary: Story = {
+  args: {
+    ...Primary.args,
+    variant: 'secondary',
+  },
+}
+
+export const Ghost: Story = {
+  args: {
+    ...Primary.args,
+    variant: 'ghost',
+  },
+}
+
+export const Outline: Story = {
+  args: {
+    ...Primary.args,
+    variant: 'outline',
+  },
+}
+
 export const Icon: Story = {
   args: {
-    ...Default.args,
+    ...Primary.args,
     children: <PaletteIcon className="absolute" />,
     size: 'md',
     shape: 'square',

@@ -25,3 +25,24 @@ export const Default: Story = {
     description: 'Description',
   },
 }
+
+export const NoSuperTitle: Story = {
+  args: {
+    ...Default.args,
+    superTitle: undefined,
+  },
+}
+
+export const NoDescription: Story = {
+  args: {
+    ...Default.args,
+    description: undefined,
+  },
+}
+
+export const NoTitle: Story = {
+  args: {
+    ...Default.args,
+    title: undefined,
+  },
+}

@@ -46,7 +46,7 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-export const Default: Story = {
+export const Top: Story = {
   args: {
     defaultOpen: true,
     text: 'Tooltip',
@@ -55,5 +55,33 @@ export const Default: Story = {
     sideOffset: 4,
     alignOffset: 0,
     hasArrow: true,
+  },
+}
+
+export const Left: Story = {
+  args: {
+    ...Top.args,
+    side: 'left',
+  },
+}
+
+export const Right: Story = {
+  args: {
+    ...Top.args,
+    side: 'right',
+  },
+}
+
+export const Bottom: Story = {
+  args: {
+    ...Top.args,
+    side: 'bottom',
+  },
+}
+
+export const NoArrow: Story = {
+  args: {
+    ...Top.args,
+    hasArrow: false,
   },
 }
