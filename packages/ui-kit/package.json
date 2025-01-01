@@ -7,7 +7,10 @@
     "scripts": {
         "dev": "pnpm dev:storybook",
         "dev:storybook": "pnpm dev:storybook:server",
-        "dev:storybook:server": "storybook dev -p 6006 --no-open"
+        "dev:storybook:server": "storybook dev -p 6006 --no-open",
+        "playwright:install": "playwright install chromium",
+        "test:screen": "STORYBOOK_URL=http://localhost:6006 playwright test",
+        "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
     "exports": {
         "./style.css": "./src/styles/index.css",
@@ -27,8 +30,10 @@
         "#components/*": "./src/components/*/index.ts"
     },
     "devDependencies": {
+        "@playwright/test": "catalog:",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
+        "@repo/ui-test": "workspace:*",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",
@@ -39,6 +44,7 @@
         "@types/postcss-import": "catalog:",
         "@types/react": "catalog:",
         "autoprefixer": "catalog:",
+        "playwright": "catalog:",
         "postcss": "catalog:",
         "postcss-import": "catalog:",
         "storybook": "catalog:",
