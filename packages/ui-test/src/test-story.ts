@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test'
+import { type Page, expect, test } from '@playwright/test'
 import { getStoryUrl } from './story-url'
 
 type Theme = 'light' | 'dark'
