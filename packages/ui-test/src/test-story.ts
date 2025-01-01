@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, Page, test } from '@playwright/test'
 import { getStoryUrl } from './story-url'
 
 type Theme = 'light' | 'dark'
@@ -8,9 +8,11 @@ type TestStoryParams = {
   story: string | string[]
   skip?: { reason: string }
   windowSize?: { width: number; height: number }
+  fullPage?: boolean
   selector?: string
   args?: Record<string, unknown>
   theme?: Theme | Theme[]
+  act?: (page: Page) => Promise<void> | void
 }
 
 export const testStory = (params: TestStoryParams) => {
@@ -19,9 +21,11 @@ export const testStory = (params: TestStoryParams) => {
     story: storyParam,
     skip,
     windowSize,
+    fullPage = false,
     selector = '#storybook-root',
     args: storyArgs = {},
     theme: themeParam = 'light',
+    act,
   } = params
 
   const stories = typeof storyParam === 'string' ? [storyParam] : storyParam
@@ -63,13 +67,16 @@ export const testStory = (params: TestStoryParams) => {
             await page.locator(':root').evaluate(root => root.classList.add('dark'))
           }
 
-          if (selector) {
-            await page.locator(selector).waitFor()
-          }
+          const target = page.locator(selector)
+          await target.waitFor()
 
-          await expect(page.locator(selector)).toHaveScreenshot({
-            animations: 'disabled',
-          })
+          await act?.(page)
+
+          if (fullPage) {
+            await expect(page).toHaveScreenshot({ animations: 'disabled', fullPage: true })
+          } else {
+            await expect(target).toHaveScreenshot({ animations: 'disabled' })
+          }
         })
       })
     }
