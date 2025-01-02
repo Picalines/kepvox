@@ -1,0 +1,73 @@
+name: Unit test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: macos-latest
+    outputs:
+      node-version: ${{ steps.read-node-version.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read .nvmrc
+        id: read-node-version
+        run: |
+          version=`cat .nvmrc | sed s/^v//`
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  screen-test:
+    name: Screen tests
+    runs-on: macos-latest
+    needs:
+      - setup
+
+    strategy:
+      matrix:
+        package:
+          - packages/ui-kit
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ needs.setup.outputs.node-version }}"
+          cache: pnpm
+
+      - name: Install root dependencies
+        run: pnpm install
+
+      - name: Install ${{ matrix.package }} dependencies
+        working-directory: ${{ matrix.package }}
+        run: pnpm install
+
+      - name: Install playwright browsers
+        working-directory: ${{ matrix.package }}
+        run: pnpm run playwright:install
+
+      - name: Run screen tests
+        working-directory: ${{ matrix.package }}
+        run: pnpm run test:screen
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: ${{ matrix.package }}/playwright-report/
+          retention-days: 30

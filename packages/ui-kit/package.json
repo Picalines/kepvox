@@ -9,7 +9,7 @@
         "dev:storybook": "pnpm dev:storybook:server",
         "dev:storybook:server": "storybook dev -p 6006 --no-open",
         "playwright:install": "playwright install chromium --with-deps",
-        "test:screen": "STORYBOOK_URL=http://localhost:6006 playwright test",
+        "test:screen": "STORYBOOK_URL=http://127.0.0.1:6006 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
     "exports": {

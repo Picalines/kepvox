@@ -39,7 +39,7 @@ export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): Playwrigh
   ],
 
   retries: 2,
-  workers: 8,
+  workers: process.env.CI ? undefined : 8,
 
   ...overrides,
 })
