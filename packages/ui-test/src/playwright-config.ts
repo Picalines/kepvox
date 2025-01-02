@@ -1,6 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 
-export const getPlaywrightConfig = (): PlaywrightTestConfig => ({
+export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): PlaywrightTestConfig => ({
   testDir: '.',
   outputDir: './test-results',
 
@@ -40,4 +40,6 @@ export const getPlaywrightConfig = (): PlaywrightTestConfig => ({
 
   retries: 2,
   workers: 8,
+
+  ...overrides,
 })
