@@ -34,10 +34,23 @@ const config: StorybookConfig = {
   },
 
   viteFinal(config) {
+    type Warning = { code: string }
+
     return mergeConfig(config, {
       css: {
         postcss: {
           plugins: [tailwindcss(), postcssImport(), autoprefixer()],
+        },
+      },
+      build: {
+        rollupOptions: {
+          onwarn: (warning: Warning, report: (warning: Warning) => void) => {
+            if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+              return
+            }
+
+            report(warning)
+          },
         },
       },
     })
