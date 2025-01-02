@@ -8,7 +8,7 @@
         "dev": "pnpm dev:storybook",
         "dev:storybook": "pnpm dev:storybook:server",
         "dev:storybook:server": "storybook dev -p 6006 --no-open",
-        "playwright:install": "playwright install chromium",
+        "playwright:install": "playwright install chromium --with-deps",
         "test:screen": "STORYBOOK_URL=http://localhost:6006 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
@@ -30,7 +30,6 @@
         "#components/*": "./src/components/*/index.ts"
     },
     "devDependencies": {
-        "@playwright/test": "catalog:",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/ui-test": "workspace:*",
