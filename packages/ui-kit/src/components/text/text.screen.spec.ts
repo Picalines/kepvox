@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './text.stories'
 
-testStory({
-  title: 'components/Text',
-  story: ['Default'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Default'],
+  themes: ['light', 'dark'],
 })

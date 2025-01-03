@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './text-input.stories'
 
-testStory({
-  title: 'components/TextInput',
-  story: ['Default', 'WithValue', 'Password', 'Disabled', 'DisabledWithValue'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Default', 'WithValue', 'Password', 'Disabled', 'DisabledWithValue'],
+  themes: ['light', 'dark'],
 })

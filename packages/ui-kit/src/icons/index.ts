@@ -5,6 +5,8 @@ export {
   CheckIcon,
   CirclePlusIcon,
   Columns3Icon,
+  GripHorizontalIcon,
+  GripVerticalIcon,
   Loader2Icon as LoaderIcon,
   MousePointer2Icon as MousePointerIcon,
   MousePointerClickIcon,

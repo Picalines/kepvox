@@ -1,9 +1,10 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './dialog.stories'
 
-testStory({
-  title: 'components/Dialog',
-  story: 'Default',
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Default'],
+  themes: ['light', 'dark'],
 
   fullPage: true,
   windowSize: { width: 800, height: 600 },

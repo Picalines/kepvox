@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './separator.stories'
 
-testStory({
-  title: 'components/Separator',
-  story: ['Horizontal', 'Vertical'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Horizontal', 'Vertical'],
+  themes: ['light', 'dark'],
 })

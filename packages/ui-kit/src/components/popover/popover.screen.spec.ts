@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './popover.stories'
 
-testStory({
-  title: 'components/Popover',
-  story: ['Top', 'Left', 'Right', 'Bottom'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Top', 'Left', 'Right', 'Bottom'],
+  themes: ['light', 'dark'],
 })

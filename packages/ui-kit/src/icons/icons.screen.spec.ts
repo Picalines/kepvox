@@ -1,8 +1,9 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './icons.stories'
 
-testStory({
-  title: 'icons/Icons',
-  story: ['Default'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Default'],
+  themes: ['light', 'dark'],
   windowSize: { width: 600, height: 800 },
 })

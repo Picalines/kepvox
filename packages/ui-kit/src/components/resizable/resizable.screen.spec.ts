@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './resizable.stories'
 
-testStory({
-  title: 'components/Resizable',
-  story: ['Default'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Horizontal', 'Vertical', 'TripleHorizontal', 'TripleVertical'],
+  themes: ['light', 'dark'],
 })

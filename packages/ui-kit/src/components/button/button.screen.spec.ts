@@ -1,7 +1,8 @@
-import { testStory } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/ui-test/test-story'
+import meta from './button.stories'
 
-testStory({
-  title: 'components/Button',
-  story: ['Primary', 'Secondary', 'Ghost', 'Outline', 'Icon'],
-  theme: ['light', 'dark'],
+testStoryMatrix({
+  meta,
+  stories: ['Primary', 'Secondary', 'Ghost', 'Outline', 'Icon'],
+  themes: ['light', 'dark'],
 })
