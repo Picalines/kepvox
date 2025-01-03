@@ -8,26 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    runs-on: macos-latest
-    outputs:
-      node-version: ${{ steps.read-node-version.outputs.version }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Read .nvmrc
-        id: read-node-version
-        run: |
-          version=`cat .nvmrc | sed s/^v//`
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
   screen-test:
     name: Screen tests
     runs-on: macos-latest
-    needs:
-      - setup
 
     strategy:
       matrix:
@@ -46,7 +29,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "${{ needs.setup.outputs.node-version }}"
+          node-version-file: .nvmrc
           cache: pnpm
 
       - name: Install root dependencies
