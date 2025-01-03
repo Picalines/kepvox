@@ -5,7 +5,7 @@ import { PlaybackButton } from './playback-button'
 
 export const EditorHeader: FC = () => {
   return (
-    <div className="flex w-full items-center gap-2 border-border border-b-2 p-2">
+    <div className="flex w-full items-center gap-2 border-b-2 p-2">
       <PlaybackButton />
       <Tooltip.Root>
         <Tooltip.Trigger asChild>

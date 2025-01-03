@@ -11,7 +11,7 @@ export default {
         {Object.entries(icons).map(([name, Icon]) => (
           <Tooltip.Root key={name}>
             <Tooltip.Trigger asChild>
-              <div className="rounded-md border border-border border-dashed p-1">
+              <div className="rounded-md border border-dashed p-1">
                 <Icon size={40} />
               </div>
             </Tooltip.Trigger>

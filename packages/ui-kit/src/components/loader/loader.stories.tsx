@@ -28,7 +28,7 @@ export const Centered: Story = {
   },
   decorators: [
     Story => (
-      <div className="relative h-40 w-40 rounded-sm border border-border border-dashed">
+      <div className="relative h-40 w-40 rounded-sm border border-dashed">
         <Story />
       </div>
     ),

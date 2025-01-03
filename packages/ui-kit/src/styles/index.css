@@ -2,6 +2,5 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import "./colors.css";
 @import "./defaults.css";
-@import "./preflight.css";
+@import "./colors.css";
