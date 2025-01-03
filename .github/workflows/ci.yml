@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint
+  check:
+    name: Check
     runs-on: ubuntu-latest
 
     steps:
@@ -30,8 +30,8 @@ jobs:
       - name: Install root dependencies
         run: pnpm install
 
-      - name: Run Biome lint
-        run: pnpm lint
+      - name: Run Biome
+        run: pnpm run ci:check
 
   unit-test:
     name: Unit tests

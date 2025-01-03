@@ -11,6 +11,7 @@
         "lint": "biome lint .",
         "lint:fix": "biome lint --write .",
         "lint:fix-unsafe": "biome lint --write --unsafe .",
+        "ci:check": "biome check .",
         "ci:pre-commit": "biome check --write"
     },
     "keywords": [],

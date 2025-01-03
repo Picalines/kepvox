@@ -1,14 +1,22 @@
 {
     "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 
-    "files": {
-        "include": ["./*.json", "apps/**", "packages/**"],
-        "ignore": [".turbo/**", ".next/**", "dist/**", "target/**", "public/**"]
-    },
-
     "extends": [
         "./packages/biome-config/biome.formatter.json",
         "./packages/biome-config/biome.linter.json",
         "./packages/biome-config/biome.imports.json"
-    ]
+    ],
+
+    "files": {
+        "include": ["./*.json", "apps/**", "packages/**"],
+        "ignore": [
+            ".turbo/**",
+            ".next/**",
+            "dist/**",
+            "target/**",
+            "public/**",
+            "test-results/**",
+            "playwright-report/**"
+        ]
+    }
 }
