@@ -31,6 +31,7 @@ const config: StorybookConfig = {
     },
   },
 
+  // @ts-expect-error mergeConfig typing seems weird
   viteFinal: config => mergeConfig(config, viteConfig),
 }
 

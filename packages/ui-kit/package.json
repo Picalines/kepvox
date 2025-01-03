@@ -5,10 +5,12 @@
     "private": true,
     "sideEffects": ["**/*.css"],
     "scripts": {
-        "dev": "pnpm dev:storybook",
-        "dev:storybook": "pnpm dev:storybook:server",
+        "dev": "pnpm run dev:storybook",
+        "dev:storybook": "pnpm run dev:storybook:server",
+        "dev:unit": "vitest watch",
         "dev:storybook:server": "storybook dev -p 6006 --no-open",
         "playwright:install": "playwright install chromium --with-deps",
+        "test:unit": "vitest run",
         "test:screen": "STORYBOOK_URL=http://127.0.0.1:6006 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
@@ -40,15 +42,20 @@
         "@storybook/react": "catalog:",
         "@storybook/react-vite": "catalog:",
         "@storybook/test": "catalog:",
+        "@testing-library/react": "catalog:",
+        "@testing-library/user-event": "catalog:",
         "@types/postcss-import": "catalog:",
         "@types/react": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
         "autoprefixer": "catalog:",
+        "jsdom": "catalog:",
         "playwright": "catalog:",
         "postcss": "catalog:",
         "postcss-import": "catalog:",
         "storybook": "catalog:",
         "tailwindcss": "catalog:",
-        "vite": "^5.3.5"
+        "vite": "catalog:",
+        "vitest": "catalog:"
     },
     "dependencies": {
         "@radix-ui/react-dialog": "^1.1.4",

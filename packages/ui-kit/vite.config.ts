@@ -12,6 +12,14 @@ export default defineConfig({
     },
   },
 
+  test: {
+    root: './src',
+    include: ['**/*.spec.ts(x)'],
+    exclude: ['**/*.screen.spec.ts(x)'],
+    globals: true,
+    environment: 'jsdom',
+  },
+
   build: {
     rollupOptions: {
       onwarn: (warning, report) => {
