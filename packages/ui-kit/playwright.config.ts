@@ -14,10 +14,4 @@ export default getPlaywrightConfig({
     stdout: 'ignore',
     stderr: 'pipe',
   },
-
-  expect: {
-    toHaveScreenshot: {
-      maxDiffPixelRatio: 0.05,
-    },
-  },
 })

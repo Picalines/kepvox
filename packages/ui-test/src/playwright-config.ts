@@ -13,6 +13,12 @@ export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): Playwrigh
 
   forbidOnly: !!process.env.CI,
 
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05,
+    },
+  },
+
   use: {
     channel: 'chromium',
     locale: 'en-US',
