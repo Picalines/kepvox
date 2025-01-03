@@ -1,10 +1,8 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 
 import { dirname, join } from 'node:path'
-import autoprefixer from 'autoprefixer'
-import postcssImport from 'postcss-import'
-import tailwindcss from 'tailwindcss'
 import { mergeConfig } from 'vite'
+import viteConfig from '../vite.config'
 
 function packagePath(value: string) {
   return dirname(require.resolve(join(value, 'package.json')))
@@ -33,28 +31,7 @@ const config: StorybookConfig = {
     },
   },
 
-  viteFinal(config) {
-    type Warning = { code: string }
-
-    return mergeConfig(config, {
-      css: {
-        postcss: {
-          plugins: [tailwindcss(), postcssImport(), autoprefixer()],
-        },
-      },
-      build: {
-        rollupOptions: {
-          onwarn: (warning: Warning, report: (warning: Warning) => void) => {
-            if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
-              return
-            }
-
-            report(warning)
-          },
-        },
-      },
-    })
-  },
+  viteFinal: config => mergeConfig(config, viteConfig),
 }
 
 export default config
