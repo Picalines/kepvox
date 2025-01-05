@@ -3,6 +3,7 @@
     "name": "@repo/ui-kit",
     "version": "0.1.0",
     "private": true,
+    "type": "module",
     "sideEffects": ["**/*.css"],
     "scripts": {
         "dev": "pnpm run dev:storybook",
@@ -35,6 +36,7 @@
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/ui-test": "workspace:*",
+        "@repo/vite-config": "workspace:^",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",

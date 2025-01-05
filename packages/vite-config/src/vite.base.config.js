@@ -1,17 +1,7 @@
-import autoprefixer from 'autoprefixer'
-import postcssImport from 'postcss-import'
-import tailwindcss from 'tailwindcss'
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 
-// Vite is used for storybook and vitest
-
 export default defineConfig({
-  css: {
-    postcss: {
-      plugins: [tailwindcss(), postcssImport(), autoprefixer()],
-    },
-  },
-
   build: {
     rollupOptions: {
       onwarn: (warning, report) => {
@@ -23,5 +13,13 @@ export default defineConfig({
         report(warning)
       },
     },
+  },
+
+  test: {
+    root: './src',
+    include: ['**/*.spec.ts(x)?'],
+    exclude: ['**/*.screen.spec.ts(x)?'],
+    globals: true,
+    environment: 'node',
   },
 })
