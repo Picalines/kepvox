@@ -8,8 +8,6 @@
                 "name": "next"
             }
         ],
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
         "jsx": "preserve",
         "noEmit": true
     }
