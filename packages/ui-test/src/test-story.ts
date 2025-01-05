@@ -62,9 +62,7 @@ export const testStory = (params: TestStoryParams) => {
 
       // Disable animations
       await page.evaluate(() => {
-        // @ts-expect-error
         Element.prototype.getAnimations = undefined
-        // @ts-expect-error
         Element.prototype.animate = undefined
       })
 

@@ -3,6 +3,7 @@
     "name": "@repo/ui-test",
     "version": "0.1.0",
     "private": true,
+    "type": "module",
     "exports": {
         "./playwright-config": "./src/playwright-config.ts",
         "./test-story": "./src/test-story.ts"
