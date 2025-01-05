@@ -29,6 +29,7 @@
         "@effector/swc-plugin": "0.5.2-swc1.7.0",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
+        "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "tailwindcss": "catalog:"

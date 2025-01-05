@@ -8,6 +8,7 @@
     },
     "devDependencies": {
         "@repo/ts-config": "workspace:*",
+        "@types/node": "catalog:",
         "tailwindcss": "catalog:",
         "tailwindcss-animate": "^1.0.7"
     }
