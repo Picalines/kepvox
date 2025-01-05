@@ -11,5 +11,8 @@
     "peerDependencies": {
         "@playwright/test": "catalog:",
         "@storybook/react": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:^"
     }
 }
