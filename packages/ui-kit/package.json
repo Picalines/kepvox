@@ -50,7 +50,6 @@
         "autoprefixer": "catalog:",
         "jsdom": "catalog:",
         "playwright": "catalog:",
-        "postcss": "catalog:",
         "postcss-import": "catalog:",
         "storybook": "catalog:",
         "tailwindcss": "catalog:",
