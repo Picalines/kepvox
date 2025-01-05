@@ -164,6 +164,9 @@ importers:
       '@repo/ts-config':
         specifier: workspace:^
         version: link:../ts-config
+      '@repo/vite-config':
+        specifier: workspace:^
+        version: link:../vite-config
       vitest:
         specifier: 'catalog:'
         version: 2.1.8(@types/node@22.10.5)(@vitest/browser@2.1.8)(jsdom@25.0.1)(msw@2.7.0(@types/node@22.10.5)(typescript@5.7.2))(terser@5.36.0)

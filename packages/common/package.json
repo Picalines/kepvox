@@ -1,0 +1,19 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/common",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./branded": "./src/branded.ts",
+        "./math": "./src/math.ts"
+    },
+    "scripts": {
+        "test:unit": "vitest run"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:^",
+        "@repo/vite-config": "workspace:^",
+        "vitest": "catalog:"
+    }
+}
