@@ -44,6 +44,7 @@ jobs:
           - packages/ui-test
           - packages/ui-kit
           - packages/synth
+          - apps/kepvox-synth-playground
 
     steps:
       - name: Checkout
