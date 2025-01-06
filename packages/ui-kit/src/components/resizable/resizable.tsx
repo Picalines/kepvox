@@ -4,13 +4,15 @@ import { cn } from '#lib/classnames'
 
 type HTMLElementTagName = keyof HTMLElementTagNameMap
 
-export type GroupProps = HTMLAttributes<HTMLElementTagName> & {
+type AnyHTMLElementAttributes = HTMLAttributes<HTMLElementTagNameMap[HTMLElementTagName]>
+
+export type GroupProps = AnyHTMLElementAttributes & {
   direction: 'horizontal' | 'vertical'
   children: ReactNode
   as?: HTMLElementTagName
 }
 
-export type PanelProps = HTMLAttributes<HTMLElementTagName> & {
+export type PanelProps = AnyHTMLElementAttributes & {
   children: ReactNode
   as?: HTMLElementTagName
   defaultSize?: number
@@ -20,7 +22,7 @@ export type PanelProps = HTMLAttributes<HTMLElementTagName> & {
   onResize?: (size: number) => void
 }
 
-export type HandleProps = HTMLAttributes<HTMLElementTagName> & {
+export type HandleProps = AnyHTMLElementAttributes & {
   children?: ReactNode
   as?: HTMLElementTagName
   disabled?: boolean
@@ -29,6 +31,7 @@ export type HandleProps = HTMLAttributes<HTMLElementTagName> & {
 }
 
 export const Group: FC<GroupProps> = ({ className, as, ...props }) => (
+  // @ts-expect-error react-resizable-panels specifies its props as HTMLAttributes<'div' | etc>, where HTMLAttributes actually expects HTMLDivElement | etc
   <ResizablePrimitive.PanelGroup
     {...props}
     tagName={as}
@@ -39,6 +42,7 @@ export const Group: FC<GroupProps> = ({ className, as, ...props }) => (
 export const Panel: FC<PanelProps> = ({ as, ...props }) => <ResizablePrimitive.Panel {...props} tagName={as} />
 
 export const Handle: FC<HandleProps> = ({ className, as, children, ...props }) => (
+  // @ts-expect-error react-resizable-panels specifies its props as HTMLAttributes<'div' | etc>, where HTMLAttributes actually expects HTMLDivElement | etc
   <ResizablePrimitive.PanelResizeHandle
     {...props}
     tagName={as}
