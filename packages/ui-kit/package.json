@@ -11,6 +11,7 @@
         "dev:unit": "vitest watch",
         "dev:storybook:server": "storybook dev -p 6006 --no-open",
         "playwright:install": "playwright install chromium --with-deps",
+        "ts:check": "tsc --noEmit",
         "test:unit": "vitest run",
         "test:screen": "STORYBOOK_URL=http://127.0.0.1:6006 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots"

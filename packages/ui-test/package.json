@@ -8,6 +8,9 @@
         "./playwright-config": "./src/playwright-config.ts",
         "./test-story": "./src/test-story.ts"
     },
+    "scripts": {
+        "ts:check": "tsc --noEmit"
+    },
     "peerDependencies": {
         "@playwright/test": "catalog:",
         "@storybook/react": "catalog:"

@@ -9,6 +9,7 @@
         "./math": "./src/math.ts"
     },
     "scripts": {
+        "ts:check": "tsc --noEmit",
         "test:unit": "vitest run"
     },
     "devDependencies": {
