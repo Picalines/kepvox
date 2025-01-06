@@ -43,6 +43,7 @@ jobs:
           - packages/common
           - packages/ui-test
           - packages/ui-kit
+          - packages/synth
 
     steps:
       - name: Checkout

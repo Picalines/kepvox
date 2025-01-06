@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/synth",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "ts:check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@repo/common": "workspace:*"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:^"
+    }
+}
