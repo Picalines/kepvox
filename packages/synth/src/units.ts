@@ -22,7 +22,7 @@ export const [isSeconds, createSeconds] = createSafeBrand(
 export type Decibels = Branded<number, 'decibels'>
 
 export const [isDecibels, createDecibels] = createSafeBrand(
-  (x: number): x is Seconds => Number.isFinite(x),
+  (x: number): x is Decibels => Number.isFinite(x) || x === Number.NEGATIVE_INFINITY,
   'the argument is not a valid decibels value',
 )
 
