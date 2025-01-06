@@ -19,6 +19,16 @@ describe('clamp', () => {
     expect(() => clamp(0, 0, 0)).not.toThrow()
   })
 
+  it('allows Infinity', () => {
+    expect(clamp(Number.POSITIVE_INFINITY, 0, 1)).toEqual(1)
+    expect(clamp(Number.NEGATIVE_INFINITY, 0, 1)).toEqual(0)
+    expect(clamp(-100, Number.NEGATIVE_INFINITY, 1)).toEqual(-100)
+    expect(clamp(100, 0, Number.POSITIVE_INFINITY)).toEqual(100)
+    expect(clamp(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)).toEqual(
+      Number.POSITIVE_INFINITY,
+    )
+  })
+
   it('throws on min > max', () => {
     expect(() => clamp(0, 1, 0)).toThrow()
   })
