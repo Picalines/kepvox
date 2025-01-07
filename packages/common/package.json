@@ -9,6 +9,7 @@
         "./math": "./src/math.ts"
     },
     "scripts": {
+        "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
         "test:unit": "vitest run"
     },
