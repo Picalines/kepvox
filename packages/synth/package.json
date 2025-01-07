@@ -8,6 +8,9 @@
         "ts:check": "tsc --noEmit"
     },
     "imports": {
+        "#context": "./src/context/index.ts",
+        "#node": "./src/node/index.ts",
+        "#param": "./src/param/index.ts",
         "#units": "./src/units.ts"
     },
     "dependencies": {
