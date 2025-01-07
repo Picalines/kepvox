@@ -110,6 +110,9 @@ importers:
       '@monaco-editor/react':
         specifier: ^4.6.0
         version: 4.6.0(monaco-editor@0.52.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@repo/synth':
+        specifier: workspace:*
+        version: link:../../packages/synth
       '@repo/ui-kit':
         specifier: workspace:*
         version: link:../../packages/ui-kit

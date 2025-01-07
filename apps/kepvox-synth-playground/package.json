@@ -17,6 +17,7 @@
     "dependencies": {
         "@effector/next": "^0.7.0",
         "@monaco-editor/react": "^4.6.0",
+        "@repo/synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
         "@withease/factories": "^1.0.5",
         "effector": "^23.2.3",
