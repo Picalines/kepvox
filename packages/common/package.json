@@ -5,6 +5,7 @@
     "private": true,
     "type": "module",
     "exports": {
+        "./assert": "./src/assert.ts",
         "./branded": "./src/branded.ts",
         "./emitter": "./src/emitter.ts",
         "./math": "./src/math.ts",
