@@ -1,2 +1,3 @@
 export * from './synth-param'
-export * from './synth-audio-param'
+export * from './scalar-synth-param'
+export * from './audio-synth-param'

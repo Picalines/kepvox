@@ -1,3 +1,5 @@
-export abstract class SynthParam {
-  constructor(readonly name: string) {}
+export const synthParamType: unique symbol = Symbol('SynthParam.type')
+
+export type SynthParam = {
+  readonly [synthParamType]: string
 }
