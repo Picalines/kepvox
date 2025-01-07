@@ -2,6 +2,8 @@ export type EventMap = {
   readonly [event: string]: [...args: any[]]
 }
 
+export type ListenEmitter<EM extends EventMap> = Pick<Emitter<EM>, 'on' | 'off' | 'once'>
+
 export class Emitter<EM extends EventMap> {
   readonly #listeners: Map<keyof EM, ((...args: any[]) => void)[]>
 
@@ -56,23 +58,24 @@ export class Emitter<EM extends EventMap> {
     }
   }
 
-  static listenMixin<EM extends EventMap>(Base: new (...args: any[]) => any = Object) {
-    return class EmitterListenMixin extends Base implements Pick<Emitter<EM>, 'on' | 'off' | 'once'> {
-      protected readonly _emit: Emitter<EM>['emit']
-      readonly on: Emitter<EM>['on']
-      readonly off: Emitter<EM>['off']
-      readonly once: Emitter<EM>['once']
+  static listenMixin<EM extends EventMap>() {
+    return <T extends new (...args: any[]) => any>(Base: T) =>
+      class EmitterListenMixin extends Base implements ListenEmitter<EM> {
+        protected readonly _emit: Emitter<EM>['emit']
+        readonly on: Emitter<EM>['on']
+        readonly off: Emitter<EM>['off']
+        readonly once: Emitter<EM>['once']
 
-      constructor(...args: ConstructorParameters<typeof Base>) {
-        super(...args)
+        constructor(...args: any) {
+          super(...args)
 
-        const emitter = new Emitter()
+          const emitter = new Emitter()
 
-        this._emit = emitter.emit.bind(emitter)
-        this.on = emitter.on.bind(emitter)
-        this.off = emitter.off.bind(emitter)
-        this.once = emitter.once.bind(emitter)
+          this._emit = emitter.emit.bind(emitter)
+          this.on = emitter.on.bind(emitter)
+          this.off = emitter.off.bind(emitter)
+          this.once = emitter.once.bind(emitter)
+        }
       }
-    }
   }
 }

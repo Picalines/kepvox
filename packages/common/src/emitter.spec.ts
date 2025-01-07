@@ -125,7 +125,7 @@ it('should ignore the cancel call after a once callback was emitted', () => {
 
 describe('listen mixin', () => {
   it('should expose on/off/once', () => {
-    class Class extends Emitter.listenMixin<{ event: [number] }>() {
+    class Class extends Emitter.listenMixin<{ event: [number] }>()(Object) {
       raiseEvent(x: number) {
         this._emit('event', x)
       }
@@ -144,10 +144,15 @@ describe('listen mixin', () => {
   })
 
   it('should keep the base class', () => {
-    class Base {}
-    class Class extends Emitter.listenMixin(Base) {}
-    const obj = new Class()
+    class Base {
+      constructor(readonly field: number) {}
+    }
 
+    class Class extends Emitter.listenMixin()(Base) {}
+
+    const obj = new Class(123)
+
+    expect(obj.field).toEqual(123)
     expect(obj instanceof Base).toEqual(true)
   })
 })
