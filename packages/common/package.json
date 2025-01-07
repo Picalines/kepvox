@@ -7,7 +7,8 @@
     "exports": {
         "./branded": "./src/branded.ts",
         "./emitter": "./src/emitter.ts",
-        "./math": "./src/math.ts"
+        "./math": "./src/math.ts",
+        "./typing": "./src/typing.ts"
     },
     "scripts": {
         "dev:unit": "vitest watch",
