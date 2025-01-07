@@ -1,4 +1,4 @@
-import { type Range, isRangeIncludes } from '@repo/common/math'
+import { type Range, rangeContains } from '@repo/common/math'
 import type { UnitName } from '#units'
 import { ScalarSynthParam } from './scalar-synth-param'
 import { type SynthParam, synthParamType } from './synth-param'
@@ -29,7 +29,7 @@ export class AudioSynthParam implements SynthParam, Omit<ScalarSynthParam, typeo
     this.#scalarParam = new ScalarSynthParam(opts)
 
     const nativeRange: Range = [nativeAudioParam.minValue, nativeAudioParam.maxValue]
-    if (!isRangeIncludes(nativeRange, this.range)) {
+    if (!rangeContains(nativeRange, this.range)) {
       throw new Error('the param range is larger the native range')
     }
 

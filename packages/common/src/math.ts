@@ -22,7 +22,7 @@ export const isInRange = (x: number, range: Range) => {
   return x >= min && x <= max
 }
 
-export const isRangeIncludes = (outerRange: Range, innerRange: Range) => {
+export const rangeContains = (outerRange: Range, innerRange: Range) => {
   assertValidRange(outerRange)
   assertValidRange(innerRange)
   const [min, max] = innerRange

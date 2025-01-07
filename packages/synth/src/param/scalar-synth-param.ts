@@ -1,4 +1,4 @@
-import { type Range, clamp, isInRange, isRangeIncludes } from '@repo/common/math'
+import { type Range, clamp, isInRange, rangeContains } from '@repo/common/math'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { type SynthParam, synthParamType } from './synth-param'
 
@@ -24,7 +24,7 @@ export class ScalarSynthParam implements SynthParam {
     this.unit = unit
 
     const unitRange = UNIT_RANGES[unit]
-    if (rangeParam && !isRangeIncludes(unitRange, rangeParam)) {
+    if (rangeParam && !rangeContains(unitRange, rangeParam)) {
       throw new Error(`the range parameter is larger than the ${unit} range`)
     }
 

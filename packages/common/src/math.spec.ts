@@ -1,4 +1,4 @@
-import { clamp, isInRange, isValidRange } from './math'
+import { clamp, isInRange, isValidRange, rangeContains } from './math'
 
 describe('range', () => {
   describe('isValidRange', () => {
@@ -20,6 +20,11 @@ describe('range', () => {
   })
 
   describe('isInRange', () => {
+    it('is inclusive', () => {
+      expect(isInRange(0, [0, 1])).toEqual(true)
+      expect(isInRange(1, [0, 1])).toEqual(true)
+    })
+
     it('throws on invalid range', () => {
       expect(() => isInRange(0, [10, 0])).toThrow()
       expect(() => isInRange(0, [0, Number.NaN])).toThrow()
@@ -27,6 +32,26 @@ describe('range', () => {
 
     it('throws on NaN', () => {
       expect(() => isInRange(Number.NaN, [0, 0])).toThrow()
+    })
+  })
+
+  describe('rangeContains', () => {
+    it('is inclusive', () => {
+      expect(rangeContains([0, 10], [0, 5])).toEqual(true)
+      expect(rangeContains([0, 10], [5, 10])).toEqual(true)
+    })
+
+    it('returns false on bigger range', () => {
+      expect(rangeContains([0, 10], [-10, 10])).toEqual(false)
+    })
+
+    it('throws on NaN', () => {
+      expect(() => rangeContains([Number.NaN, 0], [0, 5])).toThrow()
+      expect(() => rangeContains([0, 5], [0, Number.NaN])).toThrow()
+    })
+
+    it('allows infinity', () => {
+      expect(rangeContains([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY], [0, 1])).toEqual(true)
     })
   })
 })
