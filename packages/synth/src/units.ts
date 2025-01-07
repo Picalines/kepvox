@@ -24,7 +24,7 @@ export type UnitName = keyof UnitMap
 export const UNIT_RANGES: Record<UnitName, Range> = {
   seconds: [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY],
   decibels: [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY],
-  hertz: [0, Number.POSITIVE_INFINITY],
+  hertz: [0, 24000],
   normalRange: [0, 1],
   audioRange: [-1, 1],
   nonNegative: [0, Number.POSITIVE_INFINITY],
