@@ -61,3 +61,93 @@ it('should ignore an event without listeners', () => {
     emitter.emit('event')
   }).not.toThrow()
 })
+
+it('should call a once callback only once', () => {
+  const emitter = new Emitter<{ event: [] }>()
+  const callback = vi.fn()
+
+  emitter.once('event', callback)
+  emitter.emit('event')
+  emitter.emit('event')
+
+  expect(callback).toHaveBeenCalledOnce()
+})
+
+it('should call a once callback the number of times it was added', () => {
+  const emitter = new Emitter<{ event: [] }>()
+  const callback = vi.fn()
+
+  emitter.once('event', callback)
+  emitter.once('event', callback)
+  emitter.emit('event')
+  emitter.emit('event')
+  emitter.emit('event')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+it('should ignore the cancelled once callback', () => {
+  const emitter = new Emitter<{ event: [] }>()
+  const callback = vi.fn()
+
+  const cancel = emitter.once('event', callback)
+  cancel()
+  emitter.emit('event')
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+it('should ignore repeated cancel of a once callback', () => {
+  const emitter = new Emitter<{ event: [] }>()
+  const callback = vi.fn()
+
+  const cancel = emitter.once('event', callback)
+
+  expect(() => {
+    cancel()
+    cancel()
+  }).not.toThrow()
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+it('should ignore the cancel call after a once callback was emitted', () => {
+  const emitter = new Emitter<{ event: [] }>()
+  const callback = vi.fn()
+
+  const cancel = emitter.once('event', callback)
+  emitter.emit('event')
+
+  expect(() => cancel()).not.toThrow()
+
+  expect(callback).toHaveBeenCalledOnce()
+})
+
+describe('listen mixin', () => {
+  it('should expose on/off/once', () => {
+    class Class extends Emitter.listenMixin<{ event: [number] }>() {
+      raiseEvent(x: number) {
+        this._emit('event', x)
+      }
+    }
+
+    const obj = new Class()
+    const callback = vi.fn((x: number) => x)
+
+    obj.once('event', callback)
+    obj.on('event', callback)
+    obj.off('event', callback)
+    obj.raiseEvent(123)
+
+    expect(callback).toHaveBeenCalledOnce()
+    expect(callback).toHaveBeenCalledWith(123)
+  })
+
+  it('should keep the base class', () => {
+    class Base {}
+    class Class extends Emitter.listenMixin(Base) {}
+    const obj = new Class()
+
+    expect(obj instanceof Base).toEqual(true)
+  })
+})

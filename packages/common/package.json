@@ -6,6 +6,7 @@
     "type": "module",
     "exports": {
         "./branded": "./src/branded.ts",
+        "./emitter": "./src/emitter.ts",
         "./math": "./src/math.ts"
     },
     "scripts": {
