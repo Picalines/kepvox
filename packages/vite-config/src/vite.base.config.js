@@ -21,5 +21,10 @@ export default defineConfig({
     exclude: ['**/*.screen.spec.ts(x)?'],
     globals: true,
     environment: 'node',
+    typecheck: {
+      enabled: true,
+      tsconfig: './tsconfig.json',
+      include: ['**/*.spec-d.ts(x)?'],
+    },
   },
 })

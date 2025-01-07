@@ -1,4 +1,4 @@
-import { Emitter } from './emitter'
+import { Emitter } from '.'
 
 it('should call a callback', () => {
   const emitter = new Emitter<{ event: [number] }>()
