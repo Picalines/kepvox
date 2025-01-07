@@ -8,7 +8,7 @@ export class OscillatorSynthNode extends SynthNode {
   readonly waveShape // see in constructor
   readonly frequency
 
-  readonly oscillator: OscillatorNode
+  #oscillator: OscillatorNode
 
   constructor(context: SynthContext) {
     const { audioContext } = context
@@ -17,7 +17,7 @@ export class OscillatorSynthNode extends SynthNode {
 
     super({ context, inputs: [oscillator], outputs: [oscillator] })
 
-    this.oscillator = oscillator
+    this.#oscillator = oscillator
 
     this.waveShape = new EnumSynthParam({
       variants: ['sine', 'square', 'sawtooth', 'triangle'] as const,
@@ -32,12 +32,12 @@ export class OscillatorSynthNode extends SynthNode {
       initialValue: 440, // TODO: set to constant
     })
 
-    this.oscillator.start()
+    this.#oscillator.start()
   }
 
   override dispose(): void {
     super.dispose()
-    this.oscillator.stop()
-    this.oscillator.disconnect()
+    this.#oscillator.stop()
+    this.#oscillator.disconnect()
   }
 }
