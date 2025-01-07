@@ -6,7 +6,7 @@
     "type": "module",
     "exports": {
         "./assert": "./src/assert.ts",
-        "./branded": "./src/branded.ts",
+        "./branded": "./src/branded/index.ts",
         "./emitter": "./src/emitter/index.ts",
         "./math": "./src/math.ts",
         "./typing": "./src/typing.ts"
