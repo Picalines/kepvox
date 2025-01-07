@@ -14,6 +14,7 @@
         "isolatedModules": true,
         "strict": true,
         "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
         "incremental": true
     }
 }
