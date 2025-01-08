@@ -16,16 +16,17 @@
     },
     "dependencies": {
         "@effector/next": "^0.7.0",
-        "@monaco-editor/react": "^4.6.0",
+        "@monaco-editor/react": "4.7.0-rc.0",
         "@repo/synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
         "@withease/factories": "^1.0.5",
         "effector": "^23.2.3",
-        "effector-react": "^23.2.1",
+        "effector-react": "^23.3.0",
         "next": "catalog:",
         "patronum": "^2.3.0",
         "react": "catalog:",
-        "react-dom": "catalog:"
+        "react-dom": "catalog:",
+        "use-sync-external-store": "^1.4.0"
     },
     "devDependencies": {
         "@effector/swc-plugin": "0.5.2-swc1.7.0",
