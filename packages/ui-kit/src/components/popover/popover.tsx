@@ -1,4 +1,5 @@
 import * as RadixPopover from '@radix-ui/react-popover'
+import type { Overlay } from '@repo/common/typing'
 import type { ComponentPropsWithoutRef, FC, ReactNode, RefObject } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -10,15 +11,16 @@ export type RootProps = {
   onOpenChange?: (opened: boolean) => void
 }
 
-export type TriggerProps = ComponentPropsWithoutRef<'button'> & {
-  children: ReactNode
-  asChild?: boolean
-}
+export type TriggerProps = Overlay<
+  ComponentPropsWithoutRef<'button'>,
+  {
+    children: ReactNode
+  }
+>
 
 export type ContentProps = {
   children: ReactNode
   ref?: RefObject<HTMLDivElement>
-  asChild?: boolean
   className?: string
   side?: 'top' | 'right' | 'bottom' | 'left'
   sideOffset?: number
@@ -43,13 +45,16 @@ export const Root: FC<RootProps> = props => {
 
   return (
     <RadixPopover.Root {...rootProps}>
-      <RadixPopover.Trigger {...trigger.props}>{trigger.children}</RadixPopover.Trigger>
+      <RadixPopover.Trigger {...trigger.props} asChild>
+        {trigger.children}
+      </RadixPopover.Trigger>
       <RadixPopover.Portal>
         <RadixPopover.Content
           align="center"
           sideOffset={4}
           {...content.props}
           ref={content.ref}
+          asChild={false}
           className={cn(
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-sm outline-none data-[state=closed]:animate-out data-[state=open]:animate-in',
             content.props.className,

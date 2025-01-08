@@ -8,7 +8,7 @@ export const EditorHeader: FC = () => {
     <div className="flex w-full items-center gap-2 border-b-2 p-2">
       <PlaybackButton />
       <Tooltip.Root>
-        <Tooltip.Trigger asChild>
+        <Tooltip.Trigger>
           <Heading.Root>
             <Heading.SuperTitle>@kepvox/synth</Heading.SuperTitle>
             <Heading.Title variant="text-m">Playground</Heading.Title>

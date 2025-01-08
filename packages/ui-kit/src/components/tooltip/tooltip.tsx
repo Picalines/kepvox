@@ -1,4 +1,5 @@
 import * as RadixTooltip from '@radix-ui/react-tooltip'
+import type { OmitExisting, Overlay, Override } from '@repo/common/typing'
 import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -20,25 +21,31 @@ export type RootProps = {
   onOpenChange?: (opened: boolean) => void
 }
 
-export type TriggerProps = ComponentProps<'button'> & {
-  children: ReactNode
-  asChild?: boolean
-}
+export type TriggerProps = Override<
+  ComponentProps<'button'>,
+  {
+    children: ReactNode
+  }
+>
 
-export type ContentProps = ComponentProps<'div'> & {
-  children: ReactNode
-  asChild?: boolean
-  side?: 'top' | 'right' | 'bottom' | 'left'
-  sideOffset?: number
-  align?: 'start' | 'center' | 'end'
-  alignOffset?: number
-}
+export type ContentProps = Overlay<
+  ComponentProps<'div'>,
+  {
+    children: ReactNode
+    side?: 'top' | 'right' | 'bottom' | 'left'
+    sideOffset?: number
+    align?: 'start' | 'center' | 'end'
+    alignOffset?: number
+  }
+>
 
-export type ArrowProps = ComponentProps<'svg'> & {
-  asChild?: boolean
-  width?: number
-  height?: number
-}
+export type ArrowProps = Overlay<
+  OmitExisting<ComponentProps<'svg'>, 'children'>,
+  {
+    width?: number
+    height?: number
+  }
+>
 
 export const Trigger = createSlot<TriggerProps>('Trigger')
 export const Content = createSlot<ContentProps>('Content')
@@ -56,7 +63,7 @@ export const Root: FC<RootProps> = props => {
   return (
     <RadixTooltip.Root {...rootProps}>
       {trigger && (
-        <RadixTooltip.Trigger {...trigger.props} ref={trigger.ref}>
+        <RadixTooltip.Trigger {...trigger.props} ref={trigger.ref} asChild>
           {trigger.children}
         </RadixTooltip.Trigger>
       )}
@@ -66,6 +73,7 @@ export const Root: FC<RootProps> = props => {
           sideOffset={4}
           {...content.props}
           ref={content.ref}
+          asChild={false}
           className={cn(
             'fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 animate-in rounded-md border bg-popover px-3 py-1.5 text-popover-foreground text-sm shadow-sm data-[state=closed]:animate-out',
             content.props.className,

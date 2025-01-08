@@ -10,7 +10,7 @@ export default {
       <div className="flex flex-wrap gap-2">
         {Object.entries(icons).map(([name, Icon]) => (
           <Tooltip.Root key={name}>
-            <Tooltip.Trigger asChild>
+            <Tooltip.Trigger>
               <div className="rounded-md border border-dashed p-1">
                 <Icon size={40} />
               </div>

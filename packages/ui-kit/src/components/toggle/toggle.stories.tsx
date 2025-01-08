@@ -22,9 +22,6 @@ export default {
     onToggle: {
       table: { disable: true },
     },
-    asChild: {
-      table: { disable: true },
-    },
   },
 } satisfies Meta<StoryArgs>
 

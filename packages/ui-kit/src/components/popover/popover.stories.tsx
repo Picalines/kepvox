@@ -11,7 +11,7 @@ export default {
   component: Popover.Root,
   render: ({ open, defaultOpen, onOpenChange, ...contentProps }) => (
     <Popover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
-      <Popover.Trigger asChild>
+      <Popover.Trigger>
         <Button>Button</Button>
       </Popover.Trigger>
       <Popover.Content {...contentProps} className={cn('w-min', contentProps.className)}>

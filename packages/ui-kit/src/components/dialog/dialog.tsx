@@ -1,4 +1,5 @@
 import * as RadixDialog from '@radix-ui/react-dialog'
+import type { Overlay } from '@repo/common/typing'
 import type { FC, ReactNode } from 'react'
 import { Heading } from '#components/heading'
 import { XIcon } from '#icons'
@@ -14,16 +15,21 @@ export type RootProps = {
 
 export type TriggerProps = {
   children: ReactNode
-  asChild?: boolean
 }
 
-export type TitleProps = Heading.TitleProps & {
-  children: ReactNode
-}
+export type TitleProps = Overlay<
+  Heading.TitleProps,
+  {
+    children: ReactNode
+  }
+>
 
-export type DescriptionProps = Heading.DescriptionProps & {
-  children: ReactNode
-}
+export type DescriptionProps = Overlay<
+  Heading.DescriptionProps,
+  {
+    children: ReactNode
+  }
+>
 
 export type ContentProps = {
   children: ReactNode
@@ -59,7 +65,11 @@ export const Root: FC<RootProps> = props => {
 
   return (
     <RadixDialog.Root {...rootProps}>
-      {trigger && <RadixDialog.Trigger {...trigger.props}>{trigger.children}</RadixDialog.Trigger>}
+      {trigger && (
+        <RadixDialog.Trigger {...trigger.props} asChild>
+          {trigger.children}
+        </RadixDialog.Trigger>
+      )}
       <RadixDialog.Portal>
         <RadixDialog.Overlay
           className={cn(

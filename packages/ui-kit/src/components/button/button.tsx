@@ -1,4 +1,4 @@
-import { Slot } from '@radix-ui/react-slot'
+import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
@@ -49,10 +49,7 @@ export const buttonVariants = cva(
   },
 )
 
-export type ButtonProps = ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }
+export type ButtonProps = Overlay<ComponentProps<'button'>, VariantProps<typeof buttonVariants>>
 
 export type ButtonVariant = NonNullable<ButtonProps['variant']>
 
@@ -61,10 +58,9 @@ export type ButtonSize = NonNullable<ButtonProps['size']>
 export type ButtonShape = NonNullable<ButtonProps['shape']>
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, shape, asChild = false, ...props }, ref) => {
-    const Component = asChild ? Slot : 'button'
-    return <Component {...props} ref={ref} className={cn(buttonVariants({ variant, size, shape }), className)} />
-  },
+  ({ className, variant, size, shape, ...props }, ref) => (
+    <button {...props} ref={ref} className={cn(buttonVariants({ variant, size, shape }), className)} />
+  ),
 )
 
 Button.displayName = 'Button'

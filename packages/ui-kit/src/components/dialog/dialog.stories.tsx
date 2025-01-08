@@ -10,7 +10,7 @@ export default {
   component: Dialog.Root,
   render: ({ title, description, closable, ...args }) => (
     <Dialog.Root {...args}>
-      <Dialog.Trigger asChild>
+      <Dialog.Trigger>
         <Button id="dialog-trigger">Trigger</Button>
       </Dialog.Trigger>
       <Dialog.Title>{title}</Dialog.Title>

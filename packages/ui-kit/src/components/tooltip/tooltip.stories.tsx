@@ -14,7 +14,7 @@ export default {
   component: Tooltip.Root,
   render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
     <Tooltip.Root {...rootProps}>
-      <Tooltip.Trigger asChild>
+      <Tooltip.Trigger>
         <Button>Button</Button>
       </Tooltip.Trigger>
       <Tooltip.Content side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset}>
