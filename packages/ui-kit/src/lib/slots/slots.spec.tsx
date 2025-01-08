@@ -1,98 +1,78 @@
-import { renderHook } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render, renderHook } from '@testing-library/react'
+import type { FC, ReactNode } from 'react'
+import { expect, it, vi } from 'vitest'
 import { createSlot, useSlots } from '.'
 
-describe('feature', () => {
-  it('should send slot props to parent', () => {
-    const Slot = createSlot<{ prop: number }>('Slot')
+it('should send slot props to parent', () => {
+  const Slot = createSlot({ name: 'Slot' }).component<{ prop: number }>()
 
-    const {
-      result: { current: slots },
-    } = renderHook(useSlots, {
-      initialProps: {
-        children: <Slot prop={42} />,
-      },
-    })
+  const {
+    result: {
+      current: { slot },
+    },
+  } = renderHook(() => useSlots(<Slot prop={42} />, { slot: Slot }))
 
-    expect(slots.get(Slot)?.props).toStrictEqual({ prop: 42 })
-  })
-
-  it('should return undefined for missing slot', () => {
-    const Slot1 = createSlot('Slot1')
-    const Slot2 = createSlot('Slot2')
-
-    const {
-      result: { current: slots },
-    } = renderHook(useSlots, {
-      initialProps: {
-        children: <Slot1 />,
-      },
-    })
-
-    expect(slots.get(Slot1)).toBeDefined()
-    expect(slots.get(Slot2)).toBeUndefined()
-  })
-
-  it('should send components to defaultSlot', () => {
-    const Slot1 = createSlot('Slot1')
-    const Slot2 = createSlot('Slot2')
-
-    const {
-      result: { current: slots },
-    } = renderHook(useSlots, {
-      initialProps: {
-        defaultSlot: Slot1,
-        children: <p>child</p>,
-      },
-    })
-
-    expect(slots.get(Slot1)).toBeDefined()
-    expect(slots.get(Slot2)).toBeUndefined()
-  })
+  expect(slot?.props).toStrictEqual({ prop: 42 })
 })
 
-describe('error', () => {
-  it('should forbid duplicated slot', () => {
-    const Slot = createSlot('Slot')
+it('should return null for missing slot', () => {
+  const Slot1 = createSlot({ name: 'Slot1' }).component()
+  const Slot2 = createSlot({ name: 'Slot2' }).component()
 
-    expect(() => {
-      renderHook(useSlots, {
-        initialProps: {
-          children: (
-            <>
-              <Slot />
-              <Slot />
-            </>
-          ),
-        },
-      })
-    }).toThrowError()
-  })
+  const {
+    result: {
+      current: { slot1, slot2 },
+    },
+  } = renderHook(() => useSlots(<Slot1 />, { slot1: Slot1, slot2: Slot2 }))
 
-  it('should forbid components without defaultSlot', () => {
-    expect(() => {
-      renderHook(useSlots, {
-        initialProps: {
-          children: <p>child</p>,
-        },
-      })
-    }).toThrowError()
-  })
+  expect(slot1).not.toBeNull()
+  expect(slot2).toBeNull()
+})
 
-  it('should forbid components mixed with slots', () => {
-    const Slot = createSlot('Slot')
+it('should allow repeated slots if the option is specified', () => {
+  const Item = createSlot({ name: 'Item', repeatable: true }).component()
 
-    expect(() => {
-      renderHook(useSlots, {
-        initialProps: {
-          children: (
-            <>
-              <Slot />
-              <p>child</p>
-            </>
-          ),
-        },
-      })
-    }).toThrowError()
-  })
+  const receiveItems = vi.fn()
+
+  const Slotted: FC<{ children: ReactNode }> = ({ children }) => {
+    const { items } = useSlots(children, { items: Item })
+    receiveItems(items)
+    return null
+  }
+
+  expect(() => {
+    render(
+      <Slotted>
+        <Item />
+        <Item />
+      </Slotted>,
+    )
+  }).not.toThrow()
+
+  expect(receiveItems).toBeCalledWith([expect.anything(), expect.anything()])
+})
+
+it('should forbid duplicated non-repeatable slot', () => {
+  const Slot = createSlot({ name: 'Slot' }).component()
+
+  const Slotted: FC<{ children: ReactNode }> = ({ children }) => {
+    useSlots(children, { Slot })
+
+    return null
+  }
+
+  expect(() => {
+    render(
+      <Slotted>
+        <Slot />
+        <Slot />
+      </Slotted>,
+    )
+  }).toThrow(/multiple/)
+})
+
+it('should forbid regular components', () => {
+  expect(() => {
+    renderHook(() => useSlots(<p>child</p>, {}))
+  }).toThrowError(/non-slot/)
 })

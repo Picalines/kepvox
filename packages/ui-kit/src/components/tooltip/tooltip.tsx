@@ -47,18 +47,14 @@ export type ArrowProps = Overlay<
   }
 >
 
-export const Trigger = createSlot<TriggerProps>('Trigger')
-export const Content = createSlot<ContentProps>('Content')
-export const Arrow = createSlot<ArrowProps>('Arrow')
+export const Trigger = createSlot({ name: 'Trigger' }).component<TriggerProps>()
+export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
+export const Arrow = createSlot({ name: 'Arrow' }).component<ArrowProps>()
 
 export const Root: FC<RootProps> = props => {
   const { children, ...rootProps } = props
 
-  const slots = useSlots({ children })
-
-  const trigger = slots.get(Trigger)
-  const content = slots.get(Content)
-  const arrow = slots.get(Arrow)
+  const { trigger, content, arrow } = useSlots(children, { trigger: Trigger, content: Content, arrow: Arrow })
 
   return (
     <RadixTooltip.Root {...rootProps}>

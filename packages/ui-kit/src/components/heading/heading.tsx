@@ -7,20 +7,20 @@ export type SuperTitleProps = TextProps
 export type TitleProps = TextProps
 export type DescriptionProps = TextProps
 
-export const SuperTitle = createSlot<SuperTitleProps>('SuperTitle')
-export const Title = createSlot<TitleProps>('Title')
-export const Description = createSlot<DescriptionProps>('Description')
+export const SuperTitle = createSlot({ name: 'SuperTitle' }).component<SuperTitleProps>()
+export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
+export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
 
 export type RootProps = ComponentProps<'div'>
 
 export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
   const { children, className, ...rootProps } = props
 
-  const slots = useSlots({ children, defaultSlot: Title })
-
-  const superTitle = slots.get(SuperTitle)
-  const title = slots.get(Title)
-  const description = slots.get(Description)
+  const { superTitle, title, description } = useSlots(children, {
+    superTitle: SuperTitle,
+    title: Title,
+    description: Description,
+  })
 
   if (!superTitle && !title && !description) {
     return null

@@ -38,10 +38,10 @@ export type ContentProps = {
   trapFocus?: boolean
 }
 
-export const Trigger = createSlot<TriggerProps>('Trigger')
-export const Title = createSlot<TitleProps>('Title')
-export const Description = createSlot<DescriptionProps>('Description')
-export const Content = createSlot<ContentProps>('Content')
+export const Trigger = createSlot({ name: 'Trigger' }).component<TriggerProps>()
+export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
+export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
+export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 
 type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractOutside']>
 
@@ -50,12 +50,12 @@ const preventClosing: OnInteractOutside = event => event.preventDefault()
 export const Root: FC<RootProps> = props => {
   const { children, ...rootProps } = props
 
-  const slots = useSlots({ children })
-
-  const trigger = slots.get(Trigger)
-  const title = slots.get(Title)
-  const description = slots.get(Description)
-  const content = slots.get(Content)
+  const { trigger, title, description, content } = useSlots(children, {
+    trigger: Trigger,
+    title: Title,
+    description: Description,
+    content: Content,
+  })
 
   const { closable = true, ...contentProps } = content?.props ?? {}
 

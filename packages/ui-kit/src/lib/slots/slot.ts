@@ -9,11 +9,19 @@ import type {
 } from 'react'
 import { isValidElement } from 'react'
 
-export type SlotComponent<Props = {}> = FC<Props> & {
+/**
+ * @internal
+ */
+export type SlotMeta = {
+  name: string
+  repeatable?: boolean
+}
+
+export type SlotComponent<Props, Meta extends SlotMeta> = FC<Props> & {
   /**
    * @internal
    */
-  __slotName: string
+  __slot: Meta
 }
 
 type ExplicitRefProps<Props> = Props extends RefAttributes<infer T> ? RefAttributes<T> : {}
@@ -24,23 +32,26 @@ export type RenderedSlot<Props = {}> = {
   children: ReactNode
 } & ExplicitRefProps<Props>
 
-export function createSlot<Props = {}>(name: string): SlotComponent<Props> {
-  const Slot: SlotComponent<Props> = () => null
+export const createSlot = <const Meta extends SlotMeta>(meta: Meta) =>
+  ({
+    component: <Props = {}>(): SlotComponent<Props, Meta> => {
+      const Slot: SlotComponent<Props, Meta> = () => null
 
-  Slot.displayName = `Slot(${name})`
-  Slot.__slotName = name
+      Slot.displayName = `Slot(${meta.name})`
+      Slot.__slot = meta
 
-  return Slot
-}
+      return Slot
+    },
+  }) as const
 
 export function isSlotElement<Props = {}>(
   node: ReactNode,
-): node is ReactElement<PropsWithChildren<Props>, SlotComponent<Props>> & ExplicitRefProps<Props> {
+): node is ReactElement<PropsWithChildren<Props>, SlotComponent<Props, SlotMeta>> & ExplicitRefProps<Props> {
   return isValidElement(node) && isSlotComponent(node.type)
 }
 
 export function isSlotComponent<Props = {}>(
   type: string | JSXElementConstructor<Props & RefAttributes<unknown>>,
-): type is SlotComponent<Props> {
-  return typeof type === 'function' && '__slotName' in type
+): type is SlotComponent<Props, SlotMeta> {
+  return typeof type === 'function' && '__slot' in type
 }

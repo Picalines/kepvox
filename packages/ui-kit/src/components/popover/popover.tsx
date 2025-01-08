@@ -28,16 +28,13 @@ export type ContentProps = {
   alignOffset?: number
 }
 
-export const Trigger = createSlot<TriggerProps>('Trigger')
-export const Content = createSlot<ContentProps>('Content')
+export const Trigger = createSlot({ name: 'Trigger' }).component<TriggerProps>()
+export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 
 export const Root: FC<RootProps> = props => {
   const { children, ...rootProps } = props
 
-  const slots = useSlots({ children })
-
-  const trigger = slots.get(Trigger)
-  const content = slots.get(Content)
+  const { trigger, content } = useSlots(children, { trigger: Trigger, content: Content })
 
   if (!trigger || !content) {
     return null
