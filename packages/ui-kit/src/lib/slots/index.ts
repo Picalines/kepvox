@@ -1,2 +1,2 @@
-export * from './slot'
-export * from './use-slots'
+export { createSlot } from './slot'
+export { useSlots } from './use-slots'

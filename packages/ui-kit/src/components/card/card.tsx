@@ -7,16 +7,12 @@ export type HeaderProps = ComponentProps<'div'>
 export type ContentProps = ComponentProps<'div'>
 export type FooterProps = ComponentProps<'div'>
 
-export const Header = createSlot<HeaderProps>('Header')
-export const Content = createSlot<ContentProps>('Content')
-export const Footer = createSlot<FooterProps>('Footer')
+export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
+export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
+export const Footer = createSlot({ name: 'Footer' }).component<FooterProps>()
 
 export const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...props }, ref) => {
-  const slots = useSlots({ children, defaultSlot: Content })
-
-  const header = slots.get(Header)
-  const content = slots.get(Content)
-  const footer = slots.get(Footer)
+  const { header, content, footer } = useSlots(children, { header: Header, content: Content, footer: Footer })
 
   if (!header && !content && !footer) {
     return null

@@ -28,13 +28,7 @@ export type RootProps = {
 
 export type LabelProps = Omit<ComponentProps<'label'>, 'color'>
 
-export type FeedbackType = 'pending' | 'positive' | 'negative' | 'warning'
-
-export type FeedbackProps = {
-  type: FeedbackType
-}
-
-export const Label = createSlot<LabelProps>('Label')
+export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
   const {
@@ -49,8 +43,7 @@ export const Root: FC<RootProps> = props => {
     ...inputProps
   } = props
 
-  const slots = useSlots({ children })
-  const label = slots.get(Label)
+  const { label } = useSlots(children, { label: Label })
 
   const inputId = useId()
 
