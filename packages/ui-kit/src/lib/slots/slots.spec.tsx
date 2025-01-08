@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 import { createSlot, useSlots } from '.'
 
 describe('feature', () => {

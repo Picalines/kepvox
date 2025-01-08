@@ -1,3 +1,4 @@
+import { expectTypeOf, it } from 'vitest'
 import type { Branded } from '.'
 
 it('separates the inner type', () => {

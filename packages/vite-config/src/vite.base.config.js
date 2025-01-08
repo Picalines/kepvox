@@ -19,7 +19,7 @@ export default defineConfig({
     root: './src',
     include: ['**/*.spec.ts(x)?'],
     exclude: ['**/*.screen.spec.ts(x)?'],
-    globals: true,
+    globals: false,
     environment: 'node',
     typecheck: {
       enabled: true,
