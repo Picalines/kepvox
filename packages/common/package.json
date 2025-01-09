@@ -5,6 +5,7 @@
     "private": true,
     "type": "module",
     "exports": {
+        "./array": "./src/array/index.ts",
         "./assert": "./src/assert.ts",
         "./branded": "./src/branded/index.ts",
         "./emitter": "./src/emitter/index.ts",
