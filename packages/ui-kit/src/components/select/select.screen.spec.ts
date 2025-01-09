@@ -4,7 +4,7 @@ testStoryMatrix({
   meta: {
     title: 'components/Select',
   },
-  stories: ['Default'],
+  stories: ['Default', 'WithValue', 'Disabled', 'DisabledWithValue'],
   themes: ['light', 'dark'],
 })
 
@@ -12,7 +12,7 @@ testStoryMatrix({
   meta: {
     title: 'components/Select',
   },
-  stories: ['Open', 'OpenMany'],
+  stories: ['Open', 'OpenWithValue', 'OpenMany'],
   themes: ['light', 'dark'],
   fullPage: true,
   windowSize: { width: 450, height: 500 },

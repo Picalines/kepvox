@@ -1,6 +1,6 @@
 import * as RadixSelect from '@radix-ui/react-select'
-import type { Overlay } from '@repo/common/typing'
-import type { ComponentPropsWithRef, FC, Key as ReactKey, ReactNode } from 'react'
+import type { OmitExisting, Overlay } from '@repo/common/typing'
+import { type ComponentPropsWithRef, type FC, type Key as ReactKey, type ReactNode, useId } from 'react'
 import { CheckIcon, VDownIcon, VUpIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -13,12 +13,15 @@ export type RootProps = {
   onOpenChange?: (opened: boolean) => void
   defaultValue?: string
   value?: string
+  disabled?: boolean
+  required?: boolean
   onValueChange?: (value: string) => void
 }
 
+export type LabelProps = Overlay<OmitExisting<ComponentPropsWithRef<'div'>, 'id'>, { children: ReactNode }>
+
 export type TriggerProps = {
   className?: string
-  placeholder: string
 }
 
 export type ContentProps = {
@@ -33,7 +36,7 @@ export type GroupProps = Overlay<
   }
 >
 
-export type LabelProps = Overlay<
+export type HeaderProps = Overlay<
   ComponentPropsWithRef<'div'>,
   {
     children: ReactNode
@@ -45,35 +48,55 @@ export type ItemProps = Overlay<
   {
     children: ReactNode
     value: string
+    disabled?: boolean
   }
 >
 
+export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 export const Trigger = createSlot({ name: 'Trigger' }).component<TriggerProps>()
 export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 export const Group = createSlot({ name: 'Group', repeatable: true }).component<GroupProps>()
-export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
+export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
 export const Root: FC<RootProps> = props => {
   const { children, ...rootProps } = props
 
-  const { trigger, content } = useSlots(children, { trigger: Trigger, content: Content })
+  const { label, trigger, content } = useSlots(children, { label: Label, trigger: Trigger, content: Content })
   const { groups } = useSlots(content?.children, { groups: Group })
+
+  const labelId = useId()
 
   return (
     <RadixSelect.Root {...rootProps}>
       {trigger && (
-        <RadixSelect.Trigger
-          className={cn(
-            'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-            trigger.props.className,
+        <div className="relative">
+          <RadixSelect.Trigger
+            aria-labelledby={label ? labelId : undefined}
+            className={cn(
+              'peer flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+              trigger.props.className,
+            )}
+          >
+            <RadixSelect.Value />
+            <RadixSelect.Icon asChild>
+              <VDownIcon className="h-4 w-4 opacity-50" />
+            </RadixSelect.Icon>
+          </RadixSelect.Trigger>
+          {label && (
+            <div
+              {...label.props}
+              ref={label.ref}
+              id={labelId}
+              className={cn(
+                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-disabled:opacity-50 peer-data-[placeholder]:top-1/2 peer-data-[placeholder]:text-base peer-data-[placeholder]:text-muted-foreground',
+                label.props.className,
+              )}
+            >
+              {label.children}
+            </div>
           )}
-        >
-          <RadixSelect.Value placeholder={trigger.props.placeholder} />
-          <RadixSelect.Icon asChild>
-            <VDownIcon className="h-4 w-4 opacity-50" />
-          </RadixSelect.Icon>
-        </RadixSelect.Trigger>
+        </div>
       )}
       {content && (
         <RadixSelect.Portal>
@@ -106,7 +129,7 @@ Root.displayName = 'Select'
 const SelectGroup: FC<GroupProps> = props => {
   const { children, ...groupProps } = props
 
-  const { label, items } = useSlots(children, { label: Label, items: Item })
+  const { label, items } = useSlots(children, { label: Header, items: Item })
 
   return (
     <RadixSelect.Group {...groupProps}>
