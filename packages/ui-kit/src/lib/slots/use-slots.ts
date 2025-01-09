@@ -43,7 +43,9 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
     } = child
 
     const resultKey = slotNameToResultKey[name]
-    assertDefined(resultKey)
+    if (resultKey === undefined) {
+      throw new Error(`slot '${name}' wasn't defined in the useSlot arguments`)
+    }
 
     const renderedSlot: RenderedSlot<any> = { name, children, props, ref }
 

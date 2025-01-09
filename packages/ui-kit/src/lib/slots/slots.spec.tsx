@@ -71,6 +71,14 @@ it('should forbid duplicated non-repeatable slot', () => {
   }).toThrow(/multiple/)
 })
 
+it("should forbid a slot that isn't defined in the arguments", () => {
+  const Slot = createSlot({ name: 'Slot' }).component()
+
+  expect(() => {
+    renderHook(() => useSlots(<Slot />, {}))
+  }).toThrow(/'Slot'/)
+})
+
 it('should forbid regular components', () => {
   expect(() => {
     renderHook(() => useSlots(<p>child</p>, {}))
