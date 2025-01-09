@@ -1,5 +1,5 @@
 import * as RadixTooltip from '@radix-ui/react-tooltip'
-import type { OmitExisting, Overlay, Override } from '@repo/common/typing'
+import type { OmitExisting, Overlay } from '@repo/common/typing'
 import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -21,12 +21,9 @@ export type RootProps = {
   onOpenChange?: (opened: boolean) => void
 }
 
-export type TriggerProps = Override<
-  ComponentProps<'button'>,
-  {
-    children: ReactNode
-  }
->
+export type TriggerProps = {
+  children: ReactNode
+}
 
 export type ContentProps = Overlay<
   ComponentProps<'div'>,
@@ -59,7 +56,7 @@ export const Root: FC<RootProps> = props => {
   return (
     <RadixTooltip.Root {...rootProps}>
       {trigger && (
-        <RadixTooltip.Trigger {...trigger.props} ref={trigger.ref} asChild>
+        <RadixTooltip.Trigger {...trigger.props} asChild>
           {trigger.children}
         </RadixTooltip.Trigger>
       )}

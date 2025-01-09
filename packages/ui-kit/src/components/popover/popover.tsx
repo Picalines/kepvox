@@ -1,6 +1,5 @@
 import * as RadixPopover from '@radix-ui/react-popover'
-import type { Overlay } from '@repo/common/typing'
-import type { ComponentPropsWithoutRef, FC, ReactNode, RefObject } from 'react'
+import type { FC, ReactNode, RefObject } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -11,12 +10,9 @@ export type RootProps = {
   onOpenChange?: (opened: boolean) => void
 }
 
-export type TriggerProps = Overlay<
-  ComponentPropsWithoutRef<'button'>,
-  {
-    children: ReactNode
-  }
->
+export type TriggerProps = {
+  children: ReactNode
+}
 
 export type ContentProps = {
   children: ReactNode
