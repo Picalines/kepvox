@@ -15,7 +15,9 @@ export default {
       </Dialog.Trigger>
       <Dialog.Title>{title}</Dialog.Title>
       <Dialog.Description>{description}</Dialog.Description>
-      <Dialog.Content closable={closable}>Content</Dialog.Content>
+      <Dialog.Content closable={closable}>
+        <span id="dialog-content">Content</span>
+      </Dialog.Content>
     </Dialog.Root>
   ),
   argTypes: {
