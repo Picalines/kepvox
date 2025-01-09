@@ -14,6 +14,7 @@ export type InputType = 'text' | 'password'
 
 export type RootProps = {
   className?: string
+  name?: string
   value?: string
   defaultValue?: string
   inputRef?: RefObject<HTMLInputElement>
@@ -33,6 +34,7 @@ export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 export const Root: FC<RootProps> = props => {
   const {
     className,
+    name,
     value,
     defaultValue,
     inputRef,
@@ -50,18 +52,17 @@ export const Root: FC<RootProps> = props => {
   return (
     <div className={cn('relative', className)}>
       <input
+        {...inputProps}
         ref={inputRef}
         id={inputId}
+        name={name}
         value={value}
         defaultValue={defaultValue}
-        className={cn(
-          'peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-        )}
+        className="peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder=" "
         disabled={disabled}
         required={required}
         type={type}
-        {...inputProps}
       />
       {label && (
         <label
