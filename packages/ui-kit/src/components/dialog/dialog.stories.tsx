@@ -31,7 +31,6 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
-    defaultOpen: false,
     closable: true,
     title: 'Title',
     description: 'Description',
@@ -41,6 +40,6 @@ export const Default: Story = {
 export const Open: Story = {
   args: {
     ...Default.args,
-    defaultOpen: true,
+    open: true,
   },
 }
