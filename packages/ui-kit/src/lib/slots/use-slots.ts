@@ -40,6 +40,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
       },
       props: { children, ...props },
       ref,
+      key,
     } = child
 
     const resultKey = slotNameToResultKey[name]
@@ -47,7 +48,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
       throw new Error(`slot '${name}' wasn't defined in the useSlot arguments`)
     }
 
-    const renderedSlot: RenderedSlot<any> = { name, children, props, ref }
+    const renderedSlot: RenderedSlot<any> = { name, children, props, ref, key }
 
     if (Array.isArray(collectedSlots[resultKey])) {
       collectedSlots[resultKey].push(renderedSlot)
