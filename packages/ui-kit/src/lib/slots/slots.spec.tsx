@@ -52,6 +52,31 @@ it('should allow repeated slots if the option is specified', () => {
   expect(receiveItems).toBeCalledWith([expect.anything(), expect.anything()])
 })
 
+it('should allow conditional slot rendering', () => {
+  const Slot = createSlot({ name: 'Slot' }).component()
+
+  const Slotted: FC<{ children: ReactNode }> = ({ children }) => {
+    useSlots(children, { Slot })
+    return null
+  }
+
+  const UserComponent: FC<{ conditional: any }> = ({ conditional }) => {
+    return (
+      <>
+        <Slotted>{conditional && <Slot />}</Slotted>
+      </>
+    )
+  }
+
+  expect(() => {
+    render(<UserComponent conditional={true} />)
+    render(<UserComponent conditional={false} />)
+    render(<UserComponent conditional={''} />)
+    render(<UserComponent conditional={undefined} />)
+    render(<UserComponent conditional={null} />)
+  }).not.toThrow()
+})
+
 it('should forbid duplicated non-repeatable slot', () => {
   const Slot = createSlot({ name: 'Slot' }).component()
 
