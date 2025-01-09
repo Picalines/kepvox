@@ -35,3 +35,10 @@ export const Default: Story = {
     description: 'Description',
   },
 }
+
+export const Open: Story = {
+  args: {
+    ...Default.args,
+    defaultOpen: true,
+  },
+}
