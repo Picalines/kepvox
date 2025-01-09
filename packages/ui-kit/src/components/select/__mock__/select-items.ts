@@ -1,0 +1,62 @@
+export const selectGroups = [
+  {
+    group: 'Beverages',
+    items: ['Water', 'Juice', 'Soda', 'Tea', 'Coffee', 'Milk'],
+  },
+  {
+    group: 'Fruits',
+    items: [
+      'Apple',
+      'Banana',
+      'Orange',
+      'Grape',
+      'Strawberry',
+      'Blueberry',
+      'Raspberry',
+      'Mango',
+      'Pineapple',
+      'Watermelon',
+      'Kiwi',
+      'Avocado',
+      'Peach',
+      'Pear',
+      'Plum',
+    ],
+  },
+  {
+    group: 'Vegetables',
+    items: [
+      'Broccoli',
+      'Carrot',
+      'Spinach',
+      'Lettuce',
+      'Tomato',
+      'Cucumber',
+      'Onion',
+      'Garlic',
+      'Potato',
+      'Sweet Potato',
+      'Bell Pepper',
+      'Corn',
+      'Green Beans',
+      'Mushroom',
+      'Asparagus',
+    ],
+  },
+  {
+    group: 'Grains',
+    items: ['Rice', 'Bread', 'Pasta', 'Quinoa', 'Oats', 'Cornmeal', 'Barley', 'Rye'],
+  },
+  {
+    group: 'Protein',
+    items: ['Chicken', 'Beef', 'Pork', 'Fish', 'Eggs', 'Beans', 'Lentils', 'Tofu', 'Tempeh', 'Nuts', 'Seeds'],
+  },
+  {
+    group: 'Dairy',
+    items: ['Milk', 'Cheese', 'Yogurt', 'Butter', 'Ice Cream'],
+  },
+  {
+    group: 'Snacks',
+    items: ['Chips', 'Pretzels', 'Popcorn', 'Crackers', 'Nuts', 'Seeds', 'Fruit Snacks', 'Cookies', 'Candy'],
+  },
+] as const

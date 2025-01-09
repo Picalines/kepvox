@@ -1,22 +1,27 @@
+import { take } from '@repo/common/array'
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { Select } from '.'
+import { selectGroups } from './__mock__'
 
-type StoryArgs = { placeholder: string; numberOfGroups: number } & Select.RootProps
+type StoryArgs = { label: string; numberOfGroups: number } & Select.RootProps
 
 export default {
   title: 'components/Select',
   component: Select.Root,
-  render: ({ placeholder, numberOfGroups, ...rootProps }) => (
+  render: ({ label, numberOfGroups, ...rootProps }) => (
     <Select.Root {...rootProps}>
-      <Select.Trigger placeholder={placeholder} />
+      <Select.Label>{label}</Select.Label>
+      <Select.Trigger />
       <Select.Content>
-        {new Array(numberOfGroups).fill(null).map((_, index) => (
-          <Select.Group key={String(index)} id={`group-${index}`}>
-            <Select.Label>Group {index + 1}</Select.Label>
-            <Select.Item value={`${index + 1}-1`}>Item 1 ({index + 1})</Select.Item>
-            <Select.Item value={`${index + 1}-2`}>Item 2 ({index + 1})</Select.Item>
-            <Select.Item value={`${index + 1}-3`}>Item 3 ({index + 1})</Select.Item>
+        {take(selectGroups, numberOfGroups).map(({ group, items }, index) => (
+          <Select.Group key={group} id={`group-${index}`}>
+            <Select.Header>{group}</Select.Header>
+            {items.map(value => (
+              <Select.Item key={value} value={value}>
+                {value}
+              </Select.Item>
+            ))}
           </Select.Group>
         ))}
       </Select.Content>
@@ -27,7 +32,7 @@ export default {
   },
   decorators: [
     Story => (
-      <div className="w-96">
+      <div className="max-w-96 pt-2">
         <Story />
       </div>
     ),
@@ -38,8 +43,29 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
-    placeholder: 'Select option...',
-    numberOfGroups: 2,
+    label: 'Food',
+    numberOfGroups: 1,
+  },
+}
+
+export const WithValue: Story = {
+  args: {
+    ...Default.args,
+    value: selectGroups[0].items[0],
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    disabled: true,
+  },
+}
+
+export const DisabledWithValue: Story = {
+  args: {
+    ...Disabled.args,
+    value: selectGroups[0].items[0],
   },
 }
 
@@ -47,6 +73,13 @@ export const Open: Story = {
   args: {
     ...Default.args,
     open: true,
+  },
+}
+
+export const OpenWithValue: Story = {
+  args: {
+    ...Open.args,
+    value: selectGroups[0].items[0],
   },
 }
 
