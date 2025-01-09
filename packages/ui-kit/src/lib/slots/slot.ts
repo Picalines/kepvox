@@ -30,6 +30,7 @@ export type RenderedSlot<Props = {}> = {
   name: string
   props: PropsWithoutRef<PropsWithChildren<Props>>
   children: ReactNode
+  key: string | null
 } & ExplicitRefProps<Props>
 
 export const createSlot = <const Meta extends SlotMeta>(meta: Meta) =>
