@@ -1,6 +1,6 @@
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border ring-ring focus-visible:ring-ring;
   }
 
   body {

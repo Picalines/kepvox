@@ -58,7 +58,7 @@ export const Root: FC<RootProps> = props => {
         name={name}
         value={value}
         defaultValue={defaultValue}
-        className="peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder=" "
         disabled={disabled}
         required={required}
@@ -70,7 +70,7 @@ export const Root: FC<RootProps> = props => {
           ref={label.ref}
           htmlFor={inputId}
           className={cn(
-            '-translate-y-1/2 peer-focus:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:text-ring peer-focus:text-sm peer-disabled:opacity-50',
+            '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-sm peer-disabled:opacity-50',
             label.props.className,
           )}
         >
