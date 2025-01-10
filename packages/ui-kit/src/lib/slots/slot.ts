@@ -6,6 +6,7 @@ import type {
   ReactElement,
   ReactNode,
   RefAttributes,
+  RefObject,
 } from 'react'
 import { isValidElement } from 'react'
 
@@ -47,7 +48,8 @@ export const createSlot = <const Meta extends SlotMeta>(meta: Meta) =>
 
 export function isSlotElement<Props = {}>(
   node: ReactNode,
-): node is ReactElement<PropsWithChildren<Props>, SlotComponent<Props, SlotMeta>> & ExplicitRefProps<Props> {
+): node is ReactElement<Props & { children?: ReactNode; ref?: RefObject<any> }, SlotComponent<Props, SlotMeta>> &
+  ExplicitRefProps<Props> {
   return isValidElement(node) && isSlotComponent(node.type)
 }
 

@@ -1,7 +1,7 @@
 import * as RadixToggle from '@radix-ui/react-toggle'
 import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
-import { type ComponentProps, forwardRef } from 'react'
+import type { ComponentProps, FC } from 'react'
 import { cn } from '#lib/classnames'
 
 export const toggleVariants = cva(
@@ -32,16 +32,11 @@ export type ToggleProps = Overlay<
   }
 >
 
-export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
-  ({ className, variant, size, onToggle, ...props }, ref) => (
-    <RadixToggle.Root
-      {...props}
-      ref={ref}
-      asChild={false}
-      className={cn(toggleVariants({ variant, size, className }))}
-      onPressedChange={onToggle}
-    />
-  ),
+export const Toggle: FC<ToggleProps> = ({ className, variant, size, onToggle, ...props }) => (
+  <RadixToggle.Root
+    {...props}
+    asChild={false}
+    className={cn(toggleVariants({ variant, size, className }))}
+    onPressedChange={onToggle}
+  />
 )
-
-Toggle.displayName = 'Toggle'

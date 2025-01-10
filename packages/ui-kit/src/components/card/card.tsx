@@ -1,5 +1,5 @@
 import type { SetRequired } from '@repo/common/typing'
-import { type ComponentPropsWithRef, forwardRef } from 'react'
+import type { ComponentPropsWithRef, FC } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -12,7 +12,7 @@ export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 export const Footer = createSlot({ name: 'Footer' }).component<FooterProps>()
 
-export const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children, ...props }, ref) => {
+export const Root: FC<RootProps> = ({ className, children, ...rootProps }) => {
   const { header, content, footer } = useSlots(children, { header: Header, content: Content, footer: Footer })
 
   if (!header && !content && !footer) {
@@ -21,9 +21,8 @@ export const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children
 
   return (
     <div
-      ref={ref}
+      {...rootProps}
       className={cn('flex flex-col gap-3 rounded-lg border bg-card p-3 text-card-foreground shadow-sm', className)}
-      {...props}
     >
       {header && (
         <div {...header.props} ref={header.ref}>
@@ -44,4 +43,4 @@ export const Root = forwardRef<HTMLDivElement, RootProps>(({ className, children
       )}
     </div>
   )
-})
+}

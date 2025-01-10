@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from 'class-variance-authority'
-import { type ComponentProps, type ElementType, forwardRef } from 'react'
+import type { ComponentProps, ElementType, FC } from 'react'
 import { cn } from '#lib/classnames'
 
 const textVariants = cva('', {
@@ -53,16 +53,10 @@ export type TextColor = NonNullable<TextProps['color']>
 
 export type TextWeight = NonNullable<TextProps['weight']>
 
-export const Text = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
-  const { as: Element = 'span', className, variant, color, weight, italic, underline, ...restProps } = props
+export const Text: FC<TextProps> = props => {
+  const { as: Element = 'span', className, variant, color, weight, italic, underline, ...elementProps } = props
 
   return (
-    <Element
-      {...restProps}
-      ref={ref}
-      className={cn(textVariants({ variant, color, weight, italic, underline }), className)}
-    />
+    <Element {...elementProps} className={cn(textVariants({ variant, color, weight, italic, underline }), className)} />
   )
-})
-
-Text.displayName = 'Text'
+}

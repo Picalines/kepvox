@@ -1,6 +1,6 @@
 import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
-import { type ComponentProps, forwardRef } from 'react'
+import type { ComponentProps, FC } from 'react'
 import { cn } from '#lib/classnames'
 
 export const buttonVariants = cva(
@@ -57,10 +57,6 @@ export type ButtonSize = NonNullable<ButtonProps['size']>
 
 export type ButtonShape = NonNullable<ButtonProps['shape']>
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, shape, ...props }, ref) => (
-    <button {...props} ref={ref} className={cn(buttonVariants({ variant, size, shape }), className)} />
-  ),
+export const Button: FC<ButtonProps> = ({ className, variant, size, shape, ...props }) => (
+  <button {...props} className={cn(buttonVariants({ variant, size, shape }), className)} />
 )
-
-Button.displayName = 'Button'

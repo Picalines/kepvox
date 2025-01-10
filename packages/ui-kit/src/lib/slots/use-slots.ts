@@ -38,8 +38,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
       type: {
         __slot: { name },
       },
-      props: { children, ...props },
-      ref,
+      props: { children, ref, ...props },
       key,
     } = child
 

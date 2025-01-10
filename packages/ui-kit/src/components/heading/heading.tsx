@@ -1,5 +1,5 @@
 import type { SetRequired } from '@repo/common/typing'
-import { type ComponentProps, forwardRef } from 'react'
+import type { ComponentProps, FC } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
@@ -14,7 +14,7 @@ export const Description = createSlot({ name: 'Description' }).component<Descrip
 
 export type RootProps = SetRequired<ComponentProps<'div'>, 'children'>
 
-export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
+export const Root: FC<RootProps> = props => {
   const { children, className, ...rootProps } = props
 
   const { superTitle, title, description } = useSlots(children, {
@@ -28,7 +28,7 @@ export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
   }
 
   return (
-    <div {...rootProps} ref={ref} className={cn('flex flex-col', className)}>
+    <div {...rootProps} className={cn('flex flex-col', className)}>
       {superTitle && (
         <Text variant="text-xs" color="secondary" {...superTitle.props} ref={superTitle.ref}>
           {superTitle.children}
@@ -46,4 +46,4 @@ export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
       )}
     </div>
   )
-})
+}
