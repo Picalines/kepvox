@@ -12,7 +12,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
   [S in keyof SlotMap]: SlotMap[S] extends SlotComponent<infer Props, infer Meta>
     ? Meta['repeatable'] extends true
       ? RenderedSlot<Props>[]
-      : RenderedSlot<Props> | null
+      : RenderedSlot<Props> | (Meta['required'] extends true ? {} : null)
     : never
 } {
   const collectedSlots: Record<string, RenderedSlot<any>[] | RenderedSlot<any> | null> = {}
@@ -59,6 +59,13 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
       collectedSlots[resultKey] = renderedSlot
     }
   })
+
+  for (const outputKey in slotMap) {
+    const slot = slotMap[outputKey as string]
+    if (slot?.__slot.required && collectedSlots[outputKey] === null) {
+      throw new Error(`slot '${slot.__slot.name}' is required`)
+    }
+  }
 
   // @ts-expect-error: typing this properly seems impossible
   return collectedSlots
