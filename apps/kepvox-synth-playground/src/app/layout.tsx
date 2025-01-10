@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import '@repo/ui-kit/style.css'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'kepvox/synth playground',
@@ -13,7 +14,7 @@ const monoFont = JetBrains_Mono({
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang="en" className="dark">

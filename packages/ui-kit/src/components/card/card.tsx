@@ -1,11 +1,12 @@
-import { type ComponentProps, forwardRef } from 'react'
+import type { SetRequired } from '@repo/common/typing'
+import { type ComponentPropsWithRef, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-export type RootProps = ComponentProps<'div'>
-export type HeaderProps = ComponentProps<'div'>
-export type ContentProps = ComponentProps<'div'>
-export type FooterProps = ComponentProps<'div'>
+export type RootProps = SetRequired<ComponentPropsWithRef<'div'>, 'children'>
+export type HeaderProps = ComponentPropsWithRef<'div'>
+export type ContentProps = ComponentPropsWithRef<'div'>
+export type FooterProps = ComponentPropsWithRef<'div'>
 
 export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Content = createSlot({ name: 'Content' }).component<ContentProps>()

@@ -13,3 +13,7 @@ export type Override<T extends object, O extends Partial<Record<keyof T, any>>> 
 export type Overlay<T extends object, O extends Partial<Record<keyof T, any>> & object> = {
   [K in keyof T as K extends keyof O ? never : K]: T[K]
 } & O
+
+export type SetRequired<T, K extends keyof T> = OmitExisting<T, K> & Required<Pick<T, K>>
+
+export type SetOptional<T, K extends keyof T> = OmitExisting<T, K> & Partial<Pick<T, K>>

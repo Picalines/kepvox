@@ -1,3 +1,4 @@
+import type { Overlay } from '@repo/common/typing'
 import type { FC, HTMLAttributes, ReactNode } from 'react'
 import * as ResizablePrimitive from 'react-resizable-panels'
 import { cn } from '#lib/classnames'
@@ -6,29 +7,38 @@ type HTMLElementTagName = keyof HTMLElementTagNameMap
 
 type AnyHTMLElementAttributes = HTMLAttributes<HTMLElementTagNameMap[HTMLElementTagName]>
 
-export type GroupProps = AnyHTMLElementAttributes & {
-  direction: 'horizontal' | 'vertical'
-  children: ReactNode
-  as?: HTMLElementTagName
-}
+export type GroupProps = Overlay<
+  AnyHTMLElementAttributes,
+  {
+    children: ReactNode
+    direction: 'horizontal' | 'vertical'
+    as?: HTMLElementTagName
+  }
+>
 
-export type PanelProps = AnyHTMLElementAttributes & {
-  children: ReactNode
-  as?: HTMLElementTagName
-  defaultSize?: number
-  maxSize?: number
-  minSize?: number
-  order?: number
-  onResize?: (size: number) => void
-}
+export type PanelProps = Overlay<
+  AnyHTMLElementAttributes,
+  {
+    children: ReactNode
+    as?: HTMLElementTagName
+    defaultSize?: number
+    maxSize?: number
+    minSize?: number
+    order?: number
+    onResize?: (size: number) => void
+  }
+>
 
-export type HandleProps = AnyHTMLElementAttributes & {
-  children?: ReactNode
-  as?: HTMLElementTagName
-  disabled?: boolean
-  onFocus?: () => void
-  onBlur?: () => void
-}
+export type HandleProps = Overlay<
+  AnyHTMLElementAttributes,
+  {
+    children: ReactNode
+    as?: HTMLElementTagName
+    disabled?: boolean
+    onFocus?: () => void
+    onBlur?: () => void
+  }
+>
 
 export const Group: FC<GroupProps> = ({ className, as, ...props }) => (
   // @ts-expect-error react-resizable-panels specifies its props as HTMLAttributes<'div' | etc>, where HTMLAttributes actually expects HTMLDivElement | etc

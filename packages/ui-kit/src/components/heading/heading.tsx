@@ -1,17 +1,18 @@
+import type { SetRequired } from '@repo/common/typing'
 import { type ComponentProps, forwardRef } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
 
-export type SuperTitleProps = TextProps
-export type TitleProps = TextProps
-export type DescriptionProps = TextProps
+export type SuperTitleProps = SetRequired<TextProps, 'children'>
+export type TitleProps = SetRequired<TextProps, 'children'>
+export type DescriptionProps = SetRequired<TextProps, 'children'>
 
 export const SuperTitle = createSlot({ name: 'SuperTitle' }).component<SuperTitleProps>()
 export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
 export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
 
-export type RootProps = ComponentProps<'div'>
+export type RootProps = SetRequired<ComponentProps<'div'>, 'children'>
 
 export const Root = forwardRef<HTMLDivElement, RootProps>((props, ref) => {
   const { children, className, ...rootProps } = props
