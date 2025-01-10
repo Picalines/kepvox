@@ -29,6 +29,14 @@ it('should return null for missing slot', () => {
   expect(slot2).toBeNull()
 })
 
+it('should throw if the slot is missing but marked as required', () => {
+  const Slot = createSlot({ name: 'Slot', required: true }).component()
+
+  expect(() => {
+    renderHook(() => useSlots(null, { Slot }))
+  }).toThrow()
+})
+
 it('should allow repeated slots if the option is specified', () => {
   const Item = createSlot({ name: 'Item', repeatable: true }).component()
 

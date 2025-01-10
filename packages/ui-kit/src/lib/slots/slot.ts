@@ -15,6 +15,7 @@ import { isValidElement } from 'react'
  */
 export type SlotMeta = {
   name: string
+  required?: boolean
   repeatable?: boolean
 }
 
