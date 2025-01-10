@@ -27,7 +27,8 @@ export const toggleVariants = cva(
 
 export type ToggleProps = Overlay<
   ComponentProps<'button'>,
-  VariantProps<typeof toggleVariants> & {
+  VariantProps<typeof toggleVariants>,
+  {
     onToggle?: (pressed: boolean) => void
   }
 >

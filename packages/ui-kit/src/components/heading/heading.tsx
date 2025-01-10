@@ -4,9 +4,9 @@ import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
 
-export type SuperTitleProps = SetRequired<TextProps, 'children'>
-export type TitleProps = SetRequired<TextProps, 'children'>
-export type DescriptionProps = SetRequired<TextProps, 'children'>
+export type SuperTitleProps = TextProps
+export type TitleProps = TextProps
+export type DescriptionProps = TextProps
 
 export const SuperTitle = createSlot({ name: 'SuperTitle' }).component<SuperTitleProps>()
 export const Title = createSlot({ name: 'Title' }).component<TitleProps>()

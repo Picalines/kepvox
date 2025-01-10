@@ -1,5 +1,6 @@
+import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
-import type { ComponentProps, ElementType, FC } from 'react'
+import type { ComponentProps, ElementType, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 
 const textVariants = cva('', {
@@ -42,10 +43,14 @@ const textVariants = cva('', {
   },
 })
 
-export type TextProps = (ComponentProps<'span'> | ComponentProps<'label'>) &
-  VariantProps<typeof textVariants> & {
+export type TextProps = Overlay<
+  ComponentProps<'span'> | ComponentProps<'label'>,
+  VariantProps<typeof textVariants>,
+  {
+    children?: ReactNode
     as?: ElementType
   }
+>
 
 export type TextVariant = NonNullable<TextProps['variant']>
 
