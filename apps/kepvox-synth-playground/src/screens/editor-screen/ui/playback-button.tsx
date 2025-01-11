@@ -13,7 +13,7 @@ export const PlaybackButton = () => {
 
     const oscillator = new OscillatorSynthNode(synthContext)
     const output = OutputSynthNode.ofContext(synthContext)
-    oscillator.connect(output)
+    oscillator.connectOutput(output)
 
     // @ts-expect-error
     window.o = oscillator

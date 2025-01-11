@@ -8,14 +8,14 @@ export class OscillatorSynthNode extends SynthNode {
   readonly waveShape // see in constructor
   readonly frequency
 
-  #oscillator: OscillatorNode
+  readonly #oscillator: OscillatorNode
 
   constructor(context: SynthContext) {
     const { audioContext } = context
 
     const oscillator = audioContext.createOscillator()
 
-    super({ context, inputs: [oscillator], outputs: [oscillator] })
+    super({ context, inputs: [], outputs: [oscillator] })
 
     this.#oscillator = oscillator
 
@@ -38,6 +38,5 @@ export class OscillatorSynthNode extends SynthNode {
   override dispose(): void {
     super.dispose()
     this.#oscillator.stop()
-    this.#oscillator.disconnect()
   }
 }
