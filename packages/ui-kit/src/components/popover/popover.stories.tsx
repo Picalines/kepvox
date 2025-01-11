@@ -21,7 +21,7 @@ export default {
   ),
   decorators: [
     Story => (
-      <div className="w-min rounded-lg border border-dashed p-20">
+      <div className="w-min rounded-lg border border-dashed px-28 py-20">
         <Story />
       </div>
     ),
