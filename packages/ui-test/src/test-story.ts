@@ -70,6 +70,8 @@ export const testStory = (params: TestStoryParams) => {
         Element.prototype.animate = undefined
       })
 
+      await page.evaluate(() => document.fonts.ready)
+
       if (backgroundColor !== null) {
         await page.locator('body').evaluate((body, color) => {
           body.style.backgroundColor = color
