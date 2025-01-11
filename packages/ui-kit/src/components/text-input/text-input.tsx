@@ -81,4 +81,4 @@ export const Root: FC<RootProps> = props => {
   )
 }
 
-Root.displayName = 'Input'
+Root.displayName = 'TextInput'

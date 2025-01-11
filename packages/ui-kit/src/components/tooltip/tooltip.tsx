@@ -82,3 +82,5 @@ export const Root: FC<RootProps> = props => {
     </RadixTooltip.Root>
   )
 }
+
+Root.displayName = 'Tooltip'

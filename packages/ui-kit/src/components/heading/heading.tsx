@@ -47,3 +47,5 @@ export const Root: FC<RootProps> = props => {
     </div>
   )
 }
+
+Root.displayName = 'Heading'

@@ -112,3 +112,5 @@ export const Root: FC<RootProps> = props => {
     </RadixDialog.Root>
   )
 }
+
+Root.displayName = 'Dialog'

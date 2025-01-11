@@ -44,3 +44,5 @@ export const Root: FC<RootProps> = ({ className, children, ...rootProps }) => {
     </div>
   )
 }
+
+Root.displayName = 'Card'

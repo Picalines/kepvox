@@ -59,3 +59,5 @@ export const Root: FC<RootProps> = props => {
     </RadixPopover.Root>
   )
 }
+
+Root.displayName = 'Popover'
