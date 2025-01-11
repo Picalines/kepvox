@@ -1,4 +1,4 @@
-import type { PlaywrightTestConfig } from '@playwright/test'
+import { type PlaywrightTestConfig, devices } from '@playwright/test'
 
 export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): PlaywrightTestConfig => ({
   testDir: '.',
@@ -33,7 +33,7 @@ export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): Playwrigh
     {
       name: 'chromium',
       use: {
-        browserName: 'chromium',
+        ...devices['Desktop Chrome'],
       },
     },
   ],
