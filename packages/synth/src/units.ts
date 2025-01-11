@@ -1,5 +1,5 @@
 import { type Branded, createBrandedUnsafe, createSafeBrand } from '@repo/common/branded'
-import { type Range, clamp, isInRange } from '@repo/common/math'
+import { Range } from '@repo/common/math'
 
 export type Seconds = Branded<number, 'seconds'>
 export type Decibels = Branded<number, 'decibels'>
@@ -22,17 +22,17 @@ export type UnitMap = {
 export type UnitName = keyof UnitMap
 
 export const UNIT_RANGES: Record<UnitName, Range> = {
-  seconds: [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY],
-  decibels: [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY],
-  hertz: [0, Number.POSITIVE_INFINITY],
-  normalRange: [0, 1],
-  audioRange: [-1, 1],
-  nonNegative: [0, Number.POSITIVE_INFINITY],
-  factor: [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY],
+  seconds: Range.any,
+  decibels: Range.any,
+  hertz: Range.positive,
+  normalRange: Range.normal,
+  audioRange: new Range(-1, 1),
+  nonNegative: Range.positive,
+  factor: Range.any,
 }
 
 const unitRangePredicate = <U extends UnitName>(unit: U) => {
-  return (x: number): x is Branded<number, U> => isInRange(x, UNIT_RANGES[unit])
+  return (x: number): x is Branded<number, U> => UNIT_RANGES[unit].includes(x)
 }
 
 export const [isSeconds, createSeconds] = createSafeBrand(
@@ -55,21 +55,21 @@ export const [isNormalRange, createNormalRange] = createSafeBrand(
   'the argument is not in range [0, 1]',
 )
 
-export const clampToNormalRange = (x: number) => createBrandedUnsafe<NormalRange>(clamp(x, UNIT_RANGES.normalRange))
+export const clampToNormalRange = (x: number) => createBrandedUnsafe<NormalRange>(UNIT_RANGES.normalRange.clamp(x))
 
 export const [isAudioRange, createAudioRange] = createSafeBrand(
   unitRangePredicate('audioRange'),
   'the argument is not in range [-1, 1]',
 )
 
-export const clampToAudioRange = (x: number) => createBrandedUnsafe<AudioRange>(clamp(x, UNIT_RANGES.audioRange))
+export const clampToAudioRange = (x: number) => createBrandedUnsafe<AudioRange>(UNIT_RANGES.audioRange.clamp(x))
 
 export const [isNonNegative, createNonNegative] = createSafeBrand(
   unitRangePredicate('nonNegative'),
   'the argument is not in range [0, +inf]',
 )
 
-export const clampToNonNegative = (x: number) => createBrandedUnsafe<NonNegative>(clamp(x, UNIT_RANGES.nonNegative))
+export const clampToNonNegative = (x: number) => createBrandedUnsafe<NonNegative>(UNIT_RANGES.nonNegative.clamp(x))
 
 export const [isFactor, createFactor] = createSafeBrand(
   unitRangePredicate('factor'),
