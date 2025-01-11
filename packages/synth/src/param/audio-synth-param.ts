@@ -1,4 +1,4 @@
-import { type Range, rangeContains } from '@repo/common/math'
+import { type Range, rangeContains, rangeIntersection } from '@repo/common/math'
 import type { OmitExisting } from '@repo/common/typing'
 import type { UnitName } from '#units'
 import { ScalarSynthParam } from './scalar-synth-param'
@@ -17,24 +17,32 @@ export class AudioSynthParam implements SynthParam, Omit<ScalarSynthParam, typeo
 
   readonly #scalarParam: ScalarSynthParam
 
-  constructor(nativeAudioParam: AudioParam, opts: AudioSynthParam.Opts) {
-    if (hasAssociatedParamSymbol in nativeAudioParam) {
+  constructor(audioParam: AudioParam, opts: AudioSynthParam.Opts) {
+    const nativeRange: Range = [audioParam.minValue, audioParam.maxValue]
+    const rangeParam = opts.range ?? [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]
+    const range = rangeIntersection(nativeRange, rangeParam)
+
+    if (!range) {
+      throw new Error('the range parameter and AudioNode range have no point in common')
+    }
+
+    if (hasAssociatedParamSymbol in audioParam) {
       throw new Error('the AudioParam already has an AudioSynthParam associated with it')
     }
 
     // @ts-expect-error: adding a custom symbol to prevent "races"
     // between different synth parameters controlling the same AudioParam
-    nativeAudioParam[hasAssociatedParamSymbol] = true
+    audioParam[hasAssociatedParamSymbol] = true
 
-    this.#audioParam = nativeAudioParam
+    this.#audioParam = audioParam
     this.#scalarParam = new ScalarSynthParam({
       ...opts,
+      range,
       synchronize: value => {
         this.#audioParam.value = value
       },
     })
 
-    const nativeRange: Range = [nativeAudioParam.minValue, nativeAudioParam.maxValue]
     if (!rangeContains(nativeRange, this.range)) {
       throw new Error('the param range is larger the native range')
     }
