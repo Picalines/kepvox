@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clamp, isInRange, isValidRange, rangeContains } from './math'
+import { clamp, isInRange, isValidRange, rangeContains, rangeIntersection } from './math'
 
 describe('range', () => {
   describe('isValidRange', () => {
@@ -53,6 +53,18 @@ describe('range', () => {
 
     it('allows infinity', () => {
       expect(rangeContains([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY], [0, 1])).toEqual(true)
+    })
+  })
+
+  describe('rangeIntersection', () => {
+    it('returns the smaller inner range', () => {
+      expect(rangeIntersection([0, 10], [2, 5])).toEqual([2, 5])
+      expect(rangeIntersection([1, 3], [-20, 20])).toEqual([1, 3])
+    })
+
+    it('handles infinity', () => {
+      expect(rangeIntersection([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY], [0, 1])).toEqual([0, 1])
+      expect(rangeIntersection([Number.NEGATIVE_INFINITY, 0], [0, 1])).toEqual([0, 0])
     })
   })
 })
