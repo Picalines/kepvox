@@ -1,5 +1,6 @@
 import { assertDefined } from '@repo/common/assert'
 import type { SynthContext } from '#context'
+import { SynthNodeSocket } from './synth-node-socket'
 
 export const synthNodeType: unique symbol = Symbol('SynthNode.type')
 
@@ -30,21 +31,16 @@ export abstract class SynthNode {
 
   #disposed = false
 
-  readonly #inputs: readonly AudioNode[]
-  readonly #outputs: readonly AudioNode[]
-
-  // index corresponds to this node output, i.e. each
-  // output has 0 or many connections to some node inputs
-  readonly #connections: [node: SynthNode, input: number][][]
+  readonly #inputs: readonly SynthNodeSocket[]
+  readonly #outputs: readonly SynthNodeSocket[]
 
   constructor(opts: SynthNode.Opts) {
     const { context, inputs, outputs } = opts
+
     this.context = context
 
-    this.#inputs = [...inputs]
-    this.#outputs = [...outputs]
-
-    this.#connections = outputs.map(() => [])
+    this.#inputs = inputs.map(audioNode => new SynthNodeSocket(audioNode, 'input'))
+    this.#outputs = outputs.map(audioNode => new SynthNodeSocket(audioNode, 'output'))
   }
 
   get disposed() {
@@ -59,63 +55,52 @@ export abstract class SynthNode {
     return this.#outputs.length
   }
 
-  connect(node: SynthNode, output = 0, input = 0): void {
+  connectOutput(node: SynthNode, output = 0, input = 0) {
     this.#assertNotDisposed()
     node.#assertNotDisposed()
 
     this.#assertOutputIndex(output)
     node.#assertInputIndex(input)
 
-    const outputNode = this.#outputs[output]
-    const inputNode = node.#inputs[input]
-    const outputConnections = this.#connections[output]
-    assertDefined(outputNode)
-    assertDefined(inputNode)
-    assertDefined(outputConnections)
+    const outputSocket = this.#outputs[output]
+    const inputSocket = node.#inputs[input]
+    assertDefined(outputSocket)
+    assertDefined(inputSocket)
 
-    if (!outputConnections.some(c => c[0] === node && c[1] === input)) {
-      outputConnections.push([node, input])
-      outputNode.connect(inputNode)
-    }
+    outputSocket.connect(inputSocket)
   }
 
-  disconnect(node: SynthNode, output = 0, input = 0) {
+  disconnectOutput(node: SynthNode, output = 0, input: number | 'all' = 'all') {
     this.#assertNotDisposed()
     node.#assertNotDisposed()
-
     this.#assertOutputIndex(output)
+
+    if (input === 'all') {
+      for (let nodeInput = 0; nodeInput < node.numberOfInputs; nodeInput++) {
+        this.disconnectOutput(node, output, input)
+      }
+      return
+    }
+
     node.#assertInputIndex(input)
 
-    const outputNode = this.#outputs[output]
-    const inputNode = node.#inputs[input]
-    const outputConnections = this.#connections[output]
-    assertDefined(outputNode)
-    assertDefined(inputNode)
-    assertDefined(outputConnections)
+    const outputSocket = this.#outputs[output]
+    const inputSocket = node.#inputs[input]
+    assertDefined(outputSocket)
+    assertDefined(inputSocket)
 
-    const connectionIndex = outputConnections.findIndex(c => c[0] === node && c[1] === input)
-    if (connectionIndex >= 0) {
-      outputConnections.splice(connectionIndex)
-      outputNode.disconnect(inputNode)
-    }
-  }
-
-  disconnectOutput(output: number) {
-    this.#assertNotDisposed()
-    this.#assertOutputIndex(output)
-
-    const outputConnections = this.#connections[output]
-    assertDefined(outputConnections)
-
-    for (const [node, input] of [...outputConnections]) {
-      this.disconnect(node, output, input)
-    }
+    outputSocket.disconnect(inputSocket)
   }
 
   disconnectAll() {
     this.#assertNotDisposed()
-    for (let output = 0; output < this.#outputs.length; output++) {
-      this.disconnectOutput(output)
+
+    for (const input of this.#inputs) {
+      input.disconnectAll()
+    }
+
+    for (const output of this.#outputs) {
+      output.disconnectAll()
     }
   }
 
@@ -125,11 +110,19 @@ export abstract class SynthNode {
    * @virtual
    */
   dispose() {
-    if (!this.#disposed) {
-      this.disconnectAll()
+    if (this.#disposed) {
+      return
     }
 
     this.#disposed = true
+
+    for (const input of this.#inputs) {
+      input.dispose()
+    }
+
+    for (const output of this.#outputs) {
+      output.dispose()
+    }
   }
 
   #assertNotDisposed() {
@@ -139,13 +132,13 @@ export abstract class SynthNode {
   }
 
   #assertInputIndex(input: number) {
-    if (input < 0 || input >= this.numberOfInputs) {
+    if (input < 0 || input >= this.#inputs.length) {
       throw new Error("the  SynthNode doesn't have enough inputs")
     }
   }
 
   #assertOutputIndex(output: number) {
-    if (output < 0 || output >= this.numberOfOutputs) {
+    if (output < 0 || output >= this.#outputs.length) {
       throw new Error("the  SynthNode doesn't have enough outputs")
     }
   }
