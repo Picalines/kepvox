@@ -1,5 +1,5 @@
 import { Emitter } from '@repo/common/emitter'
-import { type Range, clamp, isInRange, rangeContains } from '@repo/common/math'
+import { type Range, clamp, isInRange, rangeIntersection } from '@repo/common/math'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { type SynthParam, synthParamType } from './synth-param'
 
@@ -26,20 +26,22 @@ export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) impl
   #value?: number
 
   constructor({ unit, initialValue, range: rangeParam, synchronize }: ScalarSynthParam.Opts) {
+    const unitRange = UNIT_RANGES[unit]
+    const manualrange = rangeParam ?? [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]
+    const paramRange = rangeIntersection(unitRange, manualrange)
+
+    if (!paramRange) {
+      throw new Error('the range parameter and the unit range have no values in common')
+    }
+
+    if (!isInRange(initialValue, paramRange)) {
+      throw new Error('the initialValue parameter is not in range')
+    }
+
     super()
 
     this.unit = unit
-
-    const unitRange = UNIT_RANGES[unit]
-    if (rangeParam && !rangeContains(unitRange, rangeParam)) {
-      throw new Error(`the range parameter is larger than the ${unit} range`)
-    }
-
-    this.range = rangeParam ?? unitRange
-
-    if (!isInRange(initialValue, this.range)) {
-      throw new Error('the initialValue parameter is not in range')
-    }
+    this.range = paramRange
 
     if (synchronize) {
       this.on('changed', () => synchronize(this.getValueImmediate()))
