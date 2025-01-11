@@ -16,6 +16,7 @@ type TestStoryParams = {
   fullPage?: boolean
   selector?: string
   theme?: Theme
+  backgroundColor?: string | null
   act?: PageAction
 }
 
@@ -30,6 +31,7 @@ export const testStory = (params: TestStoryParams) => {
     fullPage = false,
     selector = '#storybook-root',
     theme = DEFAULT_THEME,
+    backgroundColor = 'magenta',
     act,
   } = params
 
@@ -67,6 +69,12 @@ export const testStory = (params: TestStoryParams) => {
         // @ts-expect-error
         Element.prototype.animate = undefined
       })
+
+      if (backgroundColor !== null) {
+        await page.locator('body').evaluate((body, color) => {
+          body.style.backgroundColor = color
+        }, backgroundColor)
+      }
 
       if (theme === 'dark') {
         await page.locator(':root').evaluate(root => root.classList.add('dark'))
