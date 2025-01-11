@@ -29,6 +29,17 @@ export const rangeContains = (outerRange: Range, innerRange: Range) => {
   return isInRange(min, outerRange) && isInRange(max, outerRange)
 }
 
+export const rangeIntersection = (range1: Range, range2: Range): Range | null => {
+  assertValidRange(range1)
+  assertValidRange(range2)
+
+  const [min1, max1] = range1
+  const [min2, max2] = range2
+  const intersection: Range = [Math.max(min1, min2), Math.min(max1, max2)]
+
+  return isValidRange(intersection) ? intersection : null
+}
+
 export const clamp = (x: number, range: Range) => {
   if (Number.isNaN(x)) {
     throw new Error('the argument is NaN')
