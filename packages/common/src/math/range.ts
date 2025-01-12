@@ -1,3 +1,7 @@
+const signString = (x: number) => {
+  return x >= 0 ? '+' : '-'
+}
+
 export class Range {
   readonly #min: number
   readonly #max: number
@@ -17,6 +21,13 @@ export class Range {
 
   get max() {
     return this.#max
+  }
+
+  toString(fractionDigits = 2) {
+    const { min, max } = this
+    const left = Number.isFinite(min) ? `[${min.toFixed(fractionDigits)}` : `(${signString(min)}inf`
+    const right = Number.isFinite(max) ? `${max.toFixed(fractionDigits)}]` : `${signString(max)}inf)`
+    return `${left}; ${right}`
   }
 
   includes(x: number) {

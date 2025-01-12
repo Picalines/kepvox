@@ -37,6 +37,10 @@ export class IntRange implements RangeIntAPI {
     return this.#range
   }
 
+  toString() {
+    return this.#range.toString(0)
+  }
+
   includes(x: number): boolean {
     return this.#range.includes(x) && Number.isInteger(x)
   }

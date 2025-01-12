@@ -23,6 +23,20 @@ describe('constructor', () => {
   })
 })
 
+describe('toString', () => {
+  it('should allow setting fraction digits', () => {
+    const range = new Range(0.125, 5.75)
+    expect(range.toString(2)).toEqual('[0.13; 5.75]')
+    expect(range.toString(3)).toEqual('[0.125; 5.750]')
+  })
+
+  it('should display the infinities', () => {
+    expect(Range.any.toString()).toEqual('(-inf; +inf)')
+    expect(Range.positive.toString()).toEqual('[0.00; +inf)')
+    expect(Range.negative.toString()).toEqual('(-inf; 0.00]')
+  })
+})
+
 describe('includes', () => {
   it('is inclusive', () => {
     const range = new Range(0, 1)
