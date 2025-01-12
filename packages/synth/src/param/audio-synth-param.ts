@@ -2,7 +2,7 @@ import { Range } from '@repo/common/math'
 import type { SynthContext, SynthTime, SynthTimeLike } from '#context'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { type InterpolatedAutomation, type InterpolationMethod, automationKind } from './automation'
-import { type SynthParam, synthParamType } from './synth-param'
+import { SynthParam, synthParamType } from './synth-param'
 
 export namespace AudioSynthParam {
   export type Opts = {
@@ -15,7 +15,7 @@ export namespace AudioSynthParam {
 
 const hasAssociatedParamSymbol = Symbol('associatedSynthAudioParam')
 
-export class AudioSynthParam implements SynthParam<number>, InterpolatedAutomation {
+export class AudioSynthParam extends SynthParam<number> implements InterpolatedAutomation {
   readonly [synthParamType] = 'audio'
   readonly [automationKind] = 'interpolated'
 
@@ -43,6 +43,8 @@ export class AudioSynthParam implements SynthParam<number>, InterpolatedAutomati
     if (hasAssociatedParamSymbol in audioParam) {
       throw new Error('the AudioParam already has an AudioSynthParam associated with it')
     }
+
+    super()
 
     // @ts-expect-error: adding a custom symbol to prevent "races"
     // between different synth parameters controlling the same AudioParam

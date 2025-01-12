@@ -1,7 +1,7 @@
 import { Emitter } from '@repo/common/emitter'
 import { Range } from '@repo/common/math'
 import { UNIT_RANGES, type UnitName } from '#units'
-import { type SynthParam, synthParamType } from './synth-param'
+import { SynthParam, synthParamType } from './synth-param'
 
 export namespace ScalarSynthParam {
   export type Opts = {
@@ -16,7 +16,7 @@ type Events = {
   changed: []
 }
 
-export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) implements SynthParam<number> {
+export class ScalarSynthParam extends Emitter.listenMixin<Events>()(SynthParam<number>) {
   readonly [synthParamType] = 'scalar'
 
   readonly unit: UnitName
