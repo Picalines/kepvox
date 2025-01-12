@@ -33,8 +33,8 @@ export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) impl
       throw new Error('the range parameter and the unit range have no values in common')
     }
 
-    if (paramRange.includes(initialValue)) {
-      throw new Error('the initialValue parameter is not in range')
+    if (!paramRange.includes(initialValue)) {
+      throw new Error(`the initialValue ${initialValue} is not in range ${paramRange}`)
     }
 
     super()
