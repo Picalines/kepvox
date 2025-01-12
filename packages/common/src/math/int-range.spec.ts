@@ -23,6 +23,14 @@ describe('constructor', () => {
   })
 })
 
+describe('toString', () => {
+  it('should display the infinities', () => {
+    expect(IntRange.any.toString()).toEqual('(-inf; +inf)')
+    expect(IntRange.positive.toString()).toEqual('[0; +inf)')
+    expect(IntRange.negative.toString()).toEqual('(-inf; 0]')
+  })
+})
+
 describe('includes', () => {
   it('is inclusive', () => {
     const range = new IntRange(0, 1)
