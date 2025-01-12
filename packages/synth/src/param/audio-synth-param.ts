@@ -79,7 +79,10 @@ export class AudioSynthParam implements SynthParam<number>, InterpolatedAutomati
 
   holdAt(time: SynthTime) {
     // TODO(#8): cancelAndHoldAtTime not implemented in some browsers
-    this.#audioParam.cancelAndHoldAtTime(this.#context.time(time))
+    const value = this.getImmediate()
+    const holdTime = this.#context.time(time)
+    this.#audioParam.cancelScheduledValues(holdTime)
+    this.#audioParam.setValueAtTime(value, holdTime)
   }
 
   rampUntil(end: SynthTimeLike, value: number, method: InterpolationMethod = 'linear') {
