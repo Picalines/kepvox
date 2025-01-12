@@ -1,5 +1,5 @@
 import { Emitter } from '@repo/common/emitter'
-import { type Range, clamp, isInRange, rangeIntersection } from '@repo/common/math'
+import { Range } from '@repo/common/math'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { type SynthParam, synthParamType } from './synth-param'
 
@@ -16,7 +16,7 @@ type Events = {
   changed: []
 }
 
-export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) implements SynthParam {
+export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) implements SynthParam<number> {
   readonly [synthParamType] = 'scalar'
 
   readonly unit: UnitName
@@ -25,16 +25,15 @@ export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) impl
 
   #value?: number
 
-  constructor({ unit, initialValue, range: rangeParam, synchronize }: ScalarSynthParam.Opts) {
+  constructor({ unit, initialValue, range: rangeParam = Range.any, synchronize }: ScalarSynthParam.Opts) {
     const unitRange = UNIT_RANGES[unit]
-    const manualrange = rangeParam ?? [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]
-    const paramRange = rangeIntersection(unitRange, manualrange)
+    const paramRange = unitRange.intersection(rangeParam)
 
     if (!paramRange) {
       throw new Error('the range parameter and the unit range have no values in common')
     }
 
-    if (!isInRange(initialValue, paramRange)) {
+    if (paramRange.includes(initialValue)) {
       throw new Error('the initialValue parameter is not in range')
     }
 
@@ -44,21 +43,21 @@ export class ScalarSynthParam extends Emitter.listenMixin<Events>()(Object) impl
     this.range = paramRange
 
     if (synchronize) {
-      this.on('changed', () => synchronize(this.getValueImmediate()))
+      this.on('changed', () => synchronize(this.getImmediate()))
     }
 
-    this.setValueImmediate(initialValue)
+    this.setImmediate(initialValue)
   }
 
-  setValueImmediate(value: number) {
+  setImmediate(value: number) {
     const oldValue = this.#value
-    this.#value = clamp(value, this.range)
+    this.#value = this.range.clamp(value)
     if (oldValue !== this.#value) {
       this._emit('changed')
     }
   }
 
-  getValueImmediate(): number {
+  getImmediate(): number {
     if (this.#value === undefined) {
       throw new Error('getValueImmediate called before initialization')
     }

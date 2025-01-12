@@ -28,6 +28,7 @@ export class OscillatorSynthNode extends SynthNode {
     })
 
     this.frequency = new AudioSynthParam(oscillator.frequency, {
+      context,
       unit: 'hertz',
       initialValue: 440, // TODO: set to constant
     })
