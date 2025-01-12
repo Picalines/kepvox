@@ -25,3 +25,11 @@ export type Overlay<
 export type SetRequired<T, K extends keyof T> = OmitExisting<T, K> & Required<Pick<T, K>>
 
 export type SetOptional<T, K extends keyof T> = OmitExisting<T, K> & Partial<Pick<T, K>>
+
+type TupleImpl<Item, Length extends number, Acc extends Item[]> = Acc extends {
+  length: Length
+}
+  ? Acc
+  : TupleImpl<Item, Length, [...Acc, Item]>
+
+export type Tuple<Item, Length extends number> = `${Length}` extends `-${string}` ? never : TupleImpl<Item, Length, []>

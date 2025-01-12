@@ -18,6 +18,9 @@
         "ts:check": "tsc --noEmit",
         "test:unit": "vitest run"
     },
+    "imports": {
+        "#typing": "./src/typing.ts"
+    },
     "devDependencies": {
         "@repo/ts-config": "workspace:^",
         "@repo/vite-config": "workspace:^",
