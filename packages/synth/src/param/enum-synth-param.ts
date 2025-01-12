@@ -17,7 +17,7 @@ type Events = {
 
 export class EnumSynthParam<V extends string = string>
   extends Emitter.listenMixin<Events>()(Object)
-  implements SynthParam
+  implements SynthParam<V>
 {
   readonly [synthParamType] = 'enum'
 
@@ -39,13 +39,13 @@ export class EnumSynthParam<V extends string = string>
     }
 
     if (synchronize) {
-      this.on('changed', () => synchronize(this.getValueImmediate()))
+      this.on('changed', () => synchronize(this.getImmediate()))
     }
 
-    this.setValueImmediate(initialValue)
+    this.setImmediate(initialValue)
   }
 
-  setValueImmediate(value: V) {
+  setImmediate(value: V) {
     if (this.variants.includes(value)) {
       const oldValue = this.#value
       this.#value = value
@@ -55,9 +55,9 @@ export class EnumSynthParam<V extends string = string>
     }
   }
 
-  getValueImmediate(): V {
+  getImmediate(): V {
     if (this.#value === undefined) {
-      throw new Error('getValueImmediate called before initialization')
+      throw new Error('getImmediate called before initialization')
     }
 
     return this.#value
