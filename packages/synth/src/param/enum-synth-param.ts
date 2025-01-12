@@ -1,5 +1,5 @@
 import { Emitter } from '@repo/common/emitter'
-import { type SynthParam, synthParamType } from './synth-param'
+import { SynthParam, synthParamType } from './synth-param'
 
 export namespace EnumSynthParam {
   export type Opts<V extends string> = {
@@ -16,7 +16,7 @@ type Events = {
 }
 
 export class EnumSynthParam<V extends string = string>
-  extends Emitter.listenMixin<Events>()(Object)
+  extends Emitter.listenMixin<Events>()(SynthParam<string>)
   implements SynthParam<V>
 {
   readonly [synthParamType] = 'enum'
@@ -46,12 +46,14 @@ export class EnumSynthParam<V extends string = string>
   }
 
   setImmediate(value: V) {
-    if (this.variants.includes(value)) {
-      const oldValue = this.#value
-      this.#value = value
-      if (oldValue !== this.#value) {
-        this._emit('changed')
-      }
+    if (!this.variants.includes(value)) {
+      return
+    }
+
+    const oldValue = this.#value
+    this.#value = value
+    if (oldValue !== this.#value) {
+      this._emit('changed')
     }
   }
 

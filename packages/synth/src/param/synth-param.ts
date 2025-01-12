@@ -1,8 +1,9 @@
 export const synthParamType: unique symbol = Symbol('SynthParam.type')
 
-export type SynthParam<T> = {
-  readonly [synthParamType]: string
+export abstract class SynthParam<T> {
+  abstract readonly [synthParamType]: string
 
-  getImmediate(): T
-  setImmediate(value: T): void
+  abstract getImmediate(): T
+
+  abstract setImmediate(value: T): void
 }

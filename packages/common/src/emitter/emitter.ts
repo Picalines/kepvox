@@ -59,8 +59,8 @@ export class Emitter<EM extends EventMap> {
   }
 
   static listenMixin<EM extends EventMap>() {
-    return <T extends new (...args: any[]) => any>(Base: T) =>
-      class EmitterListenMixin extends Base implements ListenEmitter<EM> {
+    return <T extends abstract new (...args: any[]) => any>(Base: T) => {
+      abstract class EmitterListenMixin extends Base implements ListenEmitter<EM> {
         protected readonly _emit: Emitter<EM>['emit']
         readonly on: Emitter<EM>['on']
         readonly off: Emitter<EM>['off']
@@ -77,5 +77,8 @@ export class Emitter<EM extends EventMap> {
           this.once = emitter.once.bind(emitter)
         }
       }
+
+      return EmitterListenMixin
+    }
   }
 }
