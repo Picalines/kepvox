@@ -14,3 +14,7 @@ export function assertDefined<T>(
     throw new AssertionError(errorMessage)
   }
 }
+
+export function assertUnreachable(stateDescription: string): never {
+  throw new AssertionError(`unreachable state reached: ${stateDescription}`)
+}
