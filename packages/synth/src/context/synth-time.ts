@@ -1,7 +1,7 @@
 import { type Seconds, createSeconds } from '#units'
 import type { SynthContext } from './synth-context'
 
-type SynthTimeUnit = 'seconds' | 'milliseconds' | 'hertz' | 'note'
+type SynthTimeUnit = 'seconds' | 'milliseconds' | 'hertz' | 'bar' | 'note'
 
 export type SynthTime = Seconds
 
@@ -16,7 +16,8 @@ const toSecondsTable: Record<SynthTimeUnit, (value: number, context: SynthContex
   seconds: s => s,
   milliseconds: ms => ms / 1_000,
   hertz: hz => 1 / hz,
-  note: (noteValue, { bpm, timeSignature: [_, beatValue] }) => (bpm / 60) * (beatValue / noteValue),
+  bar: (bars, { bpm, timeSignature: [beatsInBar, _] }) => (60 / bpm) * beatsInBar * bars,
+  note: (noteValue, { bpm, timeSignature: [_, beatValue] }) => (60 / bpm) * (beatValue / noteValue),
 }
 
 /**
