@@ -10,11 +10,11 @@ export const PlaybackButton = () => {
     const audioContext = new AudioContext()
     await audioContext.resume()
 
-    const synthContext = new SynthContext(audioContext)
+    const context = new SynthContext(audioContext)
 
-    const oscillator = new OscillatorSynthNode(synthContext)
-    const envelope = new ADSREnvelopeSynthNode(synthContext)
-    const output = OutputSynthNode.ofContext(synthContext)
+    const oscillator = new OscillatorSynthNode(context)
+    const envelope = new ADSREnvelopeSynthNode(context)
+    const output = OutputSynthNode.ofContext(context)
 
     oscillator.connectOutput(envelope)
     envelope.connectOutput(output)
@@ -24,18 +24,21 @@ export const PlaybackButton = () => {
     // biome-ignore lint/suspicious/noConsoleLog: temporary
     console.log('running!')
 
-    oscillator.frequency.setImmediate(880)
+    oscillator.frequency.setImmediate(440)
     oscillator.waveShape.setImmediate('sawtooth')
-    envelope.attack.setImmediate(0.1)
+    envelope.attack.setImmediate(0.02)
+    envelope.decay.setImmediate(0.1)
+    envelope.sustain.setImmediate(0.5)
     envelope.release.setImmediate(0.5)
+
+    envelope.attackAt({ from: 'ahead' })
+    envelope.releaseAt({ from: 'ahead', note: 8 })
+    oscillator.frequency.rampUntil({ from: 'ahead', note: 8 }, 880)
 
     // @ts-expect-error
     window.e = envelope
     // @ts-expect-error
     window.o = oscillator
-
-    envelope.attackAt({ fromAhead: true })
-    envelope.releaseAt({ fromAhead: true, seconds: 0.2 })
   }
 
   return (

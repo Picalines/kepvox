@@ -1,31 +1,30 @@
-import { Emitter } from '@repo/common/emitter'
 import { Range } from '@repo/common/math'
+import type { SynthContext, SynthTimeLike } from '#context'
 import { UNIT_RANGES, type UnitName } from '#units'
-import { SynthParam, synthParamType } from './synth-param'
+import { AutomationCurve } from './automation-curve'
+import { InterpolatedSynthParam, type InterpolationMethod, synthParamType } from './synth-param'
 
 export namespace ScalarSynthParam {
   export type Opts = {
+    context: SynthContext
     unit: UnitName
     initialValue: number
     range?: Range
-    synchronize?: (currentValue: number) => void
   }
 }
 
-type Events = {
-  changed: []
-}
-
-export class ScalarSynthParam extends Emitter.listenMixin<Events>()(SynthParam<number>) {
+export class ScalarSynthParam extends InterpolatedSynthParam {
   readonly [synthParamType] = 'scalar'
 
   readonly unit: UnitName
-
   readonly range: Range
 
-  #value?: number
+  readonly #context: SynthContext
+  readonly #curve: AutomationCurve
 
-  constructor({ unit, initialValue, range: rangeParam = Range.any, synchronize }: ScalarSynthParam.Opts) {
+  constructor(opts: ScalarSynthParam.Opts) {
+    const { context, unit, initialValue, range: rangeParam = Range.any } = opts
+
     const unitRange = UNIT_RANGES[unit]
     const paramRange = unitRange.intersection(rangeParam)
 
@@ -42,26 +41,37 @@ export class ScalarSynthParam extends Emitter.listenMixin<Events>()(SynthParam<n
     this.unit = unit
     this.range = paramRange
 
-    if (synchronize) {
-      this.on('changed', () => synchronize(this.getImmediate()))
-    }
+    this.#context = context
+    this.#curve = new AutomationCurve(context)
 
-    this.setImmediate(initialValue)
+    this.#curve.setAt(0, initialValue)
   }
 
   setImmediate(value: number) {
-    const oldValue = this.#value
-    this.#value = this.range.clamp(value)
-    if (oldValue !== this.#value) {
-      this._emit('changed')
-    }
+    this.#curve.setAt(this.#context.currentTime, value)
   }
 
   getImmediate(): number {
-    if (this.#value === undefined) {
-      throw new Error('getValueImmediate called before initialization')
-    }
+    return this.#curve.getAt(this.#context.currentTime)
+  }
 
-    return this.#value
+  cancelAfter(time: SynthTimeLike) {
+    return this.#curve.cancelAfter(time)
+  }
+
+  getAt(time: SynthTimeLike): number {
+    return this.#curve.getAt(time)
+  }
+
+  setAt(time: SynthTimeLike, value: number) {
+    return this.#curve.setAt(time, value)
+  }
+
+  holdAt(time: SynthTimeLike) {
+    return this.#curve.holdAt(time)
+  }
+
+  rampUntil(end: SynthTimeLike, value: number, method?: InterpolationMethod) {
+    return this.#curve.rampUntil(end, value, method)
   }
 }

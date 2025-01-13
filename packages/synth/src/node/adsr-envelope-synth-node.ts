@@ -29,23 +29,27 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     })
 
     this.attack = new ScalarSynthParam({
+      context,
       unit: 'seconds',
       initialValue: 0,
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
+      context,
       unit: 'seconds',
       initialValue: 0,
       range: Range.positive,
     })
 
     this.sustain = new ScalarSynthParam({
+      context,
       unit: 'normalRange',
       initialValue: 1,
     })
 
     this.release = new ScalarSynthParam({
+      context,
       unit: 'seconds',
       initialValue: 0,
       range: Range.positive,
@@ -56,14 +60,15 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const startTime = this.context.time(start)
 
     this.#gain.cancelAfter(startTime)
+    this.#gain.setAt(startTime, 0)
 
-    // TODO(#8): replace getImmediate with getAt or something
-    const attackDuration = this.attack.getImmediate()
-    const decayDuration = this.decay.getImmediate()
-    const sustainLevel = this.sustain.getImmediate()
-
+    const attackDuration = this.attack.getAt(startTime)
     const attackEnd = this.context.time(startTime + attackDuration)
+
+    const decayDuration = this.decay.getAt(attackEnd)
     const decayEnd = this.context.time(attackEnd + decayDuration)
+
+    const sustainLevel = this.sustain.getAt(decayEnd)
 
     if (attackDuration > 0) {
       this.#gain.setAt(startTime, 0)
@@ -82,8 +87,7 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     this.#gain.holdAt(startTime)
 
-    // TODO(#8): replace getImmediate with getAt or something
-    const releaseDuration = this.release.getImmediate()
+    const releaseDuration = this.release.getAt(startTime)
     const releaseEnd = this.context.time(startTime + releaseDuration)
 
     if (releaseDuration > 0) {

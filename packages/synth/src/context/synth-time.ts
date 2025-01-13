@@ -9,7 +9,7 @@ export type SynthTimeLike =
   | SynthTime
   | number
   | (Partial<Record<SynthTimeUnit, number>> & {
-      fromAhead?: boolean
+      from?: 'current' | 'ahead'
     })
 
 const toSecondsTable: Record<SynthTimeUnit, (value: number, context: SynthContext) => number> = {
@@ -28,7 +28,7 @@ export const createSynthTime = (context: SynthContext, timeLike: SynthTimeLike):
     return createSeconds(timeLike)
   }
 
-  const { fromAhead, ...units } = timeLike
+  const { from, ...units } = timeLike
   let totalSeconds = 0
 
   for (const [unit, value] of Object.entries(units)) {
@@ -40,7 +40,9 @@ export const createSynthTime = (context: SynthContext, timeLike: SynthTimeLike):
     totalSeconds += toSecondsTable[timeUnit](value, context)
   }
 
-  if (fromAhead) {
+  if (from === 'current') {
+    totalSeconds += context.currentTime
+  } else if (from === 'ahead') {
     totalSeconds += context.currentTime + context.lookAhead
   }
 
