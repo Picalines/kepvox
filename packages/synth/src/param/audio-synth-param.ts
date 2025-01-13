@@ -1,8 +1,8 @@
 import { Range } from '@repo/common/math'
 import type { SynthContext, SynthTime, SynthTimeLike } from '#context'
 import { UNIT_RANGES, type UnitName } from '#units'
-import { type InterpolatedAutomation, type InterpolationMethod, automationKind } from './automation'
-import { SynthParam, synthParamType } from './synth-param'
+import { AutomationCurve, type CurveSchedulable } from './automation-curve'
+import { InterpolatedSynthParam, type InterpolationMethod, synthParamType } from './synth-param'
 
 export namespace AudioSynthParam {
   export type Opts = {
@@ -15,15 +15,16 @@ export namespace AudioSynthParam {
 
 const hasAssociatedParamSymbol = Symbol('associatedSynthAudioParam')
 
-export class AudioSynthParam extends SynthParam<number> implements InterpolatedAutomation {
+export class AudioSynthParam extends InterpolatedSynthParam {
   readonly [synthParamType] = 'audio'
-  readonly [automationKind] = 'interpolated'
 
   readonly unit: UnitName
   readonly range: Range
 
   readonly #context: SynthContext
   readonly #audioParam: AudioParam
+  readonly #curve: AutomationCurve
+  readonly #paramAutomation: AudioParamAutomation
 
   constructor(audioParam: AudioParam, opts: AudioSynthParam.Opts) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
@@ -36,9 +37,7 @@ export class AudioSynthParam extends SynthParam<number> implements InterpolatedA
       throw new Error('the range parameter and AudioNode range have no point in common')
     }
 
-    if (!range.includes(initialValue)) {
-      throw new Error('the initialValue parameter is not in range')
-    }
+    const safeInitialValue = range.clamp(initialValue)
 
     if (hasAssociatedParamSymbol in audioParam) {
       throw new Error('the AudioParam already has an AudioSynthParam associated with it')
@@ -55,9 +54,12 @@ export class AudioSynthParam extends SynthParam<number> implements InterpolatedA
 
     this.#context = context
     this.#audioParam = audioParam
+    this.#curve = new AutomationCurve(context)
+    this.#paramAutomation = new AudioParamAutomation(context, this.#audioParam)
 
     this.#audioParam.cancelScheduledValues(this.#context.currentTime)
-    this.#audioParam.setValueAtTime(initialValue, this.#context.currentTime)
+    this.#audioParam.setValueAtTime(safeInitialValue, this.#context.currentTime)
+    this.#curve.setAt(this.#context.currentTime, safeInitialValue)
   }
 
   setImmediate(value: number) {
@@ -68,29 +70,47 @@ export class AudioSynthParam extends SynthParam<number> implements InterpolatedA
     return this.#audioParam.value
   }
 
+  getAt(time: SynthTimeLike) {
+    return this.#curve.getAt(time)
+  }
+
   setAt(time: SynthTimeLike, value: number) {
-    const setTime = this.#context.time(time)
-    if (setTime >= this.#context.currentTime) {
-      this.#audioParam.setValueAtTime(this.range.clamp(value), setTime)
-    }
+    this.#curve.setAt(time, this.range.clamp(value))
+    this.#curve.schedule(this.#paramAutomation)
   }
 
   cancelAfter(time: SynthTime) {
-    this.#audioParam.cancelScheduledValues(this.#context.time(time))
+    const cancelTime = this.#context.time(time)
+    this.#curve.cancelAfter(cancelTime)
+    this.#audioParam.cancelScheduledValues(cancelTime)
+    this.#curve.schedule(this.#paramAutomation)
   }
 
   holdAt(time: SynthTime) {
-    // TODO(#8): cancelAndHoldAtTime not implemented in some browsers
-    const value = this.getImmediate()
-    const holdTime = this.#context.time(time)
-    this.#audioParam.cancelScheduledValues(holdTime)
-    this.#audioParam.setValueAtTime(value, holdTime)
+    this.#curve.holdAt(time)
+    this.#curve.schedule(this.#paramAutomation)
+  }
+
+  rampUntil(end: SynthTimeLike, value: number, method: InterpolationMethod = 'linear') {
+    this.#curve.rampUntil(end, this.range.clamp(value), method)
+    this.#curve.schedule(this.#paramAutomation)
+  }
+}
+
+class AudioParamAutomation implements CurveSchedulable {
+  constructor(
+    readonly context: SynthContext,
+    readonly audioParam: AudioParam,
+  ) {}
+
+  setAt(time: SynthTimeLike, value: number) {
+    this.audioParam.setValueAtTime(value, this.context.time(time))
   }
 
   rampUntil(end: SynthTimeLike, value: number, method: InterpolationMethod = 'linear') {
     const rampFunc =
-      method === 'linear' ? this.#audioParam.linearRampToValueAtTime : this.#audioParam.exponentialRampToValueAtTime
+      method === 'linear' ? this.audioParam.linearRampToValueAtTime : this.audioParam.exponentialRampToValueAtTime
 
-    rampFunc.call(this.#audioParam, this.range.clamp(value), this.#context.time(end))
+    rampFunc.call(this.audioParam, value, this.context.time(end))
   }
 }
