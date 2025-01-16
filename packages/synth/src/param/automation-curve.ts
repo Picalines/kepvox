@@ -2,7 +2,7 @@ import { isNonEmpty, isTuple } from '@repo/common/array'
 import { assertDefined, assertUnreachable } from '@repo/common/assert'
 import type { OmitExisting } from '@repo/common/typing'
 import type { SynthContext, SynthTime, SynthTimeLike } from '#context'
-import type { InterpolatedSynthParam, InterpolationMethod, synthParamType } from './synth-param'
+import type { InterpolationMethod } from './synth-param'
 
 type AutomationEventPayload = {
   set: { value: number }
@@ -19,11 +19,7 @@ type AutomationEvent<T extends AutomationEventType = AutomationEventType> = T ex
     } & AutomationEventPayload[T]
   : never
 
-export type CurveSchedulable = Pick<InterpolatedSynthParam, 'setAt' | 'rampUntil'>
-
-export class AutomationCurve
-  implements OmitExisting<InterpolatedSynthParam, typeof synthParamType | 'getImmediate' | 'setImmediate'>
-{
+export class AutomationCurve {
   readonly #context: SynthContext
 
   readonly #events: AutomationEvent[] = []
@@ -55,32 +51,10 @@ export class AutomationCurve
     this.setAt(holdTime, value)
   }
 
-  schedule(automatable: CurveSchedulable, start?: SynthTimeLike) {
-    const startTime = this.#context.time(start ?? 0)
-    const previousIndex = this.#lastEventIndex(startTime) ?? -1
-
-    if (previousIndex >= 0) {
-      automatable.setAt(startTime, this.getAt(startTime))
-    }
-
-    for (let i = previousIndex + 1; i < this.#events.length; i++) {
-      const event = this.#events[i]
-      assertDefined(event)
-
-      const eventTime = this.#context.time(startTime + event.time)
-
-      if (event.type === 'set') {
-        automatable.setAt(eventTime, event.value)
-      } else {
-        automatable.rampUntil(eventTime, event.value, event.interpolation)
-      }
-    }
-  }
-
   getAt(time: SynthTimeLike): number {
     const evalTime = this.#context.time(time)
 
-    const [before, after] = this.#eventRange(evalTime)
+    const [before, after] = this.eventRange(evalTime)
 
     if (!before && !after) {
       throw new Error(`empty ${AutomationCurve.name} cannot be evaluated`)
@@ -104,22 +78,12 @@ export class AutomationCurve
     return interpolationTable[after.interpolation](before.time, before.value, after.time, after.value, evalTime)
   }
 
-  #addEvent(event: OmitExisting<AutomationEvent, 'time'>) {
-    const time = this.#context.time(event.timeLike)
-    const eventToAdd = { ...event, time }
-
-    const lastEventIndex = this.#lastEventIndex(time)
-
-    if (lastEventIndex === null) {
-      this.#events.push(eventToAdd)
-    } else if (this.#events[lastEventIndex]?.time === time) {
-      this.#events.splice(lastEventIndex, 1, eventToAdd)
-    } else {
-      this.#events.splice(lastEventIndex + 1, 0, eventToAdd)
-    }
+  lastEvent(time: SynthTimeLike): AutomationEvent | null {
+    const index = this.#lastEventIndex(this.#context.time(time))
+    return index !== null ? (this.#events[index] ?? null) : null
   }
 
-  #eventRange(time: SynthTime): [AutomationEvent | null, AutomationEvent | null] {
+  eventRange(time: SynthTime): [AutomationEvent | null, AutomationEvent | null] {
     const events = this.#events
 
     const previousIndex = this.#lastEventIndex(time)
@@ -133,6 +97,34 @@ export class AutomationCurve
     }
 
     return [null, null]
+  }
+
+  *nextEvents(time: SynthTimeLike) {
+    const previousIndex = this.#lastEventIndex(this.#context.time(time))
+    if (previousIndex === null) {
+      return
+    }
+
+    for (let i = previousIndex + 1; i < this.#events.length; i++) {
+      const event = this.#events[i]
+      assertDefined(event)
+      yield event
+    }
+  }
+
+  #addEvent(event: OmitExisting<AutomationEvent, 'time'>) {
+    const time = this.#context.time(event.timeLike)
+    const eventToAdd = { ...event, time }
+
+    const lastEventIndex = this.#lastEventIndex(time)
+
+    if (lastEventIndex === null) {
+      this.#events.push(eventToAdd)
+    } else if (this.#events[lastEventIndex]?.time === time) {
+      this.#events.splice(lastEventIndex, 1, eventToAdd)
+    } else {
+      this.#events.splice(lastEventIndex + 1, 0, eventToAdd)
+    }
   }
 
   #lastEventIndex(time: SynthTime, eventOffset?: SynthTime): number | null {
