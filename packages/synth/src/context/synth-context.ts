@@ -1,7 +1,7 @@
 import { IntRange, Range } from '@repo/common/math'
 import { type SynthTime, type SynthTimeLike, createSynthTime } from './synth-time'
 
-export type TimeSignature = readonly [beatsInBar: number, beatValue: number]
+type TimeSignature = readonly [beatsInBar: number, beatValue: number]
 
 export namespace SynthContext {
   export type Opts = {
@@ -12,6 +12,7 @@ export namespace SynthContext {
     bpm?: number
 
     /**
+     * NOTE: changing the time during playback is an undefined behavior
      * @default [4, 4]
      */
     timeSignature?: TimeSignature
