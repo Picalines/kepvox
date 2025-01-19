@@ -24,16 +24,24 @@ export const PlaybackButton = () => {
     // biome-ignore lint/suspicious/noConsoleLog: temporary
     console.log('running!')
 
-    oscillator.frequency.setImmediate(440)
-    oscillator.waveShape.setImmediate('sawtooth')
-    envelope.attack.setImmediate(0.02)
-    envelope.decay.setImmediate(0.1)
-    envelope.sustain.setImmediate(0.5)
-    envelope.release.setImmediate(0.5)
+    oscillator.frequency.initialValue = 440
+    oscillator.waveShape.initialValue = 'sawtooth'
+    envelope.attack.initialValue = 1
+    envelope.decay.initialValue = 1
+    envelope.sustain.initialValue = 0.5
+    envelope.release.initialValue = 1
 
-    envelope.attackAt({ from: 'ahead' })
-    envelope.releaseAt({ from: 'ahead', note: 8 })
-    oscillator.frequency.rampUntil({ from: 'ahead', note: 8 }, 880)
+    let time = context.firstBeat
+    for (let i = 0; i < 5; i++) {
+      envelope.attackAt(time)
+      time = time.add({ note: 1 })
+      envelope.releaseAt(time)
+      time = time.add({ beat: 1 })
+      oscillator.frequency.curve.rampValueUntil(time, 440 + 40 * i)
+      context.secondsPerBeat.rampValueUntil(time, 1 / (i + 1))
+    }
+
+    context.play()
 
     // @ts-expect-error
     window.e = envelope

@@ -1,8 +1,8 @@
 import { Range } from '@repo/common/math'
-import type { SynthContext, SynthTimeLike } from '#context'
+import type { SynthContext } from '#context'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { AutomationCurve } from './automation-curve'
-import { InterpolatedSynthParam, type InterpolationMethod, synthParamType } from './synth-param'
+import { SynthParam, synthParamType } from './synth-param'
 
 export namespace ScalarSynthParam {
   export type Opts = {
@@ -13,14 +13,14 @@ export namespace ScalarSynthParam {
   }
 }
 
-export class ScalarSynthParam extends InterpolatedSynthParam {
+export class ScalarSynthParam extends SynthParam {
   readonly [synthParamType] = 'scalar'
 
   readonly unit: UnitName
   readonly range: Range
+  readonly curve: AutomationCurve
 
   readonly #context: SynthContext
-  readonly #curve: AutomationCurve
 
   constructor(opts: ScalarSynthParam.Opts) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
@@ -42,36 +42,16 @@ export class ScalarSynthParam extends InterpolatedSynthParam {
     this.range = paramRange
 
     this.#context = context
-    this.#curve = new AutomationCurve(context)
+    this.curve = new AutomationCurve(context)
 
-    this.#curve.setAt(0, initialValue)
+    this.curve.setValueAt(this.#context.firstBeat, initialValue)
   }
 
-  setImmediate(value: number) {
-    this.#curve.setAt(this.#context.currentTime, value)
+  get initialValue() {
+    return this.curve.valueAt(this.#context.firstBeat)
   }
 
-  getImmediate(): number {
-    return this.#curve.getAt(this.#context.currentTime)
-  }
-
-  cancelAfter(time: SynthTimeLike) {
-    return this.#curve.cancelAfter(time)
-  }
-
-  getAt(time: SynthTimeLike): number {
-    return this.#curve.getAt(time)
-  }
-
-  setAt(time: SynthTimeLike, value: number) {
-    return this.#curve.setAt(time, value)
-  }
-
-  holdAt(time: SynthTimeLike) {
-    return this.#curve.holdAt(time)
-  }
-
-  rampUntil(end: SynthTimeLike, value: number, method?: InterpolationMethod) {
-    return this.#curve.rampUntil(end, value, method)
+  set initialValue(value: number) {
+    this.curve.setValueAt(this.#context.firstBeat, value)
   }
 }

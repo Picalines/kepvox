@@ -1,64 +1,75 @@
-import { isNonEmpty, isTuple } from '@repo/common/array'
-import { assertDefined, assertUnreachable } from '@repo/common/assert'
-import type { OmitExisting } from '@repo/common/typing'
-import type { SynthContext, SynthTime, SynthTimeLike } from '#context'
-import type { InterpolationMethod } from './synth-param'
+import { isNonEmpty } from '@repo/common/array'
+import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
+import { Range } from '@repo/common/math'
+import type { SynthContext, SynthTime } from '#context'
 
-type AutomationEventPayload = {
-  set: { value: number }
-  endRamp: { value: number; interpolation: InterpolationMethod }
+export type InterpolationMethod = 'linear' | 'exponential'
+
+type AutomationEvent = {
+  time: SynthTime
+  value: number
+  ramp?: InterpolationMethod
 }
 
-type AutomationEventType = keyof AutomationEventPayload
+type InternalAutomationEvent = AutomationEvent & {
+  /**
+   * Area of a segment between this event and the next one.
+   * undefined if cant be determined
+   */
+  _area?: number
+}
 
-type AutomationEvent<T extends AutomationEventType = AutomationEventType> = T extends T
-  ? {
-      type: T
-      timeLike: SynthTimeLike
-      time: SynthTime
-    } & AutomationEventPayload[T]
-  : never
+export namespace AutomationCurve {
+  export type Opts = {
+    valueRange?: Range
+  }
+}
 
 export class AutomationCurve {
   readonly #context: SynthContext
 
-  readonly #events: AutomationEvent[] = []
+  readonly #valueRange: Range
 
-  constructor(context: SynthContext) {
+  readonly #events: InternalAutomationEvent[] = []
+
+  constructor(context: SynthContext, opts?: AutomationCurve.Opts) {
     this.#context = context
+    this.#valueRange = opts?.valueRange ?? Range.any
   }
 
-  cancelAfter(time: SynthTimeLike) {
-    const cancelTime = this.#context.time(time)
-    const cutIndex = this.#lastEventIndex(cancelTime)
-    if (cutIndex !== null) {
-      this.#events.splice(cutIndex + 1)
-    }
+  /**
+   * Schedules an event, when value will instantly jump to the specified value
+   */
+  setValueAt(time: SynthTime, value: number) {
+    this.#addEvent({ time, value: this.#processValue(value) })
   }
 
-  setAt(time: SynthTimeLike, value: number) {
-    this.#addEvent({ type: 'set', timeLike: time, value })
+  /**
+   * Schedules an event, when the value will *stop ramping* to the specified value
+   */
+  rampValueUntil(end: SynthTime, value: number, method: InterpolationMethod = 'linear') {
+    this.#addEvent({ time: end, value: this.#processValue(value), ramp: method })
   }
 
-  rampUntil(end: SynthTimeLike, value: number, method: InterpolationMethod = 'linear') {
-    this.#addEvent({ type: 'endRamp', timeLike: end, value, interpolation: method })
+  /**
+   * Cancels events after the specified time and inserts an
+   * event that will hold the old value at the time
+   */
+  holdValueAt(time: SynthTime) {
+    const value = this.valueAt(time)
+    const nextEvent = this.eventAfterOrAt(time)
+    this.#addEvent({ ...nextEvent, time, value })
+    this.cancelEventsAfter(time)
   }
 
-  holdAt(time: SynthTimeLike) {
-    const holdTime = this.#context.time(time)
-    const value = this.getAt(holdTime)
-    this.cancelAfter(holdTime)
-    this.setAt(holdTime, value)
-  }
+  /**
+   * @returns curve value at a given time
+   */
+  valueAt(time: SynthTime): number {
+    this.#assertContext(time)
+    this.#assertNotEmpty()
 
-  getAt(time: SynthTimeLike): number {
-    const evalTime = this.#context.time(time)
-
-    const [before, after] = this.eventRange(evalTime)
-
-    if (!before && !after) {
-      throw new Error(`empty ${AutomationCurve.name} cannot be evaluated`)
-    }
+    const [before, after] = this.eventSpan(time)
 
     if (!before && after) {
       return after.value
@@ -71,77 +82,172 @@ export class AutomationCurve {
     assertDefined(before)
     assertDefined(after)
 
-    if (after.type === 'set') {
+    if (!after.ramp) {
       return before.value
     }
 
-    return interpolationTable[after.interpolation](before.time, before.value, after.time, after.value, evalTime)
+    return interpolationTable[after.ramp](before.time.beats, before.value, after.time.beats, after.value, time.beats)
   }
 
-  lastEvent(time: SynthTimeLike): AutomationEvent | null {
-    const index = this.#lastEventIndex(this.#context.time(time))
-    return index !== null ? (this.#events[index] ?? null) : null
+  areaBefore(time: SynthTime): number {
+    this.#assertNotEmpty()
+
+    const lastEvent = this.eventBeforeOrAt(time)
+    if (!lastEvent) {
+      throw new Error("can't evaluate area before start")
+    }
+
+    // TODO: тут before не подойдёт
+    const beforeArea = this.eventsBefore(lastEvent.time).reduce(
+      (sum, event, index) => sum + ((event as InternalAutomationEvent)._area ?? this.#updateSpanArea(index) ?? 0),
+      0,
+    )
+
+    return beforeArea + this.#spanAreaAt(this.eventSpan(time), time)
   }
 
-  eventRange(time: SynthTime): [AutomationEvent | null, AutomationEvent | null] {
-    const events = this.#events
-
-    const previousIndex = this.#lastEventIndex(time)
-    if (previousIndex !== null) {
-      return [events[previousIndex] as AutomationEvent, events[previousIndex + 1] ?? null]
-    }
-
-    if (isTuple(events, 1)) {
-      const [event] = events
-      return time >= event.time ? [event, null] : [null, event]
-    }
-
-    return [null, null]
-  }
-
-  *nextEvents(time: SynthTimeLike) {
-    const previousIndex = this.#lastEventIndex(this.#context.time(time))
-    if (previousIndex === null) {
-      return
-    }
-
-    for (let i = previousIndex + 1; i < this.#events.length; i++) {
-      const event = this.#events[i]
-      assertDefined(event)
-      yield event
+  /**
+   * Cancels all scheduled events after the specified time
+   */
+  cancelEventsAfter(time: SynthTime) {
+    this.#assertContext(time)
+    const cutIndex = this.#eventIndexAfter(time)
+    if (cutIndex !== null) {
+      this.#events.splice(cutIndex)
+      this.#updateSpanArea(this.#events.length - 1)
     }
   }
 
-  #addEvent(event: OmitExisting<AutomationEvent, 'time'>) {
-    const time = this.#context.time(event.timeLike)
-    const eventToAdd = { ...event, time }
+  eventAt(time: SynthTime): AutomationEvent | null {
+    const event = this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
+    return event?.time.equals(time) ? event : null
+  }
 
-    const lastEventIndex = this.#lastEventIndex(time)
+  eventBefore(time: SynthTime): AutomationEvent | null {
+    return this.#events[this.#eventIndexBefore(time) ?? -1] ?? null
+  }
 
-    if (lastEventIndex === null) {
-      this.#events.push(eventToAdd)
-    } else if (this.#events[lastEventIndex]?.time === time) {
-      this.#events.splice(lastEventIndex, 1, eventToAdd)
+  eventBeforeOrAt(time: SynthTime): AutomationEvent | null {
+    return this.#events[this.#eventIndexBeforeOrAt(time) ?? -1] ?? null
+  }
+
+  eventAfter(time: SynthTime): AutomationEvent | null {
+    return this.#events[this.#eventIndexAfter(time) ?? -1] ?? null
+  }
+
+  eventAfterOrAt(time: SynthTime): AutomationEvent | null {
+    return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
+  }
+
+  *eventsAfter(time: SynthTime): Generator<AutomationEvent, void, undefined> {
+    const startIndex = this.#eventIndexAfter(time) ?? this.#events.length
+    for (let i = startIndex; i < this.#events.length; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
+  *eventsBefore(time: SynthTime): Generator<AutomationEvent, void, undefined> {
+    const stopIndex = this.#eventIndexBefore(time) ?? -1
+    for (let i = 0; i <= stopIndex; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
+  *eventsInRange(start: SynthTime, end: SynthTime): Generator<AutomationEvent, void, undefined> {
+    const startIndex = this.#eventIndexAfterOrAt(start) ?? 0
+    const endIndex = this.#eventIndexBeforeOrAt(end) ?? this.#events.length - 1
+    for (let i = startIndex; i <= endIndex; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
+  eventSpan(time: SynthTime): [AutomationEvent | null, AutomationEvent | null] {
+    return [this.eventBeforeOrAt(time), this.eventAfter(time)]
+  }
+
+  #processValue(value: number) {
+    return this.#valueRange.clamp(value)
+  }
+
+  #addEvent(event: AutomationEvent) {
+    const lastIndex = this.#eventIndexBeforeOrAt(event.time)
+
+    if (lastIndex === null) {
+      this.#events.push(event)
+      this.#updateSpanArea(this.#events.length - 2)
+      this.#updateSpanArea(this.#events.length - 1)
+    } else if (this.#events[lastIndex]?.time.equals(event.time)) {
+      this.#events.splice(lastIndex, 1, event)
+      this.#updateSpanArea(lastIndex - 1)
+      this.#updateSpanArea(lastIndex)
     } else {
-      this.#events.splice(lastEventIndex + 1, 0, eventToAdd)
+      this.#events.splice(lastIndex + 1, 0, event)
+      this.#updateSpanArea(lastIndex)
+      this.#updateSpanArea(lastIndex + 1)
     }
   }
 
-  #lastEventIndex(time: SynthTime, eventOffset?: SynthTime): number | null {
+  #updateSpanArea(eventIndex: number): number | null {
+    if (eventIndex < 0 || eventIndex >= this.#events.length) {
+      return null
+    }
+
+    const startEvent = assertedAt(this.#events, eventIndex)
+
+    if (eventIndex === this.#events.length - 1) {
+      startEvent._area = undefined
+      return null
+    }
+
+    const endEvent = assertedAt(this.#events, eventIndex + 1)
+    const area = this.#spanAreaAt([startEvent, endEvent], endEvent.time)
+    startEvent._area = area
+
+    return area
+  }
+
+  #spanAreaAt(span: [AutomationEvent | null, AutomationEvent | null], time: SynthTime): number {
+    const [start, end] = span
+
+    if (!start && end) {
+      throw new Error("can't evaluate area before start")
+    }
+
+    if (start && !end) {
+      return (time.beats - start.time.beats) * start.value
+    }
+
+    if (!start || !end) {
+      return 0
+    }
+
+    if (!end.ramp) {
+      return (time.beats - start.time.beats) * start.value
+    }
+
+    return interpolationAreaTable[end.ramp](
+      start.time.beats,
+      start.value,
+      time.beats,
+      interpolationTable[end.ramp](start.time.beats, start.value, end.time.beats, end.value, time.beats),
+    )
+  }
+
+  #eventIndexBeforeOrAt(time: SynthTime): number | null {
+    this.#assertContext(time)
+
     const events = this.#events
     if (!isNonEmpty(events)) {
       return null
     }
 
-    const offsetTime = eventOffset ?? this.#context.time(0)
-
     const firstEvent = events[0]
-    if (time < firstEvent.time + offsetTime) {
+    if (firstEvent.time.isAfter(time)) {
       return null
     }
 
     const lastEvent = events[events.length - 1]
-    if (lastEvent && time >= lastEvent.time) {
+    if (lastEvent?.time.isBeforeOrAt(time)) {
       return events.length - 1
     }
 
@@ -155,14 +261,11 @@ export class AutomationCurve {
       assertDefined(middleEvent)
       assertDefined(nextEvent)
 
-      const middleTime = middleEvent.time + offsetTime
-      const nextTime = nextEvent.time + offsetTime
-
-      if (time >= middleTime && time < nextTime) {
+      if (time.isAfterOrAt(middleEvent.time) && time.isBefore(nextEvent.time)) {
         return middle
       }
 
-      if (time > middleTime) {
+      if (middleEvent.time.isBefore(time)) {
         start = middle + 1
       } else {
         end = middle - 1
@@ -171,6 +274,45 @@ export class AutomationCurve {
 
     assertUnreachable('AutomationCurve search failed')
   }
+
+  #eventIndexBefore(time: SynthTime): number | null {
+    const lastIndex = this.#eventIndexBeforeOrAt(time)
+    return lastIndex !== null
+      ? this.#events[lastIndex]?.time.equals(time)
+        ? this.#eventIndexOrNull(lastIndex - 1)
+        : lastIndex
+      : null
+  }
+
+  #eventIndexAfterOrAt(time: SynthTime): number | null {
+    const lastIndex = this.#eventIndexBeforeOrAt(time)
+    return lastIndex !== null
+      ? this.#events[lastIndex]?.time.isBefore(time)
+        ? this.#eventIndexOrNull(lastIndex + 1)
+        : lastIndex
+      : null
+  }
+
+  #eventIndexAfter(time: SynthTime): number | null {
+    const lastIndex = this.#eventIndexBeforeOrAt(time)
+    return lastIndex !== null ? this.#eventIndexOrNull(lastIndex + 1) : null
+  }
+
+  #eventIndexOrNull(index: number): number | null {
+    return this.#events.length > 0 && index >= 0 && index < this.#events.length ? index : null
+  }
+
+  #assertNotEmpty() {
+    if (this.#events.length === 0) {
+      throw new Error(`empty ${AutomationCurve.name} cannot be evaluated`)
+    }
+  }
+
+  #assertContext(time: SynthTime) {
+    if (time.context !== this.#context) {
+      throw new Error(`${AutomationCurve.name} received a SynthTime from different SynthContext`)
+    }
+  }
 }
 
 type Interpolation = (t0: number, v0: number, t1: number, v1: number, t: number) => number
@@ -178,4 +320,11 @@ type Interpolation = (t0: number, v0: number, t1: number, v1: number, t: number)
 const interpolationTable: Record<InterpolationMethod, Interpolation> = {
   linear: (t0, v0, t1, v1, t) => v0 + (v1 - v0) * ((t - t0) / (t1 - t0)),
   exponential: (t0, v0, t1, v1, t) => v0 * (v1 / v0) ** ((t - t0) / (t1 - t0)),
+}
+
+type Area = (t0: number, v0: number, t1: number, v1: number) => number
+
+const interpolationAreaTable: Record<InterpolationMethod, Area> = {
+  linear: (t0, v0, t1, v1) => ((v0 + v1) / 2) * (t1 - t0),
+  exponential: (t0, v0, t1, v1) => ((t0 - t1) * (v0 - v1)) / Math.log(v1 / v0), // I'm not sure about that :)
 }
