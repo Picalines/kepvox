@@ -1,39 +1,47 @@
-import type { SynthContext, SynthTimeLike } from '#context'
+import type { SynthContext, SynthTime } from '#context'
 import { AutomationCurve } from './automation-curve'
+
+export namespace AudioAutomationCurve {
+  export type Opts = AutomationCurve.Opts
+}
 
 export class AudioAutomationCurve extends AutomationCurve {
   readonly #context: SynthContext
 
   readonly #audioParam: AudioParam
 
-  constructor(context: SynthContext, audioParam: AudioParam) {
-    super(context)
+  constructor(context: SynthContext, audioParam: AudioParam, opts?: AudioAutomationCurve.Opts) {
+    super(context, opts)
 
     this.#context = context
     this.#audioParam = audioParam
+
+    // TODO: add dispose method
+    this.#context.on('play', start => this.#schedule(start))
+    this.#context.on('stop', () => {
+      this.#audioParam.cancelScheduledValues(0)
+      this.#audioParam.value = this.valueAt(this.#context.firstBeat)
+    })
   }
 
-  schedule(start?: SynthTimeLike) {
-    const startTime = this.#context.time(start ?? 0)
-    const lastEvent = this.lastEvent(startTime)
-
+  #schedule(start: SynthTime) {
+    const lastEvent = this.eventBeforeOrAt(start)
     if (lastEvent) {
-      this.#audioParam.setValueAtTime(this.getAt(startTime), startTime)
+      this.#audioParam.setValueAtTime(this.valueAt(start), 0)
     }
 
-    for (const event of this.nextEvents(startTime)) {
-      const eventTime = this.#context.time(startTime + event.time)
+    const scheduleStart = this.#context.scheduleTime
 
-      if (event.type === 'set') {
-        this.#audioParam.setValueAtTime(event.value, eventTime)
-      } else {
-        const rampFunc =
-          event.interpolation === 'linear'
-            ? this.#audioParam.linearRampToValueAtTime
-            : this.#audioParam.exponentialRampToValueAtTime
+    for (const event of this.eventsAfter(start)) {
+      const scheduleTime = scheduleStart + this.#context.secondsPerBeat.areaBefore(event.time)
 
-        rampFunc.call(this.#audioParam, event.value, eventTime)
-      }
+      const scheduleFunc = event.ramp
+        ? event.ramp === 'linear'
+          ? this.#audioParam.linearRampToValueAtTime
+          : this.#audioParam.exponentialRampToValueAtTime
+        : this.#audioParam.setValueAtTime
+
+      scheduleFunc.call(this.#audioParam, event.value, scheduleTime)
     }
   }
 }

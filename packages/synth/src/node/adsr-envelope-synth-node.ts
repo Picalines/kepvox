@@ -1,5 +1,5 @@
 import { Range } from '@repo/common/math'
-import type { SynthContext, SynthTimeLike } from '#context'
+import type { SynthContext, SynthTime } from '#context'
 import { AudioSynthParam, ScalarSynthParam } from '#param'
 import { SynthNode, synthNodeType } from './synth-node'
 
@@ -30,14 +30,14 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     this.attack = new ScalarSynthParam({
       context,
-      unit: 'seconds',
+      unit: 'beats',
       initialValue: 0,
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
       context,
-      unit: 'seconds',
+      unit: 'beats',
       initialValue: 0,
       range: Range.positive,
     })
@@ -50,56 +50,51 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     this.release = new ScalarSynthParam({
       context,
-      unit: 'seconds',
+      unit: 'beats',
       initialValue: 0,
       range: Range.positive,
     })
   }
 
-  attackAt(start: SynthTimeLike) {
-    const startTime = this.context.time(start)
+  attackAt(start: SynthTime) {
+    const gain = this.#gain.curve
 
-    this.#gain.cancelAfter(startTime)
-    this.#gain.setAt(startTime, 0)
+    const attackDuration = this.attack.curve.valueAt(start)
+    const attackEnd = start.add({ beat: attackDuration })
 
-    const attackDuration = this.attack.getAt(startTime)
-    const attackEnd = this.context.time(startTime + attackDuration)
+    const decayDuration = this.decay.curve.valueAt(attackEnd)
+    const decayEnd = attackEnd.add({ beat: decayDuration })
 
-    const decayDuration = this.decay.getAt(attackEnd)
-    const decayEnd = this.context.time(attackEnd + decayDuration)
+    const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
-    const sustainLevel = this.sustain.getAt(decayEnd)
-
-    if (attackDuration > 0) {
-      this.#gain.setAt(startTime, 0)
-      this.#gain.rampUntil(attackEnd, 1, 'linear')
-    }
+    gain.holdValueAt(start)
+    gain.rampValueUntil(attackEnd, 1, 'linear')
 
     if (decayDuration > 0) {
-      this.#gain.rampUntil(decayEnd, sustainLevel, 'linear')
+      gain.rampValueUntil(decayEnd, sustainLevel, 'linear')
     } else {
-      this.#gain.setAt(decayEnd, attackDuration > 0 ? 1 : sustainLevel)
+      gain.setValueAt(decayEnd, attackDuration > 0 ? 1 : sustainLevel)
     }
   }
 
-  releaseAt(start: SynthTimeLike) {
-    const startTime = this.context.time(start)
+  releaseAt(start: SynthTime) {
+    const gain = this.#gain.curve
 
-    this.#gain.holdAt(startTime)
+    gain.holdValueAt(start)
 
-    const releaseDuration = this.release.getAt(startTime)
-    const releaseEnd = this.context.time(startTime + releaseDuration)
+    const releaseDuration = this.release.curve.valueAt(start)
+    const releaseEnd = start.add({ beat: releaseDuration })
 
     if (releaseDuration > 0) {
-      this.#gain.rampUntil(releaseEnd, 0)
+      gain.rampValueUntil(releaseEnd, 0)
     } else {
-      this.#gain.setAt(releaseEnd, 0)
+      // TODO: maybe a better solution
+      gain.setValueAt(releaseEnd.add({ beat: Number.EPSILON }), 0)
     }
   }
 
   override dispose(): void {
     super.dispose()
     this.#gainNode.disconnect()
-    this.#gain.cancelAfter(this.context.time(0))
   }
 }

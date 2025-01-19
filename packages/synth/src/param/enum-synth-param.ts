@@ -9,16 +9,11 @@ export namespace EnumSynthParam {
   }
 }
 
-// NOTE: https://github.com/microsoft/TypeScript/issues/24122
-
 type Events = {
   changed: []
 }
 
-export class EnumSynthParam<V extends string = string>
-  extends Emitter.listenMixin<Events>()(SynthParam<string>)
-  implements SynthParam<V>
-{
+export class EnumSynthParam<V extends string = string> extends Emitter.listenMixin<Events>()(SynthParam) {
   readonly [synthParamType] = 'enum'
 
   readonly variants: readonly V[]
@@ -39,13 +34,21 @@ export class EnumSynthParam<V extends string = string>
     }
 
     if (synchronize) {
-      this.on('changed', () => synchronize(this.getImmediate()))
+      this.on('changed', () => synchronize(this.value))
     }
 
-    this.setImmediate(initialValue)
+    this.value = initialValue
   }
 
-  setImmediate(value: V) {
+  get value(): V {
+    if (this.#value === undefined) {
+      throw new Error('getImmediate called before initialization')
+    }
+
+    return this.#value
+  }
+
+  set value(value: V) {
     if (!this.variants.includes(value)) {
       return
     }
@@ -55,13 +58,5 @@ export class EnumSynthParam<V extends string = string>
     if (oldValue !== this.#value) {
       this._emit('changed')
     }
-  }
-
-  getImmediate(): V {
-    if (this.#value === undefined) {
-      throw new Error('getImmediate called before initialization')
-    }
-
-    return this.#value
   }
 }

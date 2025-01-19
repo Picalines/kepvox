@@ -1,8 +1,9 @@
 import { Range } from '@repo/common/math'
-import type { SynthContext, SynthTime, SynthTimeLike } from '#context'
+import type { SynthContext } from '#context'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { AudioAutomationCurve } from './audio-automation-curve'
-import { InterpolatedSynthParam, type InterpolationMethod, synthParamType } from './synth-param'
+import type { AutomationCurve } from './automation-curve'
+import { SynthParam, synthParamType } from './synth-param'
 
 export namespace AudioSynthParam {
   export type Opts = {
@@ -15,7 +16,7 @@ export namespace AudioSynthParam {
 
 const hasAssociatedParamSymbol = Symbol('associatedSynthAudioParam')
 
-export class AudioSynthParam extends InterpolatedSynthParam {
+export class AudioSynthParam extends SynthParam {
   readonly [synthParamType] = 'audio'
 
   readonly unit: UnitName
@@ -53,44 +54,22 @@ export class AudioSynthParam extends InterpolatedSynthParam {
 
     this.#context = context
     this.#audioParam = audioParam
-    this.#curve = new AudioAutomationCurve(context, this.#audioParam)
+    this.#curve = new AudioAutomationCurve(context, this.#audioParam, { valueRange: this.range })
 
-    this.#audioParam.cancelScheduledValues(this.#context.currentTime)
-    this.#audioParam.setValueAtTime(safeInitialValue, this.#context.currentTime)
-    this.#curve.setAt(this.#context.currentTime, safeInitialValue)
+    this.#audioParam.cancelScheduledValues(0)
+    this.#audioParam.setValueAtTime(safeInitialValue, 0)
+    this.#curve.setValueAt(this.#context.firstBeat, safeInitialValue)
   }
 
-  setImmediate(value: number) {
-    this.#audioParam.setValueAtTime(this.range.clamp(value), this.#context.currentTime)
+  get curve(): AutomationCurve {
+    return this.#curve
   }
 
-  getImmediate() {
-    return this.#audioParam.value
+  get initialValue() {
+    return this.curve.valueAt(this.#context.firstBeat)
   }
 
-  getAt(time: SynthTimeLike) {
-    return this.#curve.getAt(time)
-  }
-
-  setAt(time: SynthTimeLike, value: number) {
-    this.#curve.setAt(time, this.range.clamp(value))
-    this.#curve.schedule()
-  }
-
-  cancelAfter(time: SynthTime) {
-    const cancelTime = this.#context.time(time)
-    this.#curve.cancelAfter(cancelTime)
-    this.#audioParam.cancelScheduledValues(cancelTime)
-    this.#curve.schedule()
-  }
-
-  holdAt(time: SynthTime) {
-    this.#curve.holdAt(time)
-    this.#curve.schedule()
-  }
-
-  rampUntil(end: SynthTimeLike, value: number, method: InterpolationMethod = 'linear') {
-    this.#curve.rampUntil(end, this.range.clamp(value), method)
-    this.#curve.schedule()
+  set initialValue(value: number) {
+    this.curve.setValueAt(this.#context.firstBeat, value)
   }
 }
