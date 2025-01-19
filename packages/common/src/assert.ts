@@ -18,3 +18,9 @@ export function assertDefined<T>(
 export function assertUnreachable(stateDescription: string): never {
   throw new AssertionError(`unreachable state reached: ${stateDescription}`)
 }
+
+export function assertedAt<T>(array: readonly T[], atIndex: number, errorMessage?: string): T {
+  const item = array.at(atIndex)
+  assertDefined(item, errorMessage ?? `array item at index ${atIndex} not found`)
+  return item
+}
