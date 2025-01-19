@@ -2,6 +2,7 @@ import { type Branded, createBrandedUnsafe, createSafeBrand } from '@repo/common
 import { Range } from '@repo/common/math'
 
 export type Seconds = Branded<number, 'seconds'>
+export type Beats = Branded<number, 'beats'>
 export type Decibels = Branded<number, 'decibels'>
 export type Hertz = Branded<number, 'hertz'>
 export type NormalRange = Branded<number, 'normalRange'>
@@ -11,6 +12,7 @@ export type Factor = Branded<number, 'factor'>
 
 export type UnitMap = {
   seconds: Seconds
+  beats: Beats
   decibels: Decibels
   hertz: Hertz
   normalRange: NormalRange
@@ -23,6 +25,7 @@ export type UnitName = keyof UnitMap
 
 export const UNIT_RANGES: Record<UnitName, Range> = {
   seconds: Range.any,
+  beats: Range.any,
   decibels: Range.any,
   hertz: Range.positive,
   normalRange: Range.normal,
@@ -38,6 +41,11 @@ const unitRangePredicate = <U extends UnitName>(unit: U) => {
 export const [isSeconds, createSeconds] = createSafeBrand(
   unitRangePredicate('seconds'),
   'the argument is not a valid seconds value',
+)
+
+export const [isBeats, createBeats] = createSafeBrand(
+  unitRangePredicate('beats'),
+  'the argument is not a valid beats value',
 )
 
 export const [isDecibels, createDecibels] = createSafeBrand(

@@ -1,12 +1,15 @@
+import { Emitter } from '@repo/common/emitter'
 import { IntRange, Range } from '@repo/common/math'
-import { type SynthTime, type SynthTimeLike, createSynthTime } from './synth-time'
+import { AutomationCurve } from '#param'
+import { type Seconds, createSeconds } from '#units'
+import { SynthTime } from './synth-time'
 
-type TimeSignature = readonly [beatsInBar: number, beatValue: number]
+type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
 
 export namespace SynthContext {
   export type Opts = {
     /**
-     * Beats per minute
+     * Initial beats per minute
      * @default 120
      */
     bpm?: number
@@ -27,35 +30,42 @@ export namespace SynthContext {
      *
      * @default 0.1
      */
-    lookAhead?: number
+    lookAhead?: Seconds
   }
 }
 
-export class SynthContext {
-  // @ts-expect-error: initialized by public setter
-  #bpm: number
+type Events = {
+  play: [start: SynthTime]
+  stop: []
+}
+
+export class SynthContext extends Emitter.listenMixin<Events>()(Object) {
+  /**
+   * AutomationCurve that maps musical beats to seconds.
+   * {@link AutomationCurve.areaBefore} gives you the number of seconds
+   * your composition will have played up to given beat
+   */
+  readonly secondsPerBeat: AutomationCurve
+
   // @ts-expect-error: initialized by public setter
   #timeSignature: TimeSignature
   // @ts-expect-error: initialized by public setter
-  #lookAhead: number
+  #lookAhead: Seconds
 
   constructor(
     readonly audioContext: AudioContext,
     opts?: SynthContext.Opts,
   ) {
-    const { bpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
+    super()
 
-    this.bpm = bpm
+    const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
+
     this.timeSignature = timeSignature
-    this.lookAhead = lookAhead
-  }
+    this.lookAhead = createSeconds(lookAhead)
 
-  get bpm() {
-    return this.#bpm
-  }
+    this.secondsPerBeat = new AutomationCurve(this, { valueRange: Range.positiveNonZero })
 
-  set bpm(value) {
-    this.#bpm = Range.positiveNonZero.clamp(value)
+    this.secondsPerBeat.setValueAt(this.firstBeat, 60 / initialBpm)
   }
 
   get timeSignature() {
@@ -66,19 +76,30 @@ export class SynthContext {
     this.#timeSignature = [IntRange.positiveNonZero.clamp(beatsInBar), IntRange.positiveNonZero.clamp(beatValue)]
   }
 
-  get lookAhead() {
+  get lookAhead(): Seconds {
     return this.#lookAhead
   }
 
   set lookAhead(value) {
-    this.#lookAhead = Range.positiveNonZero.clamp(value)
+    this.#lookAhead = createSeconds(Range.positiveNonZero.clamp(value))
   }
 
-  get currentTime(): SynthTime {
-    return createSynthTime(this, this.audioContext.currentTime)
+  get scheduleTime(): Seconds {
+    return createSeconds(this.audioContext.currentTime + this.lookAhead)
   }
 
-  time(time: SynthTimeLike): SynthTime {
-    return createSynthTime(this, time)
+  time(units: NonNullable<ConstructorParameters<typeof SynthTime>[1]>): SynthTime {
+    return new SynthTime(this, units)
+  }
+
+  readonly firstBeat = this.time({ beat: 0 })
+
+  play(start = this.firstBeat) {
+    this.stop()
+    this._emit('play', start)
+  }
+
+  stop() {
+    this._emit('stop')
   }
 }
