@@ -5,6 +5,9 @@ export namespace AudioAutomationCurve {
   export type Opts = AutomationCurve.Opts
 }
 
+/**
+ * @internal
+ */
 export class AudioAutomationCurve extends AutomationCurve {
   readonly #context: SynthContext
 

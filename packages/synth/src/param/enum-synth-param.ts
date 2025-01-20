@@ -13,12 +13,17 @@ type Events = {
   changed: []
 }
 
-export class EnumSynthParam<V extends string = string> extends Emitter.listenMixin<Events>()(SynthParam) {
+export class EnumSynthParam<V extends string = string> extends SynthParam {
   readonly [synthParamType] = 'enum'
 
   readonly variants: readonly V[]
 
   #value?: V
+
+  readonly #emitter = new Emitter<Events>()
+  readonly on = this.#emitter.on.bind(this.#emitter)
+  readonly off = this.#emitter.off.bind(this.#emitter)
+  readonly once = this.#emitter.once.bind(this.#emitter)
 
   constructor({ variants, initialValue, synchronize }: EnumSynthParam.Opts<V>) {
     super()
@@ -56,7 +61,7 @@ export class EnumSynthParam<V extends string = string> extends Emitter.listenMix
     const oldValue = this.#value
     this.#value = value
     if (oldValue !== this.#value) {
-      this._emit('changed')
+      this.#emitter.emit('changed')
     }
   }
 }

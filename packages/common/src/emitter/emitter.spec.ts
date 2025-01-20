@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { Emitter } from '.'
 
 it('should call a callback', () => {
@@ -122,38 +122,4 @@ it('should ignore the cancel call after a once callback was emitted', () => {
   expect(() => cancel()).not.toThrow()
 
   expect(callback).toHaveBeenCalledOnce()
-})
-
-describe('listen mixin', () => {
-  it('should expose on/off/once', () => {
-    class Class extends Emitter.listenMixin<{ event: [number] }>()(Object) {
-      raiseEvent(x: number) {
-        this._emit('event', x)
-      }
-    }
-
-    const obj = new Class()
-    const callback = vi.fn((x: number) => x)
-
-    obj.once('event', callback)
-    obj.on('event', callback)
-    obj.off('event', callback)
-    obj.raiseEvent(123)
-
-    expect(callback).toHaveBeenCalledOnce()
-    expect(callback).toHaveBeenCalledWith(123)
-  })
-
-  it('should keep the base class', () => {
-    class Base {
-      constructor(readonly field: number) {}
-    }
-
-    class Class extends Emitter.listenMixin()(Base) {}
-
-    const obj = new Class(123)
-
-    expect(obj.field).toEqual(123)
-    expect(obj instanceof Base).toEqual(true)
-  })
 })

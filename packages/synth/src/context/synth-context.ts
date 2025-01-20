@@ -1,4 +1,4 @@
-import { Emitter } from '@repo/common/emitter'
+import { Emitter, type ListenEmitter } from '@repo/common/emitter'
 import { IntRange, Range } from '@repo/common/math'
 import { AutomationCurve } from '#param'
 import { type Seconds, createSeconds } from '#units'
@@ -39,7 +39,7 @@ type Events = {
   stop: []
 }
 
-export class SynthContext extends Emitter.listenMixin<Events>()(Object) {
+export class SynthContext implements ListenEmitter<Events> {
   /**
    * AutomationCurve that maps musical beats to seconds.
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
@@ -52,12 +52,15 @@ export class SynthContext extends Emitter.listenMixin<Events>()(Object) {
   // @ts-expect-error: initialized by public setter
   #lookAhead: Seconds
 
+  readonly #emitter = new Emitter<Events>()
+  readonly on = this.#emitter.on.bind(this.#emitter)
+  readonly off = this.#emitter.off.bind(this.#emitter)
+  readonly once = this.#emitter.once.bind(this.#emitter)
+
   constructor(
     readonly audioContext: AudioContext,
     opts?: SynthContext.Opts,
   ) {
-    super()
-
     const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
 
     this.timeSignature = timeSignature
@@ -96,10 +99,10 @@ export class SynthContext extends Emitter.listenMixin<Events>()(Object) {
 
   play(start = this.firstBeat) {
     this.stop()
-    this._emit('play', start)
+    this.#emitter.emit('play', start)
   }
 
   stop() {
-    this._emit('stop')
+    this.#emitter.emit('stop')
   }
 }
