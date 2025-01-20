@@ -1,3 +1,4 @@
+import type { OmitExisting } from '@repo/common/typing'
 import {
   type ChangeEventHandler,
   type ComponentProps,
@@ -27,23 +28,12 @@ export type RootProps = {
   children: ReactNode
 }
 
-export type LabelProps = Omit<ComponentProps<'label'>, 'color'>
+export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFor'>
 
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const {
-    className,
-    name,
-    value,
-    defaultValue,
-    inputRef,
-    disabled = false,
-    required = false,
-    type,
-    children,
-    ...inputProps
-  } = props
+  const { className, inputRef, children, ...inputProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
@@ -55,14 +45,8 @@ export const Root: FC<RootProps> = props => {
         {...inputProps}
         ref={inputRef}
         id={inputId}
-        name={name}
-        value={value}
-        defaultValue={defaultValue}
         className="peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder=" "
-        disabled={disabled}
-        required={required}
-        type={type}
       />
       {label && (
         <label
