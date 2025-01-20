@@ -25,7 +25,7 @@ export const PlaybackButton = () => {
     console.log('running!')
 
     oscillator.frequency.initialValue = 440
-    oscillator.waveShape.initialValue = 'sawtooth'
+    oscillator.waveShape.value = 'sawtooth'
     envelope.attack.initialValue = 1
     envelope.decay.initialValue = 1
     envelope.sustain.initialValue = 0.5
