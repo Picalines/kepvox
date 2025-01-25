@@ -1,4 +1,5 @@
 import type { SynthContext } from '#context'
+import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { AudioSynthParam, EnumSynthParam } from '#param'
 import { SynthNode, synthNodeType } from './synth-node'
 
@@ -11,9 +12,7 @@ export class OscillatorSynthNode extends SynthNode {
   readonly #oscillator: OscillatorNode
 
   constructor(context: SynthContext) {
-    const { audioContext } = context
-
-    const oscillator = audioContext.createOscillator()
+    const oscillator = context[INTERNAL_AUDIO_CONTEXT].createOscillator()
 
     super({ context, inputs: [], outputs: [oscillator] })
 

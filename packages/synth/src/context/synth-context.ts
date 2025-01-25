@@ -1,5 +1,7 @@
+import { type Disposable, DisposableStack } from '@repo/common/disposable'
 import { Emitter, type ListenEmitter } from '@repo/common/emitter'
 import { IntRange, Range } from '@repo/common/math'
+import { INTERNAL_AUDIO_CONTEXT, INTERNAL_CONTEXT_OWN } from '#internal-symbols'
 import { AutomationCurve } from '#param'
 import { type Seconds, createSeconds } from '#units'
 import { SynthTime } from './synth-time'
@@ -39,7 +41,7 @@ type Events = {
   stop: []
 }
 
-export class SynthContext implements ListenEmitter<Events> {
+export class SynthContext implements ListenEmitter<Events>, Disposable {
   /**
    * AutomationCurve that maps musical beats to seconds.
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
@@ -47,21 +49,24 @@ export class SynthContext implements ListenEmitter<Events> {
    */
   readonly secondsPerBeat: AutomationCurve
 
+  readonly #audioContext: AudioContext
+
   // @ts-expect-error: initialized by public setter
   #timeSignature: TimeSignature
   // @ts-expect-error: initialized by public setter
   #lookAhead: Seconds
+
+  readonly #resources = new DisposableStack()
 
   readonly #emitter = new Emitter<Events>()
   readonly on = this.#emitter.on.bind(this.#emitter)
   readonly off = this.#emitter.off.bind(this.#emitter)
   readonly once = this.#emitter.once.bind(this.#emitter)
 
-  constructor(
-    readonly audioContext: AudioContext,
-    opts?: SynthContext.Opts,
-  ) {
+  constructor(audioContext: AudioContext, opts?: SynthContext.Opts) {
     const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
+
+    this.#audioContext = audioContext
 
     this.timeSignature = timeSignature
     this.lookAhead = createSeconds(lookAhead)
@@ -88,7 +93,7 @@ export class SynthContext implements ListenEmitter<Events> {
   }
 
   get scheduleTime(): Seconds {
-    return createSeconds(this.audioContext.currentTime + this.lookAhead)
+    return createSeconds(this.#audioContext.currentTime + this.lookAhead)
   }
 
   time(units: NonNullable<ConstructorParameters<typeof SynthTime>[1]>): SynthTime {
@@ -98,11 +103,42 @@ export class SynthContext implements ListenEmitter<Events> {
   readonly firstBeat = this.time({ beat: 0 })
 
   play(start = this.firstBeat) {
+    this.#assertNotDisposed()
     this.stop()
     this.#emitter.emit('play', start)
   }
 
   stop() {
+    this.#assertNotDisposed()
     this.#emitter.emit('stop')
+  }
+
+  /**
+   * Disposes all SynthNodes associated with the context
+   */
+  dispose() {
+    this.#resources.dispose()
+  }
+
+  get disposed() {
+    return this.#resources.disposed
+  }
+
+  /**
+   * Adds the disposable to the private stack
+   * @internal
+   */
+  [INTERNAL_CONTEXT_OWN](resource: Disposable) {
+    this.#resources.add(resource)
+  }
+
+  get [INTERNAL_AUDIO_CONTEXT]() {
+    return this.#audioContext
+  }
+
+  #assertNotDisposed() {
+    if (this.#resources.disposed.aborted) {
+      throw new Error('the SynthContext is used while being disposed')
+    }
   }
 }

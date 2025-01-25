@@ -4,6 +4,14 @@ export type EventMap = {
 
 export type ListenEmitter<EM extends EventMap> = Pick<Emitter<EM>, 'on' | 'off' | 'once'>
 
+type OnOpts = {
+  /**
+   * An AbortSignal that will unsubscribe the callback when aborted.
+   * NOTE: if the signal is already aborted, the subscription is ignored
+   */
+  signal?: AbortSignal
+}
+
 export class Emitter<EM extends EventMap> {
   readonly #listeners: Map<keyof EM, ((...args: any[]) => void)[]>
 
@@ -11,7 +19,13 @@ export class Emitter<EM extends EventMap> {
     this.#listeners = new Map()
   }
 
-  on<E extends keyof EM>(event: E, callback: (...args: EM[E]) => void) {
+  on<E extends keyof EM>(event: E, callback: (...args: EM[E]) => void, opts?: OnOpts) {
+    const { signal } = opts ?? {}
+
+    if (signal?.aborted) {
+      return
+    }
+
     const eventListeners = this.#listeners.get(event) ?? []
 
     if (!this.#listeners.has(event)) {
@@ -19,6 +33,8 @@ export class Emitter<EM extends EventMap> {
     }
 
     eventListeners.push(callback)
+
+    signal?.addEventListener('abort', () => this.off(event, callback), { once: true })
   }
 
   off<E extends keyof EM>(event: E, callback: (...args: EM[E]) => void) {

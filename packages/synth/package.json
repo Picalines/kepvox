@@ -14,7 +14,8 @@
         "#context": "./src/context/index.ts",
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
-        "#units": "./src/units.ts"
+        "#units": "./src/units.ts",
+        "#internal-symbols": "./src/internal-symbols.ts"
     },
     "dependencies": {
         "@repo/common": "workspace:*"

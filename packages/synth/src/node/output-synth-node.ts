@@ -1,13 +1,12 @@
 import type { SynthContext } from '#context'
+import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { SynthNode, synthNodeType } from './synth-node'
 
 export class OutputSynthNode extends SynthNode {
   readonly [synthNodeType] = 'output'
 
   private constructor(context: SynthContext) {
-    const {
-      audioContext: { destination },
-    } = context
+    const { destination } = context[INTERNAL_AUDIO_CONTEXT]
 
     super({ context, inputs: [destination], outputs: [] })
   }

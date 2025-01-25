@@ -1,5 +1,6 @@
 import { Range } from '@repo/common/math'
 import type { SynthContext, SynthTime } from '#context'
+import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { AudioSynthParam, ScalarSynthParam } from '#param'
 import { SynthNode, synthNodeType } from './synth-node'
 
@@ -15,9 +16,7 @@ export class ADSREnvelopeSynthNode extends SynthNode {
   readonly #gain: AudioSynthParam
 
   constructor(context: SynthContext) {
-    const { audioContext } = context
-
-    const gainNode = audioContext.createGain()
+    const gainNode = context[INTERNAL_AUDIO_CONTEXT].createGain()
 
     super({ context, inputs: [gainNode], outputs: [gainNode] })
 

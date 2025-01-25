@@ -8,6 +8,7 @@
         "./array": "./src/array/index.ts",
         "./assert": "./src/assert.ts",
         "./branded": "./src/branded/index.ts",
+        "./disposable": "./src/disposable/index.ts",
         "./emitter": "./src/emitter/index.ts",
         "./iter": "./src/iter/index.ts",
         "./math": "./src/math/index.ts",
