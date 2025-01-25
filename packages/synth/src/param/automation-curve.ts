@@ -97,7 +97,6 @@ export class AutomationCurve {
       throw new Error("can't evaluate area before start")
     }
 
-    // TODO: тут before не подойдёт
     const beforeArea = this.eventsBefore(lastEvent.time).reduce(
       (sum, event, index) => sum + ((event as InternalAutomationEvent)._area ?? this.#updateSpanArea(index) ?? 0),
       0,
