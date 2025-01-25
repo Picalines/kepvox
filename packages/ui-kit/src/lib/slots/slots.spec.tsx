@@ -117,3 +117,23 @@ it('should forbid regular components', () => {
     renderHook(() => useSlots(<p>child</p>, {}))
   }).toThrowError(/non-slot/)
 })
+
+it('should allow to spread the slots from an array', () => {
+  const Item = createSlot({ name: 'Item', repeatable: true }).component()
+
+  const receiveItems = vi.fn<(keys: (string | null)[]) => void>()
+
+  const Slotted: FC<{ children: ReactNode }> = ({ children }) => {
+    const { items } = useSlots(children, { items: Item })
+    receiveItems(items.map(slot => slot.key))
+    return null
+  }
+
+  const items = [1, 2, 3].map(key => <Item key={key} />)
+
+  expect(() => {
+    render(<Slotted>{...items}</Slotted>)
+  }).not.toThrow()
+
+  expect(receiveItems).toHaveBeenCalledWith(['1', '2', '3'])
+})
