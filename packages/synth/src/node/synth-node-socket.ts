@@ -1,15 +1,17 @@
+import type { Disposable } from '@repo/common/disposable'
+
 const hasAssociatedInputSocket: unique symbol = Symbol('hasAssociatedInputSocket')
 const hasAssociatedOutputSocket: unique symbol = Symbol('hasAssociatedOutputSocket')
 
 /**
  * @internal
  */
-export class SynthNodeSocket {
+export class SynthNodeSocket implements Disposable {
   readonly #audioNode: AudioNode
 
   readonly #connections: Set<SynthNodeSocket> = new Set()
 
-  #disposed = false
+  readonly #disposeController = new AbortController()
 
   constructor(
     audioNode: AudioNode,
@@ -42,10 +44,6 @@ export class SynthNodeSocket {
     }
 
     this.#audioNode = audioNode
-  }
-
-  get disposed() {
-    return this.#disposed
   }
 
   connect(socket: SynthNodeSocket) {
@@ -92,16 +90,21 @@ export class SynthNodeSocket {
   }
 
   dispose() {
-    if (this.#disposed) {
+    if (this.disposed.aborted) {
       return
     }
 
     this.disconnectAll()
-    this.#disposed = true
+
+    this.#disposeController.abort()
+  }
+
+  get disposed() {
+    return this.#disposeController.signal
   }
 
   #assertNotDisposed() {
-    if (this.#disposed) {
+    if (this.disposed.aborted) {
       throw new Error('the SynthNode socket is already disposed')
     }
   }

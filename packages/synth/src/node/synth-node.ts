@@ -1,5 +1,7 @@
 import { assertDefined } from '@repo/common/assert'
+import { type Disposable, DisposableStack } from '@repo/common/disposable'
 import type { SynthContext } from '#context'
+import { INTERNAL_CONTEXT_OWN } from '#internal-symbols'
 import { SynthNodeSocket } from './synth-node-socket'
 
 export const synthNodeType: unique symbol = Symbol('SynthNode.type')
@@ -24,27 +26,26 @@ export namespace SynthNode {
   }
 }
 
-export abstract class SynthNode {
+export abstract class SynthNode implements Disposable {
   abstract get [synthNodeType](): string
 
   readonly context: SynthContext
 
-  #disposed = false
-
   readonly #inputs: readonly SynthNodeSocket[]
   readonly #outputs: readonly SynthNodeSocket[]
+
+  readonly #resources: DisposableStack
 
   constructor(opts: SynthNode.Opts) {
     const { context, inputs, outputs } = opts
 
-    this.context = context
-
     this.#inputs = inputs.map(audioNode => new SynthNodeSocket(audioNode, 'input'))
     this.#outputs = outputs.map(audioNode => new SynthNodeSocket(audioNode, 'output'))
-  }
 
-  get disposed() {
-    return this.#disposed
+    this.#resources = new DisposableStack([...this.#inputs, ...this.#outputs])
+
+    this.context = context
+    this.context[INTERNAL_CONTEXT_OWN](this)
   }
 
   get numberOfInputs() {
@@ -105,28 +106,18 @@ export abstract class SynthNode {
   }
 
   /**
-   * Stops any audio processing associated with the node
-   * NOTE: must be idempotent
    * @virtual
    */
   dispose() {
-    if (this.#disposed) {
-      return
-    }
+    this.#resources.dispose()
+  }
 
-    this.#disposed = true
-
-    for (const input of this.#inputs) {
-      input.dispose()
-    }
-
-    for (const output of this.#outputs) {
-      output.dispose()
-    }
+  get disposed() {
+    return this.#resources.disposed
   }
 
   #assertNotDisposed() {
-    if (this.#disposed) {
+    if (this.#resources.disposed.aborted) {
       throw new Error('SynthNode used after being disposed')
     }
   }
