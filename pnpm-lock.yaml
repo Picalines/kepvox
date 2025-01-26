@@ -119,6 +119,9 @@ importers:
       '@repo/ui-kit':
         specifier: workspace:*
         version: link:../../packages/ui-kit
+      '@swc/wasm-web':
+        specifier: ^1.10.9
+        version: 1.10.9
       '@withease/factories':
         specifier: ^1.0.5
         version: 1.0.5
@@ -1792,6 +1795,9 @@ packages:
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
+
+  '@swc/wasm-web@1.10.9':
+    resolution: {integrity: sha512-HTAk+rUGDIk5cJvW7imPkUC9z76paQ0GnVzxrCU+l8c2jnDRih+FZHhGnfp353XM5p7sAEN0MOCYLI9bi88C1A==}
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -4972,6 +4978,8 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+
+  '@swc/wasm-web@1.10.9': {}
 
   '@testing-library/dom@10.4.0':
     dependencies:
