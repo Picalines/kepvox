@@ -14,6 +14,13 @@ export default {
       {description ? <Heading.Description>{description}</Heading.Description> : null}
     </Heading.Root>
   ),
+  decorators: [
+    Story => (
+      <div className="max-w-32">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>
@@ -23,6 +30,20 @@ export const Default: Story = {
     superTitle: 'SuperTitle',
     title: 'Title',
     description: 'Description',
+  },
+}
+
+export const Center: Story = {
+  args: {
+    ...Default.args,
+    align: 'center',
+  },
+}
+
+export const Right: Story = {
+  args: {
+    ...Default.args,
+    align: 'end',
   },
 }
 
