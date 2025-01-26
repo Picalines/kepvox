@@ -22,7 +22,7 @@ export const CodeEditor: FC<Props> = props => {
   const { className } = props
 
   const { value, onChangeModel, startup } = useUnit({
-    value: model.code,
+    value: model.$code,
     onChangeModel: model.codeChanged,
     startup: model.startup,
   })

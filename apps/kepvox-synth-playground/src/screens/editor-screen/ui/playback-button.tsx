@@ -8,7 +8,7 @@ import { model } from '../model'
 
 export const PlaybackButton = () => {
   const { status, toggled } = useUnit({
-    status: model.status,
+    status: model.$status,
     toggled: model.playbackToggled,
   })
 
