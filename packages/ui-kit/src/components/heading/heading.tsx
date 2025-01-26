@@ -1,4 +1,5 @@
-import type { FC, ReactNode } from 'react'
+import type { Overlay } from '@repo/common/typing'
+import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
@@ -11,14 +12,17 @@ export const SuperTitle = createSlot({ name: 'SuperTitle' }).component<SuperTitl
 export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
 export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
 
-export type RootProps = {
-  children: ReactNode
-  className?: string
-  align?: 'start' | 'center' | 'end'
-}
+export type RootProps = Overlay<
+  ComponentProps<'div'>,
+  {
+    children: ReactNode
+    className?: string
+    align?: 'start' | 'center' | 'end'
+  }
+>
 
 export const Root: FC<RootProps> = props => {
-  const { children, className, align = 'start' } = props
+  const { children, className, align = 'start', ...rootProps } = props
 
   const { superTitle, title, description } = useSlots(children, {
     superTitle: SuperTitle,
@@ -32,6 +36,7 @@ export const Root: FC<RootProps> = props => {
 
   return (
     <div
+      {...rootProps}
       className={cn(
         'flex flex-col',
         { 'text-start': align === 'start', 'text-center': align === 'center', 'text-end': align === 'end' },
