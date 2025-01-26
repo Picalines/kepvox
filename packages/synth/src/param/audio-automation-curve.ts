@@ -1,9 +1,7 @@
 import type { SynthContext, SynthTime } from '#context'
-import { AutomationCurve } from './automation-curve'
+import { AutomationCurve, type AutomationCurveOpts } from './automation-curve'
 
-export namespace AudioAutomationCurve {
-  export type Opts = AutomationCurve.Opts
-}
+export type AudioAutomationCurveOpts = AutomationCurveOpts
 
 /**
  * @internal
@@ -13,7 +11,7 @@ export class AudioAutomationCurve extends AutomationCurve {
 
   readonly #audioParam: AudioParam
 
-  constructor(context: SynthContext, audioParam: AudioParam, opts?: AudioAutomationCurve.Opts) {
+  constructor(context: SynthContext, audioParam: AudioParam, opts?: AudioAutomationCurveOpts) {
     super(context, opts)
 
     this.#context = context

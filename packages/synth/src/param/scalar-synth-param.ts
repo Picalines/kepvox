@@ -4,13 +4,11 @@ import { UNIT_RANGES, type UnitName } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
-export namespace ScalarSynthParam {
-  export type Opts = {
-    context: SynthContext
-    unit: UnitName
-    initialValue: number
-    range?: Range
-  }
+export type ScalarSynthParamOpts = {
+  context: SynthContext
+  unit: UnitName
+  initialValue: number
+  range?: Range
 }
 
 export class ScalarSynthParam extends SynthParam {
@@ -22,7 +20,7 @@ export class ScalarSynthParam extends SynthParam {
 
   readonly #context: SynthContext
 
-  constructor(opts: ScalarSynthParam.Opts) {
+  constructor(opts: ScalarSynthParamOpts) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
     const unitRange = UNIT_RANGES[unit]
