@@ -10,8 +10,8 @@ type Params = {
 export const createJsRunner = createFactory((params: Params) => {
   const { modules } = params
 
-  const status = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
-  const error = createStore<null | Error>(null)
+  const $status = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
+  const $error = createStore<null | Error>(null)
 
   const startup = createEvent()
   const codeSubmitted = createEvent<string>()
@@ -62,29 +62,29 @@ export const createJsRunner = createFactory((params: Params) => {
 
   sample({
     clock: initFx.done,
-    target: status,
+    target: $status,
     fn: () => 'initialized' as const,
   })
 
   sample({
     clock: initFx.failData,
-    target: error,
+    target: $error,
   })
 
   sample({
     clock: codeSubmitted,
-    filter: not(equals(status, 'running')),
+    filter: not(equals($status, 'running')),
     fn: code => ({ code, status: 'running', error: null }) as const,
     target: spread({
       code: runFx,
-      status,
-      error,
+      status: $status,
+      error: $error,
     }),
   })
 
   sample({
     clock: runFx.done,
-    target: status,
+    target: $status,
     fn: () => 'success' as const,
   })
 
@@ -92,16 +92,16 @@ export const createJsRunner = createFactory((params: Params) => {
     clock: runFx.failData,
     fn: error => ({ status: 'error', error }) as const,
     target: spread({
-      status,
-      error,
+      status: $status,
+      error: $error,
     }),
   })
 
-  error.watch(error => {
+  $error.watch(error => {
     if (error) {
       console.error(`${error.name}:`, error.message)
     }
   })
 
-  return { startup, status: readonly(status), error: readonly(error), codeSubmitted, modules }
+  return { startup, $status: readonly($status), $error: readonly($error), codeSubmitted, modules }
 })

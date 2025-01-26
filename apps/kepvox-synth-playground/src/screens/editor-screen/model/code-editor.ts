@@ -3,17 +3,17 @@ import { createEvent, createStore, sample } from 'effector'
 import { readonly } from 'patronum'
 
 export const createCodeEditor = createFactory(() => {
-  const userCode = createStore('')
+  const $code = createStore('')
 
-  const userCodeChanged = createEvent<string>()
+  const codeChanged = createEvent<string>()
 
   sample({
-    clock: userCodeChanged,
-    target: userCode,
+    clock: codeChanged,
+    target: $code,
   })
 
   return {
-    userCode: readonly(userCode),
-    userCodeChanged,
+    $code: readonly($code),
+    codeChanged,
   }
 })

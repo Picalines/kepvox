@@ -11,15 +11,15 @@ const jsRunner = invoke(createJsRunner, {
   modules: { synth: synthModule },
 })
 
-const { userCode: code, userCodeChanged: codeChanged } = codeEditor
-const { startup, status: runnerStatus, error } = jsRunner
+const { $code, codeChanged } = codeEditor
+const { startup, $status: $runnerStatus, $error } = jsRunner
 
 const playbackToggled = createEvent()
 
 // TODO: hook up to SynthContext
-const isPlaying = createStore(false)
+const $isPlaying = createStore(false)
 
-const status = combine(runnerStatus, isPlaying, (runnerStatus, isPlaying) => {
+const $status = combine($runnerStatus, $isPlaying, (runnerStatus, isPlaying) => {
   if (!runnerStatus) {
     return 'initializing' as const
   }
@@ -33,23 +33,23 @@ const status = combine(runnerStatus, isPlaying, (runnerStatus, isPlaying) => {
 
 sample({
   clock: playbackToggled,
-  filter: equals(status, 'ready'),
-  source: code,
+  filter: equals($status, 'ready'),
+  source: $code,
   target: jsRunner.codeSubmitted,
 })
 
 sample({
-  clock: runnerStatus,
-  filter: equals(runnerStatus, 'success'),
-  target: isPlaying,
+  clock: $runnerStatus,
+  filter: equals($runnerStatus, 'success'),
+  target: $isPlaying,
   fn: () => true,
 })
 
 sample({
   clock: playbackToggled,
-  filter: isPlaying,
-  target: isPlaying,
+  filter: $isPlaying,
+  target: $isPlaying,
   fn: () => false,
 })
 
-export { code, codeChanged, error, playbackToggled, startup, status }
+export { $code, $error, $status, codeChanged, playbackToggled, startup }
