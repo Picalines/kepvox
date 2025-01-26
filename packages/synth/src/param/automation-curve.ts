@@ -19,10 +19,8 @@ type InternalAutomationEvent = AutomationEvent & {
   _area?: number
 }
 
-export namespace AutomationCurve {
-  export type Opts = {
-    valueRange?: Range
-  }
+export type AutomationCurveOpts = {
+  valueRange?: Range
 }
 
 export class AutomationCurve {
@@ -32,7 +30,7 @@ export class AutomationCurve {
 
   readonly #events: InternalAutomationEvent[] = []
 
-  constructor(context: SynthContext, opts?: AutomationCurve.Opts) {
+  constructor(context: SynthContext, opts?: AutomationCurveOpts) {
     this.#context = context
     this.#valueRange = opts?.valueRange ?? Range.any
   }

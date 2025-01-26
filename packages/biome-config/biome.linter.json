@@ -30,7 +30,7 @@
                     }
                 },
 
-                "noNamespace": "off",
+                "noNamespace": "error",
                 "noNegationElse": "error",
                 "noYodaExpression": "error"
             },

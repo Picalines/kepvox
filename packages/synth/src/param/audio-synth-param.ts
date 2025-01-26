@@ -5,13 +5,11 @@ import { AudioAutomationCurve } from './audio-automation-curve'
 import type { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
-export namespace AudioSynthParam {
-  export type Opts = {
-    context: SynthContext
-    unit: UnitName
-    initialValue: number
-    range?: Range
-  }
+export type AudioSynthParamOpts = {
+  context: SynthContext
+  unit: UnitName
+  initialValue: number
+  range?: Range
 }
 
 const hasAssociatedParamSymbol = Symbol('associatedSynthAudioParam')
@@ -26,7 +24,7 @@ export class AudioSynthParam extends SynthParam {
   readonly #audioParam: AudioParam
   readonly #curve: AudioAutomationCurve
 
-  constructor(audioParam: AudioParam, opts: AudioSynthParam.Opts) {
+  constructor(audioParam: AudioParam, opts: AudioSynthParamOpts) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
     const unitRange = UNIT_RANGES[unit]

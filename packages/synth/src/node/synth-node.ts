@@ -6,24 +6,22 @@ import { SynthNodeSocket } from './synth-node-socket'
 
 export const synthNodeType: unique symbol = Symbol('SynthNode.type')
 
-export namespace SynthNode {
-  export type Opts = {
-    context: SynthContext
+export type SynthNodeOpts = {
+  context: SynthContext
 
-    /**
-     * A SynthNode is a group of native AudioNodes. To manage
-     * its connections, base SynthNode must receive the list of
-     * inputs and outputs
-     *
-     * You can pass the same single AudioNode to both inputs & outputs,
-     * if that's the only node you need. This mechanism is here to
-     * allow for many AudioNodes inside one SynthNode and for cases
-     * with no inputs or outputs
-     */
-    inputs: readonly AudioNode[]
+  /**
+   * A SynthNode is a group of native AudioNodes. To manage
+   * its connections, base SynthNode must receive the list of
+   * inputs and outputs
+   *
+   * You can pass the same single AudioNode to both inputs & outputs,
+   * if that's the only node you need. This mechanism is here to
+   * allow for many AudioNodes inside one SynthNode and for cases
+   * with no inputs or outputs
+   */
+  inputs: readonly AudioNode[]
 
-    outputs: readonly AudioNode[]
-  }
+  outputs: readonly AudioNode[]
 }
 
 export abstract class SynthNode implements Disposable {
@@ -36,7 +34,7 @@ export abstract class SynthNode implements Disposable {
 
   readonly #resources: DisposableStack
 
-  constructor(opts: SynthNode.Opts) {
+  constructor(opts: SynthNodeOpts) {
     const { context, inputs, outputs } = opts
 
     this.#inputs = inputs.map(audioNode => new SynthNodeSocket(audioNode, 'input'))

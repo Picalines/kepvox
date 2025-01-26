@@ -8,32 +8,30 @@ import { SynthTime } from './synth-time'
 
 type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
 
-export namespace SynthContext {
-  export type Opts = {
-    /**
-     * Initial beats per minute
-     * @default 120
-     */
-    bpm?: number
+export type SynthContextOpts = {
+  /**
+   * Initial beats per minute
+   * @default 120
+   */
+  bpm?: number
 
-    /**
-     * NOTE: changing the time during playback is an undefined behavior
-     * @default [4, 4]
-     */
-    timeSignature?: TimeSignature
+  /**
+   * NOTE: changing the time during playback is an undefined behavior
+   * @default [4, 4]
+   */
+  timeSignature?: TimeSignature
 
-    /**
-     * A small time interval used to offset from `currentTime`
-     *
-     * @example ```ts
-     * play(currentTime) // wrong, because currentTime is already in the past
-     * play(currentTime + lookAhead) // will work with a tiny delay
-     * ```
-     *
-     * @default 0.1
-     */
-    lookAhead?: Seconds
-  }
+  /**
+   * A small time interval used to offset from `currentTime`
+   *
+   * @example ```ts
+   * play(currentTime) // wrong, because currentTime is already in the past
+   * play(currentTime + lookAhead) // will work with a tiny delay
+   * ```
+   *
+   * @default 0.1
+   */
+  lookAhead?: Seconds
 }
 
 type Events = {
@@ -63,7 +61,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   readonly off = this.#emitter.off.bind(this.#emitter)
   readonly once = this.#emitter.once.bind(this.#emitter)
 
-  constructor(audioContext: AudioContext, opts?: SynthContext.Opts) {
+  constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
     const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext

@@ -1,12 +1,10 @@
 import { Emitter } from '@repo/common/emitter'
 import { SynthParam, synthParamType } from './synth-param'
 
-export namespace EnumSynthParam {
-  export type Opts<V extends string> = {
-    variants: readonly V[]
-    initialValue: NoInfer<V>
-    synchronize?: (currentVariant: V) => void
-  }
+export type EnumSynthParamOpts<V extends string> = {
+  variants: readonly V[]
+  initialValue: NoInfer<V>
+  synchronize?: (currentVariant: V) => void
 }
 
 type Events = {
@@ -25,7 +23,7 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
   readonly off = this.#emitter.off.bind(this.#emitter)
   readonly once = this.#emitter.once.bind(this.#emitter)
 
-  constructor({ variants, initialValue, synchronize }: EnumSynthParam.Opts<V>) {
+  constructor({ variants, initialValue, synchronize }: EnumSynthParamOpts<V>) {
     super()
 
     if (!variants.length) {
