@@ -1,7 +1,9 @@
 import * as synthModule from '@repo/synth'
 import { invoke } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
+import { persist as persistInQuery } from 'effector-storage/query'
 import { equals } from 'patronum'
+import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
 import { createJsRunner } from './js-runner'
 
@@ -50,6 +52,15 @@ sample({
   filter: $isPlaying,
   target: $isPlaying,
   fn: () => false,
+})
+
+persistInQuery({
+  key: 'code',
+  source: $code,
+  target: codeChanged,
+  serialize: base64Url.encode,
+  deserialize: base64Url.decode,
+  timeout: 100,
 })
 
 export { $code, $error, $status, codeChanged, playbackToggled, startup }
