@@ -4,23 +4,27 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
-    "exports": {
-        ".": "./src/index.ts"
-    },
+    "main": "./src/index.ts",
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "dev:unit": "vitest watch",
+        "ts:check": "tsc --noEmit",
+        "test:unit": "vitest run"
     },
     "imports": {
         "#context": "./src/context/index.ts",
+        "#internal-symbols": "./src/internal-symbols.ts",
+        "#math": "./src/math/index.ts",
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
-        "#units": "./src/units.ts",
-        "#internal-symbols": "./src/internal-symbols.ts"
+        "#units": "./src/units.ts"
     },
     "dependencies": {
         "@repo/common": "workspace:*"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:^"
+        "@repo/ts-config": "workspace:*",
+        "@repo/vite-config": "workspace:*",
+        "vite": "catalog:",
+        "vitest": "catalog:"
     }
 }
