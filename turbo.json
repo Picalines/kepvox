@@ -19,10 +19,11 @@
             "dependsOn": ["test:screen:setup"]
         },
         "test:screen:setup": {
-            "cache": false,
             "dependsOn": ["playwright:install"]
         },
-        "playwright:install": {},
+        "playwright:install": {
+            "cache": false
+        },
 
         "ts:check": {},
         "//#lint": {},
@@ -34,12 +35,16 @@
 
         "dev": {
             "cache": false,
-            "persistent": true
+            "persistent": true,
+            "dependsOn": ["dev:setup"]
         },
         "dev:unit": {
             "cache": false,
             "persistent": true,
             "dependsOn": ["dev:setup"]
+        },
+        "dev:setup": {
+            "dependsOn": ["^build"]
         }
     }
 }
