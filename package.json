@@ -6,13 +6,16 @@
     "description": "Web audio synthesizer inspired by SunVox",
     "scripts": {
         "build": "turbo build",
-        "dev": "turbo dev",
-        "format": "biome format --write .",
+        "test:unit": "turbo run test:unit",
+        "test:screen": "turbo run test:screen",
+        "ts:check": "turbo run ts:check",
         "lint": "biome lint .",
-        "lint:fix": "biome lint --write .",
-        "lint:fix-unsafe": "biome lint --write --unsafe .",
         "ci:check": "biome check .",
-        "ci:pre-commit": "biome check --write"
+        "ci:pre-commit": "biome check --write",
+        "format": "biome format --write .",
+        "fix": "biome check --write .",
+        "fix-unsafe": "biome check --write --unsafe .",
+        "dev": "turbo dev"
     },
     "keywords": [],
     "author": "picalines",

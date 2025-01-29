@@ -8,7 +8,8 @@
     "scripts": {
         "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
-        "test:unit": "vitest run"
+        "test:unit": "vitest run",
+        "build": "tsup"
     },
     "imports": {
         "#context": "./src/context/index.ts",
