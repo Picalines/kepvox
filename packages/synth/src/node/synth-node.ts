@@ -1,7 +1,7 @@
 import { assertDefined } from '@repo/common/assert'
-import { type Disposable, DisposableStack } from '@repo/common/disposable'
 import type { SynthContext } from '#context'
 import { INTERNAL_CONTEXT_OWN } from '#internal-symbols'
+import { type Disposable, DisposableStack } from '#util/disposable'
 import { SynthNodeSocket } from './synth-node-socket'
 
 export const synthNodeType: unique symbol = Symbol('SynthNode.type')

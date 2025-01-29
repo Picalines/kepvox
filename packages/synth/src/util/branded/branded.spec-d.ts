@@ -1,5 +1,5 @@
 import { expectTypeOf, it } from 'vitest'
-import type { Branded } from '.'
+import type { Branded } from './branded'
 
 it('separates the inner type', () => {
   expectTypeOf<Branded<number, 'brand'>>().not.toEqualTypeOf<number>()
