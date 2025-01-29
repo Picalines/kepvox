@@ -9,6 +9,9 @@ node_modules
 
 # build
 *.tsbuildinfo
+.next
+next-env.d.ts
+dist
 
 # testing
 coverage
