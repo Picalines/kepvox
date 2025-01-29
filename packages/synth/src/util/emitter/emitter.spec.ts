@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { Emitter } from '.'
+import { Emitter } from './emitter'
 
 it('should call a callback', () => {
   const emitter = new Emitter<{ event: [number] }>()

@@ -11,11 +11,9 @@
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "bundler",
-        "isolatedModules": true,
         "strict": true,
         "noUncheckedIndexedAccess": true,
         "noImplicitOverride": true,
-        "incremental": true,
         "stripInternal": true
     }
 }

@@ -16,7 +16,8 @@
         "#math": "./src/math/index.ts",
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
-        "#units": "./src/units.ts"
+        "#units": "./src/units.ts",
+        "#util/*": "./src/util/*/index.ts"
     },
     "dependencies": {
         "@repo/common": "workspace:*"
@@ -24,7 +25,9 @@
     "devDependencies": {
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
+        "tsup": "catalog:",
         "vite": "catalog:",
+        "vite-plugin-dts": "catalog:",
         "vitest": "catalog:"
     }
 }

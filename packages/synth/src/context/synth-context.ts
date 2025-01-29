@@ -1,9 +1,9 @@
-import { type Disposable, DisposableStack } from '@repo/common/disposable'
-import { Emitter, type ListenEmitter } from '@repo/common/emitter'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_CONTEXT_OWN } from '#internal-symbols'
 import { IntRange, Range } from '#math'
 import { AutomationCurve } from '#param'
 import { type Seconds, createSeconds } from '#units'
+import { type Disposable, DisposableStack } from '#util/disposable'
+import { Emitter, type ListenEmitter } from '#util/emitter'
 import { SynthTime } from './synth-time'
 
 type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]

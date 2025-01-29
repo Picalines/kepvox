@@ -9,6 +9,8 @@
             }
         ],
         "jsx": "preserve",
-        "noEmit": true
+        "noEmit": true,
+        "isolatedModules": true,
+        "incremental": true
     }
 }

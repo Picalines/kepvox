@@ -1,4 +1,4 @@
-import { Emitter } from '@repo/common/emitter'
+import { Emitter } from '#util/emitter'
 import { SynthParam, synthParamType } from './synth-param'
 
 export type EnumSynthParamOpts<V extends string> = {

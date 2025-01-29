@@ -1,4 +1,4 @@
-import type { Disposable } from '@repo/common/disposable'
+import type { Disposable } from '#util/disposable'
 
 const hasAssociatedInputSocket: unique symbol = Symbol('hasAssociatedInputSocket')
 const hasAssociatedOutputSocket: unique symbol = Symbol('hasAssociatedOutputSocket')
