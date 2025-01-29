@@ -4,7 +4,13 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
-    "main": "./src/index.ts",
+    "exports": {
+        ".": {
+            "dev": "./src/index.ts",
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
     "scripts": {
         "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
