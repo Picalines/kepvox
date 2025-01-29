@@ -1,5 +1,5 @@
 import { type Branded, createBrandedUnsafe, createSafeBrand } from '@repo/common/branded'
-import { Range } from '@repo/common/math'
+import { Range } from '#math'
 
 export type Seconds = Branded<number, 'seconds'>
 export type Beats = Branded<number, 'beats'>

@@ -1,5 +1,5 @@
-import { Range } from '@repo/common/math'
 import type { SynthContext } from '#context'
+import { Range } from '#math'
 import { UNIT_RANGES, type UnitName } from '#units'
 import { AudioAutomationCurve } from './audio-automation-curve'
 import type { AutomationCurve } from './automation-curve'

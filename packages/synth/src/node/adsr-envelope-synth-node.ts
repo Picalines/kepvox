@@ -1,6 +1,6 @@
-import { Range } from '@repo/common/math'
 import type { SynthContext, SynthTime } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
+import { Range } from '#math'
 import { AudioSynthParam, ScalarSynthParam } from '#param'
 import { SynthNode, synthNodeType } from './synth-node'
 
