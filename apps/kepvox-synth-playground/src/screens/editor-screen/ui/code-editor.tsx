@@ -10,8 +10,12 @@ import {
 import { useUnit } from 'effector-react'
 import { model } from '../model'
 
-const onMount: OnMonacoMount = editor => {
+import synthPackageDts from '#public/synth.d.ts.txt'
+
+const onMount: OnMonacoMount = async (editor, monaco) => {
   editor.updateOptions({ fontSize: 16, automaticLayout: true })
+
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(`declare module 'synth' {\n${synthPackageDts}\n}`)
 }
 
 type Props = {
