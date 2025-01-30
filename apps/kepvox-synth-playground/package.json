@@ -8,11 +8,13 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "ts:check": "tsc --noEmit"
+        "ts:check": "tsc --noEmit",
+        "setup:copy-synth-dts": "node ./scripts/copy-synth-dts.js"
     },
     "imports": {
         "#screens/*": "./src/screens/*/index.ts",
-        "#shared/lib/*": "./src/shared/lib/*/index.ts"
+        "#shared/lib/*": "./src/shared/lib/*/index.ts",
+        "#public/*": "./public/*"
     },
     "dependencies": {
         "@effector/next": "^0.7.0",
