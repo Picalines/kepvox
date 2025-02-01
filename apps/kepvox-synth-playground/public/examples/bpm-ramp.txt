@@ -1,11 +1,11 @@
-const context = PLAYGROUND_CONTEXT
+import { OscillatorSynthNode, ADSREnvelopeSynthNode } from 'synth'
+import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
 const envelope = new ADSREnvelopeSynthNode(context)
-const output = OutputSynthNode.ofContext(context)
 
 oscillator.connectOutput(envelope)
-envelope.connectOutput(output)
+envelope.connectOutput(context.output)
 
 oscillator.frequency.initialValue = 440
 oscillator.waveShape.value = 'sawtooth'
