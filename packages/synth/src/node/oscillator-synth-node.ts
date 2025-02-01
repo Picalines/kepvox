@@ -44,7 +44,7 @@ export class OscillatorSynthNode extends SynthNode {
       () => {
         gate.gain.value = 1
       },
-      { signal: this.context.disposed }, // TODO: make this default
+      { signal: this.disposed },
     )
 
     this.context.on(
@@ -52,7 +52,7 @@ export class OscillatorSynthNode extends SynthNode {
       () => {
         gate.gain.value = 0
       },
-      { signal: this.context.disposed },
+      { signal: this.disposed },
     )
   }
 

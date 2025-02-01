@@ -17,16 +17,12 @@ export class AudioAutomationCurve extends AutomationCurve {
     this.#context = context
     this.#audioParam = audioParam
 
-    this.#context.on('play', start => this.#schedule(start), { signal: context.disposed })
+    this.#context.on('play', start => this.#schedule(start))
 
-    this.#context.on(
-      'stop',
-      () => {
-        this.#audioParam.cancelScheduledValues(0)
-        this.#audioParam.value = this.valueAt(this.#context.firstBeat)
-      },
-      { signal: context.disposed },
-    )
+    this.#context.on('stop', () => {
+      this.#audioParam.cancelScheduledValues(0)
+      this.#audioParam.value = this.valueAt(this.#context.firstBeat)
+    })
   }
 
   #schedule(start: SynthTime) {

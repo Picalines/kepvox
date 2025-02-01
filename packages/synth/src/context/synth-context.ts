@@ -162,6 +162,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.#state = 'disposed'
     this.#resources.dispose()
     this.#emitter.emit('stateChanged')
+    this.#emitter.offAll()
   }
 
   get disposed() {

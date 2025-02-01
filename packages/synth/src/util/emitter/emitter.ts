@@ -49,6 +49,10 @@ export class Emitter<EM extends EventMap> {
     }
   }
 
+  offAll() {
+    this.#listeners.clear()
+  }
+
   /**
    * @returns a cancel function, because you can't use the callback
    */
