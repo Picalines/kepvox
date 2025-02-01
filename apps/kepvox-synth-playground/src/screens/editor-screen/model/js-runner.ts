@@ -4,16 +4,16 @@ import { createEffect, createEvent, createStore, sample } from 'effector'
 import { equals, not, readonly, spread } from 'patronum'
 
 type Params = {
-  modules: Readonly<Record<string, object>>
+  modules: Readonly<Record<string, () => object>>
 }
 
 export const createJsRunner = createFactory((params: Params) => {
   const { modules } = params
 
-  const $status = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
+  const $state = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
   const $error = createStore<null | Error>(null)
 
-  const startup = createEvent()
+  const initialized = createEvent()
   const codeSubmitted = createEvent<string>()
 
   const initFx = createEffect(async () => {
@@ -41,13 +41,13 @@ export const createJsRunner = createFactory((params: Params) => {
         throw new TypeError()
       }
 
-      const module = modules[path]
+      const moduleFactory = modules[path]
 
-      if (!module) {
+      if (!moduleFactory) {
         throw new Error(`module not found: ${path}`)
       }
 
-      return module
+      return moduleFactory()
     }
 
     const func = new Function('exports', 'require', transformedJs)
@@ -56,13 +56,13 @@ export const createJsRunner = createFactory((params: Params) => {
   })
 
   sample({
-    clock: startup,
+    clock: initialized,
     target: initFx,
   })
 
   sample({
     clock: initFx.done,
-    target: $status,
+    target: $state,
     fn: () => 'initialized' as const,
   })
 
@@ -73,18 +73,18 @@ export const createJsRunner = createFactory((params: Params) => {
 
   sample({
     clock: codeSubmitted,
-    filter: not(equals($status, 'running')),
+    filter: not(equals($state, 'running')),
     fn: code => ({ code, status: 'running', error: null }) as const,
     target: spread({
       code: runFx,
-      status: $status,
+      status: $state,
       error: $error,
     }),
   })
 
   sample({
     clock: runFx.done,
-    target: $status,
+    target: $state,
     fn: () => 'success' as const,
   })
 
@@ -92,7 +92,7 @@ export const createJsRunner = createFactory((params: Params) => {
     clock: runFx.failData,
     fn: error => ({ status: 'error', error }) as const,
     target: spread({
-      status: $status,
+      status: $state,
       error: $error,
     }),
   })
@@ -103,5 +103,5 @@ export const createJsRunner = createFactory((params: Params) => {
     }
   })
 
-  return { startup, $status: readonly($status), $error: readonly($error), codeSubmitted, modules }
+  return { initialized, $state: readonly($state), $error: readonly($error), codeSubmitted, modules }
 })
