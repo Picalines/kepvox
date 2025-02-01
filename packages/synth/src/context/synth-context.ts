@@ -1,5 +1,6 @@
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_CONTEXT_OWN } from '#internal-symbols'
 import { IntRange, Range } from '#math'
+import { OutputSynthNode } from '#node'
 import { AutomationCurve } from '#param'
 import { type Seconds, createSeconds } from '#units'
 import { type Disposable, DisposableStack } from '#util/disposable'
@@ -66,10 +67,13 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   // @ts-expect-error: initialized by public setter
   #lookAhead: Seconds
 
+  readonly #output: OutputSynthNode
+
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
     const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext
+    this.#output = new OutputSynthNode(this)
 
     this.timeSignature = timeSignature
     this.lookAhead = createSeconds(lookAhead)
@@ -123,6 +127,10 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   }
 
   readonly firstBeat = this.time({ beat: 0 })
+
+  get output(): OutputSynthNode {
+    return this.#output
+  }
 
   /**
    * NOTE: may be called multiple times without {@link SynthContext.stop}

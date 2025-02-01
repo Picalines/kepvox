@@ -1,4 +1,10 @@
 import { OscillatorSynthNode } from 'synth'
 import { context } from 'synth/playground'
 
+const oscillator = new OscillatorSynthNode(context)
 
+oscillator.connectOutput(context.output)
+
+oscillator.frequency.initialValue = 440
+oscillator.frequency.curve.holdValueAt(context.time({ note2: 1 }))
+oscillator.frequency.curve.rampValueUntil(context.time({ note2: 1, note4: 2 }), 880)
