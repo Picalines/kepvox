@@ -34,9 +34,12 @@ export type SynthContextOpts = {
   lookAhead?: Seconds
 }
 
+export type SynthState = 'idle' | 'playing' | 'disposed'
+
 type Events = {
   play: [start: SynthTime]
   stop: []
+  stateChanged: []
 }
 
 export class SynthContext implements ListenEmitter<Events>, Disposable {
@@ -49,17 +52,19 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
 
   readonly #audioContext: AudioContext
 
-  // @ts-expect-error: initialized by public setter
-  #timeSignature: TimeSignature
-  // @ts-expect-error: initialized by public setter
-  #lookAhead: Seconds
-
   readonly #resources = new DisposableStack()
 
   readonly #emitter = new Emitter<Events>()
   readonly on = this.#emitter.on.bind(this.#emitter)
   readonly off = this.#emitter.off.bind(this.#emitter)
   readonly once = this.#emitter.once.bind(this.#emitter)
+
+  #state: SynthState = 'idle'
+
+  // @ts-expect-error: initialized by public setter
+  #timeSignature: TimeSignature
+  // @ts-expect-error: initialized by public setter
+  #lookAhead: Seconds
 
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
     const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
@@ -72,6 +77,25 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.secondsPerBeat = new AutomationCurve(this, { valueRange: Range.positiveNonZero })
 
     this.secondsPerBeat.setValueAt(this.firstBeat, 60 / initialBpm)
+
+    audioContext.addEventListener('statechange', () => {
+      switch (audioContext.state) {
+        case 'suspended':
+          this.stop()
+          return
+        case 'closed':
+          this.dispose()
+          return
+      }
+    })
+
+    if (audioContext.state === 'closed') {
+      this.dispose()
+    }
+  }
+
+  get state() {
+    return this.#state
   }
 
   get timeSignature() {
@@ -100,22 +124,36 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
 
   readonly firstBeat = this.time({ beat: 0 })
 
+  /**
+   * NOTE: may be called multiple times without {@link SynthContext.stop}
+   */
   play(start = this.firstBeat) {
     this.#assertNotDisposed()
     this.stop()
-    this.#emitter.emit('play', start)
+    this.#audioContext.resume().then(() => {
+      this.#state = 'playing'
+      this.#emitter.emit('play', start)
+      this.#emitter.emit('stateChanged')
+    })
   }
 
   stop() {
     this.#assertNotDisposed()
-    this.#emitter.emit('stop')
+    if (this.#state === 'playing') {
+      this.#state = 'idle'
+      this.#emitter.emit('stop')
+      this.#emitter.emit('stateChanged')
+    }
   }
 
   /**
    * Disposes all SynthNodes associated with the context
    */
   dispose() {
+    this.stop()
+    this.#state = 'disposed'
     this.#resources.dispose()
+    this.#emitter.emit('stateChanged')
   }
 
   get disposed() {
