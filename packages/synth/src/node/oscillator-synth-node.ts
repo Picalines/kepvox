@@ -13,8 +13,11 @@ export class OscillatorSynthNode extends SynthNode {
 
   constructor(context: SynthContext) {
     const oscillator = context[INTERNAL_AUDIO_CONTEXT].createOscillator()
+    const gate = context[INTERNAL_AUDIO_CONTEXT].createGain()
 
-    super({ context, inputs: [], outputs: [oscillator] })
+    oscillator.connect(gate)
+
+    super({ context, inputs: [], outputs: [gate] })
 
     this.#oscillator = oscillator
 
@@ -33,6 +36,24 @@ export class OscillatorSynthNode extends SynthNode {
     })
 
     this.#oscillator.start()
+
+    gate.gain.value = 0
+
+    this.context.on(
+      'play',
+      () => {
+        gate.gain.value = 1
+      },
+      { signal: this.context.disposed }, // TODO: make this default
+    )
+
+    this.context.on(
+      'stop',
+      () => {
+        gate.gain.value = 0
+      },
+      { signal: this.context.disposed },
+    )
   }
 
   override dispose(): void {
