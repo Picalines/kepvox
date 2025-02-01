@@ -1,28 +1,32 @@
-import * as synthModule from '@repo/synth'
+import * as synth from '@repo/synth'
 import { invoke } from '@withease/factories'
-import { combine, createEvent, createStore, sample } from 'effector'
+import { combine, createEvent, sample } from 'effector'
 import { persist as persistInQuery } from 'effector-storage/query'
 import { equals } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
 import { createJsRunner } from './js-runner'
+import { createSynth } from './synth'
 
-const codeEditor = invoke(createCodeEditor)
+import defaultCode from '#public/examples/default.txt'
 
-const jsRunner = invoke(createJsRunner, {
-  modules: { synth: synthModule },
+const { $code, $isReadonly: $isCodeReadonly, codeChanged } = invoke(createCodeEditor, { defaultCode })
+
+const { $synthContext, $isPlaying, started: synthStarted, reset: resetSynth } = invoke(createSynth)
+
+const {
+  initialized,
+  $state: $jsState,
+  $error,
+  codeSubmitted,
+} = invoke(createJsRunner, {
+  modules: { synth: () => synth, 'synth/playground': () => ({ context: $synthContext.getState() }) },
 })
-
-const { $code, codeChanged } = codeEditor
-const { startup, $status: $runnerStatus, $error } = jsRunner
 
 const playbackToggled = createEvent()
 
-// TODO: hook up to SynthContext
-const $isPlaying = createStore(false)
-
-const $status = combine($runnerStatus, $isPlaying, (runnerStatus, isPlaying) => {
-  if (!runnerStatus) {
+const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
+  if (!jsState) {
     return 'initializing' as const
   }
 
@@ -37,21 +41,24 @@ sample({
   clock: playbackToggled,
   filter: equals($status, 'ready'),
   source: $code,
-  target: jsRunner.codeSubmitted,
+  target: codeSubmitted,
 })
 
 sample({
-  clock: $runnerStatus,
-  filter: equals($runnerStatus, 'success'),
-  target: $isPlaying,
-  fn: () => true,
+  clock: $jsState,
+  filter: equals($jsState, 'success'),
+  target: synthStarted,
 })
 
 sample({
   clock: playbackToggled,
   filter: $isPlaying,
-  target: $isPlaying,
-  fn: () => false,
+  target: resetSynth,
+})
+
+sample({
+  clock: $isPlaying,
+  target: $isCodeReadonly,
 })
 
 persistInQuery({
@@ -63,4 +70,4 @@ persistInQuery({
   timeout: 100,
 })
 
-export { $code, $error, $status, codeChanged, playbackToggled, startup }
+export { $code, $isCodeReadonly, $error, $status, codeChanged, playbackToggled, initialized }
