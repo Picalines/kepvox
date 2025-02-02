@@ -2,7 +2,6 @@ import type { StorybookConfig } from '@storybook/react-vite'
 
 import { dirname, join } from 'node:path'
 import { mergeConfig } from 'vite'
-import viteConfig from '../vite.config'
 
 function packagePath(value: string) {
   return dirname(require.resolve(join(value, 'package.json')))
@@ -31,7 +30,9 @@ const config: StorybookConfig = {
     },
   },
 
-  viteFinal: config => mergeConfig(config, viteConfig),
+  viteFinal: async config => {
+    return mergeConfig(config, await import('@repo/vite-config/storybook'))
+  },
 }
 
 export default config
