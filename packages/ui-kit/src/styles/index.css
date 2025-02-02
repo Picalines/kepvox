@@ -1,6 +1,4 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "@repo/tailwind-config";
 
-@import "./defaults.css";
 @import "./colors.css";
+@import "./defaults.css";

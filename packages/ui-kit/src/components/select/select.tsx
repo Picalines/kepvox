@@ -74,7 +74,7 @@ export const Root: FC<RootProps> = props => {
           <RadixSelect.Trigger
             aria-labelledby={label ? labelId : undefined}
             className={cn(
-              'peer flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+              'peer flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
               trigger.props.className,
             )}
           >
@@ -89,7 +89,7 @@ export const Root: FC<RootProps> = props => {
               ref={label.ref}
               id={labelId}
               className={cn(
-                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-disabled:opacity-50 peer-data-[placeholder]:top-1/2 peer-data-[placeholder]:text-base peer-data-[placeholder]:text-muted-foreground',
+                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-disabled:opacity-50 peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
                 label.props.className,
               )}
             >
@@ -102,7 +102,7 @@ export const Root: FC<RootProps> = props => {
         <RadixSelect.Portal>
           <RadixSelect.Content
             position="popper"
-            className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=left]:-translate-x-1 data-[side=top]:-translate-y-1 relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[side=right]:translate-x-1 data-[side=bottom]:translate-y-1 data-[state=closed]:animate-out data-[state=open]:animate-in"
+            className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=left]:-translate-x-1 data-[side=top]:-translate-y-1 relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[side=right]:translate-x-1 data-[side=bottom]:translate-y-1"
           >
             <RadixSelect.ScrollUpButton className="flex cursor-default items-center justify-center py-1">
               <VUpIcon className="h-4 w-4" />
@@ -149,7 +149,7 @@ const SelectGroup: FC<GroupProps> = props => {
           ref={ref}
           key={key ?? itemProps.value}
           className={cn(
-            'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+            'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
             itemProps.className,
           )}
         >

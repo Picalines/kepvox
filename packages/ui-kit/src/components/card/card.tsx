@@ -22,7 +22,7 @@ export const Root: FC<RootProps> = ({ className, children, ...rootProps }) => {
   return (
     <div
       {...rootProps}
-      className={cn('flex flex-col gap-3 rounded-lg border bg-card p-3 text-card-foreground shadow-sm', className)}
+      className={cn('flex flex-col gap-3 rounded-lg border bg-card p-3 text-card-foreground shadow-xs', className)}
     >
       {header && (
         <div {...header.props} ref={header.ref}>
