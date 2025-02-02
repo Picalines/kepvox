@@ -5,12 +5,13 @@ import { persist as persistInQuery } from 'effector-storage/query'
 import { equals } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
+import { createExampleSelector } from './examples'
 import { createJsRunner } from './js-runner'
 import { createSynth } from './synth'
 
-import defaultCode from '#public/examples/default.txt'
+const { $exampleName, $exampleCode, exampleSelected } = invoke(createExampleSelector)
 
-const { $code, $isReadonly: $isCodeReadonly, codeChanged } = invoke(createCodeEditor, { defaultCode })
+const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor, { defaultCode: $exampleCode.getState() })
 
 const { $synthContext, $isPlaying, started: synthStarted, reset: resetSynth } = invoke(createSynth)
 
@@ -58,7 +59,12 @@ sample({
 
 sample({
   clock: $isPlaying,
-  target: $isCodeReadonly,
+  target: $isReadonly,
+})
+
+sample({
+  clock: $exampleCode,
+  target: codeChanged,
 })
 
 persistInQuery({
@@ -70,4 +76,14 @@ persistInQuery({
   timeout: 100,
 })
 
-export { $code, $isCodeReadonly, $error, $status, codeChanged, playbackToggled, initialized }
+export {
+  $code,
+  $isReadonly,
+  $error,
+  $status,
+  $exampleName as $example,
+  exampleSelected,
+  codeChanged,
+  playbackToggled,
+  initialized,
+}

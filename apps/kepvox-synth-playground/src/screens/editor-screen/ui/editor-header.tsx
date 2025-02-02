@@ -3,6 +3,7 @@ import { Separator } from '@repo/ui-kit/components/separator'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import type { FC } from 'react'
 import { EditorStatus } from './editor-status'
+import { ExampleSelect } from './example-select'
 import { PlaybackButton } from './playback-button'
 
 export const EditorHeader: FC = () => {
@@ -20,6 +21,7 @@ export const EditorHeader: FC = () => {
       <Separator orientation="vertical" />
       <PlaybackButton />
       <EditorStatus />
+      <ExampleSelect />
     </div>
   )
 }
