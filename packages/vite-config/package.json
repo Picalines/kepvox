@@ -23,11 +23,8 @@
         "#base": "./src/vite.base.config.js"
     },
     "peerDependencies": {
-        "@types/postcss-import": "catalog:",
         "@vitejs/plugin-react": "catalog:",
-        "autoprefixer": "catalog:",
-        "postcss-import": "catalog:",
-        "tailwindcss": "catalog:",
+        "@tailwindcss/vite": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     },
