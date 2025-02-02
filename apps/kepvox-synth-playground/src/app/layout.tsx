@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
-import '@repo/ui-kit/style.css'
+import './index.css'
 import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
