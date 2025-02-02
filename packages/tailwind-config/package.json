@@ -4,12 +4,9 @@
     "version": "0.1.0",
     "private": true,
     "exports": {
-        ".": "./tailwind.config.ts"
+        ".": "./tailwind.css"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:*",
-        "@types/node": "catalog:",
-        "tailwindcss": "catalog:",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss": "catalog:"
     }
 }
