@@ -30,9 +30,7 @@ const config: StorybookConfig = {
     },
   },
 
-  viteFinal: async config => {
-    return mergeConfig(config, await import('@repo/vite-config/storybook'))
-  },
+  viteFinal: async config => mergeConfig(config, await import('#config/vite')),
 }
 
 export default config
