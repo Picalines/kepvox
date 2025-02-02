@@ -36,7 +36,7 @@ export const Root: FC<RootProps> = props => {
       <RadixCheckbox.Root
         {...rootProps}
         id={checkboxId}
-        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
       >
         <RadixCheckbox.Indicator className="flex items-center justify-center text-current">
           <CheckIcon className="h-4 w-4" />
