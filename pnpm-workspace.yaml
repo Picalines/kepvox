@@ -13,6 +13,7 @@ catalog:
   tailwindcss: ^4.0.0
   "@tailwindcss/postcss": ^4.0.0
   "@tailwindcss/vite": ^4.0.0
+  tailwind-merge: ^3.0.1
   postcss: ^8.4.47
 
   storybook: ^8.4.7
