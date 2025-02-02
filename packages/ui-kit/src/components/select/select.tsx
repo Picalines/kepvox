@@ -1,6 +1,6 @@
 import * as RadixSelect from '@radix-ui/react-select'
 import type { OmitExisting, Overlay } from '@repo/common/typing'
-import { type ComponentPropsWithRef, type FC, type Key as ReactKey, type ReactNode, useId } from 'react'
+import { type ComponentPropsWithRef, type FC, type ReactNode, useId } from 'react'
 import { CheckIcon, VDownIcon, VUpIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
@@ -32,7 +32,6 @@ export type GroupProps = Overlay<
   ComponentPropsWithRef<'div'>,
   {
     children: ReactNode
-    key?: ReactKey
   }
 >
 
@@ -74,7 +73,7 @@ export const Root: FC<RootProps> = props => {
           <RadixSelect.Trigger
             aria-labelledby={label ? labelId : undefined}
             className={cn(
-              'peer flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+              'peer flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
               trigger.props.className,
             )}
           >
@@ -109,7 +108,7 @@ export const Root: FC<RootProps> = props => {
             </RadixSelect.ScrollUpButton>
             <RadixSelect.Viewport className="h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] p-1">
               {groups.map((group, index) => (
-                <SelectGroup {...group.props} ref={group.ref} key={group.key ?? index}>
+                <SelectGroup key={group.key ?? index} {...group.props} ref={group.ref}>
                   {group.children}
                 </SelectGroup>
               ))}
@@ -145,9 +144,9 @@ const SelectGroup: FC<GroupProps> = props => {
       )}
       {items.map(({ children: text, props: itemProps, ref, key }) => (
         <RadixSelect.Item
+          key={key ?? itemProps.value}
           {...itemProps}
           ref={ref}
-          key={key ?? itemProps.value}
           className={cn(
             'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
             itemProps.className,
