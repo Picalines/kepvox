@@ -27,16 +27,12 @@ const MONACO_TS_DECLARATIONS = [
 export const CodeEditor: FC<Props> = props => {
   const { className } = props
 
-  const {
-    value: defaultValue,
-    isReadonly,
-    onChangeModel,
-    setupRunner,
-  } = useUnit({
+  const { value, isReadonly, onChangeModel, setupRunner } = useUnit({
     value: model.$code,
-    isReadonly: model.$isCodeReadonly,
+    isReadonly: model.$isReadonly,
     onChangeModel: model.codeChanged,
     setupRunner: model.initialized,
+    example: model.$example,
   })
 
   const editorRef = useRef<MonacoEditorInstance>(null)
@@ -55,18 +51,15 @@ export const CodeEditor: FC<Props> = props => {
 
   useEffect(() => setupRunner(), [setupRunner])
 
-  useEffect(() => {
-    editorRef.current?.updateOptions({ readOnly: isReadonly })
-  }, [isReadonly])
-
   return (
     <div className={className}>
       <MonacoEditor
         onMount={onMount}
-        defaultValue={defaultValue}
+        value={value}
         onChange={onChange}
         defaultLanguage="typescript"
         theme="vs-dark"
+        options={{ readOnly: isReadonly }}
       />
     </div>
   )
