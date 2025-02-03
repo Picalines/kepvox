@@ -15,9 +15,9 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
       },
       size: {
-        sm: 'h-8 rounded-md px-3',
+        sm: 'h-8 px-3',
         md: 'h-10 px-4 py-2',
-        lg: 'h-12 rounded-md px-8',
+        lg: 'h-12 px-8',
       },
       shape: {
         pill: '',

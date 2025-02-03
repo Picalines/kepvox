@@ -32,7 +32,7 @@ export default {
   },
   decorators: [
     Story => (
-      <div className="max-w-96 pt-2">
+      <div className="flex pt-2">
         <Story />
       </div>
     ),
@@ -87,5 +87,19 @@ export const OpenMany: Story = {
   args: {
     ...Open.args,
     numberOfGroups: 10,
+  },
+}
+
+export const Small: Story = {
+  args: {
+    ...Default.args,
+    size: 'sm',
+  },
+}
+
+export const Large: Story = {
+  args: {
+    ...Default.args,
+    size: 'lg',
   },
 }
