@@ -16,12 +16,6 @@ export default {
     size: {
       control: 'select',
     },
-    onClick: {
-      table: { disable: true },
-    },
-    onToggle: {
-      table: { disable: true },
-    },
   },
 } satisfies Meta<StoryArgs>
 
