@@ -17,7 +17,7 @@ export const PlaybackButton = () => {
   const Icon = status === 'playing' ? SquareIcon : PlayIcon
 
   return (
-    <Button onMouseDown={toggled} size="md" shape="square" variant="outline" className="relative" disabled={disabled}>
+    <Button onMouseDown={toggled} size="lg" shape="square" variant="outline" className="relative" disabled={disabled}>
       <Icon className={cn('absolute', disabled && 'animate-pulse')} />
     </Button>
   )

@@ -1,22 +1,26 @@
 import * as RadixSelect from '@radix-ui/react-select'
 import type { OmitExisting, Overlay } from '@repo/common/typing'
+import { type VariantProps, cva } from 'class-variance-authority'
 import { type ComponentPropsWithRef, type FC, type ReactNode, useId } from 'react'
 import { CheckIcon, VDownIcon, VUpIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
-export type RootProps = {
-  children: ReactNode
-  name?: string
-  open?: boolean
-  defaultOpen?: boolean
-  onOpenChange?: (opened: boolean) => void
-  defaultValue?: string
-  value?: string
-  disabled?: boolean
-  required?: boolean
-  onValueChange?: (value: string) => void
-}
+export type RootProps = Overlay<
+  VariantProps<typeof variants>,
+  {
+    children: ReactNode
+    name?: string
+    open?: boolean
+    defaultOpen?: boolean
+    onOpenChange?: (opened: boolean) => void
+    defaultValue?: string
+    value?: string
+    disabled?: boolean
+    required?: boolean
+    onValueChange?: (value: string) => void
+  }
+>
 
 export type LabelProps = Overlay<OmitExisting<ComponentPropsWithRef<'div'>, 'id'>, { children: ReactNode }>
 
@@ -58,8 +62,21 @@ export const Group = createSlot({ name: 'Group', repeatable: true }).component<G
 export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
+const variants = cva(
+  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed',
+  {
+    variants: {
+      size: {
+        sm: 'h-8',
+        md: 'h-10',
+        lg: 'h-12',
+      },
+    },
+  },
+)
+
 export const Root: FC<RootProps> = props => {
-  const { children, ...rootProps } = props
+  const { children, size = 'md', ...rootProps } = props
 
   const { label, trigger, content } = useSlots(children, { label: Label, trigger: Trigger, content: Content })
   const { groups } = useSlots(content?.children, { groups: Group })
@@ -69,15 +86,15 @@ export const Root: FC<RootProps> = props => {
   return (
     <RadixSelect.Root {...rootProps}>
       {trigger && (
-        <div className="relative">
+        <div className="relative has-disabled:opacity-50">
           <RadixSelect.Trigger
             aria-labelledby={label ? labelId : undefined}
-            className={cn(
-              'peer flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-              trigger.props.className,
-            )}
+            className={cn(variants({ size }), 'peer group', trigger.props.className)}
           >
-            <RadixSelect.Value />
+            <RadixSelect.Value className="line-clamp-1" />
+            {label && rootProps.defaultValue === undefined && rootProps.value === undefined && (
+              <span className="hidden opacity-0 group-data-placeholder:inline">{label.children}</span>
+            )}
             <RadixSelect.Icon asChild>
               <VDownIcon className="h-4 w-4 opacity-50" />
             </RadixSelect.Icon>
@@ -88,7 +105,7 @@ export const Root: FC<RootProps> = props => {
               ref={label.ref}
               id={labelId}
               className={cn(
-                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-disabled:opacity-50 peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
+                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
                 label.props.className,
               )}
             >

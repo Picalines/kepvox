@@ -22,7 +22,7 @@ export const ExampleSelect: FC = () => {
   )
 
   return (
-    <Select.Root value={value} onValueChange={onValueChange} disabled={disabled}>
+    <Select.Root size="lg" value={value} onValueChange={onValueChange} disabled={disabled}>
       <Select.Trigger />
       <Select.Content>
         <Select.Group>
