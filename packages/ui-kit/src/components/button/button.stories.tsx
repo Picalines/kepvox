@@ -12,11 +12,6 @@ export default {
   args: {
     onClick: fn(),
   },
-  argTypes: {
-    onClick: {
-      table: { disable: true },
-    },
-  },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>

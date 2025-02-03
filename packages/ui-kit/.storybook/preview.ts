@@ -14,6 +14,12 @@ const preview: Preview = {
       defaultTheme: 'light',
     }),
   ],
+
+  parameters: {
+    controls: {
+      exclude: /^on.+/,
+    },
+  },
 }
 
 export default preview

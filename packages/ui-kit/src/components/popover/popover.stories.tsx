@@ -38,9 +38,6 @@ export default {
       control: 'inline-radio',
       options: ['start', 'center', 'end'] satisfies StoryArgs['align'][],
     },
-    onOpenChange: {
-      table: { disable: true },
-    },
   },
 } satisfies Meta<StoryArgs>
 
