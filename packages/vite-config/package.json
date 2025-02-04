@@ -6,18 +6,9 @@
     "type": "module",
     "types": "./src/types.d.ts",
     "exports": {
-        "./base": {
-            "types": "./src/types.d.ts",
-            "default": "./src/vite.base.config.js"
-        },
-        "./react": {
-            "types": "./src/types.d.ts",
-            "default": "./src/vite.react.config.js"
-        },
-        "./storybook": {
-            "types": "./src/types.d.ts",
-            "default": "./src/vite.storybook.config.js"
-        }
+        "./base": "./src/vite.base.config.js",
+        "./react": "./src/vite.react.config.js",
+        "./storybook": "./src/vite.storybook.config.js"
     },
     "imports": {
         "#base": "./src/vite.base.config.js"
