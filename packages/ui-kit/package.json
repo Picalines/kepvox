@@ -36,6 +36,7 @@
     },
     "devDependencies": {
         "@playwright/test": "catalog:",
+        "@repo/storybook-config": "workspace:*",
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/ui-test": "workspace:*",

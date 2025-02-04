@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/storybook-config",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./merge": "./src/merge-config.js",
+        "./main/base": "./src/storybook.base.main.js",
+        "./main/vite": "./src/storybook.vite.main.js",
+        "./preview/react": "./src/storybook.preview.react.js"
+    },
+    "scripts": {
+        "ts:check": "tsc --noEmit"
+    },
+    "imports": {
+        "#main/base": "./src/storybook.base.main.js"
+    },
+    "peerDependencies": {
+        "@storybook/addon-essentials": "catalog:",
+        "@storybook/addon-interactions": "catalog:",
+        "@storybook/addon-links": "catalog:",
+        "@storybook/addon-themes": "catalog:",
+        "@storybook/nextjs": "catalog:",
+        "@storybook/react": "catalog:",
+        "@storybook/react-vite": "catalog:",
+        "storybook": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*"
+    }
+}
