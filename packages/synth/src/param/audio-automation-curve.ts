@@ -1,17 +1,18 @@
 import type { SynthContext, SynthTime } from '#context'
+import type { UnitName } from '#units'
 import { AutomationCurve, type AutomationCurveOpts } from './automation-curve'
 
-export type AudioAutomationCurveOpts = AutomationCurveOpts
+export type AudioAutomationCurveOpts<TUnit extends UnitName> = AutomationCurveOpts<TUnit>
 
 /**
  * @internal
  */
-export class AudioAutomationCurve extends AutomationCurve {
+export class AudioAutomationCurve<TUnit extends UnitName> extends AutomationCurve<TUnit> {
   readonly #context: SynthContext
 
   readonly #audioParam: AudioParam
 
-  constructor(context: SynthContext, audioParam: AudioParam, opts?: AudioAutomationCurveOpts) {
+  constructor(context: SynthContext, audioParam: AudioParam, opts: AudioAutomationCurveOpts<TUnit>) {
     super(context, opts)
 
     this.#context = context

@@ -1,26 +1,26 @@
 import type { SynthContext } from '#context'
 import { Range } from '#math'
-import { UNIT_RANGES, type UnitName } from '#units'
+import { UNIT_RANGES, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
-export type ScalarSynthParamOpts = {
+export type ScalarSynthParamOpts<TUnit extends UnitName> = {
   context: SynthContext
-  unit: UnitName
-  initialValue: number
+  unit: TUnit
+  initialValue: UnitValue<TUnit>
   range?: Range
 }
 
-export class ScalarSynthParam extends SynthParam {
+export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly [synthParamType] = 'scalar'
 
-  readonly unit: UnitName
+  readonly unit: TUnit
   readonly range: Range
-  readonly curve: AutomationCurve
+  readonly curve: AutomationCurve<TUnit>
 
   readonly #context: SynthContext
 
-  constructor(opts: ScalarSynthParamOpts) {
+  constructor(opts: ScalarSynthParamOpts<TUnit>) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
     const unitRange = UNIT_RANGES[unit]
@@ -40,16 +40,14 @@ export class ScalarSynthParam extends SynthParam {
     this.range = paramRange
 
     this.#context = context
-    this.curve = new AutomationCurve(context)
-
-    this.curve.setValueAt(this.#context.firstBeat, initialValue)
+    this.curve = new AutomationCurve(context, { initialValue })
   }
 
   get initialValue() {
     return this.curve.valueAt(this.#context.firstBeat)
   }
 
-  set initialValue(value: number) {
+  set initialValue(value: UnitValue<TUnit>) {
     this.curve.setValueAt(this.#context.firstBeat, value)
   }
 }
