@@ -1,6 +1,6 @@
 import type { SynthContext } from '#context'
 import { Range } from '#math'
-import { UNIT_RANGES, type UnitName, type UnitValue } from '#units'
+import { Unit, type UnitName, type UnitValue } from '#units'
 import { AudioAutomationCurve } from './audio-automation-curve'
 import type { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
@@ -27,7 +27,7 @@ export class AudioSynthParam<TUnit extends UnitName> extends SynthParam {
   constructor(audioParam: AudioParam, opts: AudioSynthParamOpts<TUnit>) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
-    const unitRange = UNIT_RANGES[unit]
+    const unitRange = Unit[unit].range
     const nativeRange = new Range(audioParam.minValue, audioParam.maxValue)
     const range = unitRange.intersection(nativeRange)?.intersection(rangeParam)
 

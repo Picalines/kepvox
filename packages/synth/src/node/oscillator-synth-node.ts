@@ -1,7 +1,7 @@
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { AudioSynthParam, EnumSynthParam } from '#param'
-import { createHertz } from '#units'
+import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
 export class OscillatorSynthNode extends SynthNode {
@@ -33,7 +33,7 @@ export class OscillatorSynthNode extends SynthNode {
     this.frequency = new AudioSynthParam(oscillator.frequency, {
       context,
       unit: 'hertz',
-      initialValue: createHertz(440), // TODO: set to constant
+      initialValue: Unit.hertz.orThrow(440), // TODO: set to constant
     })
 
     this.#oscillator.start()

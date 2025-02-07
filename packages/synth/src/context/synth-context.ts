@@ -2,7 +2,7 @@ import { INTERNAL_AUDIO_CONTEXT, INTERNAL_CONTEXT_OWN } from '#internal-symbols'
 import { IntRange, Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { AutomationCurve } from '#param'
-import { type Seconds, createSeconds } from '#units'
+import { type Seconds, Unit } from '#units'
 import { type Disposable, DisposableStack } from '#util/disposable'
 import { Emitter, type ListenEmitter } from '#util/emitter'
 import { SynthTime } from './synth-time'
@@ -76,10 +76,10 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.#output = new OutputSynthNode(this)
 
     this.timeSignature = timeSignature
-    this.lookAhead = createSeconds(lookAhead)
+    this.lookAhead = Unit.seconds.orClamp(lookAhead)
 
     this.secondsPerBeat = new AutomationCurve(this, {
-      initialValue: createSeconds(60 / initialBpm),
+      initialValue: Unit.seconds.orClamp(60 / initialBpm),
       valueRange: Range.positiveNonZero,
     })
 
@@ -116,11 +116,11 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   }
 
   set lookAhead(value) {
-    this.#lookAhead = createSeconds(Range.positiveNonZero.clamp(value))
+    this.#lookAhead = Unit.seconds.orClamp(Range.positiveNonZero.clamp(value))
   }
 
   get scheduleTime(): Seconds {
-    return createSeconds(this.#audioContext.currentTime + this.lookAhead)
+    return Unit.seconds.orClamp(this.#audioContext.currentTime + this.lookAhead)
   }
 
   time(units: NonNullable<ConstructorParameters<typeof SynthTime>[1]>): SynthTime {
