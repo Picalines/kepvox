@@ -115,10 +115,15 @@ jobs:
         working-directory: ${{ matrix.package }}
         run: pnpm exec turbo test:screen
 
+      - name: Prepare report artifact name
+        id: prepare-report-artifact
+        if: ${{ !cancelled() }}
+        run: echo "name=${{ matrix.package }}" | sed 's|/|--|g' >> "$GITHUB_OUTPUT"
+
       - name: Upload report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: ${{ steps.prepare-report-artifact.outputs.name }}-playwright-report
           path: ${{ matrix.package }}/playwright-report/
           retention-days: 30
