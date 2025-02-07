@@ -1,10 +1,10 @@
-import { OscillatorSynthNode, createHertz } from 'synth'
+import { OscillatorSynthNode, Unit } from 'synth'
 import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
 
 oscillator.connectOutput(context.output)
 
-oscillator.frequency.initialValue = createHertz(440)
+oscillator.frequency.initialValue = Unit.hertz.orThrow(440)
 oscillator.frequency.curve.holdValueAt(context.time({ note2: 1 }))
-oscillator.frequency.curve.rampValueUntil(context.time({ note2: 1, note4: 2 }), createHertz(880))
+oscillator.frequency.curve.rampValueUntil(context.time({ note2: 1, note4: 2 }), Unit.hertz.orThrow(880))

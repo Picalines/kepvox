@@ -1,6 +1,6 @@
 import type { SynthContext } from '#context'
 import { Range } from '#math'
-import { UNIT_RANGES, type UnitName, type UnitValue } from '#units'
+import { Unit, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
@@ -23,7 +23,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
   constructor(opts: ScalarSynthParamOpts<TUnit>) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
-    const unitRange = UNIT_RANGES[unit]
+    const unitRange = Unit[unit].range
     const paramRange = unitRange.intersection(rangeParam)
 
     if (!paramRange) {

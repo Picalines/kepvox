@@ -2,7 +2,7 @@ import type { SynthContext, SynthTime } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { AudioSynthParam, ScalarSynthParam } from '#param'
-import { createBeats, createNormalRange } from '#units'
+import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
 export class ADSREnvelopeSynthNode extends SynthNode {
@@ -24,34 +24,34 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     this.#gainNode = gainNode
     this.#gain = new AudioSynthParam(gainNode.gain, {
       context,
-      unit: 'normalRange',
-      initialValue: createNormalRange(0),
+      unit: 'normal',
+      initialValue: Unit.normal.min,
     })
 
     this.attack = new ScalarSynthParam({
       context,
       unit: 'beats',
-      initialValue: createBeats(0),
+      initialValue: Unit.beats.orThrow(0),
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
       context,
       unit: 'beats',
-      initialValue: createBeats(0),
+      initialValue: Unit.beats.orThrow(0),
       range: Range.positive,
     })
 
     this.sustain = new ScalarSynthParam({
       context,
-      unit: 'normalRange',
-      initialValue: createNormalRange(1),
+      unit: 'normal',
+      initialValue: Unit.normal.max,
     })
 
     this.release = new ScalarSynthParam({
       context,
       unit: 'beats',
-      initialValue: createBeats(0),
+      initialValue: Unit.beats.orThrow(0),
       range: Range.positive,
     })
   }
@@ -68,12 +68,12 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
     gain.holdValueAt(start)
-    gain.rampValueUntil(attackEnd, createNormalRange(1), 'linear')
+    gain.rampValueUntil(attackEnd, Unit.normal.max, 'linear')
 
     if (decayDuration > 0) {
       gain.rampValueUntil(decayEnd, sustainLevel, 'linear')
     } else {
-      gain.setValueAt(decayEnd, attackDuration > 0 ? createNormalRange(1) : sustainLevel)
+      gain.setValueAt(decayEnd, attackDuration > 0 ? Unit.normal.max : sustainLevel)
     }
   }
 
@@ -86,10 +86,10 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const releaseEnd = start.add({ beat: releaseDuration })
 
     if (releaseDuration > 0) {
-      gain.rampValueUntil(releaseEnd, createNormalRange(0))
+      gain.rampValueUntil(releaseEnd, Unit.normal.min)
     } else {
       // TODO: maybe a better solution
-      gain.setValueAt(releaseEnd.add({ beat: Number.EPSILON }), createNormalRange(0))
+      gain.setValueAt(releaseEnd.add({ beat: Number.EPSILON }), Unit.normal.min)
     }
   }
 

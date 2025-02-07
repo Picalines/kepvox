@@ -1,4 +1,4 @@
-import { type Beats, createBeats } from '#units'
+import { type Beats, Unit } from '#units'
 import type { SynthContext } from './synth-context'
 
 type SynthTimeUnit = 'beat' | 'measure' | 'note' | 'note2' | 'note4' | 'note8' | 'note16'
@@ -74,6 +74,6 @@ export class SynthTime {
       totalBeats += toBeatsTable[timeUnit](value, this.#context)
     }
 
-    return createBeats(totalBeats)
+    return Unit.beats.orThrow(totalBeats)
   }
 }
