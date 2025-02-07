@@ -91,6 +91,7 @@ jobs:
       matrix:
         package:
           - packages/ui-kit
+          - apps/kepvox-synth-playground
 
     steps:
       - name: Checkout
