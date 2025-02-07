@@ -22,6 +22,8 @@ type TestStoryParams = {
 
 const DEFAULT_THEME: Theme = 'light'
 
+const MAX_CONNECTION_ATTEMPTS = 5
+
 export const testStory = (params: TestStoryParams) => {
   const {
     meta,
@@ -50,13 +52,29 @@ export const testStory = (params: TestStoryParams) => {
     test(testName, async ({ page }) => {
       test.skip(Boolean(skip), skip?.reason)
 
-      await page.goto(storyUrl.toString())
+      // NOTE: we try to refresh the story page, because storybook might
+      // respond before the app bundle is built
+      let connectionRetires = 0
 
-      await page
-        .locator('#storybook-root > *')
-        .or(page.locator('#storybook-root', { hasText: /./ }))
-        .first()
-        .waitFor({ state: 'attached' })
+      while (true) {
+        try {
+          await page.goto(storyUrl.toString())
+
+          await page
+            .locator('#storybook-root > *')
+            .or(page.locator('#storybook-root', { hasText: /./ }))
+            .first()
+            .waitFor({ state: 'attached' })
+
+          break
+        } catch (e) {
+          if (connectionRetires < MAX_CONNECTION_ATTEMPTS) {
+            connectionRetires++
+            continue
+          }
+          throw e
+        }
+      }
 
       if (windowSize) {
         await page.setViewportSize(windowSize)
