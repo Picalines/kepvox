@@ -49,7 +49,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
    * your composition will have played up to given beat
    */
-  readonly secondsPerBeat: AutomationCurve
+  readonly secondsPerBeat: AutomationCurve<'seconds'>
 
   readonly #audioContext: AudioContext
 
@@ -78,9 +78,10 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.timeSignature = timeSignature
     this.lookAhead = createSeconds(lookAhead)
 
-    this.secondsPerBeat = new AutomationCurve(this, { valueRange: Range.positiveNonZero })
-
-    this.secondsPerBeat.setValueAt(this.firstBeat, 60 / initialBpm)
+    this.secondsPerBeat = new AutomationCurve(this, {
+      initialValue: createSeconds(60 / initialBpm),
+      valueRange: Range.positiveNonZero,
+    })
 
     audioContext.addEventListener('statechange', () => {
       switch (audioContext.state) {

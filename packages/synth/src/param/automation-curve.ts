@@ -2,50 +2,53 @@ import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
 import type { SynthContext, SynthTime } from '#context'
 import { Range } from '#math'
+import type { UnitName, UnitValue } from '#units'
 
 export type InterpolationMethod = 'linear' | 'exponential'
 
-type AutomationEvent = {
+type AutomationEvent<TUnit extends UnitName> = {
   time: SynthTime
-  value: number
+  value: UnitValue<TUnit>
   ramp?: InterpolationMethod
 }
 
-type InternalAutomationEvent = AutomationEvent & {
-  /**
-   * Area of a segment between this event and the next one.
-   * undefined if cant be determined
-   */
-  _area?: number
-}
-
-export type AutomationCurveOpts = {
+export type AutomationCurveOpts<TUnit extends UnitName> = {
+  initialValue: UnitValue<TUnit>
   valueRange?: Range
 }
 
-export class AutomationCurve {
+export class AutomationCurve<TUnit extends UnitName> {
   readonly #context: SynthContext
 
   readonly #valueRange: Range
 
-  readonly #events: InternalAutomationEvent[] = []
+  readonly #events: AutomationEvent<TUnit>[] = []
 
-  constructor(context: SynthContext, opts?: AutomationCurveOpts) {
+  /**
+   * Area of a segment between this event and the next one.
+   * undefined if cant be determined
+   */
+  readonly #eventAreas = new WeakMap<AutomationEvent<TUnit>, number>()
+
+  // TODO: remove context in #29
+  constructor(context: SynthContext, opts: AutomationCurveOpts<TUnit>) {
     this.#context = context
-    this.#valueRange = opts?.valueRange ?? Range.any
+    this.#valueRange = opts.valueRange ?? Range.any
+
+    this.setValueAt(context.firstBeat, opts.initialValue)
   }
 
   /**
    * Schedules an event, when value will instantly jump to the specified value
    */
-  setValueAt(time: SynthTime, value: number) {
+  setValueAt(time: SynthTime, value: UnitValue<TUnit>) {
     this.#addEvent({ time, value: this.#processValue(value) })
   }
 
   /**
    * Schedules an event, when the value will *stop ramping* to the specified value
    */
-  rampValueUntil(end: SynthTime, value: number, method: InterpolationMethod = 'linear') {
+  rampValueUntil(end: SynthTime, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
     this.#addEvent({ time: end, value: this.#processValue(value), ramp: method })
   }
 
@@ -61,9 +64,21 @@ export class AutomationCurve {
   }
 
   /**
+   * Cancels all scheduled events after the specified time
+   */
+  cancelEventsAfter(time: SynthTime) {
+    this.#assertContext(time)
+    const cutIndex = this.#eventIndexAfter(time)
+    if (cutIndex !== null) {
+      this.#events.splice(cutIndex)
+      this.#updateSpanArea(this.#events.length - 1)
+    }
+  }
+
+  /**
    * @returns curve value at a given time
    */
-  valueAt(time: SynthTime): number {
+  valueAt(time: SynthTime): UnitValue<TUnit> {
     this.#assertContext(time)
     this.#assertNotEmpty()
 
@@ -84,7 +99,13 @@ export class AutomationCurve {
       return before.value
     }
 
-    return interpolationTable[after.ramp](before.time.beats, before.value, after.time.beats, after.value, time.beats)
+    return interpolationTable[after.ramp](
+      before.time.beats,
+      before.value,
+      after.time.beats,
+      after.value,
+      time.beats,
+    ) as UnitValue<TUnit>
   }
 
   areaBefore(time: SynthTime): number {
@@ -96,61 +117,49 @@ export class AutomationCurve {
     }
 
     const beforeArea = this.eventsBefore(lastEvent.time).reduce(
-      (sum, event, index) => sum + ((event as InternalAutomationEvent)._area ?? this.#updateSpanArea(index) ?? 0),
+      (sum, event, index) => sum + (this.#eventAreas.get(event) ?? this.#updateSpanArea(index) ?? 0),
       0,
     )
 
     return beforeArea + this.#spanAreaAt(this.eventSpan(time), time)
   }
 
-  /**
-   * Cancels all scheduled events after the specified time
-   */
-  cancelEventsAfter(time: SynthTime) {
-    this.#assertContext(time)
-    const cutIndex = this.#eventIndexAfter(time)
-    if (cutIndex !== null) {
-      this.#events.splice(cutIndex)
-      this.#updateSpanArea(this.#events.length - 1)
-    }
-  }
-
-  eventAt(time: SynthTime): AutomationEvent | null {
+  eventAt(time: SynthTime): AutomationEvent<TUnit> | null {
     const event = this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
     return event?.time.equals(time) ? event : null
   }
 
-  eventBefore(time: SynthTime): AutomationEvent | null {
+  eventBefore(time: SynthTime): AutomationEvent<TUnit> | null {
     return this.#events[this.#eventIndexBefore(time) ?? -1] ?? null
   }
 
-  eventBeforeOrAt(time: SynthTime): AutomationEvent | null {
+  eventBeforeOrAt(time: SynthTime): AutomationEvent<TUnit> | null {
     return this.#events[this.#eventIndexBeforeOrAt(time) ?? -1] ?? null
   }
 
-  eventAfter(time: SynthTime): AutomationEvent | null {
+  eventAfter(time: SynthTime): AutomationEvent<TUnit> | null {
     return this.#events[this.#eventIndexAfter(time) ?? -1] ?? null
   }
 
-  eventAfterOrAt(time: SynthTime): AutomationEvent | null {
+  eventAfterOrAt(time: SynthTime): AutomationEvent<TUnit> | null {
     return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
   }
 
-  *eventsAfter(time: SynthTime): Generator<AutomationEvent, void, undefined> {
+  *eventsAfter(time: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
     const startIndex = this.#eventIndexAfter(time) ?? this.#events.length
     for (let i = startIndex; i < this.#events.length; i++) {
       yield assertedAt(this.#events, i)
     }
   }
 
-  *eventsBefore(time: SynthTime): Generator<AutomationEvent, void, undefined> {
+  *eventsBefore(time: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
     const stopIndex = this.#eventIndexBefore(time) ?? -1
     for (let i = 0; i <= stopIndex; i++) {
       yield assertedAt(this.#events, i)
     }
   }
 
-  *eventsInRange(start: SynthTime, end: SynthTime): Generator<AutomationEvent, void, undefined> {
+  *eventsInRange(start: SynthTime, end: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
     const startIndex = this.#eventIndexAfterOrAt(start) ?? 0
     const endIndex = this.#eventIndexBeforeOrAt(end) ?? this.#events.length - 1
     for (let i = startIndex; i <= endIndex; i++) {
@@ -158,15 +167,15 @@ export class AutomationCurve {
     }
   }
 
-  eventSpan(time: SynthTime): [AutomationEvent | null, AutomationEvent | null] {
+  eventSpan(time: SynthTime): [AutomationEvent<TUnit> | null, AutomationEvent<TUnit> | null] {
     return [this.eventBeforeOrAt(time), this.eventAfter(time)]
   }
 
-  #processValue(value: number) {
-    return this.#valueRange.clamp(value)
+  #processValue(value: UnitValue<TUnit>) {
+    return this.#valueRange.clamp(value) as UnitValue<TUnit>
   }
 
-  #addEvent(event: AutomationEvent) {
+  #addEvent(event: AutomationEvent<TUnit>) {
     const lastIndex = this.#eventIndexBeforeOrAt(event.time)
 
     if (lastIndex === null) {
@@ -192,18 +201,18 @@ export class AutomationCurve {
     const startEvent = assertedAt(this.#events, eventIndex)
 
     if (eventIndex === this.#events.length - 1) {
-      startEvent._area = undefined
+      this.#eventAreas.delete(startEvent)
       return null
     }
 
     const endEvent = assertedAt(this.#events, eventIndex + 1)
     const area = this.#spanAreaAt([startEvent, endEvent], endEvent.time)
-    startEvent._area = area
+    this.#eventAreas.set(startEvent, area)
 
     return area
   }
 
-  #spanAreaAt(span: [AutomationEvent | null, AutomationEvent | null], time: SynthTime): number {
+  #spanAreaAt(span: [AutomationEvent<TUnit> | null, AutomationEvent<TUnit> | null], time: SynthTime): number {
     const [start, end] = span
 
     if (!start && end) {

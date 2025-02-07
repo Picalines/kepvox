@@ -23,6 +23,8 @@ export type UnitMap = {
 
 export type UnitName = keyof UnitMap
 
+export type UnitValue<TUnit extends UnitName> = UnitMap[TUnit]
+
 export const UNIT_RANGES: Record<UnitName, Range> = {
   seconds: Range.any,
   beats: Range.any,

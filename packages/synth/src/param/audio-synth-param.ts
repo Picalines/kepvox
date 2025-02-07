@@ -1,30 +1,30 @@
 import type { SynthContext } from '#context'
 import { Range } from '#math'
-import { UNIT_RANGES, type UnitName } from '#units'
+import { UNIT_RANGES, type UnitName, type UnitValue } from '#units'
 import { AudioAutomationCurve } from './audio-automation-curve'
 import type { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
-export type AudioSynthParamOpts = {
+export type AudioSynthParamOpts<TUnit extends UnitName> = {
   context: SynthContext
-  unit: UnitName
-  initialValue: number
+  unit: TUnit
+  initialValue: UnitValue<TUnit>
   range?: Range
 }
 
 const hasAssociatedParamSymbol = Symbol('associatedSynthAudioParam')
 
-export class AudioSynthParam extends SynthParam {
+export class AudioSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly [synthParamType] = 'audio'
 
-  readonly unit: UnitName
+  readonly unit: TUnit
   readonly range: Range
 
   readonly #context: SynthContext
   readonly #audioParam: AudioParam
-  readonly #curve: AudioAutomationCurve
+  readonly #curve: AudioAutomationCurve<TUnit>
 
-  constructor(audioParam: AudioParam, opts: AudioSynthParamOpts) {
+  constructor(audioParam: AudioParam, opts: AudioSynthParamOpts<TUnit>) {
     const { context, unit, initialValue, range: rangeParam = Range.any } = opts
 
     const unitRange = UNIT_RANGES[unit]
@@ -52,14 +52,16 @@ export class AudioSynthParam extends SynthParam {
 
     this.#context = context
     this.#audioParam = audioParam
-    this.#curve = new AudioAutomationCurve(context, this.#audioParam, { valueRange: this.range })
+    this.#curve = new AudioAutomationCurve(context, this.#audioParam, {
+      initialValue: safeInitialValue as UnitValue<TUnit>,
+      valueRange: this.range,
+    })
 
     this.#audioParam.cancelScheduledValues(0)
     this.#audioParam.setValueAtTime(safeInitialValue, 0)
-    this.#curve.setValueAt(this.#context.firstBeat, safeInitialValue)
   }
 
-  get curve(): AutomationCurve {
+  get curve(): AutomationCurve<TUnit> {
     return this.#curve
   }
 
@@ -67,7 +69,7 @@ export class AudioSynthParam extends SynthParam {
     return this.curve.valueAt(this.#context.firstBeat)
   }
 
-  set initialValue(value: number) {
+  set initialValue(value: UnitValue<TUnit>) {
     this.curve.setValueAt(this.#context.firstBeat, value)
   }
 }
