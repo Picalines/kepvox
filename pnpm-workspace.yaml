@@ -16,15 +16,15 @@ catalog:
   tailwind-merge: ^3.0.1
   postcss: ^8.4.47
 
-  storybook: ^8.4.7
-  "@storybook/addon-essentials": ^8.4.7
-  "@storybook/addon-interactions": ^8.4.7
-  "@storybook/addon-links": ^8.4.7
-  "@storybook/addon-themes": ^8.4.7
-  "@storybook/nextjs": ^8.4.7
-  "@storybook/react": ^8.4.7
-  "@storybook/react-vite": ^8.4.7
-  "@storybook/test": ^8.4.7
+  storybook: ^8.5.3
+  "@storybook/addon-essentials": ^8.5.3
+  "@storybook/addon-interactions": ^8.5.3
+  "@storybook/addon-links": ^8.5.3
+  "@storybook/addon-themes": ^8.5.3
+  "@storybook/nextjs": ^8.5.3
+  "@storybook/react": ^8.5.3
+  "@storybook/react-vite": ^8.5.3
+  "@storybook/test": ^8.5.3
 
   tsup: ^8.3.6
 
