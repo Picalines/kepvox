@@ -2,6 +2,6 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "@repo/ts-config/tsconfig.nextjs.json",
     "compilerOptions": {},
-    "include": [".", "next-env.d.ts", ".next/types/**/*.ts"],
+    "include": ["**/*.js", "**/*.ts", "**/*.tsx", ".storybook/**/*.ts", "next-env.d.ts", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }
