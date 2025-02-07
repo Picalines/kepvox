@@ -7,14 +7,14 @@
     "sideEffects": ["**/*.css"],
     "scripts": {
         "dev": "pnpm run dev:storybook",
-        "dev:storybook": "pnpm run dev:storybook:server",
+        "dev:storybook": "storybook dev -p 6001 --no-open",
         "dev:unit": "vitest watch",
-        "dev:storybook:server": "storybook dev -p 6006 --no-open",
-        "playwright:install": "playwright install chromium --with-deps",
         "ts:check": "tsc --noEmit",
         "test:unit": "vitest run",
-        "test:screen": "STORYBOOK_URL=http://127.0.0.1:6006 playwright test",
-        "test:screen:update": "pnpm run test:screen --update-snapshots"
+        "test:screen": "PLAYWRIGHT_PORT=6001 playwright test",
+        "test:screen:update": "pnpm run test:screen --update-snapshots",
+        "playwright:install": "playwright install chromium --with-deps",
+        "playwright:server": "pnpm run dev:storybook"
     },
     "exports": {
         "./style.css": "./src/styles/index.css",
