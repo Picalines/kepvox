@@ -20,8 +20,8 @@ export const EditorHeader: FC = () => {
       </Tooltip.Root>
       <Separator orientation="vertical" />
       <PlaybackButton />
-      <EditorStatus />
       <ExampleSelect />
+      <EditorStatus />
     </div>
   )
 }
