@@ -40,7 +40,7 @@
         "@repo/tailwind-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/ui-test": "workspace:*",
-        "@repo/vite-config": "workspace:^",
+        "@repo/vite-config": "workspace:*",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",

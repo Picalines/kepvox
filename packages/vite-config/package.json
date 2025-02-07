@@ -23,6 +23,6 @@
         "vitest": "catalog:"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:^"
+        "@repo/ts-config": "workspace:*"
     }
 }

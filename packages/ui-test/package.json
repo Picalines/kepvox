@@ -16,7 +16,7 @@
         "@storybook/react": "catalog:"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:^",
+        "@repo/ts-config": "workspace:*",
         "@types/node": "catalog:"
     }
 }

@@ -24,8 +24,8 @@
         "#typing": "./src/typing.ts"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:^",
-        "@repo/vite-config": "workspace:^",
+        "@repo/ts-config": "workspace:*",
+        "@repo/vite-config": "workspace:*",
         "vitest": "catalog:"
     }
 }
