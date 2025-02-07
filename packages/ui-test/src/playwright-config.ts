@@ -1,6 +1,6 @@
 import { type PlaywrightTestConfig, devices } from '@playwright/test'
 
-export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): PlaywrightTestConfig => ({
+const defaultPlaywrightConfig: PlaywrightTestConfig = {
   testDir: '.',
   outputDir: './test-results',
 
@@ -47,5 +47,13 @@ export const getPlaywrightConfig = (overrides?: PlaywrightTestConfig): Playwrigh
   retries: 2,
   workers: process.env.CI ? undefined : 8,
 
-  ...overrides,
-})
+  webServer: {
+    command: 'pnpm run playwright:server',
+    port: Number(process.env.PLAYWRIGHT_PORT),
+    reuseExistingServer: !process.env.CI,
+    stdout: 'ignore',
+    stderr: 'pipe',
+  },
+}
+
+export default defaultPlaywrightConfig

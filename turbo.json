@@ -44,6 +44,11 @@
             "persistent": true,
             "dependsOn": ["dev:setup"]
         },
+        "dev:storybook": {
+            "cache": false,
+            "persistent": true,
+            "dependsOn": ["dev:setup"]
+        },
         "dev:setup": {
             "dependsOn": ["^build"]
         }
