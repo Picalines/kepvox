@@ -1,6 +1,6 @@
-const { STORYBOOK_URL } = process.env
-if (typeof STORYBOOK_URL !== 'string') {
-  throw new Error('missing env variable STORYBOOK_URL')
+const { PLAYWRIGHT_PORT } = process.env
+if (!PLAYWRIGHT_PORT) {
+  throw new Error('missing env variable PLAYWRIGHT_PORT')
 }
 
 type GetStoryUrlParams = {
@@ -11,7 +11,8 @@ type GetStoryUrlParams = {
 export const getStoryUrl = (params: GetStoryUrlParams) => {
   const { title, story } = params
 
-  const storyUrl = new URL(STORYBOOK_URL)
+  const storyUrl = new URL('http://127.0.0.1')
+  storyUrl.port = PLAYWRIGHT_PORT
   storyUrl.pathname = '/iframe.html'
   storyUrl.searchParams.set('id', storyId(title, story))
   storyUrl.searchParams.set('viewMode', 'story')
