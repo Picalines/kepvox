@@ -13,15 +13,13 @@
         "test:unit": {},
         "test:screen": {
             "cache": false,
-            "dependsOn": ["test:screen:setup"]
+            "dependsOn": ["playwright:install", "test:screen:setup"]
         },
         "test:screen:update": {
             "cache": false,
-            "dependsOn": ["test:screen:setup"]
+            "dependsOn": ["playwright:install", "test:screen:setup"]
         },
-        "test:screen:setup": {
-            "dependsOn": ["playwright:install"]
-        },
+        "test:screen:setup": {},
         "playwright:install": {
             "cache": false
         },

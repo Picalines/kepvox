@@ -6,6 +6,10 @@
             "dependsOn": ["setup:copy-synth-dts"]
         },
 
+        "test:screen:setup": {
+            "dependsOn": ["setup:copy-synth-dts"]
+        },
+
         "dev:setup": {
             "dependsOn": ["setup:copy-synth-dts"]
         },
