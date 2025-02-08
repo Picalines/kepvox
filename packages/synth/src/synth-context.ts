@@ -2,9 +2,9 @@ import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { IntRange, Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { AutomationCurve } from '#param'
+import { SynthTime } from '#time'
 import { type Seconds, Unit } from '#units'
 import { Signal } from '#util/signal'
-import { SynthTime } from './synth-time'
 
 type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
 

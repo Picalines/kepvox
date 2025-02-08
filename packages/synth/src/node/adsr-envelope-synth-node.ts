@@ -1,7 +1,8 @@
-import type { SynthContext, SynthTime } from '#context'
+import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { ScalarSynthParam } from '#param'
+import type { SynthTime } from '#time'
 import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 

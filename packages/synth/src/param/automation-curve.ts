@@ -1,7 +1,7 @@
 import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
-import { SynthTime } from '#context'
 import { Range } from '#math'
+import { SynthTime } from '#time'
 import type { UnitName, UnitValue } from '#units'
 
 export type InterpolationMethod = 'linear' | 'exponential'
