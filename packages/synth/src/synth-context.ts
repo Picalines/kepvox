@@ -3,7 +3,7 @@ import { IntRange, Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { AutomationCurve } from '#param'
 import { SynthTime } from '#time'
-import { type Seconds, Unit } from '#units'
+import { Seconds } from '#units'
 import { Signal } from '#util/signal'
 
 type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
@@ -61,10 +61,10 @@ export class SynthContext {
     this.#output = new OutputSynthNode(this)
 
     this.timeSignature = timeSignature
-    this.lookAhead = Unit.seconds.orClamp(lookAhead)
+    this.lookAhead = Seconds.orClamp(lookAhead)
 
     this.secondsPerNote = new AutomationCurve({
-      initialValue: Unit.seconds.orClamp(2), // 120 bpm in 4/4
+      initialValue: Seconds.orClamp(2), // 120 bpm in 4/4
       valueRange: Range.positiveNonZero,
     })
 
@@ -101,11 +101,11 @@ export class SynthContext {
   }
 
   set lookAhead(value) {
-    this.#lookAhead = Unit.seconds.orClamp(Range.positiveNonZero.clamp(value))
+    this.#lookAhead = Seconds.orClamp(Range.positiveNonZero.clamp(value))
   }
 
   get scheduleTime(): Seconds {
-    return Unit.seconds.orClamp(this.#audioContext.currentTime + this.lookAhead)
+    return Seconds.orClamp(this.#audioContext.currentTime + this.lookAhead)
   }
 
   get output(): OutputSynthNode {

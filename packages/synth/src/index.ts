@@ -1,6 +1,5 @@
 export * from './math'
 export * from './node'
-export * from './note'
 export * from './param'
 export * from './synth-context'
 export * from './synth-time'
