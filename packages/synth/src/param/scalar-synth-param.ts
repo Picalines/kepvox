@@ -1,11 +1,10 @@
-import { type SynthContext, SynthTime } from '#context'
+import { SynthTime } from '#context'
 import { Range } from '#math'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
 
 export type ScalarSynthParamOpts<TUnit extends UnitName> = {
-  context: SynthContext
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range

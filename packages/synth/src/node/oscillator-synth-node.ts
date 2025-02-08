@@ -4,61 +4,52 @@ import { AudioSynthParam, EnumSynthParam } from '#param'
 import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
+const WAVE_SPAHE = ['sine', 'square', 'sawtooth', 'triangle'] as const
+
 export class OscillatorSynthNode extends SynthNode {
   readonly [synthNodeType] = 'oscillator'
 
-  readonly waveShape // see in constructor
-  readonly frequency
-
-  readonly #oscillator: OscillatorNode
+  readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHE)[number]>
+  readonly frequency: AudioSynthParam<'hertz'>
 
   constructor(context: SynthContext) {
     const oscillator = context[INTERNAL_AUDIO_CONTEXT].createOscillator()
     const gate = context[INTERNAL_AUDIO_CONTEXT].createGain()
 
     oscillator.connect(gate)
+    oscillator.start()
 
     super({ context, inputs: [], outputs: [gate] })
 
-    this.#oscillator = oscillator
-
     this.waveShape = new EnumSynthParam({
-      variants: ['sine', 'square', 'sawtooth', 'triangle'] as const,
+      variants: WAVE_SPAHE,
       initialValue: 'sine',
       synchronize: shape => {
         oscillator.type = shape
       },
     })
 
-    this.frequency = new AudioSynthParam(oscillator.frequency, {
+    this.frequency = new AudioSynthParam({
       context,
+      audioParam: oscillator.frequency,
       unit: 'hertz',
       initialValue: Unit.hertz.orThrow(440), // TODO: set to constant
     })
 
-    this.#oscillator.start()
+    const unmuteOscillator = () => {
+      gate.gain.value = 1
+    }
 
-    gate.gain.value = 0
+    const muteOscillator = () => {
+      gate.gain.value = 0
+    }
 
-    this.context.on(
-      'play',
-      () => {
-        gate.gain.value = 1
-      },
-      { signal: this.disposed },
-    )
+    muteOscillator()
 
-    this.context.on(
-      'stop',
-      () => {
-        gate.gain.value = 0
-      },
-      { signal: this.disposed },
-    )
-  }
+    this.context.on('play', unmuteOscillator, { signal: this.disposed })
+    this.context.on('stop', muteOscillator, { signal: this.disposed })
 
-  override dispose(): void {
-    super.dispose()
-    this.#oscillator.stop()
+    this.disposed.addEventListener('abort', () => this.frequency.dispose(), { once: true })
+    this.disposed.addEventListener('abort', () => oscillator.stop(), { once: true })
   }
 }
