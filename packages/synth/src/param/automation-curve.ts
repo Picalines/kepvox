@@ -6,11 +6,11 @@ import type { UnitName, UnitValue } from '#units'
 
 export type InterpolationMethod = 'linear' | 'exponential'
 
-type AutomationEvent<TUnit extends UnitName> = {
+type AutomationEvent<TUnit extends UnitName> = Readonly<{
   time: SynthTime
   value: UnitValue<TUnit>
   ramp?: InterpolationMethod
-}
+}>
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
   initialValue: UnitValue<TUnit>
@@ -20,6 +20,9 @@ export type AutomationCurveOpts<TUnit extends UnitName> = {
 export class AutomationCurve<TUnit extends UnitName> {
   readonly #valueRange: Range
 
+  /**
+   * NOTE: has at least one element after construction
+   */
   readonly #events: AutomationEvent<TUnit>[] = []
 
   /**
@@ -32,6 +35,12 @@ export class AutomationCurve<TUnit extends UnitName> {
     this.#valueRange = opts.valueRange ?? Range.any
 
     this.setValueAt(SynthTime.start, opts.initialValue)
+  }
+
+  get timeRange(): [start: SynthTime, end: SynthTime] {
+    const start = assertedAt(this.#events, 0)
+    const end = assertedAt(this.#events, -1)
+    return [start.time, end.time]
   }
 
   /**
@@ -51,31 +60,27 @@ export class AutomationCurve<TUnit extends UnitName> {
   /**
    * Cancels events after the specified time and inserts an
    * event that will hold the old value at the time
+   *
+   * @returns the value
    */
-  holdValueAt(time: SynthTime) {
+  holdValueAt(time: SynthTime): UnitValue<TUnit> {
     const value = this.valueAt(time)
-    const nextEvent = this.eventAfterOrAt(time)
+    const nextEvent = this.eventAfterOrAt(time) // Copy the ramp
     this.#addEvent({ ...nextEvent, time, value })
-    this.cancelEventsAfter(time)
-  }
 
-  /**
-   * Cancels all scheduled events after the specified time
-   */
-  cancelEventsAfter(time: SynthTime) {
     const cutIndex = this.#eventIndexAfter(time)
     if (cutIndex !== null) {
       this.#events.splice(cutIndex)
       this.#updateSpanArea(this.#events.length - 1)
     }
+
+    return value
   }
 
   /**
    * @returns curve value at a given time
    */
   valueAt(time: SynthTime): UnitValue<TUnit> {
-    this.#assertNotEmpty()
-
     const [before, after] = this.eventSpan(time)
 
     if (!before && after) {
@@ -103,8 +108,6 @@ export class AutomationCurve<TUnit extends UnitName> {
   }
 
   areaBefore(time: SynthTime): number {
-    this.#assertNotEmpty()
-
     const lastEvent = this.eventBeforeOrAt(time)
     if (!lastEvent) {
       throw new Error("can't evaluate area before start")
@@ -298,12 +301,6 @@ export class AutomationCurve<TUnit extends UnitName> {
 
   #eventIndexOrNull(index: number): number | null {
     return this.#events.length > 0 && index >= 0 && index < this.#events.length ? index : null
-  }
-
-  #assertNotEmpty() {
-    if (this.#events.length === 0) {
-      throw new Error(`empty ${AutomationCurve.name} cannot be evaluated`)
-    }
   }
 }
 
