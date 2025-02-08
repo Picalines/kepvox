@@ -13,7 +13,7 @@ export class AudioAutomationCurve<TUnit extends UnitName> extends AutomationCurv
   readonly #audioParam: AudioParam
 
   constructor(context: SynthContext, audioParam: AudioParam, opts: AudioAutomationCurveOpts<TUnit>) {
-    super(context, opts)
+    super(opts)
 
     this.#context = context
     this.#audioParam = audioParam
@@ -35,7 +35,7 @@ export class AudioAutomationCurve<TUnit extends UnitName> extends AutomationCurv
     const scheduleStart = this.#context.scheduleTime
 
     for (const event of this.eventsAfter(start)) {
-      const scheduleTime = scheduleStart + this.#context.secondsPerBeat.areaBefore(event.time)
+      const scheduleTime = scheduleStart + this.#context.secondsPerNote.areaBefore(event.time)
 
       const scheduleFunc = event.ramp
         ? event.ramp === 'linear'

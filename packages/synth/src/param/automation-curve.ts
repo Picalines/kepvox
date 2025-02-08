@@ -1,6 +1,6 @@
 import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
-import { type SynthContext, SynthTime } from '#context'
+import { SynthTime } from '#context'
 import { Range } from '#math'
 import type { UnitName, UnitValue } from '#units'
 
@@ -18,8 +18,6 @@ export type AutomationCurveOpts<TUnit extends UnitName> = {
 }
 
 export class AutomationCurve<TUnit extends UnitName> {
-  readonly #context: SynthContext
-
   readonly #valueRange: Range
 
   readonly #events: AutomationEvent<TUnit>[] = []
@@ -30,9 +28,7 @@ export class AutomationCurve<TUnit extends UnitName> {
    */
   readonly #eventAreas = new WeakMap<AutomationEvent<TUnit>, number>()
 
-  // TODO: remove context in #29
-  constructor(context: SynthContext, opts: AutomationCurveOpts<TUnit>) {
-    this.#context = context
+  constructor(opts: AutomationCurveOpts<TUnit>) {
     this.#valueRange = opts.valueRange ?? Range.any
 
     this.setValueAt(SynthTime.start, opts.initialValue)
@@ -98,11 +94,11 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     return interpolationTable[after.ramp](
-      before.time.toBeats(this.#context),
+      before.time.toNotes(),
       before.value,
-      after.time.toBeats(this.#context),
+      after.time.toNotes(),
       after.value,
-      time.toBeats(this.#context),
+      time.toNotes(),
     ) as UnitValue<TUnit>
   }
 
@@ -218,7 +214,7 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     if (start && !end) {
-      return (time.toBeats(this.#context) - start.time.toBeats(this.#context)) * start.value
+      return (time.toNotes() - start.time.toNotes()) * start.value
     }
 
     if (!start || !end) {
@@ -226,20 +222,14 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     if (!end.ramp) {
-      return (time.toBeats(this.#context) - start.time.toBeats(this.#context)) * start.value
+      return (time.toNotes() - start.time.toNotes()) * start.value
     }
 
     return interpolationAreaTable[end.ramp](
-      start.time.toBeats(this.#context),
+      start.time.toNotes(),
       start.value,
-      time.toBeats(this.#context),
-      interpolationTable[end.ramp](
-        start.time.toBeats(this.#context),
-        start.value,
-        end.time.toBeats(this.#context),
-        end.value,
-        time.toBeats(this.#context),
-      ),
+      time.toNotes(),
+      interpolationTable[end.ramp](start.time.toNotes(), start.value, end.time.toNotes(), end.value, time.toNotes()),
     )
   }
 
