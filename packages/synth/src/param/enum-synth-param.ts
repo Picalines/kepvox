@@ -1,14 +1,12 @@
-import { Emitter } from '#util/emitter'
+import type { SynthNode } from '#node'
+import { Signal } from '#util/signal'
 import { SynthParam, synthParamType } from './synth-param'
 
 export type EnumSynthParamOpts<V extends string> = {
+  node: SynthNode
   variants: readonly V[]
   initialValue: NoInfer<V>
   synchronize?: (currentVariant: V) => void
-}
-
-type Events = {
-  changed: []
 }
 
 export class EnumSynthParam<V extends string = string> extends SynthParam {
@@ -18,13 +16,12 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
 
   #value?: V
 
-  readonly #emitter = new Emitter<Events>()
-  readonly on = this.#emitter.on.bind(this.#emitter)
-  readonly off = this.#emitter.off.bind(this.#emitter)
-  readonly once = this.#emitter.once.bind(this.#emitter)
+  readonly #changed = Signal.controlled<V>()
 
-  constructor({ variants, initialValue, synchronize }: EnumSynthParamOpts<V>) {
-    super()
+  constructor(opts: EnumSynthParamOpts<V>) {
+    const { node, variants, initialValue, synchronize } = opts
+
+    super({ node })
 
     if (!variants.length) {
       throw new Error('empty variants array is not allowed in an enum param')
@@ -37,10 +34,12 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
     }
 
     if (synchronize) {
-      this.on('changed', () => synchronize(this.value))
+      this.#changed.signal.watch(synchronize)
     }
 
     this.value = initialValue
+
+    node.disposed.watch(() => this.#changed.cancelAll())
   }
 
   get value(): V {
@@ -59,7 +58,7 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
     const oldValue = this.#value
     this.#value = value
     if (oldValue !== this.#value) {
-      this.#emitter.emit('changed')
+      this.#changed.emit(value)
     }
   }
 }

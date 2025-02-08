@@ -1,6 +1,6 @@
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
-import { AudioSynthParam, EnumSynthParam } from '#param'
+import { EnumSynthParam, ScalarSynthParam } from '#param'
 import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
@@ -10,7 +10,7 @@ export class OscillatorSynthNode extends SynthNode {
   readonly [synthNodeType] = 'oscillator'
 
   readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHE)[number]>
-  readonly frequency: AudioSynthParam<'hertz'>
+  readonly frequency: ScalarSynthParam<'hertz'>
 
   constructor(context: SynthContext) {
     const oscillator = context[INTERNAL_AUDIO_CONTEXT].createOscillator()
@@ -22,6 +22,7 @@ export class OscillatorSynthNode extends SynthNode {
     super({ context, inputs: [], outputs: [gate] })
 
     this.waveShape = new EnumSynthParam({
+      node: this,
       variants: WAVE_SPAHE,
       initialValue: 'sine',
       synchronize: shape => {
@@ -29,8 +30,8 @@ export class OscillatorSynthNode extends SynthNode {
       },
     })
 
-    this.frequency = new AudioSynthParam({
-      context,
+    this.frequency = new ScalarSynthParam({
+      node: this,
       audioParam: oscillator.frequency,
       unit: 'hertz',
       initialValue: Unit.hertz.orThrow(440), // TODO: set to constant
@@ -46,10 +47,7 @@ export class OscillatorSynthNode extends SynthNode {
 
     muteOscillator()
 
-    this.context.on('play', unmuteOscillator, { signal: this.disposed })
-    this.context.on('stop', muteOscillator, { signal: this.disposed })
-
-    this.disposed.addEventListener('abort', () => this.frequency.dispose(), { once: true })
-    this.disposed.addEventListener('abort', () => oscillator.stop(), { once: true })
+    this.context.playing.watchUntil(this.disposed, unmuteOscillator)
+    this.context.stopped.watchUntil(this.disposed, muteOscillator)
   }
 }

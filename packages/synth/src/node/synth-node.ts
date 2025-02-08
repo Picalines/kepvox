@@ -1,7 +1,6 @@
 import { assertDefined } from '@repo/common/assert'
 import type { SynthContext } from '#context'
-import { INTERNAL_CONTEXT_OWN } from '#internal-symbols'
-import { type Disposable, DisposableStack } from '#util/disposable'
+import { Signal } from '#util/signal'
 import { SynthNodeSocket } from './synth-node-socket'
 
 export const synthNodeType: unique symbol = Symbol('SynthNode.type')
@@ -24,7 +23,7 @@ export type SynthNodeOpts = {
   outputs: readonly AudioNode[]
 }
 
-export abstract class SynthNode implements Disposable {
+export abstract class SynthNode {
   abstract get [synthNodeType](): string
 
   readonly context: SynthContext
@@ -32,18 +31,15 @@ export abstract class SynthNode implements Disposable {
   readonly #inputs: readonly SynthNodeSocket[]
   readonly #outputs: readonly SynthNodeSocket[]
 
-  readonly #resources: DisposableStack
+  readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
   constructor(opts: SynthNodeOpts) {
     const { context, inputs, outputs } = opts
 
-    this.#inputs = inputs.map(audioNode => new SynthNodeSocket(audioNode, 'input'))
-    this.#outputs = outputs.map(audioNode => new SynthNodeSocket(audioNode, 'output'))
-
-    this.#resources = new DisposableStack([...this.#inputs, ...this.#outputs])
-
     this.context = context
-    this.context[INTERNAL_CONTEXT_OWN](this)
+
+    this.#inputs = inputs.map(audioNode => new SynthNodeSocket({ type: 'input', synthNode: this, audioNode }))
+    this.#outputs = outputs.map(audioNode => new SynthNodeSocket({ type: 'output', synthNode: this, audioNode }))
   }
 
   get numberOfInputs() {
@@ -104,15 +100,15 @@ export abstract class SynthNode implements Disposable {
   }
 
   dispose() {
-    this.#resources.dispose()
+    this.#disposed.emit(null)
   }
 
   get disposed() {
-    return this.#resources.disposed
+    return this.#disposed.signal
   }
 
   #assertNotDisposed() {
-    if (this.#resources.disposed.aborted) {
+    if (this.#disposed.signal.emitted) {
       throw new Error('SynthNode used after being disposed')
     }
   }

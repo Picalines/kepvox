@@ -13,7 +13,7 @@ export const createSynth = createFactory(() => {
 
     const synthContext = new SynthContext(new AudioContext())
 
-    synthContext.on('stateChanged', () => stateChanged(synthContext.state))
+    synthContext.stateChanged.watch(() => stateChanged(synthContext.state))
 
     return synthContext
   }
