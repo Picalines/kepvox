@@ -9,10 +9,10 @@ envelope.connectOutput(context.output)
 
 oscillator.frequency.initialValue = U.hertz.orThrow(440)
 oscillator.waveShape.value = 'sawtooth'
-envelope.attack.initialValue = U.beats.orThrow(1)
-envelope.decay.initialValue = U.beats.orThrow(1)
+envelope.attack.initialValue = U.notes.orThrow(1)
+envelope.decay.initialValue = U.notes.orThrow(1)
 envelope.sustain.initialValue = U.normal.orThrow(0.5)
-envelope.release.initialValue = U.beats.orThrow(1)
+envelope.release.initialValue = U.notes.orThrow(1)
 
 let time = context.firstBeat
 for (let i = 0; i < 5; i++) {

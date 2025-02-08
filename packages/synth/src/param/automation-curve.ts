@@ -1,6 +1,6 @@
 import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
-import type { SynthContext, SynthTime } from '#context'
+import { type SynthContext, SynthTime } from '#context'
 import { Range } from '#math'
 import type { UnitName, UnitValue } from '#units'
 
@@ -35,7 +35,7 @@ export class AutomationCurve<TUnit extends UnitName> {
     this.#context = context
     this.#valueRange = opts.valueRange ?? Range.any
 
-    this.setValueAt(context.firstBeat, opts.initialValue)
+    this.setValueAt(SynthTime.start, opts.initialValue)
   }
 
   /**
@@ -67,7 +67,6 @@ export class AutomationCurve<TUnit extends UnitName> {
    * Cancels all scheduled events after the specified time
    */
   cancelEventsAfter(time: SynthTime) {
-    this.#assertContext(time)
     const cutIndex = this.#eventIndexAfter(time)
     if (cutIndex !== null) {
       this.#events.splice(cutIndex)
@@ -79,7 +78,6 @@ export class AutomationCurve<TUnit extends UnitName> {
    * @returns curve value at a given time
    */
   valueAt(time: SynthTime): UnitValue<TUnit> {
-    this.#assertContext(time)
     this.#assertNotEmpty()
 
     const [before, after] = this.eventSpan(time)
@@ -100,11 +98,11 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     return interpolationTable[after.ramp](
-      before.time.beats,
+      before.time.toBeats(this.#context),
       before.value,
-      after.time.beats,
+      after.time.toBeats(this.#context),
       after.value,
-      time.beats,
+      time.toBeats(this.#context),
     ) as UnitValue<TUnit>
   }
 
@@ -220,7 +218,7 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     if (start && !end) {
-      return (time.beats - start.time.beats) * start.value
+      return (time.toBeats(this.#context) - start.time.toBeats(this.#context)) * start.value
     }
 
     if (!start || !end) {
@@ -228,20 +226,24 @@ export class AutomationCurve<TUnit extends UnitName> {
     }
 
     if (!end.ramp) {
-      return (time.beats - start.time.beats) * start.value
+      return (time.toBeats(this.#context) - start.time.toBeats(this.#context)) * start.value
     }
 
     return interpolationAreaTable[end.ramp](
-      start.time.beats,
+      start.time.toBeats(this.#context),
       start.value,
-      time.beats,
-      interpolationTable[end.ramp](start.time.beats, start.value, end.time.beats, end.value, time.beats),
+      time.toBeats(this.#context),
+      interpolationTable[end.ramp](
+        start.time.toBeats(this.#context),
+        start.value,
+        end.time.toBeats(this.#context),
+        end.value,
+        time.toBeats(this.#context),
+      ),
     )
   }
 
   #eventIndexBeforeOrAt(time: SynthTime): number | null {
-    this.#assertContext(time)
-
     const events = this.#events
     if (!isNonEmpty(events)) {
       return null
@@ -311,12 +313,6 @@ export class AutomationCurve<TUnit extends UnitName> {
   #assertNotEmpty() {
     if (this.#events.length === 0) {
       throw new Error(`empty ${AutomationCurve.name} cannot be evaluated`)
-    }
-  }
-
-  #assertContext(time: SynthTime) {
-    if (time.context !== this.#context) {
-      throw new Error(`${AutomationCurve.name} received a SynthTime from different SynthContext`)
     }
   }
 }
