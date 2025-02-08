@@ -30,15 +30,15 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     this.attack = new ScalarSynthParam({
       context,
-      unit: 'beats',
-      initialValue: Unit.beats.orThrow(0),
+      unit: 'notes',
+      initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
       context,
-      unit: 'beats',
-      initialValue: Unit.beats.orThrow(0),
+      unit: 'notes',
+      initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
@@ -50,8 +50,8 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     this.release = new ScalarSynthParam({
       context,
-      unit: 'beats',
-      initialValue: Unit.beats.orThrow(0),
+      unit: 'notes',
+      initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
   }
@@ -60,10 +60,10 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const gain = this.#gain.curve
 
     const attackDuration = this.attack.curve.valueAt(start)
-    const attackEnd = start.add({ beat: attackDuration })
+    const attackEnd = start.add({ note: attackDuration })
 
     const decayDuration = this.decay.curve.valueAt(attackEnd)
-    const decayEnd = attackEnd.add({ beat: decayDuration })
+    const decayEnd = attackEnd.add({ note: decayDuration })
 
     const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
@@ -83,13 +83,13 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     gain.holdValueAt(start)
 
     const releaseDuration = this.release.curve.valueAt(start)
-    const releaseEnd = start.add({ beat: releaseDuration })
+    const releaseEnd = start.add({ note: releaseDuration })
 
     if (releaseDuration > 0) {
       gain.rampValueUntil(releaseEnd, Unit.normal.min)
     } else {
       // TODO: maybe a better solution
-      gain.setValueAt(releaseEnd.add({ beat: Number.EPSILON }), Unit.normal.min)
+      gain.setValueAt(releaseEnd.add({ note: Number.EPSILON }), Unit.normal.min)
     }
   }
 

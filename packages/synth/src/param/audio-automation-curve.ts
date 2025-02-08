@@ -1,4 +1,4 @@
-import type { SynthContext, SynthTime } from '#context'
+import { type SynthContext, SynthTime } from '#context'
 import type { UnitName } from '#units'
 import { AutomationCurve, type AutomationCurveOpts } from './automation-curve'
 
@@ -22,7 +22,7 @@ export class AudioAutomationCurve<TUnit extends UnitName> extends AutomationCurv
 
     this.#context.on('stop', () => {
       this.#audioParam.cancelScheduledValues(0)
-      this.#audioParam.value = this.valueAt(this.#context.firstBeat)
+      this.#audioParam.value = this.valueAt(SynthTime.start)
     })
   }
 

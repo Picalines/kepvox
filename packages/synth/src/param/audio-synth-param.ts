@@ -1,4 +1,4 @@
-import type { SynthContext } from '#context'
+import { type SynthContext, SynthTime } from '#context'
 import { Range } from '#math'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { AudioAutomationCurve } from './audio-automation-curve'
@@ -20,7 +20,6 @@ export class AudioSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly unit: TUnit
   readonly range: Range
 
-  readonly #context: SynthContext
   readonly #audioParam: AudioParam
   readonly #curve: AudioAutomationCurve<TUnit>
 
@@ -50,7 +49,6 @@ export class AudioSynthParam<TUnit extends UnitName> extends SynthParam {
     this.unit = unit
     this.range = range
 
-    this.#context = context
     this.#audioParam = audioParam
     this.#curve = new AudioAutomationCurve(context, this.#audioParam, {
       initialValue: safeInitialValue as UnitValue<TUnit>,
@@ -66,10 +64,10 @@ export class AudioSynthParam<TUnit extends UnitName> extends SynthParam {
   }
 
   get initialValue() {
-    return this.curve.valueAt(this.#context.firstBeat)
+    return this.curve.valueAt(SynthTime.start)
   }
 
   set initialValue(value: UnitValue<TUnit>) {
-    this.curve.setValueAt(this.#context.firstBeat, value)
+    this.curve.setValueAt(SynthTime.start, value)
   }
 }

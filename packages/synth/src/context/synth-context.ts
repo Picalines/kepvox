@@ -123,20 +123,19 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     return Unit.seconds.orClamp(this.#audioContext.currentTime + this.lookAhead)
   }
 
-  time(units: NonNullable<ConstructorParameters<typeof SynthTime>[1]>): SynthTime {
-    return new SynthTime(this, units)
-  }
-
-  readonly firstBeat = this.time({ beat: 0 })
-
   get output(): OutputSynthNode {
     return this.#output
+  }
+
+  measure(measureIndex: number): SynthTime {
+    const [notesInBar, _] = this.timeSignature
+    return new SynthTime({ note: notesInBar * measureIndex })
   }
 
   /**
    * NOTE: may be called multiple times without {@link SynthContext.stop}
    */
-  play(start = this.firstBeat) {
+  play(start = SynthTime.start) {
     this.#assertNotDisposed()
     this.stop()
     this.#audioContext.resume().then(() => {
