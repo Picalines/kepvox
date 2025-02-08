@@ -1,6 +1,7 @@
 export * from './math'
 export * from './node'
 export * from './param'
+export * from './pitch'
 export * from './synth-context'
 export * from './synth-time'
 export * from './units'
