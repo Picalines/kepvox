@@ -13,7 +13,6 @@ export class ADSREnvelopeSynthNode extends SynthNode {
   readonly sustain
   readonly release
 
-  readonly #gainNode
   readonly #gain
 
   constructor(context: SynthContext) {
@@ -21,35 +20,33 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     super({ context, inputs: [gainNode], outputs: [gainNode] })
 
-    this.#gainNode = gainNode
-    this.#gain = new AudioSynthParam(gainNode.gain, {
+    this.#gain = new AudioSynthParam({
       context,
+      audioParam: gainNode.gain,
       unit: 'normal',
       initialValue: Unit.normal.min,
     })
 
+    this.disposed.addEventListener('abort', () => this.#gain.dispose(), { once: true })
+
     this.attack = new ScalarSynthParam({
-      context,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
-      context,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
     this.sustain = new ScalarSynthParam({
-      context,
       unit: 'normal',
       initialValue: Unit.normal.max,
     })
 
     this.release = new ScalarSynthParam({
-      context,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
@@ -85,16 +82,6 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const releaseDuration = this.release.curve.valueAt(start)
     const releaseEnd = start.add({ note: releaseDuration })
 
-    if (releaseDuration > 0) {
-      gain.rampValueUntil(releaseEnd, Unit.normal.min)
-    } else {
-      // TODO: maybe a better solution
-      gain.setValueAt(releaseEnd.add({ note: Number.EPSILON }), Unit.normal.min)
-    }
-  }
-
-  override dispose(): void {
-    super.dispose()
-    this.#gainNode.disconnect()
+    gain.rampValueUntil(releaseEnd, Unit.normal.min)
   }
 }

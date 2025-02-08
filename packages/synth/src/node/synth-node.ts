@@ -103,9 +103,6 @@ export abstract class SynthNode implements Disposable {
     }
   }
 
-  /**
-   * @virtual
-   */
   dispose() {
     this.#resources.dispose()
   }
