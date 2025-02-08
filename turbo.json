@@ -13,11 +13,11 @@
         "test:unit": {},
         "test:screen": {
             "cache": false,
-            "dependsOn": ["playwright:install", "test:screen:setup"]
+            "dependsOn": ["^build", "playwright:install", "test:screen:setup"]
         },
         "test:screen:update": {
             "cache": false,
-            "dependsOn": ["playwright:install", "test:screen:setup"]
+            "dependsOn": ["^build", "playwright:install", "test:screen:setup"]
         },
         "test:screen:setup": {},
         "playwright:install": {
@@ -35,20 +35,18 @@
         "dev": {
             "cache": false,
             "persistent": true,
-            "dependsOn": ["dev:setup"]
+            "dependsOn": ["^build", "dev:setup"]
         },
         "dev:unit": {
             "cache": false,
             "persistent": true,
-            "dependsOn": ["dev:setup"]
+            "dependsOn": ["^build", "dev:setup"]
         },
         "dev:storybook": {
             "cache": false,
             "persistent": true,
-            "dependsOn": ["dev:setup"]
+            "dependsOn": ["^build", "dev:setup"]
         },
-        "dev:setup": {
-            "dependsOn": ["^build"]
-        }
+        "dev:setup": {}
     }
 }
