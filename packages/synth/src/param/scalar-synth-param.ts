@@ -1,6 +1,7 @@
-import { type SynthContext, SynthTime } from '#context'
+import type { SynthContext } from '#context'
 import { Range } from '#math'
 import type { SynthNode } from '#node'
+import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SynthParam, synthParamType } from './synth-param'
