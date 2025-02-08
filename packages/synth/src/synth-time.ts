@@ -1,4 +1,4 @@
-import { type Beats, type Notes, Unit } from '#units'
+import { Beats, Notes, type UnitValue } from '#units'
 import type { SynthContext } from './synth-context'
 
 type SynthTimeUnit = 'note' | 'note2' | 'note4' | 'note8' | 'note16'
@@ -24,13 +24,13 @@ export class SynthTime {
     return new SynthTime({ note4: this.#quarterNotes + synthTime.#quarterNotes })
   }
 
-  toBeats(context: SynthContext): Beats {
+  toBeats(context: SynthContext): UnitValue<'beats'> {
     const [_, beatsInNote] = context.timeSignature
-    return Unit.beats.orThrow(beatsInNote * (this.#quarterNotes / 4))
+    return Beats.orThrow(beatsInNote * (this.#quarterNotes / 4))
   }
 
-  toNotes(): Notes {
-    return Unit.notes.orThrow(this.#quarterNotes / 4)
+  toNotes(): UnitValue<'notes'> {
+    return Notes.orThrow(this.#quarterNotes / 4)
   }
 
   equals(time: SynthTime) {

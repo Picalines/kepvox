@@ -3,7 +3,7 @@ import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { ScalarSynthParam } from '#param'
 import type { SynthTime } from '#time'
-import { Unit } from '#units'
+import { Normal, Notes } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
 export class ADSREnvelopeSynthNode extends SynthNode {
@@ -25,33 +25,33 @@ export class ADSREnvelopeSynthNode extends SynthNode {
       node: this,
       audioParam: gainNode.gain,
       unit: 'normal',
-      initialValue: Unit.normal.min,
+      initialValue: Normal.min,
     })
 
     this.attack = new ScalarSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Unit.notes.orThrow(0),
+      initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Unit.notes.orThrow(0),
+      initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
     this.sustain = new ScalarSynthParam({
       node: this,
       unit: 'normal',
-      initialValue: Unit.normal.max,
+      initialValue: Normal.max,
     })
 
     this.release = new ScalarSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Unit.notes.orThrow(0),
+      initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
   }
@@ -68,12 +68,12 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
     gain.holdValueAt(start)
-    gain.rampValueUntil(attackEnd, Unit.normal.max, 'linear')
+    gain.rampValueUntil(attackEnd, Normal.max, 'linear')
 
     if (decayDuration > 0) {
       gain.rampValueUntil(decayEnd, sustainLevel, 'linear')
     } else {
-      gain.setValueAt(decayEnd, attackDuration > 0 ? Unit.normal.max : sustainLevel)
+      gain.setValueAt(decayEnd, attackDuration > 0 ? Normal.max : sustainLevel)
     }
   }
 
@@ -85,6 +85,6 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     const releaseDuration = this.release.curve.valueAt(start)
     const releaseEnd = start.add({ note: releaseDuration })
 
-    gain.rampValueUntil(releaseEnd, Unit.normal.min)
+    gain.rampValueUntil(releaseEnd, Normal.min)
   }
 }

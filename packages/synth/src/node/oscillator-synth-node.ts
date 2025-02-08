@@ -1,7 +1,7 @@
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { EnumSynthParam, ScalarSynthParam } from '#param'
-import { Unit } from '#units'
+import { Hertz } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
 const WAVE_SPAHE = ['sine', 'square', 'sawtooth', 'triangle'] as const
@@ -34,7 +34,7 @@ export class OscillatorSynthNode extends SynthNode {
       node: this,
       audioParam: oscillator.frequency,
       unit: 'hertz',
-      initialValue: Unit.hertz.orThrow(440), // TODO: set to constant
+      initialValue: Hertz.orThrow(440), // TODO: set to constant
     })
 
     const unmuteOscillator = () => {

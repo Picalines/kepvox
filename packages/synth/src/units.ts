@@ -1,31 +1,20 @@
 import { Range } from '#math'
 import { type Branded, createSafeBrand } from '#util/branded'
 
-export type Seconds = Branded<number, 'seconds'>
-export type Beats = Branded<number, 'beats'>
-export type Notes = Branded<number, 'notes'>
-export type Decibels = Branded<number, 'decibels'>
-export type Hertz = Branded<number, 'hertz'>
-export type NormalRange = Branded<number, 'normal'>
-export type AudioRange = Branded<number, 'audio'>
-export type NonNegative = Branded<number, 'nonNegative'>
-export type Factor = Branded<number, 'factor'>
+export type UnitName =
+  | 'seconds'
+  | 'beats'
+  | 'notes'
+  | 'decibels'
+  | 'hertz'
+  | 'normal'
+  | 'audio'
+  | 'nonNegative'
+  | 'factor'
 
-export type UnitMap = {
-  seconds: Seconds
-  beats: Beats
-  notes: Notes
-  decibels: Decibels
-  hertz: Hertz
-  normal: NormalRange
-  audio: AudioRange
-  nonNegative: NonNegative
-  factor: Factor
-}
+export type UnitValueMap = { [U in UnitName]: Branded<number, U> }
 
-export type UnitName = keyof UnitMap
-
-export type UnitValue<TUnit extends UnitName> = UnitMap[TUnit]
+export type UnitValue<TUnit extends UnitName> = UnitValueMap[TUnit]
 
 type UnitMeta<TUnit extends UnitName> = Readonly<{
   range: Range
@@ -36,25 +25,52 @@ type UnitMeta<TUnit extends UnitName> = Readonly<{
   orClamp: (x: number) => UnitValue<TUnit>
 }>
 
-const createUnitMeta = <TUnit extends UnitName>(range: Range): UnitMeta<TUnit> => {
+const createUnitMeta = <TUnit extends UnitName>(unitName: TUnit, range: Range): UnitMeta<TUnit> => {
   const [is, orThrow] = createSafeBrand(
     (x: number): x is UnitValue<TUnit> => range.includes(x),
-    `the argument is not in range ${range}`,
+    `the argument is not a valid ${unitName} value in range ${range}`,
   )
 
   const orClamp = (x: number) => range.clamp(x)
 
-  return { range, min: orThrow(range.min), max: orThrow(range.max), is, orThrow, orClamp } as unknown as UnitMeta<TUnit>
+  return {
+    range,
+    min: orThrow(range.min),
+    max: orThrow(range.max),
+    is,
+    orThrow,
+    orClamp,
+  } as unknown as UnitMeta<TUnit>
 }
 
 export const Unit: { readonly [U in UnitName]: UnitMeta<U> } = {
-  seconds: createUnitMeta<'seconds'>(Range.any),
-  beats: createUnitMeta<'beats'>(Range.any),
-  notes: createUnitMeta<'notes'>(Range.any),
-  decibels: createUnitMeta<'decibels'>(Range.any),
-  hertz: createUnitMeta<'hertz'>(Range.positive),
-  normal: createUnitMeta<'normal'>(Range.normal),
-  audio: createUnitMeta<'audio'>(new Range(-1, 1)),
-  nonNegative: createUnitMeta<'nonNegative'>(Range.positive),
-  factor: createUnitMeta<'factor'>(Range.any),
+  seconds: createUnitMeta('seconds', Range.any),
+  beats: createUnitMeta('beats', Range.any),
+  notes: createUnitMeta('notes', Range.any),
+  decibels: createUnitMeta('decibels', Range.any),
+  hertz: createUnitMeta('hertz', Range.positive),
+  normal: createUnitMeta('normal', Range.normal),
+  audio: createUnitMeta('audio', new Range(-1, 1)),
+  nonNegative: createUnitMeta('nonNegative', Range.positive),
+  factor: createUnitMeta('factor', Range.any),
 }
+
+export const Seconds = Unit.seconds
+export const Beats = Unit.beats
+export const Notes = Unit.notes
+export const Decibels = Unit.decibels
+export const Hertz = Unit.hertz
+export const Normal = Unit.normal
+export const Audio = Unit.audio
+export const NonNegative = Unit.nonNegative
+export const Factor = Unit.factor
+
+export type Seconds = UnitValue<'seconds'>
+export type Beats = UnitValue<'beats'>
+export type Notes = UnitValue<'notes'>
+export type Decibels = UnitValue<'decibels'>
+export type Hertz = UnitValue<'hertz'>
+export type Normal = UnitValue<'normal'>
+export type Audio = UnitValue<'audio'>
+export type NonNegative = UnitValue<'nonNegative'>
+export type Factor = UnitValue<'factor'>
