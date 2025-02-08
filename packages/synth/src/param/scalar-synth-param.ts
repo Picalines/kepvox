@@ -19,7 +19,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly curve: AutomationCurve<TUnit>
 
   constructor(opts: ScalarSynthParamOpts<TUnit>) {
-    const { context, unit, initialValue, range: rangeParam = Range.any } = opts
+    const { unit, initialValue, range: rangeParam = Range.any } = opts
 
     const unitRange = Unit[unit].range
     const paramRange = unitRange.intersection(rangeParam)
@@ -37,7 +37,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     this.unit = unit
     this.range = paramRange
 
-    this.curve = new AutomationCurve(context, { initialValue })
+    this.curve = new AutomationCurve({ initialValue })
   }
 
   get initialValue() {

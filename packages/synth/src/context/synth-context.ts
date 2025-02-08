@@ -11,12 +11,6 @@ type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
 
 export type SynthContextOpts = {
   /**
-   * Initial beats per minute
-   * @default 120
-   */
-  bpm?: number
-
-  /**
    * NOTE: changing the time during playback is an undefined behavior
    * @default [4, 4]
    */
@@ -45,11 +39,11 @@ type Events = {
 
 export class SynthContext implements ListenEmitter<Events>, Disposable {
   /**
-   * AutomationCurve that maps musical beats to seconds.
+   * AutomationCurve that maps whole notes to seconds.
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
    * your composition will have played up to given beat
    */
-  readonly secondsPerBeat: AutomationCurve<'seconds'>
+  readonly secondsPerNote: AutomationCurve<'seconds'>
 
   readonly #audioContext: AudioContext
 
@@ -70,7 +64,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   readonly #output: OutputSynthNode
 
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
-    const { bpm: initialBpm = 120, timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
+    const { timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext
     this.#output = new OutputSynthNode(this)
@@ -78,8 +72,8 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.timeSignature = timeSignature
     this.lookAhead = Unit.seconds.orClamp(lookAhead)
 
-    this.secondsPerBeat = new AutomationCurve(this, {
-      initialValue: Unit.seconds.orClamp(60 / initialBpm),
+    this.secondsPerNote = new AutomationCurve({
+      initialValue: Unit.seconds.orClamp(2), // 120 bpm in 4/4
       valueRange: Range.positiveNonZero,
     })
 

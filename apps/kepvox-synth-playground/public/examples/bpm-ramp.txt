@@ -1,4 +1,4 @@
-import { OscillatorSynthNode, ADSREnvelopeSynthNode, Unit as U } from 'synth'
+import { OscillatorSynthNode, ADSREnvelopeSynthNode, Unit as U, SynthTime } from 'synth'
 import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
@@ -14,12 +14,12 @@ envelope.decay.initialValue = U.notes.orThrow(1)
 envelope.sustain.initialValue = U.normal.orThrow(0.5)
 envelope.release.initialValue = U.notes.orThrow(1)
 
-let time = context.firstBeat
+let time = SynthTime.start
 for (let i = 0; i < 5; i++) {
   envelope.attackAt(time)
   time = time.add({ note: 1 })
   envelope.releaseAt(time)
-  time = time.add({ beat: 1 })
+  time = time.add({ note: envelope.release.initialValue })
   oscillator.frequency.curve.rampValueUntil(time, U.hertz.orThrow(440 + 40 * i))
-  context.secondsPerBeat.rampValueUntil(time, U.seconds.orThrow(1 / (i + 1)))
+  context.secondsPerNote.rampValueUntil(time, U.seconds.orThrow(1 / (i + 1)))
 }
