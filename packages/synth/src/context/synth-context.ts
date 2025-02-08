@@ -1,10 +1,9 @@
-import { INTERNAL_AUDIO_CONTEXT, INTERNAL_CONTEXT_OWN } from '#internal-symbols'
+import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { IntRange, Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { AutomationCurve } from '#param'
 import { type Seconds, Unit } from '#units'
-import { type Disposable, DisposableStack } from '#util/disposable'
-import { Emitter, type ListenEmitter } from '#util/emitter'
+import { Signal } from '#util/signal'
 import { SynthTime } from './synth-time'
 
 type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
@@ -31,13 +30,7 @@ export type SynthContextOpts = {
 
 export type SynthState = 'idle' | 'playing' | 'disposed'
 
-type Events = {
-  play: [start: SynthTime]
-  stop: []
-  stateChanged: []
-}
-
-export class SynthContext implements ListenEmitter<Events>, Disposable {
+export class SynthContext {
   /**
    * AutomationCurve that maps whole notes to seconds.
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
@@ -47,12 +40,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
 
   readonly #audioContext: AudioContext
 
-  readonly #resources = new DisposableStack()
-
-  readonly #emitter = new Emitter<Events>()
-  readonly on = this.#emitter.on.bind(this.#emitter)
-  readonly off = this.#emitter.off.bind(this.#emitter)
-  readonly once = this.#emitter.once.bind(this.#emitter)
+  readonly #output: OutputSynthNode
 
   #state: SynthState = 'idle'
 
@@ -61,7 +49,10 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   // @ts-expect-error: initialized by public setter
   #lookAhead: Seconds
 
-  readonly #output: OutputSynthNode
+  readonly #playing = Signal.controlled<{ start: SynthTime }>()
+  readonly #stopped = Signal.controlled<{}>()
+  readonly #stateChanged = Signal.controlled<{}>()
+  readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
     const { timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
@@ -121,6 +112,22 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     return this.#output
   }
 
+  get playing() {
+    return this.#playing.signal
+  }
+
+  get stopped() {
+    return this.#stopped.signal
+  }
+
+  get stateChanged() {
+    return this.#stateChanged.signal
+  }
+
+  get disposed() {
+    return this.#disposed.signal
+  }
+
   measure(measureIndex: number): SynthTime {
     const [notesInBar, _] = this.timeSignature
     return new SynthTime({ note: notesInBar * measureIndex })
@@ -134,8 +141,8 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.stop()
     this.#audioContext.resume().then(() => {
       this.#state = 'playing'
-      this.#emitter.emit('play', start)
-      this.#emitter.emit('stateChanged')
+      this.#playing.emit({ start })
+      this.#stateChanged.emit({})
     })
   }
 
@@ -143,8 +150,8 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
     this.#assertNotDisposed()
     if (this.#state === 'playing') {
       this.#state = 'idle'
-      this.#emitter.emit('stop')
-      this.#emitter.emit('stateChanged')
+      this.#stopped.emit({})
+      this.#stateChanged.emit({})
     }
   }
 
@@ -154,21 +161,12 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   dispose() {
     this.stop()
     this.#state = 'disposed'
-    this.#resources.dispose()
-    this.#emitter.emit('stateChanged')
-    this.#emitter.offAll()
-  }
+    this.#disposed.emit(null)
+    this.#stateChanged.emit({})
 
-  get disposed() {
-    return this.#resources.disposed
-  }
-
-  /**
-   * Adds the disposable to the private stack
-   * @internal
-   */
-  [INTERNAL_CONTEXT_OWN](resource: Disposable) {
-    this.#resources.add(resource)
+    this.#playing.cancelAll()
+    this.#stopped.cancelAll()
+    this.#stateChanged.cancelAll()
   }
 
   get [INTERNAL_AUDIO_CONTEXT]() {
@@ -176,7 +174,7 @@ export class SynthContext implements ListenEmitter<Events>, Disposable {
   }
 
   #assertNotDisposed() {
-    if (this.#resources.disposed.aborted) {
+    if (this.#disposed.signal.emitted) {
       throw new Error('the SynthContext is used while being disposed')
     }
   }

@@ -1,22 +1,30 @@
-import type { Disposable } from '#util/disposable'
+import type { SynthNode } from './synth-node'
 
 const hasAssociatedInputSocket: unique symbol = Symbol('hasAssociatedInputSocket')
 const hasAssociatedOutputSocket: unique symbol = Symbol('hasAssociatedOutputSocket')
 
+type SocketType = 'input' | 'output'
+
+type Opts = {
+  type: SocketType
+  synthNode: SynthNode
+  audioNode: AudioNode
+}
+
 /**
  * @internal
  */
-export class SynthNodeSocket implements Disposable {
+export class SynthNodeSocket {
+  readonly #type: SocketType
+
+  readonly #synthNode: SynthNode
   readonly #audioNode: AudioNode
 
   readonly #connections: Set<SynthNodeSocket> = new Set()
 
-  readonly #disposeController = new AbortController()
+  constructor(opts: Opts) {
+    const { type, synthNode, audioNode } = opts
 
-  constructor(
-    audioNode: AudioNode,
-    readonly type: 'input' | 'output',
-  ) {
     if (type === 'input') {
       if (audioNode.numberOfInputs !== 1) {
         throw new Error('SynthNode allows only 1-input AudioNodes as its input')
@@ -43,7 +51,11 @@ export class SynthNodeSocket implements Disposable {
       audioNode[hasAssociatedOutputSocket] = true
     }
 
+    this.#type = type
+    this.#synthNode = synthNode
     this.#audioNode = audioNode
+
+    this.#synthNode.disposed.watch(() => this.disconnectAll())
   }
 
   connect(socket: SynthNodeSocket) {
@@ -59,7 +71,7 @@ export class SynthNodeSocket implements Disposable {
     socket.#connections.add(this)
 
     const [source, destination] =
-      this.type === 'output' ? [this.#audioNode, socket.#audioNode] : [socket.#audioNode, this.#audioNode]
+      this.#type === 'output' ? [this.#audioNode, socket.#audioNode] : [socket.#audioNode, this.#audioNode]
 
     source.connect(destination)
   }
@@ -77,7 +89,7 @@ export class SynthNodeSocket implements Disposable {
     socket.#connections.delete(this)
 
     const [source, destination] =
-      this.type === 'output' ? [this.#audioNode, socket.#audioNode] : [socket.#audioNode, this.#audioNode]
+      this.#type === 'output' ? [this.#audioNode, socket.#audioNode] : [socket.#audioNode, this.#audioNode]
 
     source.disconnect(destination)
   }
@@ -89,28 +101,14 @@ export class SynthNodeSocket implements Disposable {
     }
   }
 
-  dispose() {
-    if (this.disposed.aborted) {
-      return
-    }
-
-    this.disconnectAll()
-
-    this.#disposeController.abort()
-  }
-
-  get disposed() {
-    return this.#disposeController.signal
-  }
-
   #assertNotDisposed() {
-    if (this.disposed.aborted) {
+    if (this.#synthNode.disposed.emitted) {
       throw new Error('the SynthNode socket is already disposed')
     }
   }
 
   #assertDifferentTypes(otherSocket: SynthNodeSocket) {
-    if (this.type === otherSocket.type) {
+    if (this.#type === otherSocket.#type) {
       throw new Error('Input-input and output-output connections are not allowed')
     }
   }

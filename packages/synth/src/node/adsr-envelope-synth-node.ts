@@ -1,7 +1,7 @@
 import type { SynthContext, SynthTime } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
-import { AudioSynthParam, ScalarSynthParam } from '#param'
+import { ScalarSynthParam } from '#param'
 import { Unit } from '#units'
 import { SynthNode, synthNodeType } from './synth-node'
 
@@ -20,33 +20,35 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     super({ context, inputs: [gainNode], outputs: [gainNode] })
 
-    this.#gain = new AudioSynthParam({
-      context,
+    this.#gain = new ScalarSynthParam({
+      node: this,
       audioParam: gainNode.gain,
       unit: 'normal',
       initialValue: Unit.normal.min,
     })
 
-    this.disposed.addEventListener('abort', () => this.#gain.dispose(), { once: true })
-
     this.attack = new ScalarSynthParam({
+      node: this,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
     this.decay = new ScalarSynthParam({
+      node: this,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
     })
 
     this.sustain = new ScalarSynthParam({
+      node: this,
       unit: 'normal',
       initialValue: Unit.normal.max,
     })
 
     this.release = new ScalarSynthParam({
+      node: this,
       unit: 'notes',
       initialValue: Unit.notes.orThrow(0),
       range: Range.positive,
