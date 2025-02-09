@@ -2,6 +2,8 @@
 
 import { cn } from '@repo/ui-kit/classnames'
 import { Button } from '@repo/ui-kit/components/button'
+import { Text } from '@repo/ui-kit/components/text'
+import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { PlayIcon, SquareIcon } from '@repo/ui-kit/icons'
 import { useUnit } from 'effector-react'
 import { model } from '../model'
@@ -17,8 +19,26 @@ export const PlaybackButton = () => {
   const Icon = status === 'playing' ? SquareIcon : PlayIcon
 
   return (
-    <Button onMouseDown={toggled} size="lg" shape="square" variant="outline" className="relative" disabled={disabled}>
-      <Icon className={cn('absolute', disabled && 'animate-pulse')} />
-    </Button>
+    <Tooltip.Root>
+      <Tooltip.Trigger>
+        <Button
+          onMouseDown={toggled}
+          size="lg"
+          shape="square"
+          variant={status === 'playing' ? 'destructive' : 'outline'}
+          className="relative"
+          disabled={disabled}
+        >
+          <Icon className={cn('absolute', disabled && 'animate-pulse')} />
+        </Button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>
+        <Text>
+          <kbd>
+            <kbd>ctrl/cmd</kbd> + <kbd>enter</kbd>
+          </kbd>
+        </Text>
+      </Tooltip.Content>
+    </Tooltip.Root>
   )
 }

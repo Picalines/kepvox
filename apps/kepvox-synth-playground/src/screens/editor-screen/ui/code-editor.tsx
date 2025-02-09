@@ -2,7 +2,11 @@
 
 import { type FC, useCallback, useEffect } from 'react'
 
-import { Editor as MonacoEditor, type OnChange as OnMonacoChange } from '@monaco-editor/react'
+import {
+  Editor as MonacoEditor,
+  type OnChange as OnMonacoChange,
+  type OnMount as OnMonacoMount,
+} from '@monaco-editor/react'
 import { useUnit } from 'effector-react'
 import { model } from '../model'
 import { initializeMonaco } from './initialize-monaco'
@@ -14,22 +18,29 @@ type Props = {
 export const CodeEditor: FC<Props> = props => {
   const { className } = props
 
-  const { value, isReadonly, onChangeModel, setupRunner } = useUnit({
+  const { value, isReadonly, onChangeModel, onPlaybackToggle, onSetup } = useUnit({
     value: model.$code,
     isReadonly: model.$isReadonly,
     onChangeModel: model.codeChanged,
-    setupRunner: model.initialized,
-    example: model.$example,
+    onPlaybackToggle: model.playbackToggled,
+    onSetup: model.initialized,
   })
 
   const onChange = useCallback<OnMonacoChange>(newValue => onChangeModel(newValue ?? ''), [onChangeModel])
 
-  useEffect(() => setupRunner(), [setupRunner])
+  const onMount = useCallback<OnMonacoMount>(
+    (editor, monaco) => {
+      initializeMonaco({ monaco, editor, onPlaybackToggleAction: onPlaybackToggle })
+    },
+    [onPlaybackToggle],
+  )
+
+  useEffect(() => onSetup(), [onSetup])
 
   return (
     <div className={className}>
       <MonacoEditor
-        onMount={initializeMonaco}
+        onMount={onMount}
         value={value}
         onChange={onChange}
         defaultLanguage="typescript"

@@ -4,15 +4,42 @@ import synthPackageDts from '#public/synth.d.ts.txt'
 
 type MonacoEditor = ReturnType<Monaco['editor']['create']>
 
-const MONACO_TS_DECLARATIONS = [
-  `declare module 'synth' {\n${synthPackageDts}\n}`,
-  `declare module 'synth/playground' {\nimport { SynthContext } from 'synth';\nexport declare const context: SynthContext\n}`,
-]
+type Params = {
+  monaco: Monaco
+  editor: MonacoEditor
+  onPlaybackToggleAction?: () => void
+}
 
-export const initializeMonaco = (editor: MonacoEditor, monaco: Monaco) => {
-  editor.updateOptions({ fontSize: 16, theme: 'vs-dark', minimap: { enabled: false } })
+export const initializeMonaco = (params: Params) => {
+  const { monaco, editor, onPlaybackToggleAction } = params
 
-  for (const dts of MONACO_TS_DECLARATIONS) {
+  loadTypesccriptLibs(monaco)
+
+  editor.updateOptions({
+    fontSize: 16,
+    theme: 'vs-dark',
+    minimap: { enabled: false },
+  })
+
+  editor.addAction({
+    id: 'kepvox-toggle-playback',
+    label: 'Kepvox: Toggle playback',
+
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+
+    run: () => {
+      onPlaybackToggleAction?.()
+    },
+  })
+}
+
+const loadTypesccriptLibs = (monaco: Monaco) => {
+  const declarations = [
+    `declare module 'synth' {\n${synthPackageDts}\n}`,
+    `declare module 'synth/playground' {\nimport { SynthContext } from 'synth';\nexport declare const context: SynthContext\n}`,
+  ]
+
+  for (const dts of declarations) {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(dts)
   }
 }

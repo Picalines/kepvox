@@ -58,8 +58,9 @@ sample({
 })
 
 sample({
-  clock: $isPlaying,
+  clock: combine({ isPlaying: $isPlaying, jsState: $jsState }),
   target: $isReadonly,
+  fn: ({ isPlaying, jsState }) => isPlaying || jsState === 'running',
 })
 
 sample({
