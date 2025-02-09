@@ -6,7 +6,7 @@ import { Unit, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
 import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
 
-const hasAssociatedParam = Symbol('associatedSynthAudioParam')
+const synthAudioParams = new WeakSet<AudioParam>()
 
 export type ScalarSynthParamOpts<TUnit extends UnitName> = {
   node: SynthNode
@@ -30,7 +30,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     const { node, audioParam, unit, initialValue: initialValueParam, range: rangeParam = Range.any } = opts
     const { context } = node
 
-    if (audioParam && hasAssociatedParam in audioParam) {
+    if (audioParam && synthAudioParams.has(audioParam)) {
       throw new Error(`the ${AudioParam.name} already has an associated ${ScalarSynthParam.name}`)
     }
 
@@ -54,9 +54,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     this.#audioParam = audioParam ?? null
 
     if (audioParam) {
-      // @ts-expect-error: adding a custom symbol to prevent "races"
-      // between different synth parameters controlling the same AudioParam
-      audioParam[hasAssociatedParam] = true
+      synthAudioParams.add(audioParam)
 
       context.playing.watchUntil(node.disposed, ({ start }) => this.#scheduleAudio(start))
       context.stopped.watchUntil(node.disposed, () => this.#stopAudio())

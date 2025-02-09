@@ -1,7 +1,7 @@
 import type { SynthNode } from './synth-node'
 
-const hasAssociatedInputSocket: unique symbol = Symbol('hasAssociatedInputSocket')
-const hasAssociatedOutputSocket: unique symbol = Symbol('hasAssociatedOutputSocket')
+const synthInputAudioNodes = new WeakSet<AudioNode>()
+const synthOutputAudioNodes = new WeakSet<AudioNode>()
 
 type SocketType = 'input' | 'output'
 
@@ -30,12 +30,11 @@ export class SynthNodeSocket {
         throw new Error('SynthNode allows only 1-input AudioNodes as its input')
       }
 
-      if (hasAssociatedInputSocket in audioNode) {
+      if (synthInputAudioNodes.has(audioNode)) {
         throw new Error('AudioNode already has an associated SynthNode input socket')
       }
 
-      // @ts-expect-error
-      audioNode[hasAssociatedInputSocket] = true
+      synthInputAudioNodes.add(audioNode)
     }
 
     if (type === 'output') {
@@ -43,12 +42,11 @@ export class SynthNodeSocket {
         throw new Error('SynthNode allows only 1-output AudioNodes as its input')
       }
 
-      if (hasAssociatedOutputSocket in audioNode) {
+      if (synthOutputAudioNodes.has(audioNode)) {
         throw new Error('AudioNode already has an associated SynthNode output socket')
       }
 
-      // @ts-expect-error
-      audioNode[hasAssociatedOutputSocket] = true
+      synthOutputAudioNodes.add(audioNode)
     }
 
     this.#type = type
@@ -77,8 +75,6 @@ export class SynthNodeSocket {
   }
 
   disconnect(socket: SynthNodeSocket) {
-    this.#assertNotDisposed()
-    socket.#assertNotDisposed()
     this.#assertDifferentTypes(socket)
 
     if (!this.#connections.has(socket)) {
@@ -95,7 +91,6 @@ export class SynthNodeSocket {
   }
 
   disconnectAll() {
-    this.#assertNotDisposed()
     for (const socket of [...this.#connections]) {
       this.disconnect(socket)
     }

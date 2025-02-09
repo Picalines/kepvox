@@ -38,6 +38,8 @@ export abstract class SynthNode {
 
     this.context = context
 
+    this.context.disposed.watchUntil(this.disposed, this.dispose.bind(this))
+
     this.#inputs = inputs.map(audioNode => new SynthNodeSocket({ type: 'input', synthNode: this, audioNode }))
     this.#outputs = outputs.map(audioNode => new SynthNodeSocket({ type: 'output', synthNode: this, audioNode }))
   }
