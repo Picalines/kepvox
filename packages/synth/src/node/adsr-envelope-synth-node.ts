@@ -57,8 +57,6 @@ export class ADSREnvelopeSynthNode extends SynthNode {
   }
 
   attackAt(start: SynthTime) {
-    const gain = this.#gain.curve
-
     const attackDuration = this.attack.curve.valueAt(start)
     const attackEnd = start.add({ note: attackDuration })
 
@@ -67,24 +65,35 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
+    const gain = this.#gain.curve
     gain.holdValueAt(start)
-    gain.rampValueUntil(attackEnd, Normal.max, 'linear')
+
+    const attackValue = decayDuration > 0 ? Normal.max : sustainLevel
+
+    if (attackDuration > 0) {
+      gain.rampValueUntil(attackEnd, attackValue, 'linear')
+    } else {
+      gain.setValueAt(attackEnd, attackValue)
+    }
 
     if (decayDuration > 0) {
       gain.rampValueUntil(decayEnd, sustainLevel, 'linear')
     } else {
-      gain.setValueAt(decayEnd, attackDuration > 0 ? Normal.max : sustainLevel)
+      gain.setValueAt(decayEnd, sustainLevel)
     }
   }
 
   releaseAt(start: SynthTime) {
-    const gain = this.#gain.curve
-
-    gain.holdValueAt(start)
-
     const releaseDuration = this.release.curve.valueAt(start)
     const releaseEnd = start.add({ note: releaseDuration })
 
-    gain.rampValueUntil(releaseEnd, Normal.min)
+    const gain = this.#gain.curve
+    gain.holdValueAt(start)
+
+    if (releaseDuration > 0) {
+      gain.rampValueUntil(releaseEnd, Normal.min)
+    } else {
+      gain.setValueAt(releaseEnd, Normal.min)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { OscillatorSynthNode, ADSREnvelopeSynthNode, SynthTime as T, Notes, Pitch, PitchNotation } from 'synth'
+import { OscillatorSynthNode, ADSREnvelopeSynthNode, SynthTime as T, Pitch, PitchNotation } from 'synth'
 import { context } from 'synth/playground'
 
 context.timeSignature = [4, 4]
@@ -10,13 +10,13 @@ oscillator.connectOutput(envelope)
 envelope.connectOutput(context.output)
 
 oscillator.waveShape.value = 'triangle'
-envelope.attack.initialValue = Notes.orThrow(0)
-envelope.release.initialValue = Notes.orThrow(0.1)
+envelope.attack.initialValue = new T({note16: 1}).toNotes()
+envelope.release.initialValue = new T({note16: 1}).toNotes()
 
-const play = (time: T, note: PitchNotation) => {
+const play = (time: T, note: PitchNotation, duration: T) => {
     oscillator.frequency.curve.setValueAt(time, Pitch.frequency(note))
     envelope.attackAt(time)
-    envelope.releaseAt(time)
+    envelope.releaseAt(time.add(duration).add({ note: -envelope.release.initialValue }))
 }
 
 const n4 = new T({ note4: 1 })
@@ -74,7 +74,7 @@ const notes: [PitchNotation | null, T][] = [
 let time = T.start
 for (const [note, duration] of notes) {
     if (note !== null) {
-        play(time, note)
+        play(time, note, duration)
     }
     time = time.add(duration)
 }

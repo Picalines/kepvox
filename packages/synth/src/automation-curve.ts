@@ -6,11 +6,11 @@ import type { UnitName, UnitValue } from '#units'
 
 export type InterpolationMethod = 'linear' | 'exponential'
 
-type AutomationEvent<TUnit extends UnitName> = Readonly<{
+type AutomationEvent<TUnit extends UnitName> = {
   time: SynthTime
   value: UnitValue<TUnit>
-  ramp?: InterpolationMethod
-}>
+  ramp?: { value: UnitValue<TUnit>; method: InterpolationMethod }
+}
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
   initialValue: UnitValue<TUnit>
@@ -45,16 +45,29 @@ export class AutomationCurve<TUnit extends UnitName> {
 
   /**
    * Schedules an event, when value will instantly jump to the specified value
+   *
+   * Second {@link setValueAt} call overrides the first one. Doesn't cancel the {@link rampValueUntil}
    */
   setValueAt(time: SynthTime, value: UnitValue<TUnit>) {
-    this.#addEvent({ time, value: this.#processValue(value) })
+    this.#mergeEvent({ time, value: this.#processValue(value) })
   }
 
   /**
    * Schedules an event, when the value will *stop ramping* to the specified value
+   *
+   * The curve will approach to the value up until the time, but exactly at that point
+   * some other event might override the value. If there's no event at the time the value
+   * will settle at the ramp value
+   *
+   * Second {@link rampValueUntil} overrides the ramp method and value. Doesn't cancel the {@link setValueAt}
    */
   rampValueUntil(end: SynthTime, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
-    this.#addEvent({ time: end, value: this.#processValue(value), ramp: method })
+    const leftValue = this.#processValue(value)
+
+    const existingEvent = this.eventAt(end)
+    const rightValue = existingEvent?.value ?? leftValue
+
+    this.#mergeEvent({ time: end, ramp: { value: leftValue, method }, value: rightValue })
   }
 
   /**
@@ -65,8 +78,7 @@ export class AutomationCurve<TUnit extends UnitName> {
    */
   holdValueAt(time: SynthTime): UnitValue<TUnit> {
     const value = this.valueAt(time)
-    const nextEvent = this.eventAfterOrAt(time) // Copy the ramp
-    this.#addEvent({ ...nextEvent, time, value })
+    this.#mergeEvent({ time, value })
 
     const cutIndex = this.#eventIndexAfter(time)
     if (cutIndex !== null) {
@@ -98,11 +110,11 @@ export class AutomationCurve<TUnit extends UnitName> {
       return before.value
     }
 
-    return interpolationTable[after.ramp](
+    return interpolationTable[after.ramp.method](
       before.time.toNotes(),
       before.value,
       after.time.toNotes(),
-      after.value,
+      after.ramp.value,
       time.toNotes(),
     ) as UnitValue<TUnit>
   }
@@ -172,21 +184,23 @@ export class AutomationCurve<TUnit extends UnitName> {
     return this.#valueRange.clamp(value) as UnitValue<TUnit>
   }
 
-  #addEvent(event: AutomationEvent<TUnit>) {
-    const lastIndex = this.#eventIndexBeforeOrAt(event.time)
+  #mergeEvent(event: AutomationEvent<TUnit>) {
+    const lastEventIndex = this.#eventIndexBeforeOrAt(event.time)
 
-    if (lastIndex === null) {
+    const lastEvent = lastEventIndex !== null ? assertedAt(this.#events, lastEventIndex) : null
+
+    if (lastEventIndex === null) {
       this.#events.push(event)
       this.#updateSpanArea(this.#events.length - 2)
       this.#updateSpanArea(this.#events.length - 1)
-    } else if (this.#events[lastIndex]?.time.equals(event.time)) {
-      this.#events.splice(lastIndex, 1, event)
-      this.#updateSpanArea(lastIndex - 1)
-      this.#updateSpanArea(lastIndex)
+    } else if (lastEvent?.time.equals(event.time)) {
+      this.#events.splice(lastEventIndex, 1, { ...lastEvent, ...event })
+      this.#updateSpanArea(lastEventIndex - 1)
+      this.#updateSpanArea(lastEventIndex)
     } else {
-      this.#events.splice(lastIndex + 1, 0, event)
-      this.#updateSpanArea(lastIndex)
-      this.#updateSpanArea(lastIndex + 1)
+      this.#events.splice(lastEventIndex + 1, 0, event)
+      this.#updateSpanArea(lastEventIndex)
+      this.#updateSpanArea(lastEventIndex + 1)
     }
   }
 
@@ -228,11 +242,17 @@ export class AutomationCurve<TUnit extends UnitName> {
       return (time.toNotes() - start.time.toNotes()) * start.value
     }
 
-    return interpolationAreaTable[end.ramp](
+    return interpolationAreaTable[end.ramp.method](
       start.time.toNotes(),
       start.value,
       time.toNotes(),
-      interpolationTable[end.ramp](start.time.toNotes(), start.value, end.time.toNotes(), end.value, time.toNotes()),
+      interpolationTable[end.ramp.method](
+        start.time.toNotes(),
+        start.value,
+        end.time.toNotes(),
+        end.ramp.value,
+        time.toNotes(),
+      ),
     )
   }
 
