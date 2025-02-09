@@ -3,8 +3,13 @@ import { createEvent, createStore, sample } from 'effector'
 import { readonly } from 'patronum'
 import bpmRampExample from '#public/examples/bpm-ramp.txt'
 import defaultExample from '#public/examples/default.txt'
+import stilAliveExample from '#public/examples/still-alive.txt'
 
-export const EXAMPLES = { default: defaultExample, 'bpm-ramp': bpmRampExample } as const
+export const EXAMPLES = {
+  default: defaultExample,
+  'bpm-ramp': bpmRampExample,
+  'still-alive': stilAliveExample,
+} as const
 
 type ExampleName = keyof typeof EXAMPLES
 
