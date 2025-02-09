@@ -1,7 +1,7 @@
+import { AutomationCurve } from '#automation'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { IntRange, Range } from '#math'
 import { OutputSynthNode } from '#node'
-import { AutomationCurve } from '#param'
 import { SynthTime } from '#time'
 import { Seconds } from '#units'
 import { Signal } from '#util/signal'

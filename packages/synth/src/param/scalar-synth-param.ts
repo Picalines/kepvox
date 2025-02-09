@@ -1,9 +1,9 @@
+import { AutomationCurve } from '#automation'
 import type { SynthContext } from '#context'
 import { Range } from '#math'
 import type { SynthNode } from '#node'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
-import { AutomationCurve } from './automation-curve'
 import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
 
 const synthAudioParams = new WeakSet<AudioParam>()

@@ -18,6 +18,7 @@
         "build": "tsup"
     },
     "imports": {
+        "#automation": "./src/automation-curve.ts",
         "#context": "./src/synth-context.ts",
         "#internal-symbols": "./src/internal-symbols.ts",
         "#math": "./src/math/index.ts",
