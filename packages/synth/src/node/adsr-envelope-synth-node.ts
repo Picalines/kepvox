@@ -4,10 +4,10 @@ import { Range } from '#math'
 import { ScalarSynthParam } from '#param'
 import type { SynthTime } from '#time'
 import { Normal, Notes } from '#units'
-import { SynthNode, synthNodeType } from './synth-node'
+import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
 
 export class ADSREnvelopeSynthNode extends SynthNode {
-  readonly [synthNodeType] = 'adsr-envelope'
+  readonly [SYNTH_NODE_TYPE] = 'adsr-envelope'
 
   readonly attack
   readonly decay

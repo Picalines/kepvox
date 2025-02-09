@@ -4,7 +4,7 @@ import type { SynthNode } from '#node'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { AutomationCurve } from './automation-curve'
-import { SynthParam, synthParamType } from './synth-param'
+import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
 
 const hasAssociatedParam = Symbol('associatedSynthAudioParam')
 
@@ -17,7 +17,7 @@ export type ScalarSynthParamOpts<TUnit extends UnitName> = {
 }
 
 export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
-  readonly [synthParamType] = 'scalar'
+  readonly [SYNTH_PARAM_TYPE] = 'scalar'
 
   readonly unit: TUnit
   readonly range: Range

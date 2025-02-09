@@ -1,13 +1,13 @@
 import { SynthNode } from '#node'
 
-export const synthParamType: unique symbol = Symbol('SynthParam.type')
+export const SYNTH_PARAM_TYPE: unique symbol = Symbol('SynthParam.type')
 
 export type SynthParamOpts = {
   node: SynthNode
 }
 
 export abstract class SynthParam {
-  abstract readonly [synthParamType]: string
+  abstract readonly [SYNTH_PARAM_TYPE]: string
 
   readonly node: SynthNode
 

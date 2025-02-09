@@ -1,6 +1,6 @@
 import type { SynthNode } from '#node'
 import { Signal } from '#util/signal'
-import { SynthParam, synthParamType } from './synth-param'
+import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
 
 export type EnumSynthParamOpts<V extends string> = {
   node: SynthNode
@@ -10,7 +10,7 @@ export type EnumSynthParamOpts<V extends string> = {
 }
 
 export class EnumSynthParam<V extends string = string> extends SynthParam {
-  readonly [synthParamType] = 'enum'
+  readonly [SYNTH_PARAM_TYPE] = 'enum'
 
   readonly variants: readonly V[]
 
