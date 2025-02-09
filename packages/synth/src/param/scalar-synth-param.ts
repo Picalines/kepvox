@@ -75,13 +75,13 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     }
 
     const curve = this.curve
+    const scheduleStart = this.#context.scheduleTime
+    const skippedSeconds = this.#context.secondsPerNote.areaBefore(start)
 
     this.#audioParam.setValueAtTime(curve.valueAt(start), 0)
 
-    const scheduleStart = this.#context.scheduleTime
-
     for (const event of curve.eventsAfter(start)) {
-      const scheduleTime = scheduleStart + this.#context.secondsPerNote.areaBefore(event.time)
+      const scheduleTime = scheduleStart + (this.#context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
 
       const scheduleFunc = event.ramp
         ? event.ramp === 'linear'
