@@ -48,7 +48,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
 
     this.unit = unit
     this.range = range
-    this.curve = new AutomationCurve({ initialValue })
+    this.curve = new AutomationCurve({ initialValue, valueRange: range })
 
     this.#context = context
     this.#audioParam = audioParam ?? null
