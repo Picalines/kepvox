@@ -130,7 +130,7 @@ export class SynthContext {
 
   measure(measureIndex: number): SynthTime {
     const [notesInBar, _] = this.timeSignature
-    return new SynthTime({ note: notesInBar * measureIndex })
+    return SynthTime.note.repeat(notesInBar * measureIndex)
   }
 
   /**

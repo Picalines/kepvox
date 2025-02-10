@@ -11,6 +11,7 @@ export type UnitName =
   | 'audio'
   | 'nonNegative'
   | 'factor'
+  | 'ticks'
 
 export type UnitValueMap = { [U in UnitName]: Branded<number, U> }
 
@@ -53,6 +54,7 @@ export const Unit: { readonly [U in UnitName]: UnitMeta<U> } = {
   audio: createUnitMeta('audio', new Range(-1, 1)),
   nonNegative: createUnitMeta('nonNegative', Range.positive),
   factor: createUnitMeta('factor', Range.any),
+  ticks: createUnitMeta('ticks', Range.any),
 }
 
 export const Seconds = Unit.seconds
@@ -64,6 +66,7 @@ export const Normal = Unit.normal
 export const Audio = Unit.audio
 export const NonNegative = Unit.nonNegative
 export const Factor = Unit.factor
+export const Ticks = Unit.ticks
 
 export type Seconds = UnitValue<'seconds'>
 export type Beats = UnitValue<'beats'>
@@ -74,3 +77,4 @@ export type Normal = UnitValue<'normal'>
 export type Audio = UnitValue<'audio'>
 export type NonNegative = UnitValue<'nonNegative'>
 export type Factor = UnitValue<'factor'>
+export type Ticks = UnitValue<'ticks'>
