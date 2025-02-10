@@ -1,5 +1,4 @@
 import { AutomationCurve } from '#automation'
-import type { SynthContext } from '#context'
 import { Range } from '#math'
 import type { SynthNode } from '#node'
 import { SynthTime } from '#time'
@@ -19,15 +18,12 @@ export type ScalarSynthParamOpts<TUnit extends UnitName> = {
 export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly [SYNTH_PARAM_TYPE] = 'scalar'
 
-  readonly unit: TUnit
-  readonly range: Range
   readonly curve: AutomationCurve<TUnit>
 
-  readonly #context: SynthContext
   readonly #audioParam: AudioParam | null
 
   constructor(opts: ScalarSynthParamOpts<TUnit>) {
-    const { node, audioParam, unit, initialValue: initialValueParam, range: rangeParam = Range.any } = opts
+    const { node, audioParam, unit, initialValue, range: rangeParam = Range.any } = opts
     const { context } = node
 
     if (audioParam && synthAudioParams.has(audioParam)) {
@@ -35,22 +31,17 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     }
 
     const unitRange = Unit[unit].range
-    const nativeRange = audioParam ? new Range(audioParam.minValue, audioParam.maxValue) : Range.any
-    const range = unitRange.intersection(nativeRange)?.intersection(rangeParam)
-
-    if (!range) {
-      throw new Error('the ScalarSynthParam has invalid range')
+    const audioRange = audioParam ? new Range(audioParam.minValue, audioParam.maxValue) : Range.any
+    const valueRange = unitRange.intersection(audioRange)?.intersection(rangeParam)
+    if (!valueRange) {
+      throw new Error(`${AudioParam.name} with range ${audioRange} can't handle values in range ${valueRange}`)
     }
 
-    const initialValue = Unit[unit].orClamp(range.clamp(initialValueParam))
+    const curve = new AutomationCurve({ unit, initialValue, valueRange })
 
     super({ node })
 
-    this.unit = unit
-    this.range = range
-    this.curve = new AutomationCurve({ initialValue, valueRange: range })
-
-    this.#context = context
+    this.curve = curve
     this.#audioParam = audioParam ?? null
 
     if (audioParam) {
@@ -59,6 +50,14 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
       context.playing.watchUntil(node.disposed, ({ start }) => this.#scheduleAudio(start))
       context.stopped.watchUntil(node.disposed, () => this.#stopAudio())
     }
+  }
+
+  get unit(): TUnit {
+    return this.curve.unit
+  }
+
+  get range(): Range {
+    return this.curve.valueRange
   }
 
   get initialValue() {
@@ -76,13 +75,13 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
 
     const curve = this.curve
     const audioParam = this.#audioParam
-    const scheduleStart = this.#context.scheduleTime
-    const skippedSeconds = this.#context.secondsPerNote.areaBefore(start)
+    const scheduleStart = this.context.scheduleTime
+    const skippedSeconds = this.context.secondsPerNote.areaBefore(start)
 
     audioParam.setValueAtTime(curve.valueAt(start), 0)
 
     for (const event of curve.eventsAfter(start)) {
-      const scheduleTime = scheduleStart + (this.#context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
+      const scheduleTime = scheduleStart + (this.context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
 
       if (event.ramp) {
         const rampFunc =

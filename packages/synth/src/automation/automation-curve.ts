@@ -2,7 +2,7 @@ import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
 import { Range } from '#math'
 import { SynthTime } from '#time'
-import type { UnitName, UnitValue } from '#units'
+import { Unit, type UnitName, type UnitValue } from '#units'
 
 export type InterpolationMethod = 'linear' | 'exponential'
 
@@ -13,11 +13,13 @@ type AutomationEvent<TUnit extends UnitName> = {
 }
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
+  unit: TUnit
   initialValue: UnitValue<TUnit>
   valueRange?: Range
 }
 
 export class AutomationCurve<TUnit extends UnitName> {
+  readonly #unit: TUnit
   readonly #valueRange: Range
 
   /**
@@ -32,15 +34,36 @@ export class AutomationCurve<TUnit extends UnitName> {
   readonly #eventAreas = new WeakMap<AutomationEvent<TUnit>, number>()
 
   constructor(opts: AutomationCurveOpts<TUnit>) {
-    this.#valueRange = opts.valueRange ?? Range.any
+    const { unit, initialValue, valueRange = Range.any } = opts
+    const unitRange = Unit[unit].range
 
-    this.setValueAt(SynthTime.start, opts.initialValue)
+    const commonRange = unitRange.intersection(valueRange)
+    if (!commonRange) {
+      throw new Error(`${AutomationCurve.name} of ${unit} (${unitRange}) can't handle the ${valueRange} value range`)
+    }
+
+    this.#unit = unit
+    this.#valueRange = commonRange
+
+    this.setValueAt(SynthTime.start, initialValue)
+  }
+
+  get unit(): TUnit {
+    return this.#unit
   }
 
   get timeRange(): [start: SynthTime, end: SynthTime] {
     const start = assertedAt(this.#events, 0)
     const end = assertedAt(this.#events, -1)
     return [start.time, end.time]
+  }
+
+  /**
+   * @returns a range of values that the curve can accept.
+   * Think "physically possible" range, not the actual values range
+   */
+  get valueRange(): Range {
+    return this.#valueRange
   }
 
   /**

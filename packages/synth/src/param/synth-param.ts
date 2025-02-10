@@ -20,4 +20,8 @@ export abstract class SynthParam {
 
     this.node = node
   }
+
+  get context() {
+    return this.node.context
+  }
 }

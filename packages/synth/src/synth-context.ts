@@ -64,6 +64,7 @@ export class SynthContext {
     this.lookAhead = Seconds.orClamp(lookAhead)
 
     this.secondsPerNote = new AutomationCurve({
+      unit: 'seconds',
       initialValue: Seconds.orClamp(2), // 120 bpm in 4/4
       valueRange: Range.positiveNonZero,
     })

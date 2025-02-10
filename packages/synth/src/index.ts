@@ -1,4 +1,4 @@
-export * from './automation-curve'
+export * from './automation'
 export * from './math'
 export * from './node'
 export * from './param'
