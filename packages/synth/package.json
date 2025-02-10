@@ -24,6 +24,7 @@
         "#math": "./src/math/index.ts",
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
+        "#pitch": "./src/pitch.ts",
         "#time": "./src/synth-time.ts",
         "#units": "./src/units.ts",
         "#util/*": "./src/util/*/index.ts"
