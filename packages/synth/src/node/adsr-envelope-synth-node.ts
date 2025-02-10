@@ -2,7 +2,7 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { ScalarSynthParam } from '#param'
-import type { SynthTime } from '#time'
+import { SynthTime } from '#time'
 import { Normal, Notes } from '#units'
 import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
 
@@ -58,10 +58,10 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
   attackAt(start: SynthTime) {
     const attackDuration = this.attack.curve.valueAt(start)
-    const attackEnd = start.add({ note: attackDuration })
+    const attackEnd = start.add(SynthTime.fromNotes(attackDuration))
 
     const decayDuration = this.decay.curve.valueAt(attackEnd)
-    const decayEnd = attackEnd.add({ note: decayDuration })
+    const decayEnd = attackEnd.add(SynthTime.fromNotes(decayDuration))
 
     const sustainLevel = this.sustain.curve.valueAt(decayEnd)
 
@@ -85,7 +85,7 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
   releaseAt(start: SynthTime) {
     const releaseDuration = this.release.curve.valueAt(start)
-    const releaseEnd = start.add({ note: releaseDuration })
+    const releaseEnd = start.add(SynthTime.fromNotes(releaseDuration))
 
     const gain = this.#gain.curve
     gain.holdValueAt(start)

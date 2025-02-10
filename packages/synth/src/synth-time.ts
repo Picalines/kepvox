@@ -1,55 +1,74 @@
-import { Beats, Notes, type UnitValue } from '#units'
-import type { SynthContext } from './synth-context'
+import { Notes, Ticks } from '#units'
 
-type SynthTimeUnit = 'note' | 'note2' | 'note4' | 'note8' | 'note16'
-
-type SynthTimeUnitMap = Partial<Record<SynthTimeUnit, number>>
+const TICKS_IN_NOTE = Ticks.orThrow(64)
 
 export class SynthTime {
-  static readonly start = new SynthTime()
+  static readonly start = new SynthTime(Ticks.orThrow(0))
 
-  readonly #quarterNotes: number
+  static readonly note = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE))
+  static readonly half = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 2))
+  static readonly quarter = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 4))
+  static readonly eighth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 8))
+  static readonly sixteenth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 16))
+  static readonly thirtySecond = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 32))
+  static readonly sixtyFourth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 64))
 
-  constructor(units: SynthTimeUnitMap = {}) {
-    this.#quarterNotes =
-      (units.note ?? 0) * 4 +
-      (units.note2 ?? 0) * 2 +
-      (units.note4 ?? 0) +
-      (units.note8 ?? 0) / 2 +
-      (units.note16 ?? 0) / 4
+  readonly #ticks: Ticks
+
+  private constructor(ticks: Ticks) {
+    this.#ticks = ticks
   }
 
-  add(time: SynthTime | SynthTimeUnitMap): SynthTime {
-    const synthTime = time instanceof SynthTime ? time : new SynthTime(time)
-    return new SynthTime({ note4: this.#quarterNotes + synthTime.#quarterNotes })
+  static fromTicks(ticks: Ticks) {
+    return new SynthTime(ticks)
   }
 
-  toBeats(context: SynthContext): UnitValue<'beats'> {
-    const [_, beatsInNote] = context.timeSignature
-    return Beats.orThrow(beatsInNote * (this.#quarterNotes / 4))
+  static fromNotes(notes: Notes) {
+    return SynthTime.note.repeat(notes)
   }
 
-  toNotes(): UnitValue<'notes'> {
-    return Notes.orThrow(this.#quarterNotes / 4)
+  add(time: SynthTime): SynthTime {
+    return new SynthTime(Ticks.orClamp(this.#ticks + time.#ticks))
+  }
+
+  sub(time: SynthTime): SynthTime {
+    return new SynthTime(Ticks.orClamp(this.#ticks - time.#ticks))
+  }
+
+  repeat(times: number): SynthTime {
+    return new SynthTime(Ticks.orClamp(this.#ticks * times))
+  }
+
+  toNotes(): Notes {
+    return Notes.orThrow(this.#ticks / TICKS_IN_NOTE)
+  }
+
+  /**
+   * Intended for serialization. Don't rely on how long ticks are,
+   * it's easier to use relative note values. Change the time signature if you
+   * want to speed up your composition
+   */
+  toTicks(): Ticks {
+    return this.#ticks
   }
 
   equals(time: SynthTime) {
-    return this.#quarterNotes === time.#quarterNotes
+    return this.#ticks === time.#ticks
   }
 
   isAfter(time: SynthTime) {
-    return this.#quarterNotes > time.#quarterNotes
+    return this.#ticks > time.#ticks
   }
 
   isAfterOrAt(time: SynthTime) {
-    return this.#quarterNotes >= time.#quarterNotes
+    return this.#ticks >= time.#ticks
   }
 
   isBefore(time: SynthTime) {
-    return this.#quarterNotes < time.#quarterNotes
+    return this.#ticks < time.#ticks
   }
 
   isBeforeOrAt(time: SynthTime) {
-    return this.#quarterNotes <= time.#quarterNotes
+    return this.#ticks <= time.#ticks
   }
 }
