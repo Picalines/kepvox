@@ -4,12 +4,12 @@ import { EnumSynthParam, ScalarSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
 
-const WAVE_SPAHE = ['sine', 'square', 'sawtooth', 'triangle'] as const
+const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
 
 export class OscillatorSynthNode extends SynthNode {
   readonly [SYNTH_NODE_TYPE] = 'oscillator'
 
-  readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHE)[number]>
+  readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHES)[number]>
   readonly frequency: ScalarSynthParam<'hertz'>
 
   constructor(context: SynthContext) {
@@ -23,12 +23,16 @@ export class OscillatorSynthNode extends SynthNode {
 
     this.waveShape = new EnumSynthParam({
       node: this,
-      variants: WAVE_SPAHE,
+      variants: WAVE_SPAHES,
       initialValue: 'sine',
-      synchronize: shape => {
-        oscillator.type = shape
-      },
     })
+
+    const updateWaveShape = () => {
+      oscillator.type = this.waveShape.value
+    }
+
+    this.waveShape.valueChanged.watch(updateWaveShape)
+    updateWaveShape()
 
     this.frequency = new ScalarSynthParam({
       node: this,

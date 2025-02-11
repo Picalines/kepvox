@@ -1,22 +1,18 @@
-import { OscillatorSynthNode, ADSREnvelopeSynthNode, SynthTime as T, Pitch, PitchNotation } from 'synth'
+import { GeneratorSynthNode, SynthTime as T, Pitch, PitchNotation } from 'synth'
 import { context } from 'synth/playground'
 
-context.timeSignature = [4, 4]
+const generator = new GeneratorSynthNode(context, {
+    maxPolyphony: 16
+})
+generator.connectOutput(context.output)
 
-const oscillator = new OscillatorSynthNode(context)
-const envelope = new ADSREnvelopeSynthNode(context)
-
-oscillator.connectOutput(envelope)
-envelope.connectOutput(context.output)
-
-oscillator.waveShape.value = 'triangle'
-envelope.attack.initialValue = T.sixteenth.toNotes()
-envelope.release.initialValue = T.sixteenth.toNotes()
+generator.waveShape.value = 'triangle'
+generator.attack.initialValue = T.sixteenth.toNotes()
+generator.release.initialValue = T.eighth.toNotes()
 
 const play = (time: T, note: PitchNotation, duration: T) => {
-    oscillator.frequency.curve.setValueAt(time, Pitch.frequency(note))
-    envelope.attackAt(time)
-    envelope.releaseAt(time.add(duration).sub(T.fromNotes(envelope.release.initialValue)))
+    generator.attackAt(time, Pitch.frequency(note))
+    generator.releaseAt(time.add(duration), Pitch.frequency(note))
 }
 
 // "Still alive" © Valve

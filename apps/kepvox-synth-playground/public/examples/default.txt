@@ -6,5 +6,5 @@ const oscillator = new OscillatorSynthNode(context)
 oscillator.connectOutput(context.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
-oscillator.frequency.curve.holdValueAt(new SynthTime({ note2: 1 }))
-oscillator.frequency.curve.rampValueUntil(new SynthTime({ note2: 1, note4: 2 }), Pitch.frequency('A5'))
+oscillator.frequency.curve.holdValueAt(SynthTime.half)
+oscillator.frequency.curve.rampValueUntil(SynthTime.note, Pitch.frequency('A5'))

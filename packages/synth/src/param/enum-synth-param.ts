@@ -6,7 +6,6 @@ export type EnumSynthParamOpts<V extends string> = {
   node: SynthNode
   variants: readonly V[]
   initialValue: NoInfer<V>
-  synchronize?: (currentVariant: V) => void
 }
 
 export class EnumSynthParam<V extends string = string> extends SynthParam {
@@ -19,7 +18,7 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
   readonly #changed = Signal.controlled<V>()
 
   constructor(opts: EnumSynthParamOpts<V>) {
-    const { node, variants, initialValue, synchronize } = opts
+    const { node, variants, initialValue } = opts
 
     super({ node })
 
@@ -33,13 +32,13 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
       throw new Error('the initialValue argument is not a valid enum param variant')
     }
 
-    if (synchronize) {
-      this.#changed.signal.watch(synchronize)
-    }
-
     this.value = initialValue
 
     node.disposed.watch(() => this.#changed.cancelAll())
+  }
+
+  get valueChanged() {
+    return this.#changed.signal
   }
 
   get value(): V {
