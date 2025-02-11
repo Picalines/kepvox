@@ -1,20 +1,12 @@
 import { AutomationCurve } from '#automation'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
-import { IntRange, Range } from '#math'
+import { Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { SynthTime } from '#time'
 import { Seconds } from '#units'
 import { Signal } from '#util/signal'
 
-type TimeSignature = readonly [beatsInBar: number, beatsInNote: number]
-
 export type SynthContextOpts = {
-  /**
-   * NOTE: changing the time during playback is an undefined behavior
-   * @default [4, 4]
-   */
-  timeSignature?: TimeSignature
-
   /**
    * A small time interval used to offset from `currentTime`
    *
@@ -45,8 +37,6 @@ export class SynthContext {
   #state: SynthState = 'idle'
 
   // @ts-expect-error: initialized by public setter
-  #timeSignature: TimeSignature
-  // @ts-expect-error: initialized by public setter
   #lookAhead: Seconds
 
   readonly #playing = Signal.controlled<{ start: SynthTime }>()
@@ -55,12 +45,11 @@ export class SynthContext {
   readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
-    const { timeSignature = [4, 4], lookAhead = 0.1 } = opts ?? {}
+    const { lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext
     this.#output = new OutputSynthNode(this)
 
-    this.timeSignature = timeSignature
     this.lookAhead = Seconds.orClamp(lookAhead)
 
     this.secondsPerNote = new AutomationCurve({
@@ -87,14 +76,6 @@ export class SynthContext {
 
   get state() {
     return this.#state
-  }
-
-  get timeSignature() {
-    return this.#timeSignature
-  }
-
-  set timeSignature([beatsInBar, beatValue]) {
-    this.#timeSignature = [IntRange.positiveNonZero.clamp(beatsInBar), IntRange.positiveNonZero.clamp(beatValue)]
   }
 
   get lookAhead(): Seconds {
@@ -127,11 +108,6 @@ export class SynthContext {
 
   get disposed() {
     return this.#disposed.signal
-  }
-
-  measure(measureIndex: number): SynthTime {
-    const [notesInBar, _] = this.timeSignature
-    return SynthTime.note.repeat(notesInBar * measureIndex)
   }
 
   /**

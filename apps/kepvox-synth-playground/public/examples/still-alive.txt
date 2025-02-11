@@ -10,65 +10,62 @@ oscillator.connectOutput(envelope)
 envelope.connectOutput(context.output)
 
 oscillator.waveShape.value = 'triangle'
-envelope.attack.initialValue = new T({note16: 1}).toNotes()
-envelope.release.initialValue = new T({note16: 1}).toNotes()
+envelope.attack.initialValue = T.sixteenth.toNotes()
+envelope.release.initialValue = T.sixteenth.toNotes()
 
 const play = (time: T, note: PitchNotation, duration: T) => {
     oscillator.frequency.curve.setValueAt(time, Pitch.frequency(note))
     envelope.attackAt(time)
-    envelope.releaseAt(time.add(duration).add({ note: -envelope.release.initialValue }))
+    envelope.releaseAt(time.add(duration).sub(T.fromNotes(envelope.release.initialValue)))
 }
-
-const n4 = new T({ note4: 1 })
-const n8 = new T({ note8: 1 })
 
 // "Still alive" © Valve
 const notes: [PitchNotation | null, T][] = [
-    ['C4',  n4],
-    ['F4',  n4],
-    ['E4',  n8],
-    ['D4',  n8],
-    ['D4',  n8],
-    ['C4',  n8],
-    ['D4',  n8],
-    ['C4',  n8],
-    ['C4',  n4],
-    ['C4',  n8],
-    [null,  n8],
-    ['A3',  n8],
-    ['A#3', n8],
-    ['C4',  n4],
-    ['F4',  n4],
-    ['G4',  n8],
-    ['F4',  n8],
-    ['E4',  n8],
-    ['D4',  n8],
-    ['D4',  n8],
-    ['E4',  n8],
-    ['F4',  n4],
-    ['F4',  n8],
-    [null,  n8],
-    ['G4',  n8],
-    ['A4',  n8],
-    ['A#4', n8],
-    ['A#4', n8],
-    ['A4',  n4],
-    ['G4',  n4],
-    ['F4',  n8],
-    ['G4',  n8],
-    ['A4',  n8],
-    ['A4',  n8],
-    ['G4',  n4],
-    ['F4',  n4],
-    ['D4',  n8],
-    ['C4',  n8],
-    ['D4',  n8],
-    ['F4',  n8],
-    ['F4',  n8],
-    ['E4',  n4],
-    ['E4',  n8],
-    ['F#4', n8],
-    ['F#4', n4],
+    ['C4',  T.quarter],
+    ['F4',  T.quarter],
+    ['E4',  T.eighth],
+    ['D4',  T.eighth],
+    ['D4',  T.eighth],
+    ['C4',  T.eighth],
+    ['D4',  T.eighth],
+    ['C4',  T.eighth],
+    ['C4',  T.quarter],
+    ['C4',  T.eighth],
+    [null,  T.eighth],
+    ['A3',  T.eighth],
+    ['A#3', T.eighth],
+    ['C4',  T.quarter],
+    ['F4',  T.quarter],
+    ['G4',  T.eighth],
+    ['F4',  T.eighth],
+    ['E4',  T.eighth],
+    ['D4',  T.eighth],
+    ['D4',  T.eighth],
+    ['E4',  T.eighth],
+    ['F4',  T.quarter],
+    ['F4',  T.eighth],
+    [null,  T.eighth],
+    ['G4',  T.eighth],
+    ['A4',  T.eighth],
+    ['A#4', T.eighth],
+    ['A#4', T.eighth],
+    ['A4',  T.quarter],
+    ['G4',  T.quarter],
+    ['F4',  T.eighth],
+    ['G4',  T.eighth],
+    ['A4',  T.eighth],
+    ['A4',  T.eighth],
+    ['G4',  T.quarter],
+    ['F4',  T.quarter],
+    ['D4',  T.eighth],
+    ['C4',  T.eighth],
+    ['D4',  T.eighth],
+    ['F4',  T.eighth],
+    ['F4',  T.eighth],
+    ['E4',  T.quarter],
+    ['E4',  T.eighth],
+    ['F#4', T.eighth],
+    ['F#4', T.quarter],
 ]
 
 let time = T.start
