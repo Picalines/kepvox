@@ -10,12 +10,15 @@ export type AutomationEvent<TUnit extends UnitName> = {
   ramp?: { value: UnitValue<TUnit>; method: InterpolationMethod }
 }
 
+export type RampDirection = 'none' | 'increasing' | 'decreasing'
+
 export type ReadonlyAutomationCurve<TUnit extends UnitName> = {
   get unit(): TUnit
   get timeRange(): [start: SynthTime, end: SynthTime]
   get valueRange(): Range
 
   valueAt(time: SynthTime): UnitValue<TUnit>
+  rampDirectionAt(time: SynthTime): RampDirection
   areaBefore(time: SynthTime): number
 
   eventAt(time: SynthTime): AutomationEvent<TUnit> | null

@@ -3,7 +3,12 @@ import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/asser
 import { Range } from '#math'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
-import type { AutomationEvent, InterpolationMethod, ReadonlyAutomationCurve } from './readonly-automation-curve'
+import type {
+  AutomationEvent,
+  RampDirection,
+  InterpolationMethod,
+  ReadonlyAutomationCurve,
+} from './readonly-automation-curve'
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
   unit: TUnit
@@ -133,6 +138,20 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
       after.ramp.value,
       time.toNotes(),
     ) as UnitValue<TUnit>
+  }
+
+  rampDirectionAt(time: SynthTime): RampDirection {
+    const [before, after] = this.eventSpan(time)
+
+    if (!before || !after || !after.ramp) {
+      return 'none'
+    }
+
+    if (after.ramp.value === before.value) {
+      return 'none'
+    }
+
+    return after.ramp.value > before.value ? 'increasing' : 'decreasing'
   }
 
   areaBefore(time: SynthTime): number {

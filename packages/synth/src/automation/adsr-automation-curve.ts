@@ -40,6 +40,9 @@ export class ADSRAutomationCurve {
     return this.#gain
   }
 
+  /**
+   * @returns time at which the attack (more specifically, decay) will end
+   */
   attackAt(start: SynthTime) {
     const attackDuration = this.#attack.valueAt(start)
     const attackEnd = start.add(SynthTime.fromNotes(attackDuration))
@@ -64,8 +67,13 @@ export class ADSRAutomationCurve {
     } else {
       gain.setValueAt(decayEnd, sustainLevel)
     }
+
+    return decayEnd
   }
 
+  /**
+   * @returns time at which the release will end
+   */
   releaseAt(start: SynthTime) {
     const releaseDuration = this.#release.valueAt(start)
     const releaseEnd = start.add(SynthTime.fromNotes(releaseDuration))
@@ -78,5 +86,7 @@ export class ADSRAutomationCurve {
     } else {
       gain.setValueAt(releaseEnd, Normal.min)
     }
+
+    return releaseEnd
   }
 }
