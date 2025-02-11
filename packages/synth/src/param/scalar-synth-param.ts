@@ -1,4 +1,4 @@
-import { AutomationCurve } from '#automation'
+import { AutomationCurve, automateAudioParam } from '#automation'
 import { Range } from '#math'
 import type { SynthNode } from '#node'
 import { SynthTime } from '#time'
@@ -20,8 +20,6 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
 
   readonly curve: AutomationCurve<TUnit>
 
-  readonly #audioParam: AudioParam | null
-
   constructor(opts: ScalarSynthParamOpts<TUnit>) {
     const { node, audioParam, unit, initialValue, range: rangeParam = Range.any } = opts
     const { context } = node
@@ -42,13 +40,16 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     super({ node })
 
     this.curve = curve
-    this.#audioParam = audioParam ?? null
 
     if (audioParam) {
       synthAudioParams.add(audioParam)
 
-      context.playing.watchUntil(node.disposed, ({ start }) => this.#scheduleAudio(start))
-      context.stopped.watchUntil(node.disposed, () => this.#stopAudio())
+      automateAudioParam({
+        context,
+        audioParam,
+        curve,
+        until: node.disposed,
+      })
     }
   }
 
@@ -66,40 +67,5 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
 
   set initialValue(value: UnitValue<TUnit>) {
     this.curve.setValueAt(SynthTime.start, value)
-  }
-
-  #scheduleAudio(start: SynthTime) {
-    if (!this.#audioParam) {
-      return
-    }
-
-    const curve = this.curve
-    const audioParam = this.#audioParam
-    const scheduleStart = this.context.scheduleTime
-    const skippedSeconds = this.context.secondsPerNote.areaBefore(start)
-
-    audioParam.setValueAtTime(curve.valueAt(start), 0)
-
-    for (const event of curve.eventsAfter(start)) {
-      const scheduleTime = scheduleStart + (this.context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
-
-      if (event.ramp) {
-        const rampFunc =
-          event.ramp.method === 'linear' ? audioParam.linearRampToValueAtTime : audioParam.exponentialRampToValueAtTime
-
-        rampFunc.call(audioParam, event.ramp.value, scheduleTime - Number.EPSILON)
-      }
-
-      audioParam.setValueAtTime(event.value, scheduleTime)
-    }
-  }
-
-  #stopAudio() {
-    if (!this.#audioParam) {
-      return
-    }
-
-    this.#audioParam.cancelScheduledValues(0)
-    this.#audioParam.value = this.initialValue
   }
 }
