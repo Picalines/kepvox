@@ -49,5 +49,7 @@ export class OscillatorSynthNode extends SynthNode {
 
     this.context.playing.watchUntil(this.disposed, unmuteOscillator)
     this.context.stopped.watchUntil(this.disposed, muteOscillator)
+
+    this.disposed.watch(() => oscillator.stop())
   }
 }
