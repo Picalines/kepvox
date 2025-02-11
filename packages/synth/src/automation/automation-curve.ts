@@ -3,14 +3,7 @@ import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/asser
 import { Range } from '#math'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
-
-export type InterpolationMethod = 'linear' | 'exponential'
-
-type AutomationEvent<TUnit extends UnitName> = {
-  time: SynthTime
-  value: UnitValue<TUnit>
-  ramp?: { value: UnitValue<TUnit>; method: InterpolationMethod }
-}
+import type { AutomationEvent, InterpolationMethod, ReadonlyAutomationCurve } from './readonly-automation-curve'
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
   unit: TUnit
@@ -18,7 +11,7 @@ export type AutomationCurveOpts<TUnit extends UnitName> = {
   valueRange?: Range
 }
 
-export class AutomationCurve<TUnit extends UnitName> {
+export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomationCurve<TUnit> {
   readonly #unit: TUnit
   readonly #valueRange: Range
 
