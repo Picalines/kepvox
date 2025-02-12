@@ -1,5 +1,5 @@
 import { AutomationCurve } from '#automation'
-import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
+import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import { Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { SynthTime } from '#time'
@@ -32,12 +32,11 @@ export class SynthContext {
 
   readonly #audioContext: AudioContext
 
+  readonly #lookAhead: Seconds
+
   readonly #output: OutputSynthNode
 
   #state: SynthState = 'idle'
-
-  // @ts-expect-error: initialized by public setter
-  #lookAhead: Seconds
 
   readonly #playing = Signal.controlled<{ start: SynthTime }>()
   readonly #stopped = Signal.controlled<{}>()
@@ -48,9 +47,8 @@ export class SynthContext {
     const { lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext
+    this.#lookAhead = Seconds.orClamp(Range.positiveNonZero.clamp(lookAhead))
     this.#output = new OutputSynthNode(this)
-
-    this.lookAhead = Seconds.orClamp(lookAhead)
 
     this.secondsPerNote = new AutomationCurve({
       unit: 'seconds',
@@ -76,18 +74,6 @@ export class SynthContext {
 
   get state() {
     return this.#state
-  }
-
-  get lookAhead(): Seconds {
-    return this.#lookAhead
-  }
-
-  set lookAhead(value) {
-    this.#lookAhead = Seconds.orClamp(Range.positiveNonZero.clamp(value))
-  }
-
-  get scheduleTime(): Seconds {
-    return Seconds.orClamp(this.#audioContext.currentTime + this.lookAhead)
   }
 
   get output(): OutputSynthNode {
@@ -148,6 +134,10 @@ export class SynthContext {
 
   get [INTERNAL_AUDIO_CONTEXT]() {
     return this.#audioContext
+  }
+
+  get [INTERNAL_LOOK_AHEAD]() {
+    return this.#lookAhead
   }
 
   #assertNotDisposed() {
