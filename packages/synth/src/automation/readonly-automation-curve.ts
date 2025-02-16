@@ -1,34 +1,20 @@
 import type { Range } from '#math'
 import type { SynthTime } from '#time'
 import type { UnitName, UnitValue } from '#units'
+import type { ReadonlyEventTimeline } from './readonly-event-timeline'
 
 export type InterpolationMethod = 'linear' | 'exponential'
 
-export type AutomationEvent<TUnit extends UnitName> = {
+export type AutomationCurveEvent<TUnit extends UnitName> = {
   time: SynthTime
   value: UnitValue<TUnit>
   ramp?: { value: UnitValue<TUnit>; method: InterpolationMethod }
 }
 
-export type RampDirection = 'none' | 'increasing' | 'decreasing'
-
-export type ReadonlyAutomationCurve<TUnit extends UnitName> = {
+export type ReadonlyAutomationCurve<TUnit extends UnitName> = ReadonlyEventTimeline<AutomationCurveEvent<TUnit>> & {
   get unit(): TUnit
-  get timeRange(): [start: SynthTime, end: SynthTime]
   get valueRange(): Range
 
   valueAt(time: SynthTime): UnitValue<TUnit>
-  rampDirectionAt(time: SynthTime): RampDirection
   areaBefore(time: SynthTime): number
-
-  eventAt(time: SynthTime): AutomationEvent<TUnit> | null
-  eventBefore(time: SynthTime): AutomationEvent<TUnit> | null
-  eventBeforeOrAt(time: SynthTime): AutomationEvent<TUnit> | null
-  eventAfter(time: SynthTime): AutomationEvent<TUnit> | null
-  eventAfterOrAt(time: SynthTime): AutomationEvent<TUnit> | null
-
-  eventsAfter(time: SynthTime): Iterable<AutomationEvent<TUnit>>
-  eventsBefore(time: SynthTime): Iterable<AutomationEvent<TUnit>>
-  eventsInRange(start: SynthTime, end: SynthTime): Iterable<AutomationEvent<TUnit>>
-  eventSpan(time: SynthTime): [AutomationEvent<TUnit> | null, AutomationEvent<TUnit> | null]
 }

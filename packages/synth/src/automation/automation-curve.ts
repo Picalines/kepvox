@@ -1,14 +1,9 @@
-import { isNonEmpty } from '@repo/common/array'
-import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
+import { assertDefined } from '@repo/common/assert'
 import { Range } from '#math'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
-import type {
-  AutomationEvent,
-  RampDirection,
-  InterpolationMethod,
-  ReadonlyAutomationCurve,
-} from './readonly-automation-curve'
+import { EventTimeline } from './event-timeline'
+import type { AutomationCurveEvent, InterpolationMethod, ReadonlyAutomationCurve } from './readonly-automation-curve'
 
 export type AutomationCurveOpts<TUnit extends UnitName> = {
   unit: TUnit
@@ -23,13 +18,13 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   /**
    * NOTE: has at least one element after construction
    */
-  readonly #events: AutomationEvent<TUnit>[] = []
+  readonly #timeline = new EventTimeline<AutomationCurveEvent<TUnit>>()
 
   /**
    * Area of a segment between this event and the next one.
    * undefined if cant be determined
    */
-  readonly #eventAreas = new WeakMap<AutomationEvent<TUnit>, number>()
+  readonly #spanAreas = new WeakMap<AutomationCurveEvent<TUnit>, number>()
 
   constructor(opts: AutomationCurveOpts<TUnit>) {
     const { unit, initialValue, valueRange = Range.any } = opts
@@ -43,6 +38,8 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     this.#unit = unit
     this.#valueRange = commonRange
 
+    this.#timeline.changed.watch(({ event }) => this.#updateAreaAround(event))
+
     this.setValueAt(SynthTime.start, initialValue)
   }
 
@@ -50,10 +47,8 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     return this.#unit
   }
 
-  get timeRange(): [start: SynthTime, end: SynthTime] {
-    const start = assertedAt(this.#events, 0)
-    const end = assertedAt(this.#events, -1)
-    return [start.time, end.time]
+  get timeRange() {
+    return this.#timeline.timeRange
   }
 
   /**
@@ -70,7 +65,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
    * Second {@link setValueAt} call overrides the first one. Doesn't cancel the {@link rampValueUntil}
    */
   setValueAt(time: SynthTime, value: UnitValue<TUnit>) {
-    this.#mergeEvent({ time, value: this.#processValue(value) })
+    this.#timeline.mergeEvent({ time, value: this.#processValue(value) })
   }
 
   /**
@@ -88,7 +83,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     const existingEvent = this.eventAt(end)
     const rightValue = existingEvent?.value ?? leftValue
 
-    this.#mergeEvent({ time: end, ramp: { value: leftValue, method }, value: rightValue })
+    this.#timeline.mergeEvent({ time: end, ramp: { value: leftValue, method }, value: rightValue })
   }
 
   /**
@@ -99,14 +94,8 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
    */
   holdValueAt(time: SynthTime): UnitValue<TUnit> {
     const value = this.valueAt(time)
-    this.#mergeEvent({ time, value })
-
-    const cutIndex = this.#eventIndexAfter(time)
-    if (cutIndex !== null) {
-      this.#events.splice(cutIndex)
-      this.#updateSpanArea(this.#events.length - 1)
-    }
-
+    this.#timeline.mergeEvent({ time, value })
+    this.#timeline.cancelEventsAfter(time)
     return value
   }
 
@@ -140,20 +129,6 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     ) as UnitValue<TUnit>
   }
 
-  rampDirectionAt(time: SynthTime): RampDirection {
-    const [before, after] = this.eventSpan(time)
-
-    if (!before || !after || !after.ramp) {
-      return 'none'
-    }
-
-    if (after.ramp.value === before.value) {
-      return 'none'
-    }
-
-    return after.ramp.value > before.value ? 'increasing' : 'decreasing'
-  }
-
   areaBefore(time: SynthTime): number {
     const lastEvent = this.eventBeforeOrAt(time)
     if (!lastEvent) {
@@ -161,108 +136,73 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     }
 
     const beforeArea = this.eventsBefore(lastEvent.time).reduce(
-      (sum, event, index) => sum + (this.#eventAreas.get(event) ?? this.#updateSpanArea(index) ?? 0),
+      (sum, event) => sum + (this.#spanAreas.get(event) ?? 0),
       0,
     )
 
     return beforeArea + this.#spanAreaAt(this.eventSpan(time), time)
   }
 
-  eventAt(time: SynthTime): AutomationEvent<TUnit> | null {
-    const event = this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
-    return event?.time.equals(time) ? event : null
+  eventAt(time: SynthTime) {
+    return this.#timeline.eventAt(time)
   }
 
-  eventBefore(time: SynthTime): AutomationEvent<TUnit> | null {
-    return this.#events[this.#eventIndexBefore(time) ?? -1] ?? null
+  eventBefore(time: SynthTime) {
+    return this.#timeline.eventBefore(time)
   }
 
-  eventBeforeOrAt(time: SynthTime): AutomationEvent<TUnit> | null {
-    return this.#events[this.#eventIndexBeforeOrAt(time) ?? -1] ?? null
+  eventBeforeOrAt(time: SynthTime) {
+    return this.#timeline.eventBeforeOrAt(time)
   }
 
-  eventAfter(time: SynthTime): AutomationEvent<TUnit> | null {
-    return this.#events[this.#eventIndexAfter(time) ?? -1] ?? null
+  eventAfter(time: SynthTime) {
+    return this.#timeline.eventAfter(time)
   }
 
-  eventAfterOrAt(time: SynthTime): AutomationEvent<TUnit> | null {
-    return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
+  eventAfterOrAt(time: SynthTime) {
+    return this.#timeline.eventAfterOrAt(time)
   }
 
-  *eventsAfter(time: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
-    const startIndex = this.#eventIndexAfter(time) ?? this.#events.length
-    for (let i = startIndex; i < this.#events.length; i++) {
-      yield assertedAt(this.#events, i)
-    }
+  eventsAfter(time: SynthTime) {
+    return this.#timeline.eventsAfter(time)
   }
 
-  *eventsBefore(time: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
-    const stopIndex = this.#eventIndexBefore(time) ?? -1
-    for (let i = 0; i <= stopIndex; i++) {
-      yield assertedAt(this.#events, i)
-    }
+  eventsBefore(time: SynthTime) {
+    return this.#timeline.eventsBefore(time)
   }
 
-  *eventsInRange(start: SynthTime, end: SynthTime): Generator<AutomationEvent<TUnit>, void, undefined> {
-    const startIndex = this.#eventIndexAfterOrAt(start) ?? 0
-    const endIndex = this.#eventIndexBeforeOrAt(end) ?? this.#events.length - 1
-    for (let i = startIndex; i <= endIndex; i++) {
-      yield assertedAt(this.#events, i)
-    }
+  eventsInRange(start: SynthTime, end: SynthTime) {
+    return this.#timeline.eventsInRange(start, end)
   }
 
-  eventSpan(time: SynthTime): [AutomationEvent<TUnit> | null, AutomationEvent<TUnit> | null] {
-    return [this.eventBeforeOrAt(time), this.eventAfter(time)]
+  eventSpan(time: SynthTime) {
+    return this.#timeline.eventSpan(time)
   }
 
   #processValue(value: UnitValue<TUnit>) {
     return this.#valueRange.clamp(value) as UnitValue<TUnit>
   }
 
-  #mergeEvent(event: AutomationEvent<TUnit>) {
-    const lastEventIndex = this.#eventIndexBeforeOrAt(event.time)
+  #updateAreaAround(event: AutomationCurveEvent<TUnit>) {
+    const prevEvent = this.eventBefore(event.time)
+    const nextEvent = this.eventAfter(event.time)
 
-    const lastEvent = lastEventIndex !== null ? assertedAt(this.#events, lastEventIndex) : null
+    if (prevEvent) {
+      this.#spanAreas.set(prevEvent, this.#spanAreaAt([prevEvent, event], event.time))
+    }
 
-    if (lastEventIndex === null) {
-      this.#events.push(event)
-      this.#updateSpanArea(this.#events.length - 2)
-      this.#updateSpanArea(this.#events.length - 1)
-    } else if (lastEvent?.time.equals(event.time)) {
-      this.#events.splice(lastEventIndex, 1, { ...lastEvent, ...event })
-      this.#updateSpanArea(lastEventIndex - 1)
-      this.#updateSpanArea(lastEventIndex)
+    if (nextEvent) {
+      this.#spanAreas.set(event, this.#spanAreaAt([event, nextEvent], nextEvent.time))
     } else {
-      this.#events.splice(lastEventIndex + 1, 0, event)
-      this.#updateSpanArea(lastEventIndex)
-      this.#updateSpanArea(lastEventIndex + 1)
+      this.#spanAreas.delete(event)
     }
   }
 
-  #updateSpanArea(eventIndex: number): number | null {
-    if (eventIndex < 0 || eventIndex >= this.#events.length) {
-      return null
-    }
-
-    const startEvent = assertedAt(this.#events, eventIndex)
-
-    if (eventIndex === this.#events.length - 1) {
-      this.#eventAreas.delete(startEvent)
-      return null
-    }
-
-    const endEvent = assertedAt(this.#events, eventIndex + 1)
-    const area = this.#spanAreaAt([startEvent, endEvent], endEvent.time)
-    this.#eventAreas.set(startEvent, area)
-
-    return area
-  }
-
-  #spanAreaAt(span: [AutomationEvent<TUnit> | null, AutomationEvent<TUnit> | null], time: SynthTime): number {
+  #spanAreaAt(span: [AutomationCurveEvent<TUnit> | null, AutomationCurveEvent<TUnit> | null], time: SynthTime): number {
     const [start, end] = span
 
     if (!start && end) {
-      throw new Error("can't evaluate area before start")
+      throw new Error(`${AutomationCurve.name} can't evaluate area before start`)
     }
 
     if (start && !end) {
@@ -289,73 +229,6 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
         time.toNotes(),
       ),
     )
-  }
-
-  #eventIndexBeforeOrAt(time: SynthTime): number | null {
-    const events = this.#events
-    if (!isNonEmpty(events)) {
-      return null
-    }
-
-    const firstEvent = events[0]
-    if (firstEvent.time.isAfter(time)) {
-      return null
-    }
-
-    const lastEvent = events[events.length - 1]
-    if (lastEvent?.time.isBeforeOrAt(time)) {
-      return events.length - 1
-    }
-
-    let start = 0
-    let end = events.length - 1
-
-    while (start <= end) {
-      const middle = Math.floor(start + (end - start) / 2)
-      const middleEvent = this.#events[middle]
-      const nextEvent = this.#events[middle + 1]
-      assertDefined(middleEvent)
-      assertDefined(nextEvent)
-
-      if (time.isAfterOrAt(middleEvent.time) && time.isBefore(nextEvent.time)) {
-        return middle
-      }
-
-      if (middleEvent.time.isBefore(time)) {
-        start = middle + 1
-      } else {
-        end = middle - 1
-      }
-    }
-
-    assertUnreachable('AutomationCurve search failed')
-  }
-
-  #eventIndexBefore(time: SynthTime): number | null {
-    const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null
-      ? this.#events[lastIndex]?.time.equals(time)
-        ? this.#eventIndexOrNull(lastIndex - 1)
-        : lastIndex
-      : null
-  }
-
-  #eventIndexAfterOrAt(time: SynthTime): number | null {
-    const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null
-      ? this.#events[lastIndex]?.time.isBefore(time)
-        ? this.#eventIndexOrNull(lastIndex + 1)
-        : lastIndex
-      : null
-  }
-
-  #eventIndexAfter(time: SynthTime): number | null {
-    const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null ? this.#eventIndexOrNull(lastIndex + 1) : null
-  }
-
-  #eventIndexOrNull(index: number): number | null {
-    return this.#events.length > 0 && index >= 0 && index < this.#events.length ? index : null
   }
 }
 
