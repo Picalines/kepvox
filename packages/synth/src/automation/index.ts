@@ -1,3 +1,5 @@
-export * from './readonly-automation-curve'
-export * from './automation-curve'
 export * from './adsr-automation-curve'
+export * from './automation-curve'
+export * from './enum-automation'
+export * from './readonly-automation-curve'
+export * from './readonly-enum-automation'
