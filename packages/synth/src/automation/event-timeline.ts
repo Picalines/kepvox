@@ -1,20 +1,37 @@
 import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
 import type { SynthTime } from '#time'
-import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timeline'
 import { Signal } from '#util/signal'
+import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timeline'
 
 export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTimeline<TEvent> {
   readonly #changed = Signal.controlled<{ event: TEvent }>()
 
+  readonly #cancelled = Signal.controlled<{ after: SynthTime }>()
+
   readonly #events: TEvent[] = []
 
+  get changed() {
+    return this.#changed.signal
+  }
+
+  get cancelled() {
+    return this.#cancelled.signal
+  }
+
   get timeRange(): [start: SynthTime, end: SynthTime] {
+    if (!this.#events.length) {
+      throw new Error(`${EventTimeline.name} has no events`)
+    }
+
     const start = assertedAt(this.#events, 0)
     const end = assertedAt(this.#events, -1)
     return [start.time, end.time]
   }
 
+  /**
+   * Merges given event with an existing one at the {@link SynthTime}
+   */
   mergeEvent(event: TEvent) {
     const lastEventIndex = this.#eventIndexBeforeOrAt(event.time)
 
@@ -34,6 +51,14 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     }
 
     this.#changed.emit({ event: newEvent })
+  }
+
+  cancelEventsAfter(time: SynthTime) {
+    const cutIndex = this.#eventIndexAfter(time)
+    if (cutIndex !== null) {
+      this.#events.splice(cutIndex)
+      this.#cancelled.emit({ after: time })
+    }
   }
 
   eventAt(time: SynthTime): TEvent | null {
