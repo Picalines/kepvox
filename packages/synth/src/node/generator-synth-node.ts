@@ -1,11 +1,13 @@
+import { assertedAt } from '@repo/common/assert'
+import { isOneOf } from '@repo/common/predicate'
 import { ADSRAutomationCurve, AutomationCurve, automateAudioParam } from '#automation'
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { EnumSynthParam, ScalarSynthParam } from '#param'
+import { Pitch } from '#pitch'
 import type { SynthTime } from '#time'
-import { Hertz, Normal, Notes } from '#units'
-import { assertedAt } from '@repo/common/assert'
+import { type Hertz, Normal, Notes } from '#units'
 import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
 
 export type GeneratorSynthNodeOpts = {
@@ -21,9 +23,6 @@ type GeneratorVoice = {
 }
 
 const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
-
-// TODO: Unit.zero utility?
-const INACTIVE_VOICE_FREQUENCY = Hertz.orThrow(0)
 
 export class GeneratorSynthNode extends SynthNode {
   readonly [SYNTH_NODE_TYPE] = 'generator'
@@ -90,7 +89,7 @@ export class GeneratorSynthNode extends SynthNode {
 
       const frequency = new AutomationCurve({
         unit: 'hertz',
-        initialValue: INACTIVE_VOICE_FREQUENCY,
+        initialValue: Pitch.frequency('C0'),
       })
 
       const adsr = new ADSRAutomationCurve({
@@ -129,16 +128,7 @@ export class GeneratorSynthNode extends SynthNode {
   }
 
   attackAt(time: SynthTime, frequency: Hertz) {
-    if (frequency === INACTIVE_VOICE_FREQUENCY) {
-      return
-    }
-
-    const voice =
-      this.#voices.find(
-        voice =>
-          voice.frequency.valueAt(time) === INACTIVE_VOICE_FREQUENCY &&
-          voice.adsr.gain.rampDirectionAt(time) !== 'increasing',
-      ) ?? assertedAt(this.#voices, 0)
+    const voice = this.#voices.find(voice => voice.adsr.state.valueAt(time) === 'idle') ?? assertedAt(this.#voices, 0)
 
     voice.frequency.holdValueAt(time)
     voice.frequency.setValueAt(time, frequency)
@@ -146,21 +136,11 @@ export class GeneratorSynthNode extends SynthNode {
   }
 
   releaseAt(time: SynthTime, frequency: Hertz) {
-    if (frequency === INACTIVE_VOICE_FREQUENCY) {
-      return
-    }
-
     const voice = this.#voices.find(
-      voice => voice.frequency.valueAt(time) === frequency && voice.adsr.gain.rampDirectionAt(time) !== 'decreasing',
+      voice =>
+        !isOneOf(voice.adsr.state.valueAt(time), ['idle', 'release']) && voice.frequency.valueAt(time) === frequency,
     )
 
-    if (!voice) {
-      return
-    }
-
-    const releaseEnd = voice.adsr.releaseAt(time)
-
-    voice.frequency.holdValueAt(releaseEnd)
-    voice.frequency.setValueAt(releaseEnd, INACTIVE_VOICE_FREQUENCY)
+    voice?.adsr.releaseAt(time)
   }
 }
