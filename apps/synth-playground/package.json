@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/package",
-    "name": "kepvox-synth-playground",
+    "name": "synth-playground",
     "version": "0.1.0",
     "private": true,
     "type": "module",
