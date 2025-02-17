@@ -36,9 +36,9 @@ export class OscillatorSynthNode extends SynthNode {
 
     this.frequency = new ScalarSynthParam({
       node: this,
-      audioParam: oscillator.frequency,
       unit: 'hertz',
       initialValue: Pitch.frequency('A4'),
+      automate: { param: oscillator.frequency },
     })
 
     const unmuteOscillator = () => {
