@@ -12,7 +12,7 @@ export type ScalarSynthParamOpts<TUnit extends UnitName> = {
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
-  audioParam?: AudioParam
+  automate?: { param: AudioParam; map?: (curveValue: UnitValue<TUnit>) => number }
 }
 
 export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
@@ -21,7 +21,14 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
   readonly curve: AutomationCurve<TUnit>
 
   constructor(opts: ScalarSynthParamOpts<TUnit>) {
-    const { node, audioParam, unit, initialValue, range: rangeParam = Range.any } = opts
+    const {
+      node,
+      automate: { param: audioParam, map: mapAudioParam } = {},
+      unit,
+      initialValue,
+      range: rangeParam = Range.any,
+    } = opts
+
     const { context } = node
 
     if (audioParam && synthAudioParams.has(audioParam)) {
@@ -49,6 +56,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
         audioParam,
         curve,
         until: node.disposed,
+        map: mapAudioParam,
       })
     }
   }
