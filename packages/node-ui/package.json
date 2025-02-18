@@ -1,0 +1,15 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/node-ui",
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "dependencies": {
+        "@withease/factories": "catalog:",
+        "effector": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*"
+    }
+}
