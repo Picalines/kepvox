@@ -1,8 +1,9 @@
 import { testStoryMatrix } from '@repo/ui-test/test-story'
-import meta from './tooltip.stories'
 
 testStoryMatrix({
-  meta,
+  meta: {
+    title: 'components/Tooltip',
+  },
   stories: ['Top', 'Left', 'Right', 'Bottom', 'NoArrow'],
   themes: ['light', 'dark'],
 })

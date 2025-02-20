@@ -1,8 +1,9 @@
 import { testStoryMatrix } from '@repo/ui-test/test-story'
-import meta from './heading.stories'
 
 testStoryMatrix({
-  meta,
+  meta: {
+    title: 'components/Heading',
+  },
   stories: ['Default', 'Center', 'Right', 'NoSuperTitle', 'NoDescription', 'NoTitle'],
   themes: ['light', 'dark'],
 })

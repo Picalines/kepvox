@@ -1,8 +1,9 @@
 import { testStoryMatrix } from '@repo/ui-test/test-story'
-import meta from './checkbox.stories'
 
 testStoryMatrix({
-  meta,
+  meta: {
+    title: 'components/Checkbox',
+  },
   stories: ['Checked', 'Unchecked', 'CheckedAndDisabled', 'UncheckedAndDisabled'],
   themes: ['light', 'dark'],
 })
