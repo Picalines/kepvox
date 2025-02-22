@@ -1,4 +1,5 @@
 import type { SynthTime } from '#time'
+import type { Signal } from '#util/signal'
 
 export type TimedEvent = {
   time: SynthTime
@@ -6,6 +7,8 @@ export type TimedEvent = {
 
 export type ReadonlyEventTimeline<TEvent extends TimedEvent> = {
   get timeRange(): [start: SynthTime, end: SynthTime]
+  get changed(): Signal<{ event: TEvent }>
+  get cancelled(): Signal<{ after: SynthTime }>
 
   eventAt(time: SynthTime): TEvent | null
   eventBefore(time: SynthTime): TEvent | null

@@ -25,6 +25,14 @@ export class EnumAutomation<E extends string> implements ReadonlyEnumAutomation<
     return this.#timeline.timeRange
   }
 
+  get changed() {
+    return this.#timeline.changed
+  }
+
+  get cancelled() {
+    return this.#timeline.cancelled
+  }
+
   setValueAt(time: SynthTime, value: E) {
     this.#timeline.mergeEvent({ time, value })
   }
