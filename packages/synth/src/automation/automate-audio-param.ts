@@ -16,7 +16,10 @@ type Params<TUnit extends UnitName> = {
    * Cancel AudioParam automation on the signal. Useful for dispose logic
    */
   until: Signal<null>
-  map?: (curveValue: UnitValue<TUnit>) => number
+  /**
+   * Change the curve value before sending it to AudioParam
+   */
+  map?: (curveValue: UnitValue<TUnit>, time: SynthTime) => number
 }
 
 /**
@@ -34,7 +37,7 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
     const now = audioContext.currentTime
     const ahead = now + context[INTERNAL_LOOK_AHEAD]
 
-    audioParam.setValueAtTime(map(curve.valueAt(start)), now)
+    audioParam.setValueAtTime(map(curve.valueAt(start), start), now)
 
     for (const event of curve.eventsAfter(start)) {
       const time = ahead + (context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
@@ -43,16 +46,16 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
         const rampFunc =
           event.ramp.method === 'linear' ? audioParam.linearRampToValueAtTime : audioParam.exponentialRampToValueAtTime
 
-        rampFunc.call(audioParam, map(event.ramp.value), time - Number.EPSILON)
+        rampFunc.call(audioParam, map(event.ramp.value, event.time), time - Number.EPSILON)
       }
 
-      audioParam.setValueAtTime(map(event.value), time)
+      audioParam.setValueAtTime(map(event.value, event.time), time)
     }
   }
 
   const stopAudio = () => {
     audioParam.cancelScheduledValues(0)
-    audioParam.value = map(curve.valueAt(SynthTime.start))
+    audioParam.value = map(curve.valueAt(SynthTime.start), SynthTime.start)
   }
 
   context.playing.watchUntil(until, ({ start }) => scheduleEvents(start))

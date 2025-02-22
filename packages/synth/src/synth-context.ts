@@ -1,9 +1,9 @@
-import { AutomationCurve } from '#automation'
+import { AutomationCurve, automateAudioParam } from '#automation'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import { Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { SynthTime } from '#time'
-import { Seconds } from '#units'
+import { Notes, Seconds } from '#units'
 import { Signal } from '#util/signal'
 
 export type SynthContextOpts = {
@@ -30,18 +30,24 @@ export class SynthContext {
    */
   readonly secondsPerNote: AutomationCurve<'seconds'>
 
-  readonly #audioContext: AudioContext
+  readonly #playing = Signal.controlled<{ start: SynthTime }>()
+  readonly #stopped = Signal.controlled<{}>()
+  readonly #stateChanged = Signal.controlled<{}>()
+  readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
+  readonly #audioContext: AudioContext
   readonly #lookAhead: Seconds
 
   readonly #output: OutputSynthNode
 
   #state: SynthState = 'idle'
+  #playbackStartTime = Seconds.orThrow(0)
 
-  readonly #playing = Signal.controlled<{ start: SynthTime }>()
-  readonly #stopped = Signal.controlled<{}>()
-  readonly #stateChanged = Signal.controlled<{}>()
-  readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
+  /**
+   * Dummy audio node for {@link elapsedNotes}. We use its AudioParam
+   * to map seconds to {@link SynthTime}.
+   */
+  readonly #notesPerSecondNode: PannerNode
 
   constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
     const { lookAhead = 0.1 } = opts ?? {}
@@ -54,6 +60,22 @@ export class SynthContext {
       unit: 'seconds',
       initialValue: Seconds.orClamp(2), // 120 bpm in 4/4
       valueRange: Range.positiveNonZero,
+    })
+
+    this.playing.watch(() => {
+      this.#playbackStartTime = Seconds.orThrow(this.#audioContext.currentTime + this.#lookAhead)
+    })
+
+    this.#notesPerSecondNode = new PannerNode(audioContext)
+    this.#notesPerSecondNode.connect(audioContext.destination) // won't work without connection
+    this.disposed.watch(() => this.#notesPerSecondNode.disconnect())
+
+    automateAudioParam({
+      context: this,
+      audioParam: this.#notesPerSecondNode.positionX,
+      curve: this.secondsPerNote,
+      map: (_, time) => time.toNotes(),
+      until: this.disposed,
     })
 
     audioContext.addEventListener('statechange', () => {
@@ -94,6 +116,34 @@ export class SynthContext {
 
   get disposed() {
     return this.#disposed.signal
+  }
+
+  get elapsedSeconds(): Seconds {
+    return Seconds.orThrow(
+      this.state === 'playing' ? Math.max(0, this.#audioContext.currentTime - this.#playbackStartTime) : 0,
+    )
+  }
+
+  get elapsedNotes(): Notes {
+    if (this.state !== 'playing') {
+      return Notes.orThrow(0)
+    }
+
+    const elapsedSeconds = this.elapsedSeconds
+    const [, tempoAutomationEnd] = this.secondsPerNote.timeRange
+    const tempoAutomationEndSeconds = this.secondsPerNote.areaBefore(tempoAutomationEnd)
+
+    // See the constructor. If the tempo automation is active,
+    // use its current value as the result
+    if (elapsedSeconds <= tempoAutomationEndSeconds) {
+      return Notes.orThrow(this.#notesPerSecondNode.positionX.value)
+    }
+
+    // If the tempo automation have ended, we know that the elapsedNotes should
+    // increase linearly, and the "slope" is determined by secondsPerNote
+    const constantNoteDuration = this.secondsPerNote.valueAt(tempoAutomationEnd)
+    const secondsSinceAutomationEnd = elapsedSeconds - tempoAutomationEndSeconds
+    return Notes.orThrow(tempoAutomationEnd.toNotes() + secondsSinceAutomationEnd / constantNoteDuration)
   }
 
   /**
