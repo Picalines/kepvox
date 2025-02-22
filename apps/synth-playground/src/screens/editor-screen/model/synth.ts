@@ -1,7 +1,7 @@
 import { SynthContext, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
-import { readonly } from 'patronum'
+import { interval, not, readonly, spread } from 'patronum'
 
 export const createSynth = createFactory(() => {
   const stateChanged = createEvent<SynthState>()
@@ -10,6 +10,9 @@ export const createSynth = createFactory(() => {
 
   const $state = restore(stateChanged, 'disposed')
   const $isPlaying = $state.map(state => state === 'playing')
+
+  const $elapsedSeconds = createStore(0)
+  const $elapsedNotes = createStore(0)
 
   const initialized = createEvent()
   const started = createEvent()
@@ -63,9 +66,32 @@ export const createSynth = createFactory(() => {
     target: $synthContext,
   })
 
+  const { tick } = interval({
+    timeout: 50,
+    start: sample({ clock: $isPlaying, filter: $isPlaying }),
+    stop: sample({ clock: $isPlaying, filter: not($isPlaying) }),
+    leading: true,
+    trailing: true,
+  })
+
+  sample({
+    clock: tick,
+    source: $synthContext,
+    fn: context => ({
+      elapsedSeconds: context?.elapsedSeconds ?? 0,
+      elapsedNotes: context?.elapsedNotes ?? 0,
+    }),
+    target: spread({
+      elapsedSeconds: $elapsedSeconds,
+      elapsedNotes: $elapsedNotes,
+    }),
+  })
+
   return {
     $isPlaying: readonly($isPlaying),
     $synthContext: readonly($synthContext),
+    $elapsedSeconds: readonly($elapsedSeconds),
+    $elapsedNotes: readonly($elapsedNotes),
     initialized,
     started,
     reset,

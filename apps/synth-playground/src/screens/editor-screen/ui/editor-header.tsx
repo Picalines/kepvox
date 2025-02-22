@@ -5,6 +5,7 @@ import type { FC } from 'react'
 import { EditorStatus } from './editor-status'
 import { ExampleSelect } from './example-select'
 import { PlaybackButton } from './playback-button'
+import { PlaybackTimer } from './playback-timer'
 
 export const EditorHeader: FC = () => {
   return (
@@ -22,6 +23,7 @@ export const EditorHeader: FC = () => {
       <PlaybackButton />
       <ExampleSelect />
       <EditorStatus />
+      <PlaybackTimer />
     </div>
   )
 }
