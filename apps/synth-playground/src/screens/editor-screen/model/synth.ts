@@ -1,30 +1,32 @@
 import { SynthContext, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
-import { attach, createEvent, createStore, restore, sample } from 'effector'
+import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
 import { readonly } from 'patronum'
 
 export const createSynth = createFactory(() => {
   const stateChanged = createEvent<SynthState>()
 
-  const createSynthContext = (): SynthContext | null => {
+  const $synthContext = createStore<SynthContext | null>(null)
+
+  const $state = restore(stateChanged, 'disposed')
+  const $isPlaying = $state.map(state => state === 'playing')
+
+  const initialized = createEvent()
+  const started = createEvent()
+  const reset = createEvent()
+
+  const initContextFx = createEffect(() => {
     if (typeof window === 'undefined') {
       return null
     }
 
     const synthContext = new SynthContext(new AudioContext())
 
-    synthContext.stateChanged.watch(() => stateChanged(synthContext.state))
+    const scopedStateChanged = scopeBind(stateChanged)
+    synthContext.stateChanged.watch(() => scopedStateChanged(synthContext.state))
 
     return synthContext
-  }
-
-  const $synthContext = createStore(createSynthContext())
-
-  const $state = restore(stateChanged, 'disposed')
-  const $isPlaying = $state.map(state => state === 'playing')
-
-  const started = createEvent()
-  const reset = createEvent()
+  })
 
   const playFx = attach({
     source: $synthContext,
@@ -34,6 +36,11 @@ export const createSynth = createFactory(() => {
   const disposeFx = attach({
     source: $synthContext,
     effect: synthContext => synthContext?.dispose(),
+  })
+
+  sample({
+    clock: initialized,
+    target: initContextFx,
   })
 
   sample({
@@ -48,13 +55,18 @@ export const createSynth = createFactory(() => {
 
   sample({
     clock: disposeFx.finally,
+    target: initContextFx,
+  })
+
+  sample({
+    clock: initContextFx.doneData,
     target: $synthContext,
-    fn: createSynthContext,
   })
 
   return {
     $isPlaying: readonly($isPlaying),
     $synthContext: readonly($synthContext),
+    initialized,
     started,
     reset,
   }

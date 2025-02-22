@@ -6,8 +6,8 @@ import { type FC, useCallback } from 'react'
 import { EXAMPLES, model } from '../model'
 
 export const ExampleSelect: FC = () => {
-  const { value, onChange, disabled } = useUnit({
-    value: model.$example,
+  const { example, onChange, disabled } = useUnit({
+    example: model.$example,
     onChange: model.exampleSelected,
     disabled: model.$isReadonly,
   })
@@ -22,7 +22,7 @@ export const ExampleSelect: FC = () => {
   )
 
   return (
-    <Select.Root size="lg" value={value} onValueChange={onValueChange} disabled={disabled}>
+    <Select.Root size="lg" value={example.name} onValueChange={onValueChange} disabled={disabled}>
       <Select.Trigger />
       <Select.Content>
         <Select.Group>

@@ -13,27 +13,25 @@ export const EXAMPLES = {
 
 type ExampleName = keyof typeof EXAMPLES
 
+type Example = {
+  name: ExampleName
+  code: string
+}
+
 export const createExampleSelector = createFactory(() => {
-  const $exampleName = createStore<ExampleName>('default')
-  const $exampleCode = createStore(EXAMPLES[$exampleName.getState()])
+  const $example = createStore<Example>({ name: 'default', code: EXAMPLES.default })
 
   const exampleSelected = createEvent<ExampleName>()
 
   sample({
     clock: exampleSelected,
-    filter: example => example in EXAMPLES,
-    target: $exampleName,
-  })
-
-  sample({
-    clock: $exampleName,
-    target: $exampleCode,
-    fn: example => EXAMPLES[example],
+    filter: exampleName => exampleName in EXAMPLES,
+    fn: exampleName => ({ name: exampleName, code: EXAMPLES[exampleName] }),
+    target: $example,
   })
 
   return {
-    $exampleName: readonly($exampleName),
-    $exampleCode: readonly($exampleCode),
+    $example: readonly($example),
     exampleSelected,
   }
 })

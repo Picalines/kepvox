@@ -2,14 +2,8 @@ import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
 import { not, readonly } from 'patronum'
 
-type Params = {
-  defaultCode?: string
-}
-
-export const createCodeEditor = createFactory((params: Params) => {
-  const { defaultCode = '' } = params
-
-  const $code = createStore(defaultCode)
+export const createCodeEditor = createFactory(() => {
+  const $code = createStore('')
 
   const $isReadonly = createStore(false)
 
