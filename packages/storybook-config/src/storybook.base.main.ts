@@ -1,6 +1,5 @@
-/**
- * @type {import('@storybook/react-vite').StorybookConfig}
- */
+import type { StorybookConfig } from 'storybook/internal/types'
+
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 
@@ -12,12 +11,8 @@ const config = {
   ],
 
   typescript: {
-    check: true,
-    reactDocgen: 'react-docgen-typescript',
-    reactDocgenTypescriptOptions: {
-      tsconfigPath: 'tsconfig.json',
-    },
+    check: false,
   },
-}
+} satisfies StorybookConfig
 
 export default config

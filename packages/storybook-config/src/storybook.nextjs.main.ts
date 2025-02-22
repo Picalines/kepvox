@@ -1,7 +1,9 @@
+import type { StorybookConfig } from '@storybook/nextjs'
 import baseSbConfig from '#main/base'
-import { mergeNextConfig } from './merge-config'
 
-export default mergeNextConfig(baseSbConfig, {
+const config = {
+  ...baseSbConfig,
+
   framework: {
     name: '@storybook/nextjs',
     options: {},
@@ -10,4 +12,6 @@ export default mergeNextConfig(baseSbConfig, {
   core: {
     builder: '@storybook/builder-webpack5',
   },
-})
+} satisfies StorybookConfig
+
+export default config

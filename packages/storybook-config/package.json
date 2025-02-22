@@ -5,17 +5,17 @@
     "private": true,
     "type": "module",
     "exports": {
-        "./main/base": "./src/storybook.base.main.js",
-        "./main/nextjs": "./src/storybook.nextjs.main.js",
-        "./main/vite": "./src/storybook.vite.main.js",
-        "./merge": "./src/merge-config.js",
-        "./preview/react": "./src/storybook.preview.react.js"
+        "./main/base": "./src/storybook.base.main.ts",
+        "./main/nextjs": "./src/storybook.nextjs.main.ts",
+        "./main/vite": "./src/storybook.vite.main.ts",
+        "./merge": "./src/merge-config.ts",
+        "./preview/react": "./src/storybook.preview.react.ts"
     },
     "scripts": {
         "ts:check": "tsc --noEmit"
     },
     "imports": {
-        "#main/base": "./src/storybook.base.main.js"
+        "#main/base": "./src/storybook.base.main.ts"
     },
     "peerDependencies": {
         "@storybook/addon-essentials": "catalog:",

@@ -1,7 +1,9 @@
+import type { StorybookConfig } from '@storybook/react-vite'
 import baseSbConfig from '#main/base'
-import { mergeViteConfig as mergeSbViteConfig } from './merge-config'
 
-export default mergeSbViteConfig(baseSbConfig, {
+const config = {
+  ...baseSbConfig,
+
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -10,4 +12,6 @@ export default mergeSbViteConfig(baseSbConfig, {
   core: {
     builder: '@storybook/builder-vite',
   },
-})
+} satisfies StorybookConfig
+
+export default config
