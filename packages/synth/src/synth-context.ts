@@ -35,7 +35,7 @@ export class SynthContext {
   readonly #stateChanged = Signal.controlled<{}>()
   readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
-  readonly #audioContext: AudioContext
+  readonly #audioContext: AudioContext | OfflineAudioContext
   readonly #lookAhead: Seconds
 
   readonly #output: OutputSynthNode
