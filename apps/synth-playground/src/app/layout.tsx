@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import './index.css'
+import { EffectorNext } from '@effector/next'
 import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={monoFont.className}>{children}</body>
+      <body className={monoFont.className}>
+        <EffectorNext>{children}</EffectorNext>
+      </body>
     </html>
   )
 }
