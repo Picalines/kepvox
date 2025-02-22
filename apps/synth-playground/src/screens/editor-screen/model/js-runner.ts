@@ -1,58 +1,57 @@
 import initSwc, { transform } from '@swc/wasm-web'
 import { createFactory } from '@withease/factories'
-import { createEffect, createEvent, createStore, sample } from 'effector'
+import { attach, createEffect, createEvent, createStore, restore, sample } from 'effector'
 import { equals, not, readonly, spread } from 'patronum'
 
-type Params = {
-  modules: Readonly<Record<string, () => object>>
-}
-
-export const createJsRunner = createFactory((params: Params) => {
-  const { modules } = params
-
+export const createJsRunner = createFactory(() => {
   const $state = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
   const $error = createStore<null | Error>(null)
 
   const initialized = createEvent()
-  const codeSubmitted = createEvent<string>()
+  const jsCodeChanged = createEvent<string>()
+  const jsModulesChanged = createEvent<Record<string, object>>()
+  const jsCodeRan = createEvent()
+
+  const $jsCode = restore(jsCodeChanged, '')
+  const $jsModules = restore(jsModulesChanged, {})
 
   const initFx = createEffect(async () => {
     await initSwc()
   })
 
-  const runFx = createEffect(async (jsCode: string) => {
-    let transformedJs: string
+  const runFx = attach({
+    source: {
+      jsCode: $jsCode,
+      jsModules: $jsModules,
+    },
+    effect: async ({ jsCode, jsModules }) => {
+      let transformedJs: string
 
-    try {
-      const output = await transform(jsCode, {
-        module: { type: 'commonjs' },
-        jsc: {
-          parser: { syntax: 'typescript' },
-        },
-      })
+      try {
+        const output = await transform(jsCode, {
+          module: { type: 'commonjs' },
+          jsc: {
+            parser: { syntax: 'typescript' },
+          },
+        })
 
-      transformedJs = output.code
-    } catch (error) {
-      throw error instanceof Error ? error : new SyntaxError(String(error))
-    }
-
-    const require = (path: unknown) => {
-      if (typeof path !== 'string') {
-        throw new TypeError()
+        transformedJs = output.code
+      } catch (error) {
+        throw error instanceof Error ? error : new SyntaxError(String(error))
       }
 
-      const moduleFactory = modules[path]
+      const require = (path: unknown) => {
+        if (typeof path !== 'string') {
+          throw new TypeError()
+        }
 
-      if (!moduleFactory) {
-        throw new Error(`module not found: ${path}`)
+        return jsModules[path]
       }
 
-      return moduleFactory()
-    }
-
-    const func = new Function('exports', 'require', transformedJs)
-    const exports: Record<string, unknown> = {}
-    func(exports, require)
+      const func = new Function('exports', 'require', transformedJs)
+      const exports: Record<string, unknown> = {}
+      func(exports, require)
+    },
   })
 
   sample({
@@ -72,13 +71,13 @@ export const createJsRunner = createFactory((params: Params) => {
   })
 
   sample({
-    clock: codeSubmitted,
+    clock: jsCodeRan,
     filter: not(equals($state, 'running')),
-    fn: code => ({ code, status: 'running', error: null }) as const,
+    fn: () => ({ status: 'running', error: null, run: undefined }) as const,
     target: spread({
-      code: runFx,
       status: $state,
       error: $error,
+      run: runFx,
     }),
   })
 
@@ -103,5 +102,12 @@ export const createJsRunner = createFactory((params: Params) => {
     }
   })
 
-  return { initialized, $state: readonly($state), $error: readonly($error), codeSubmitted, modules }
+  return {
+    $state: readonly($state),
+    $error: readonly($error),
+    initialized,
+    jsCodeChanged,
+    jsModulesChanged,
+    jsCodeRan,
+  }
 })

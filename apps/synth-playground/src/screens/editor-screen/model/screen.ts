@@ -1,6 +1,7 @@
-import * as synth from '@repo/synth'
+import * as synthModule from '@repo/synth'
 import { invoke } from '@withease/factories'
 import { combine, createEvent, sample } from 'effector'
+import { createGate } from 'effector-react'
 import { persist as persistInQuery } from 'effector-storage/query'
 import { equals } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
@@ -9,20 +10,28 @@ import { createExampleSelector } from './examples'
 import { createJsRunner } from './js-runner'
 import { createSynth } from './synth'
 
-const { $exampleName, $exampleCode, exampleSelected } = invoke(createExampleSelector)
+const Gate = createGate()
 
-const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor, { defaultCode: $exampleCode.getState() })
+const { $example, exampleSelected } = invoke(createExampleSelector)
 
-const { $synthContext, $isPlaying, started: synthStarted, reset: resetSynth } = invoke(createSynth)
+const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor)
 
 const {
-  initialized,
+  $synthContext,
+  $isPlaying,
+  initialized: synthSetup,
+  started: synthStarted,
+  reset: synthReset,
+} = invoke(createSynth)
+
+const {
   $state: $jsState,
   $error,
-  codeSubmitted,
-} = invoke(createJsRunner, {
-  modules: { synth: () => synth, 'synth/playground': () => ({ context: $synthContext.getState() }) },
-})
+  initialized: jsRunnerSetup,
+  jsCodeChanged,
+  jsModulesChanged,
+  jsCodeRan,
+} = invoke(createJsRunner)
 
 const playbackToggled = createEvent()
 
@@ -39,10 +48,37 @@ const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
 })
 
 sample({
+  clock: Gate.open,
+  target: [jsRunnerSetup, synthSetup],
+})
+
+sample({
+  clock: Gate.close,
+  target: synthReset,
+})
+
+sample({
+  clock: $synthContext,
+  target: jsModulesChanged,
+  fn: context => ({ synth: synthModule, 'synth/playground': { context } }),
+})
+
+sample({
   clock: playbackToggled,
   filter: equals($status, 'ready'),
   source: $code,
-  target: codeSubmitted,
+  target: jsCodeChanged,
+})
+
+sample({
+  clock: playbackToggled,
+  filter: $isPlaying,
+  target: synthReset,
+})
+
+sample({
+  clock: jsCodeChanged,
+  target: jsCodeRan,
 })
 
 sample({
@@ -52,39 +88,25 @@ sample({
 })
 
 sample({
-  clock: playbackToggled,
-  filter: $isPlaying,
-  target: resetSynth,
-})
-
-sample({
   clock: combine({ isPlaying: $isPlaying, jsState: $jsState }),
   target: $isReadonly,
   fn: ({ isPlaying, jsState }) => isPlaying || jsState === 'running',
 })
 
 sample({
-  clock: $exampleCode,
+  clock: $example,
   target: codeChanged,
+  fn: ({ code }) => code,
 })
 
 persistInQuery({
   key: 'code',
   source: $code,
+  pickup: Gate.open,
   target: codeChanged,
   serialize: base64Url.encode,
   deserialize: base64Url.decode,
-  timeout: 100,
+  timeout: 10,
 })
 
-export {
-  $code,
-  $isReadonly,
-  $error,
-  $status,
-  $exampleName as $example,
-  exampleSelected,
-  codeChanged,
-  playbackToggled,
-  initialized,
-}
+export { Gate, $code, $isReadonly, $error, $status, $example, exampleSelected, codeChanged, playbackToggled }

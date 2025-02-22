@@ -1,6 +1,6 @@
 'use client'
 
-import { type FC, useCallback, useEffect } from 'react'
+import { type FC, useCallback } from 'react'
 
 import {
   Editor as MonacoEditor,
@@ -18,12 +18,11 @@ type Props = {
 export const CodeEditor: FC<Props> = props => {
   const { className } = props
 
-  const { value, isReadonly, onChangeModel, onPlaybackToggle, onSetup } = useUnit({
+  const { value, isReadonly, onChangeModel, onPlaybackToggle } = useUnit({
     value: model.$code,
     isReadonly: model.$isReadonly,
     onChangeModel: model.codeChanged,
     onPlaybackToggle: model.playbackToggled,
-    onSetup: model.initialized,
   })
 
   const onChange = useCallback<OnMonacoChange>(newValue => onChangeModel(newValue ?? ''), [onChangeModel])
@@ -34,8 +33,6 @@ export const CodeEditor: FC<Props> = props => {
     },
     [onPlaybackToggle],
   )
-
-  useEffect(() => onSetup(), [onSetup])
 
   return (
     <div className={className}>
