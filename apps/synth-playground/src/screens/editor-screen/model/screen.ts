@@ -19,6 +19,8 @@ const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor)
 const {
   $synthContext,
   $isPlaying,
+  $elapsedSeconds,
+  $elapsedNotes,
   initialized: synthSetup,
   started: synthStarted,
   reset: synthReset,
@@ -109,4 +111,16 @@ persistInQuery({
   timeout: 10,
 })
 
-export { Gate, $code, $isReadonly, $error, $status, $example, exampleSelected, codeChanged, playbackToggled }
+export {
+  Gate,
+  $code,
+  $isReadonly,
+  $error,
+  $status,
+  $example,
+  $elapsedSeconds,
+  $elapsedNotes,
+  exampleSelected,
+  codeChanged,
+  playbackToggled,
+}
