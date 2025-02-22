@@ -59,6 +59,14 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     return this.#valueRange
   }
 
+  get changed() {
+    return this.#timeline.changed
+  }
+
+  get cancelled() {
+    return this.#timeline.cancelled
+  }
+
   /**
    * Schedules an event, when value will instantly jump to the specified value
    *
