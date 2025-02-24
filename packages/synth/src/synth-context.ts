@@ -49,7 +49,7 @@ export class SynthContext {
    */
   readonly #notesPerSecondNode: PannerNode
 
-  constructor(audioContext: AudioContext, opts?: SynthContextOpts) {
+  constructor(audioContext: AudioContext | OfflineAudioContext, opts?: SynthContextOpts) {
     const { lookAhead = 0.1 } = opts ?? {}
 
     this.#audioContext = audioContext
