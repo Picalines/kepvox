@@ -3,7 +3,7 @@ import { invoke } from '@withease/factories'
 import { combine, createEvent, sample } from 'effector'
 import { createGate } from 'effector-react'
 import { persist as persistInQuery } from 'effector-storage/query'
-import { equals } from 'patronum'
+import { debug, equals } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
 import { createExampleSelector } from './examples'
@@ -28,17 +28,17 @@ const {
 
 const {
   $state: $jsState,
-  $error,
+  $error: $jsError,
   initialized: jsRunnerSetup,
-  jsCodeChanged,
   jsModulesChanged,
+  jsCodeSubmitted,
   jsCodeRan,
 } = invoke(createJsRunner)
 
 const playbackToggled = createEvent()
 
 const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
-  if (!jsState) {
+  if (jsState === 'initializing') {
     return 'initializing' as const
   }
 
@@ -48,6 +48,8 @@ const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
 
   return 'ready' as const
 })
+
+debug({ js: $jsState, synth: $isPlaying, screen: $status })
 
 sample({
   clock: Gate.open,
@@ -69,7 +71,7 @@ sample({
   clock: playbackToggled,
   filter: equals($status, 'ready'),
   source: $code,
-  target: jsCodeChanged,
+  target: jsCodeSubmitted,
 })
 
 sample({
@@ -79,13 +81,8 @@ sample({
 })
 
 sample({
-  clock: jsCodeChanged,
-  target: jsCodeRan,
-})
-
-sample({
-  clock: $jsState,
-  filter: equals($jsState, 'success'),
+  clock: jsCodeRan,
+  filter: equals($jsError, null),
   target: synthStarted,
 })
 
@@ -115,7 +112,7 @@ export {
   Gate,
   $code,
   $isReadonly,
-  $error,
+  $jsError,
   $status,
   $example,
   $elapsedSeconds,

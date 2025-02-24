@@ -7,7 +7,7 @@ import type { FC } from 'react'
 import { model } from '../model'
 
 export const EditorStatus: FC = () => {
-  const { status, error } = useUnit({ status: model.$status, error: model.$error })
+  const { status, error } = useUnit({ status: model.$status, error: model.$jsError })
 
   if (status === 'initializing') {
     return <Text color="secondary">Initializing...</Text>

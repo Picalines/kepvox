@@ -4,15 +4,15 @@ import { attach, createEffect, createEvent, createStore, restore, sample } from 
 import { equals, not, readonly, spread } from 'patronum'
 
 export const createJsRunner = createFactory(() => {
-  const $state = createStore<null | 'initialized' | 'running' | 'success' | 'error'>(null)
+  const $state = createStore<'initializing' | 'ready' | 'running'>('initializing')
   const $error = createStore<null | Error>(null)
 
   const initialized = createEvent()
-  const jsCodeChanged = createEvent<string>()
   const jsModulesChanged = createEvent<Record<string, object>>()
+  const jsCodeSubmitted = createEvent<string>()
   const jsCodeRan = createEvent()
 
-  const $jsCode = restore(jsCodeChanged, '')
+  const $jsCode = restore(jsCodeSubmitted, '')
   const $jsModules = restore(jsModulesChanged, {})
 
   const initFx = createEffect(async () => {
@@ -62,7 +62,7 @@ export const createJsRunner = createFactory(() => {
   sample({
     clock: initFx.done,
     target: $state,
-    fn: () => 'initialized' as const,
+    fn: () => 'ready' as const,
   })
 
   sample({
@@ -71,7 +71,7 @@ export const createJsRunner = createFactory(() => {
   })
 
   sample({
-    clock: jsCodeRan,
+    clock: jsCodeSubmitted,
     filter: not(equals($state, 'running')),
     fn: () => ({ status: 'running', error: null, run: undefined }) as const,
     target: spread({
@@ -82,18 +82,19 @@ export const createJsRunner = createFactory(() => {
   })
 
   sample({
-    clock: runFx.done,
-    target: $state,
-    fn: () => 'success' as const,
+    clock: runFx.failData,
+    target: $error,
   })
 
   sample({
-    clock: runFx.failData,
-    fn: error => ({ status: 'error', error }) as const,
-    target: spread({
-      status: $state,
-      error: $error,
-    }),
+    clock: runFx.finally,
+    target: $state,
+    fn: () => 'ready' as const,
+  })
+
+  sample({
+    clock: runFx.finally,
+    target: jsCodeRan,
   })
 
   $error.watch(error => {
@@ -106,8 +107,8 @@ export const createJsRunner = createFactory(() => {
     $state: readonly($state),
     $error: readonly($error),
     initialized,
-    jsCodeChanged,
     jsModulesChanged,
+    jsCodeSubmitted,
     jsCodeRan,
   }
 })
