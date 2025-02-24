@@ -14,14 +14,11 @@
     "scripts": {
         "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6003 --no-open",
-        "dev:unit": "vitest watch",
+        "dev:unit": "vitest watch --browser.api=6013 --browser.headless",
         "ts:check": "tsc --noEmit",
-        "test:unit": "vitest run",
-        "test:screen": "PLAYWRIGHT_PORT=6003 playwright test",
-        "test:screen:update": "pnpm run test:screen --update-snapshots",
+        "test:unit": "vitest run --browser.api=6013 --browser.headless",
         "build": "tsup",
-        "playwright:install": "playwright install chromium --with-deps",
-        "playwright:server": "pnpm run dev:storybook"
+        "playwright:install": "playwright install chromium --with-deps"
     },
     "imports": {
         "#automation": "./src/automation/internals.ts",
@@ -40,19 +37,11 @@
     },
     "devDependencies": {
         "@playwright/test": "catalog:",
-        "@repo/storybook-config": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/ui-test": "workspace:*",
         "@repo/vite-config": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
-        "@storybook/addon-links": "catalog:",
-        "@storybook/addon-themes": "catalog:",
-        "@storybook/react": "catalog:",
-        "@storybook/react-vite": "catalog:",
-        "@storybook/test": "catalog:",
+        "@vitest/browser": "catalog:",
         "playwright": "catalog:",
-        "storybook": "catalog:",
         "tsup": "catalog:",
         "vite": "catalog:",
         "vite-plugin-dts": "catalog:",
