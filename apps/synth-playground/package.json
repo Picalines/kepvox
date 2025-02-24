@@ -30,7 +30,7 @@
         "@repo/ui-kit": "workspace:*",
         "@swc/wasm-web": "^1.10.9",
         "@withease/factories": "^1.0.5",
-        "effector": "^23.2.3",
+        "effector": "^23.3.0",
         "effector-react": "^23.3.0",
         "effector-storage": "^7.1.0",
         "next": "catalog:",
