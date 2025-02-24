@@ -2,7 +2,7 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { EnumSynthParam, ScalarSynthParam } from '#param'
 import { Pitch } from '#pitch'
-import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
+import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
 
 const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
 

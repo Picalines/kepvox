@@ -8,7 +8,7 @@ import { EnumSynthParam, ScalarSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import type { SynthTime } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
+import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
 
 export type GeneratorSynthNodeOpts = {
   /**

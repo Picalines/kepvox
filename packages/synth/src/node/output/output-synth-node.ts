@@ -1,6 +1,6 @@
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
-import { SYNTH_NODE_TYPE, SynthNode } from './synth-node'
+import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
 
 export class OutputSynthNode extends SynthNode {
   readonly [SYNTH_NODE_TYPE] = 'output'
