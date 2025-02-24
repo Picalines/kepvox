@@ -27,6 +27,7 @@ export default defineConfig({
           name: 'unit',
           include: ['**/*.unit.spec.ts(x)?'],
           environment: 'node',
+          css: false,
           typecheck: {
             enabled: true,
             tsconfig: './tsconfig.json',
@@ -53,9 +54,11 @@ export default defineConfig({
             enabled: true,
             provider: 'playwright',
             headless: true,
+            screenshotFailures: false,
             instances: [
               {
                 browser: 'chromium',
+                viewport: { width: 800, height: 600 },
               },
             ],
           },

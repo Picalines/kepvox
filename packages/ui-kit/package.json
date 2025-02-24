@@ -8,9 +8,9 @@
     "scripts": {
         "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6001 --no-open",
-        "dev:unit": "vitest watch",
+        "dev:unit": "vitest watch --browser.api.port=6011 --browser.headless",
         "ts:check": "tsc --noEmit",
-        "test:unit": "vitest run",
+        "test:unit": "vitest run --browser.api.port=6011 --browser.headless",
         "test:screen": "PLAYWRIGHT_PORT=6001 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
         "playwright:install": "playwright install chromium --with-deps",
