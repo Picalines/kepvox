@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -17,14 +18,49 @@ export default defineConfig({
 
   test: {
     root: './src',
-    include: ['**/*.spec.ts(x)?'],
-    exclude: ['**/*.screen.spec.ts(x)?'],
     globals: false,
-    environment: 'node',
-    typecheck: {
-      enabled: true,
-      tsconfig: './tsconfig.json',
-      include: ['**/*.spec-d.ts(x)?'],
-    },
+
+    workspace: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['**/*.unit.spec.ts(x)?'],
+          environment: 'node',
+          typecheck: {
+            enabled: true,
+            tsconfig: './tsconfig.json',
+            include: ['**/*.unit.spec-d.ts(x)?'],
+          },
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'dom-unit',
+          include: ['**/*.dom-unit.spec.ts(x)?'],
+          environment: 'jsdom',
+          css: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'browser',
+          include: ['**/*.browser.spec.ts(x)?'],
+          setupFiles: ['./vitest.setup.browser.ts'],
+          browser: {
+            enabled: true,
+            provider: 'playwright',
+            headless: true,
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+    ],
   },
 })
