@@ -53,12 +53,14 @@
         "@testing-library/user-event": "catalog:",
         "@types/react": "catalog:",
         "@vitejs/plugin-react": "catalog:",
+        "@vitest/browser": "catalog:",
         "jsdom": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
         "tailwindcss": "catalog:",
         "vite": "catalog:",
-        "vitest": "catalog:"
+        "vitest": "catalog:",
+        "vitest-browser-react": "catalog:"
     },
     "dependencies": {
         "@radix-ui/react-checkbox": "^1.1.3",

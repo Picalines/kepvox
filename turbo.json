@@ -10,7 +10,9 @@
         },
         "build:setup": {},
 
-        "test:unit": {},
+        "test:unit": {
+            "dependsOn": ["playwright:install"]
+        },
         "test:screen": {
             "cache": false,
             "dependsOn": ["^build", "playwright:install", "test:screen:setup"]
