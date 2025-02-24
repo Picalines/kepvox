@@ -1,8 +1,9 @@
+import { EffectorNext } from '@effector/next'
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
-import './index.css'
-import { EffectorNext } from '@effector/next'
 import type { ReactNode } from 'react'
+
+import './index.css'
 
 export const metadata: Metadata = {
   title: 'kepvox/synth playground',
