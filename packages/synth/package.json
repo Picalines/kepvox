@@ -12,13 +12,16 @@
         }
     },
     "scripts": {
+        "build": "tsup",
         "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6003 --no-open",
         "dev:unit": "vitest watch --browser.api=6013 --browser.headless",
         "ts:check": "tsc --noEmit",
         "test:unit": "vitest run --browser.api=6013 --browser.headless",
-        "build": "tsup",
-        "playwright:install": "playwright install chromium --with-deps"
+        "test:screen": "PLAYWRIGHT_PORT=6003 playwright test",
+        "test:screen:update": "pnpm run test:screen --update-snapshots",
+        "playwright:install": "playwright install chromium --with-deps",
+        "playwright:server": "pnpm run dev:storybook"
     },
     "imports": {
         "#automation": "./src/automation/internals.ts",
@@ -28,6 +31,7 @@
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
         "#pitch": "./src/pitch.ts",
+        "#test": "./src/test/index.ts",
         "#time": "./src/synth-time.ts",
         "#units": "./src/units.ts",
         "#util/*": "./src/util/*/index.ts"
@@ -42,6 +46,7 @@
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
+        "@repo/web-audio": "workspace:*",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",
@@ -50,6 +55,7 @@
         "@storybook/react-vite": "catalog:",
         "@storybook/test": "catalog:",
         "@types/react": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
         "@vitest/browser": "catalog:",
         "playwright": "catalog:",
         "react": "catalog:",

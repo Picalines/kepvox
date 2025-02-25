@@ -99,6 +99,7 @@ jobs:
       matrix:
         package:
           - packages/ui-kit
+          - packages/synth
           - apps/synth-playground
 
     steps:
