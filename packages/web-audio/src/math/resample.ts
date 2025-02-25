@@ -28,11 +28,11 @@ export const resample = (params: Params): Float32Array => {
     for (let blockItemIndex = 0; blockItemIndex < blockSize; blockItemIndex++) {
       const blockItem = rawData[blockStart + blockItemIndex]
       assertDefined(blockItem)
-      blockSum += blockItem
+      blockSum += map(blockItem)
     }
 
     const average = blockSum / blockSize
-    resampled[sampleIndex] = map(average)
+    resampled[sampleIndex] = average
   }
 
   return resampled
