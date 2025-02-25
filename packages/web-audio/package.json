@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/web-audio",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "ts:check": "tsc --noEmit"
+    },
+    "exports": {
+        "./draw": "./src/draw/index.ts",
+        "./math": "./src/math/index.ts",
+        "./offline": "./src/offline/index.ts"
+    },
+    "dependencies": {
+        "@repo/common": "workspace:*"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*"
+    }
+}
