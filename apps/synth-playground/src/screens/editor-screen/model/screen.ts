@@ -3,7 +3,7 @@ import { invoke } from '@withease/factories'
 import { combine, createEvent, sample } from 'effector'
 import { createGate } from 'effector-react'
 import { persist as persistInQuery } from 'effector-storage/query'
-import { debug, equals } from 'patronum'
+import { equals } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
 import { createExampleSelector } from './examples'
@@ -48,8 +48,6 @@ const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
 
   return 'ready' as const
 })
-
-debug({ js: $jsState, synth: $isPlaying, screen: $status })
 
 sample({
   clock: Gate.open,
