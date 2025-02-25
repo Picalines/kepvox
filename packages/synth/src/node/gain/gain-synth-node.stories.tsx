@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
-import { Pitch } from '#pitch'
 import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
-import { Factor, Seconds } from '#units'
-import { OscillatorSynthNode } from '../oscillator'
+import { Decibels, Factor, Seconds } from '#units'
+import { ConstantSynthNode } from '../constant'
 import { GainSynthNode } from './gain-synth-node'
 
 type StoryArgs = ComponentProps<typeof WaveformStory>
@@ -12,6 +11,10 @@ type StoryArgs = ComponentProps<typeof WaveformStory>
 export default {
   title: 'nodes/Gain',
   component: WaveformStory,
+  args: {
+    numberOfChannels: 1,
+    duration: Seconds.orThrow(1),
+  },
   parameters: {
     layout: 'fullscreen',
   },
@@ -19,21 +22,36 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-export const Default: Story = {
+export const HalfFactor: Story = {
   args: {
-    duration: Seconds.orThrow(1),
-    numberOfChannels: 2,
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
 
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.frequency.initialValue = Pitch.frequency('C2')
+      const constant = new ConstantSynthNode(context)
+      constant.value.initialValue = Factor.orThrow(1)
 
       const gain = new GainSynthNode(context)
-      gain.factor.initialValue = Factor.orThrow(0)
-      gain.factor.curve.rampValueUntil(SynthTime.note, Factor.orThrow(1))
+      gain.factor.initialValue = Factor.orThrow(0.5)
 
-      oscillator.connectOutput(gain)
+      constant.connectOutput(gain)
+      gain.connectOutput(context.output)
+    },
+  },
+}
+
+export const Decibel: Story = {
+  args: {
+    synthTree: context => {
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+
+      const constant = new ConstantSynthNode(context)
+      constant.value.initialValue = Factor.orThrow(1)
+
+      const gain = new GainSynthNode(context)
+      gain.decibels.initialValue = Decibels.orThrow(0)
+      gain.decibels.curve.rampValueUntil(SynthTime.note, Decibels.orThrow(-30), 'exponential')
+
+      constant.connectOutput(gain)
       gain.connectOutput(context.output)
     },
   },
