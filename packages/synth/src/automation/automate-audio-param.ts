@@ -37,7 +37,9 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
     const now = audioContext.currentTime
     const ahead = now + context[INTERNAL_LOOK_AHEAD]
 
-    audioParam.setValueAtTime(map(curve.valueAt(start), start), now)
+    const initialValue = map(curve.valueAt(start), start)
+    audioParam.setValueAtTime(initialValue, now)
+    audioParam.setValueAtTime(initialValue, ahead)
 
     for (const event of curve.eventsAfter(start)) {
       const time = ahead + (context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
