@@ -24,6 +24,8 @@ type GeneratorVoice = {
 
 const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
 
+export type GeneratorWaveShape = (typeof WAVE_SPAHES)[number]
+
 export class GeneratorSynthNode extends SynthNode {
   readonly [SYNTH_NODE_TYPE] = 'generator'
 
