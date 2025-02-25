@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@repo/playwright-config",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/playwright-config.ts"
+    },
+    "scripts": {
+        "ts:check": "tsc --noEmit"
+    },
+    "peerDependencies": {
+        "@playwright/test": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*",
+        "@types/node": "catalog:"
+    }
+}

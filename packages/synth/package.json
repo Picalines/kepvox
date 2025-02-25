@@ -37,8 +37,9 @@
     },
     "devDependencies": {
         "@playwright/test": "catalog:",
+        "@repo/playwright-config": "workspace:*",
+        "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
-        "@repo/ui-test": "workspace:*",
         "@repo/vite-config": "workspace:*",
         "@vitest/browser": "catalog:",
         "playwright": "catalog:",

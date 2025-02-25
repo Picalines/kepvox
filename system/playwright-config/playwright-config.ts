@@ -1,6 +1,6 @@
 import { type PlaywrightTestConfig, devices } from '@playwright/test'
 
-const defaultPlaywrightConfig: PlaywrightTestConfig = {
+const config: PlaywrightTestConfig = {
   testDir: '.',
   outputDir: './test-results',
 
@@ -56,4 +56,4 @@ const defaultPlaywrightConfig: PlaywrightTestConfig = {
   },
 }
 
-export default defaultPlaywrightConfig
+export default config
