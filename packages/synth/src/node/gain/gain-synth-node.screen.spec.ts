@@ -4,5 +4,5 @@ testStoryMatrix({
   meta: {
     title: 'nodes/Gain',
   },
-  stories: ['Default'],
+  stories: ['HalfFactor', 'Decibel'],
 })
