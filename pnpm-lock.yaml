@@ -173,13 +173,13 @@ importers:
         version: 1.49.1
       '@repo/storybook-config':
         specifier: workspace:*
-        version: link:../../packages/storybook-config
+        version: link:../../system/storybook-config
       '@repo/tailwind-config':
         specifier: workspace:*
-        version: link:../../packages/tailwind-config
+        version: link:../../system/tailwind-config
       '@repo/ts-config':
         specifier: workspace:*
-        version: link:../../packages/ts-config
+        version: link:../../system/ts-config
       '@repo/ui-test':
         specifier: workspace:*
         version: link:../../packages/ui-test
@@ -197,7 +197,7 @@ importers:
         version: 8.5.8(storybook@8.5.8(prettier@3.3.3))
       '@storybook/nextjs':
         specifier: 'catalog:'
-        version: 8.5.8(esbuild@0.24.2)(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))
+        version: 8.5.8(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.5.8(@storybook/test@8.5.8(storybook@8.5.8(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(typescript@5.7.2)
@@ -226,53 +226,17 @@ importers:
         specifier: 'catalog:'
         version: 4.0.7
 
-  packages/biome-config: {}
-
   packages/common:
     devDependencies:
       '@repo/ts-config':
         specifier: workspace:*
-        version: link:../ts-config
+        version: link:../../system/ts-config
       '@repo/vite-config':
         specifier: workspace:*
-        version: link:../vite-config
+        version: link:../../system/vite-config
       vitest:
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.10.5)(typescript@5.7.2))(terser@5.36.0)(yaml@2.5.0)
-
-  packages/storybook-config:
-    dependencies:
-      '@storybook/addon-essentials':
-        specifier: 'catalog:'
-        version: 8.5.8(@types/react@19.0.2)(storybook@8.5.8(prettier@3.3.3))
-      '@storybook/addon-interactions':
-        specifier: 'catalog:'
-        version: 8.5.8(storybook@8.5.8(prettier@3.3.3))
-      '@storybook/addon-links':
-        specifier: 'catalog:'
-        version: 8.5.8(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))
-      '@storybook/addon-themes':
-        specifier: 'catalog:'
-        version: 8.5.8(storybook@8.5.8(prettier@3.3.3))
-      '@storybook/nextjs':
-        specifier: 'catalog:'
-        version: 8.5.8(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)
-      '@storybook/react':
-        specifier: 'catalog:'
-        version: 8.5.8(@storybook/test@8.5.8(storybook@8.5.8(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(typescript@5.7.2)
-      '@storybook/react-vite':
-        specifier: 'catalog:'
-        version: 8.5.8(@storybook/test@8.5.8(storybook@8.5.8(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.8)(storybook@8.5.8(prettier@3.3.3))(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0))
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.0.2
-      storybook:
-        specifier: 'catalog:'
-        version: 8.5.8(prettier@3.3.3)
-    devDependencies:
-      '@repo/ts-config':
-        specifier: workspace:*
-        version: link:../ts-config
 
   packages/synth:
     dependencies:
@@ -285,13 +249,13 @@ importers:
         version: 1.49.1
       '@repo/ts-config':
         specifier: workspace:*
-        version: link:../ts-config
+        version: link:../../system/ts-config
       '@repo/ui-test':
         specifier: workspace:*
         version: link:../ui-test
       '@repo/vite-config':
         specifier: workspace:*
-        version: link:../vite-config
+        version: link:../../system/vite-config
       '@vitest/browser':
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(playwright@1.49.1)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0))(vitest@3.0.6)
@@ -310,14 +274,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.10.5)(typescript@5.7.2))(terser@5.36.0)(yaml@2.5.0)
-
-  packages/tailwind-config:
-    devDependencies:
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.0.7
-
-  packages/ts-config: {}
 
   packages/ui-kit:
     dependencies:
@@ -378,19 +334,19 @@ importers:
         version: 1.49.1
       '@repo/storybook-config':
         specifier: workspace:*
-        version: link:../storybook-config
+        version: link:../../system/storybook-config
       '@repo/tailwind-config':
         specifier: workspace:*
-        version: link:../tailwind-config
+        version: link:../../system/tailwind-config
       '@repo/ts-config':
         specifier: workspace:*
-        version: link:../ts-config
+        version: link:../../system/ts-config
       '@repo/ui-test':
         specifier: workspace:*
         version: link:../ui-test
       '@repo/vite-config':
         specifier: workspace:*
-        version: link:../vite-config
+        version: link:../../system/vite-config
       '@storybook/addon-essentials':
         specifier: 'catalog:'
         version: 8.5.8(@types/react@19.0.2)(storybook@8.5.8(prettier@3.3.3))
@@ -463,12 +419,56 @@ importers:
     devDependencies:
       '@repo/ts-config':
         specifier: workspace:*
-        version: link:../ts-config
+        version: link:../../system/ts-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.10.5
 
-  packages/vite-config:
+  system/biome-config: {}
+
+  system/storybook-config:
+    dependencies:
+      '@storybook/addon-essentials':
+        specifier: 'catalog:'
+        version: 8.5.8(@types/react@19.0.2)(storybook@8.5.8(prettier@3.3.3))
+      '@storybook/addon-interactions':
+        specifier: 'catalog:'
+        version: 8.5.8(storybook@8.5.8(prettier@3.3.3))
+      '@storybook/addon-links':
+        specifier: 'catalog:'
+        version: 8.5.8(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))
+      '@storybook/addon-themes':
+        specifier: 'catalog:'
+        version: 8.5.8(storybook@8.5.8(prettier@3.3.3))
+      '@storybook/nextjs':
+        specifier: 'catalog:'
+        version: 8.5.8(esbuild@0.24.2)(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))
+      '@storybook/react':
+        specifier: 'catalog:'
+        version: 8.5.8(@storybook/test@8.5.8(storybook@8.5.8(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(typescript@5.7.2)
+      '@storybook/react-vite':
+        specifier: 'catalog:'
+        version: 8.5.8(@storybook/test@8.5.8(storybook@8.5.8(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.8)(storybook@8.5.8(prettier@3.3.3))(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0))
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.0.2
+      storybook:
+        specifier: 'catalog:'
+        version: 8.5.8(prettier@3.3.3)
+    devDependencies:
+      '@repo/ts-config':
+        specifier: workspace:*
+        version: link:../ts-config
+
+  system/tailwind-config:
+    devDependencies:
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.0.7
+
+  system/ts-config: {}
+
+  system/vite-config:
     dependencies:
       '@tailwindcss/vite':
         specifier: 'catalog:'
@@ -7562,7 +7562,7 @@ snapshots:
     dependencies:
       storybook: 8.5.8(prettier@3.3.3)
 
-  '@storybook/nextjs@8.5.8(esbuild@0.24.2)(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))':
+  '@storybook/nextjs@8.5.8(esbuild@0.24.2)(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.26.0)
@@ -7627,7 +7627,7 @@ snapshots:
       - webpack-hot-middleware
       - webpack-plugin-serve
 
-  '@storybook/nextjs@8.5.8(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)':
+  '@storybook/nextjs@8.5.8(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.8(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.26.0)
@@ -7958,20 +7958,20 @@ snapshots:
 
   '@types/babel__core@7.20.5':
     dependencies:
-      '@babel/parser': 7.26.3
-      '@babel/types': 7.26.3
+      '@babel/parser': 7.26.7
+      '@babel/types': 7.26.7
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.20.6
 
   '@types/babel__generator@7.6.8':
     dependencies:
-      '@babel/types': 7.26.3
+      '@babel/types': 7.26.7
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.26.3
-      '@babel/types': 7.26.3
+      '@babel/parser': 7.26.7
+      '@babel/types': 7.26.7
 
   '@types/babel__traverse@7.20.6':
     dependencies:
@@ -8054,6 +8054,26 @@ snapshots:
       - typescript
       - utf-8-validate
       - vite
+
+  '@vitest/browser@3.0.6(@types/node@22.10.5)(typescript@5.7.2)(vitest@3.0.6)':
+    dependencies:
+      '@testing-library/dom': 10.4.0
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.0)
+      '@vitest/mocker': 3.0.6(msw@2.7.0(@types/node@22.10.5)(typescript@5.7.2))(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0))
+      '@vitest/utils': 3.0.6
+      magic-string: 0.30.17
+      msw: 2.7.0(@types/node@22.10.5)(typescript@5.7.2)
+      sirv: 3.0.1
+      tinyrainbow: 2.0.0
+      vitest: 3.0.6(@types/node@22.10.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.10.5)(typescript@5.7.2))(terser@5.36.0)(yaml@2.5.0)
+      ws: 8.18.0
+    transitivePeerDependencies:
+      - '@types/node'
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - vite
+    optional: true
 
   '@vitest/expect@2.0.5':
     dependencies:
@@ -11004,7 +11024,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.10.5
-      '@vitest/browser': 3.0.6(@types/node@22.10.5)(playwright@1.49.1)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0))(vitest@3.0.6)
+      '@vitest/browser': 3.0.6(@types/node@22.10.5)(typescript@5.7.2)(vitest@3.0.6)
       jsdom: 25.0.1
     transitivePeerDependencies:
       - jiti
