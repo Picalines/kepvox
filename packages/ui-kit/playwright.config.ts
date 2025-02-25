@@ -1,1 +1,1 @@
-export { default } from '@repo/ui-test/playwright-config'
+export { default } from '@repo/playwright-config'

@@ -1,4 +1,4 @@
-import { testStoryMatrix } from '@repo/ui-test/test-story'
+import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
