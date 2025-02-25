@@ -152,11 +152,10 @@ export class SynthContext {
   play(start = SynthTime.start) {
     this.#assertNotDisposed()
     this.stop()
-    this.#audioContext.resume().then(() => {
-      this.#state = 'playing'
-      this.#playing.emit({ start })
-      this.#stateChanged.emit({})
-    })
+
+    this.#state = 'playing'
+    this.#playing.emit({ start })
+    this.#stateChanged.emit({})
   }
 
   stop() {
