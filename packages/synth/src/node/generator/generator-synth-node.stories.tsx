@@ -26,7 +26,7 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-type CreateEnvelopeParams = {
+type CreateGeneratorParams = {
   context: SynthContext
   attack?: Notes
   decay?: Notes
@@ -36,7 +36,7 @@ type CreateEnvelopeParams = {
   destination?: SynthNode
 }
 
-const createGenerator = (params: CreateEnvelopeParams) => {
+const createGenerator = (params: CreateGeneratorParams) => {
   const { context, attack, decay, sustain, release, waveShape, destination } = params
 
   const generator = new GeneratorSynthNode(context)
