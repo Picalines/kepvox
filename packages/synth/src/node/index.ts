@@ -1,5 +1,6 @@
 export * from './adsr-envelope'
 export * from './constant'
+export * from './delay'
 export * from './gain'
 export * from './generator'
 export * from './oscillator'
