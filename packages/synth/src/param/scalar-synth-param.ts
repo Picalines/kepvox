@@ -12,7 +12,7 @@ export type ScalarSynthParamOpts<TUnit extends UnitName> = {
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
-  automate?: { param: AudioParam; map?: (curveValue: UnitValue<TUnit>) => number }
+  automate?: { param: AudioParam; map?: (curveValue: UnitValue<TUnit>, time: SynthTime) => number }
 }
 
 export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
