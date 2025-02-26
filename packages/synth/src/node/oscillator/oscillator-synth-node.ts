@@ -13,10 +13,16 @@ export class OscillatorSynthNode extends SynthNode {
   readonly frequency: ScalarSynthParam<'hertz'>
 
   constructor(context: SynthContext) {
-    const oscillator = context[INTERNAL_AUDIO_CONTEXT].createOscillator()
-    const gate = context[INTERNAL_AUDIO_CONTEXT].createGain()
+    const audioContext = context[INTERNAL_AUDIO_CONTEXT]
 
-    oscillator.connect(gate)
+    const oscillator = audioContext.createOscillator()
+    const merger = audioContext.createChannelMerger(2)
+    const gate = audioContext.createGain()
+
+    oscillator.connect(merger, 0, 0)
+    oscillator.connect(merger, 0, 1)
+    merger.connect(gate)
+
     oscillator.start()
 
     super({ context, inputs: [], outputs: [gate] })
