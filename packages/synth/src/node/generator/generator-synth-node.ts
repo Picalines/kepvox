@@ -43,9 +43,9 @@ export class GeneratorSynthNode extends SynthNode {
 
     const audioContext = context[INTERNAL_AUDIO_CONTEXT]
 
-    const masterGain = audioContext.createGain()
+    const steroMerger = audioContext.createChannelMerger(2)
 
-    super({ context, inputs: [], outputs: [masterGain] })
+    super({ context, inputs: [], outputs: [steroMerger] })
 
     this.attack = new ScalarSynthParam({
       node: this,
@@ -87,7 +87,8 @@ export class GeneratorSynthNode extends SynthNode {
       gain.gain.value = 0
 
       oscillator.connect(gain)
-      gain.connect(masterGain)
+      gain.connect(steroMerger, 0, 0)
+      gain.connect(steroMerger, 0, 1)
 
       const frequency = new AutomationCurve({
         unit: 'hertz',
