@@ -14,8 +14,9 @@ type Props<T> = {
   waveformDetails?: number
   canvasWidth?: number
   canvasHeight?: number
-  backgroundColor?: string
   waveformColor?: string
+  positiveBackgroundColor?: string
+  negativeBackgroundColor?: string
 }
 
 export const WaveformStory = <T = {}>(props: Props<T>) => {
@@ -28,8 +29,9 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
     waveformDetails = 0.05,
     canvasWidth = 800,
     canvasHeight = 600,
-    backgroundColor = 'oklch(0.266 0.065 152.934)',
     waveformColor = 'oklch(0.792 0.209 151.711)',
+    positiveBackgroundColor = 'oklch(0.274 0.072 132.109)',
+    negativeBackgroundColor = 'oklch(0.277 0.046 192.524)',
   } = props
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -54,29 +56,30 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
 
     drawContext.save()
 
-    drawContext.fillStyle = backgroundColor
-    drawContext.fillRect(0, 0, canvas.width, canvas.height)
-
     const channelLineHeight = canvas.height / numberOfChannels
 
     for (let channelIndex = 0; channelIndex < numberOfChannels; channelIndex++) {
+      drawContext.translate(0, channelIndex * channelLineHeight)
+
+      drawContext.fillStyle = positiveBackgroundColor
+      drawContext.fillRect(0, 0, canvas.width, channelLineHeight / 2)
+
+      drawContext.fillStyle = negativeBackgroundColor
+      drawContext.fillRect(0, channelLineHeight / 2, canvas.width, channelLineHeight / 2)
+
       const rawData = audioBuffer.getChannelData(channelIndex)
 
       const data = resample({
         data: rawData,
         samples: rawData.length * waveformDetails,
-        map: Math.abs,
       })
-
-      drawContext.translate(0, channelIndex * channelLineHeight)
 
       drawWaveform({
         context: drawContext,
         data,
         width: canvas.width,
         height: channelLineHeight,
-        minValue: 0,
-        maxValue: 1,
+        maxAmplitude: 1,
       })
     }
 
@@ -84,7 +87,8 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
     drawContext.fill()
     drawContext.restore()
   }, [
-    backgroundColor,
+    positiveBackgroundColor,
+    negativeBackgroundColor,
     sampleRate,
     numberOfChannels,
     duration,
