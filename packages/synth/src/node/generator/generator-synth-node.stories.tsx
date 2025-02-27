@@ -73,6 +73,7 @@ export const Default: Story = {
 
 export const Polyphony: Story = {
   args: {
+    timeMarkers: [SynthTime.note.repeat(3), SynthTime.note.repeat(4)],
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 6))
 
