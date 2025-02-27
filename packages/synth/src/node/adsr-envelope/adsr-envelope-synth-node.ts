@@ -2,7 +2,7 @@ import { ADSRAutomationCurve, automateAudioParam } from '#automation'
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
-import { ScalarSynthParam } from '#param'
+import { CurveSynthParam } from '#param'
 import type { SynthTime } from '#time'
 import { Normal, Notes } from '#units'
 import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
@@ -22,27 +22,27 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
     super({ context, inputs: [gainNode], outputs: [gainNode] })
 
-    this.attack = new ScalarSynthParam({
+    this.attack = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
-    this.decay = new ScalarSynthParam({
+    this.decay = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
-    this.sustain = new ScalarSynthParam({
+    this.sustain = new CurveSynthParam({
       node: this,
       unit: 'normal',
       initialValue: Normal.max,
     })
 
-    this.release = new ScalarSynthParam({
+    this.release = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),
