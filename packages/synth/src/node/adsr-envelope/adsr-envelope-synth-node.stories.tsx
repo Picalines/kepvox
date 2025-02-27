@@ -54,6 +54,7 @@ const createEnvelope = (params: CreateEnvelopeParams) => {
 
 export const Default: Story = {
   args: {
+    timeMarkers: [SynthTime.note, SynthTime.note.repeat(2), SynthTime.note.repeat(3)],
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
 
@@ -73,6 +74,7 @@ export const Default: Story = {
 
 export const Chained: Story = {
   args: {
+    timeMarkers: [SynthTime.note.repeat(3)],
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 8))
 
@@ -94,6 +96,7 @@ export const Chained: Story = {
 
 export const Oscillator: Story = {
   args: {
+    timeMarkers: [SynthTime.note, SynthTime.note.repeat(2), SynthTime.note.repeat(3)],
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
 
