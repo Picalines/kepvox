@@ -7,20 +7,20 @@ import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
 
 const synthAudioParams = new WeakSet<AudioParam>()
 
-export type ScalarSynthParamOpts<TUnit extends UnitName> = {
+export type CurveSynthParamOpts<TUnit extends UnitName> = {
   node: SynthNode
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
-  automate?: { param: AudioParam; map?: (curveValue: UnitValue<TUnit>, time: SynthTime) => number }
+  automate?: { param: AudioParam; map?: Parameters<typeof automateAudioParam<TUnit>>[0]['map'] }
 }
 
-export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
-  readonly [SYNTH_PARAM_TYPE] = 'scalar'
+export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
+  readonly [SYNTH_PARAM_TYPE] = 'curve'
 
   readonly curve: AutomationCurve<TUnit>
 
-  constructor(opts: ScalarSynthParamOpts<TUnit>) {
+  constructor(opts: CurveSynthParamOpts<TUnit>) {
     const {
       node,
       automate: { param: audioParam, map: mapAudioParam } = {},
@@ -32,7 +32,7 @@ export class ScalarSynthParam<TUnit extends UnitName> extends SynthParam {
     const { context } = node
 
     if (audioParam && synthAudioParams.has(audioParam)) {
-      throw new Error(`the ${AudioParam.name} already has an associated ${ScalarSynthParam.name}`)
+      throw new Error(`the ${AudioParam.name} already has an associated ${CurveSynthParam.name}`)
     }
 
     const unitRange = Unit[unit].range

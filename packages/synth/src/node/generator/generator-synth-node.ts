@@ -4,7 +4,7 @@ import { ADSRAutomationCurve, AutomationCurve, automateAudioParam } from '#autom
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
-import { EnumSynthParam, ScalarSynthParam } from '#param'
+import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import type { SynthTime } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
@@ -47,27 +47,27 @@ export class GeneratorSynthNode extends SynthNode {
 
     super({ context, inputs: [], outputs: [steroMerger] })
 
-    this.attack = new ScalarSynthParam({
+    this.attack = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
-    this.decay = new ScalarSynthParam({
+    this.decay = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),
       range: Range.positive,
     })
 
-    this.sustain = new ScalarSynthParam({
+    this.sustain = new CurveSynthParam({
       node: this,
       unit: 'normal',
       initialValue: Normal.max,
     })
 
-    this.release = new ScalarSynthParam({
+    this.release = new CurveSynthParam({
       node: this,
       unit: 'notes',
       initialValue: Notes.orThrow(0),

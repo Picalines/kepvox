@@ -1,6 +1,6 @@
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
-import { EnumSynthParam, ScalarSynthParam } from '#param'
+import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
 
@@ -10,7 +10,7 @@ export class OscillatorSynthNode extends SynthNode {
   readonly [SYNTH_NODE_TYPE] = 'oscillator'
 
   readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHES)[number]>
-  readonly frequency: ScalarSynthParam<'hertz'>
+  readonly frequency: CurveSynthParam<'hertz'>
 
   constructor(context: SynthContext) {
     const audioContext = context[INTERNAL_AUDIO_CONTEXT]
@@ -40,7 +40,7 @@ export class OscillatorSynthNode extends SynthNode {
     this.waveShape.valueChanged.watch(updateWaveShape)
     updateWaveShape()
 
-    this.frequency = new ScalarSynthParam({
+    this.frequency = new CurveSynthParam({
       node: this,
       unit: 'hertz',
       initialValue: Pitch.frequency('A4'),
