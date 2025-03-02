@@ -44,14 +44,11 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
   }
 
   set value(value: V) {
-    if (!this.variants.includes(value)) {
+    if (!this.variants.includes(value) || this.#value === value) {
       return
     }
 
-    const oldValue = this.#value
     this.#value = value
-    if (oldValue !== this.#value) {
-      this.#changed.emit(value)
-    }
+    this.#changed.emit(this.#value)
   }
 }
