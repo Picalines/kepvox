@@ -1,14 +1,12 @@
 import { AutomationCurve, automateAudioParam } from '#automation'
 import { Range } from '#math'
-import type { SynthNode } from '#node'
 import { SynthTime } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
-import { SYNTH_PARAM_TYPE, SynthParam } from './synth-param'
+import { SYNTH_PARAM_TYPE, SynthParam, type SynthParamOpts } from './synth-param'
 
 const synthAudioParams = new WeakSet<AudioParam>()
 
-export type CurveSynthParamOpts<TUnit extends UnitName> = {
-  node: SynthNode
+export type CurveSynthParamOpts<TUnit extends UnitName> = SynthParamOpts & {
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
