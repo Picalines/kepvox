@@ -14,9 +14,9 @@ export class DelaySynthNode extends SynthNode {
   readonly delayLeft: CurveSynthParam<'notes'>
   readonly delayRight: CurveSynthParam<'notes'>
 
-  readonly mixOriginal: CurveSynthParam<'normal'>
-  readonly mixLeftDelay: CurveSynthParam<'normal'>
-  readonly mixRightDelay: CurveSynthParam<'normal'>
+  readonly dry: CurveSynthParam<'normal'>
+  readonly wetLeft: CurveSynthParam<'normal'>
+  readonly wetRight: CurveSynthParam<'normal'>
 
   constructor(context: SynthContext) {
     const audioContext = context[INTERNAL_AUDIO_CONTEXT]
@@ -24,7 +24,7 @@ export class DelaySynthNode extends SynthNode {
     const input = audioContext.createGain()
     const output = audioContext.createGain()
 
-    const originalGain = audioContext.createGain()
+    const dryGain = audioContext.createGain()
     const splitter = audioContext.createChannelSplitter(2)
     const merger = audioContext.createChannelMerger(2)
 
@@ -35,7 +35,7 @@ export class DelaySynthNode extends SynthNode {
     const gainRight = audioContext.createGain()
 
     input.connect(splitter)
-    input.connect(originalGain).connect(output)
+    input.connect(dryGain).connect(output)
 
     splitter.connect(delayLeft, 0).connect(gainLeft).connect(merger, 0, 0)
     splitter.connect(delayRight, 1).connect(gainRight).connect(merger, 0, 1)
@@ -62,21 +62,21 @@ export class DelaySynthNode extends SynthNode {
       automate: { param: delayRight.delayTime, map: mapNotesToSeconds },
     })
 
-    this.mixOriginal = new CurveSynthParam({
+    this.dry = new CurveSynthParam({
       node: this,
       unit: 'normal',
       initialValue: Normal.orThrow(0),
-      automate: { param: originalGain.gain },
+      automate: { param: dryGain.gain },
     })
 
-    this.mixLeftDelay = new CurveSynthParam({
+    this.wetLeft = new CurveSynthParam({
       node: this,
       unit: 'normal',
       initialValue: Normal.orThrow(1),
       automate: { param: gainLeft.gain },
     })
 
-    this.mixRightDelay = new CurveSynthParam({
+    this.wetRight = new CurveSynthParam({
       node: this,
       unit: 'normal',
       initialValue: Normal.orThrow(1),
