@@ -37,7 +37,7 @@ export class OscillatorSynthNode extends SynthNode {
       oscillator.type = this.waveShape.value
     }
 
-    this.waveShape.valueChanged.watch(updateWaveShape)
+    this.waveShape.changed.watch(updateWaveShape)
     updateWaveShape()
 
     this.frequency = new CurveSynthParam({

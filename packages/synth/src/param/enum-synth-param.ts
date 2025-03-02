@@ -11,7 +11,7 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
 
   readonly variants: readonly V[]
 
-  #value?: V
+  #value: V
 
   readonly #changed = Signal.controlled<V>()
 
@@ -24,26 +24,22 @@ export class EnumSynthParam<V extends string = string> extends SynthParam {
       throw new Error('empty variants array is not allowed in an enum param')
     }
 
-    this.variants = variants
+    this.variants = [...variants]
 
-    if (!variants.includes(initialValue)) {
+    if (!this.variants.includes(initialValue)) {
       throw new Error('the initialValue argument is not a valid enum param variant')
     }
 
-    this.value = initialValue
+    this.#value = initialValue
 
     node.disposed.watch(() => this.#changed.cancelAll())
   }
 
-  get valueChanged() {
+  get changed() {
     return this.#changed.signal
   }
 
   get value(): V {
-    if (this.#value === undefined) {
-      throw new Error('getImmediate called before initialization')
-    }
-
     return this.#value
   }
 
