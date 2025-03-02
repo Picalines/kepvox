@@ -52,9 +52,9 @@ export const WithOriginal: Story = {
       oscillator.frequency.initialValue = Hertz.orThrow(4)
 
       const delay = new DelaySynthNode(context)
-      delay.mixOriginal.initialValue = Normal.orThrow(1)
-      delay.mixLeftDelay.initialValue = Normal.orThrow(0.5)
-      delay.mixRightDelay.initialValue = Normal.orThrow(0.5)
+      delay.dry.initialValue = Normal.orThrow(1)
+      delay.wetLeft.initialValue = Normal.orThrow(0.5)
+      delay.wetRight.initialValue = Normal.orThrow(0.5)
       delay.delayLeft.initialValue = SynthTime.quarter.toNotes()
       delay.delayRight.initialValue = SynthTime.half.toNotes()
 
