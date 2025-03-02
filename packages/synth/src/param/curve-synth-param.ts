@@ -10,7 +10,7 @@ export type CurveSynthParamOpts<TUnit extends UnitName> = SynthParamOpts & {
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
-  automate?: { param: AudioParam; map?: Parameters<typeof automateAudioParam<TUnit>>[0]['map'] }
+  automate?: { param: AudioParam; map?: (value: UnitValue<TUnit>, time: SynthTime) => number }
 }
 
 export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
