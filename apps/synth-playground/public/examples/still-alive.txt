@@ -4,8 +4,8 @@ import { context } from 'synth/playground'
 const generator = new GeneratorSynthNode(context, { maxPolyphony: 16 })
 const gain = new GainSynthNode(context)
 
-generator.connectOutput(gain)
-gain.connectOutput(context.output)
+generator.connect(gain)
+gain.connect(context.output)
 
 generator.waveShape.value = 'triangle'
 generator.attack.initialValue = T.sixteenth.toNotes()

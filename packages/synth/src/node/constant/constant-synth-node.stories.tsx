@@ -25,7 +25,7 @@ export const Default: Story = {
   args: {
     synthTree: context => {
       const constant = new ConstantSynthNode(context)
-      constant.connectOutput(context.output)
+      constant.connect(context.output)
       constant.value.initialValue = Factor.orThrow(1)
     },
   },
@@ -35,7 +35,7 @@ export const Half: Story = {
   args: {
     synthTree: context => {
       const constant = new ConstantSynthNode(context)
-      constant.connectOutput(context.output)
+      constant.connect(context.output)
       constant.value.initialValue = Factor.orThrow(0.5)
     },
   },
@@ -47,7 +47,7 @@ export const LinearRamp: Story = {
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
       const constant = new ConstantSynthNode(context)
-      constant.connectOutput(context.output)
+      constant.connect(context.output)
       constant.value.initialValue = Factor.orThrow(0)
       constant.value.curve.rampValueUntil(SynthTime.note, Factor.orThrow(1))
     },

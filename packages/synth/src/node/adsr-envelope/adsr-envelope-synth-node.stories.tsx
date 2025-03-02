@@ -39,10 +39,10 @@ const createEnvelope = (params: CreateEnvelopeParams) => {
   const { context, attack, decay, sustain, release, source: sourceParam } = params
 
   const envelope = new ADSREnvelopeSynthNode(context)
-  envelope.connectOutput(context.output)
+  envelope.connect(context.output)
 
   const source = sourceParam ?? new ConstantSynthNode(context)
-  source.connectOutput(envelope)
+  source.connect(envelope)
 
   envelope.attack.initialValue = attack ?? envelope.attack.initialValue
   envelope.decay.initialValue = decay ?? envelope.decay.initialValue

@@ -36,8 +36,8 @@ export const Default: Story = {
       const delay = new DelaySynthNode(context)
       delay.delayRight.initialValue = SynthTime.quarter.toNotes()
 
-      oscillator.connectOutput(delay)
-      delay.connectOutput(context.output)
+      oscillator.connect(delay)
+      delay.connect(context.output)
     },
   },
 }
@@ -61,9 +61,9 @@ export const WithOriginal: Story = {
       const gain = new GainSynthNode(context)
       gain.factor.initialValue = Factor.orThrow(0.5)
 
-      oscillator.connectOutput(delay)
-      delay.connectOutput(gain)
-      gain.connectOutput(context.output)
+      oscillator.connect(delay)
+      delay.connect(gain)
+      gain.connect(context.output)
     },
   },
 }
