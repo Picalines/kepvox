@@ -121,7 +121,7 @@ export class GeneratorSynthNode extends SynthNode {
       }
 
       updateWaveShape()
-      this.waveShape.valueChanged.watch(updateWaveShape)
+      this.waveShape.changed.watch(updateWaveShape)
 
       oscillator.start()
       this.disposed.watch(() => oscillator.stop())
