@@ -19,7 +19,7 @@ type Props<T> = {
 const CANVAS_WIDTH = 1920
 const CANVAS_HEIGHT = 1080
 
-const BACKGROUND_COLOR = 'oklch(0.266 0.065 152.934)'
+const BACKGROUND_COLORS = ['oklch(0.266 0.065 152.934)', 'oklch(0.262 0.051 172.552)']
 const WAVEFORM_COLOR = 'oklch(0.792 0.209 151.711)'
 const PHASE_LINE_COLOR = 'oklch(0.685 0.169 237.323)'
 const TIME_MARKER_COLOR = 'oklch(0.905 0.182 98.111)'
@@ -58,22 +58,20 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
       },
     })
 
-    drawContext.save()
-
-    drawContext.fillStyle = BACKGROUND_COLOR
-    drawContext.fillRect(0, 0, canvas.width, canvas.height)
-
-    drawContext.fillStyle = WAVEFORM_COLOR
-    drawContext.strokeStyle = PHASE_LINE_COLOR
-    drawContext.lineWidth = 2
-
     const channelLineHeight = canvas.height / numberOfChannels
 
     drawContext.save()
 
-    for (let channelIndex = 0; channelIndex < numberOfChannels; channelIndex++) {
-      drawContext.translate(0, channelIndex * channelLineHeight)
+    drawContext.lineWidth = 2
+    drawContext.clearRect(0, 0, canvas.width, canvas.height)
 
+    drawContext.save()
+
+    for (let channelIndex = 0; channelIndex < numberOfChannels; channelIndex++) {
+      drawContext.fillStyle = BACKGROUND_COLORS[channelIndex % BACKGROUND_COLORS.length] ?? 'none'
+      drawContext.fillRect(0, 0, canvas.width, channelLineHeight)
+
+      drawContext.strokeStyle = PHASE_LINE_COLOR
       drawContext.beginPath()
       drawContext.moveTo(0, channelLineHeight / 2)
       drawContext.lineTo(canvas.width, channelLineHeight / 2)
@@ -94,7 +92,10 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
         maxAmplitude: 1,
       })
 
+      drawContext.fillStyle = WAVEFORM_COLOR
       drawContext.fill()
+
+      drawContext.translate(0, channelLineHeight)
     }
 
     drawContext.restore()
