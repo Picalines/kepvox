@@ -52,7 +52,7 @@ export abstract class SynthNode {
     return this.#outputs.length
   }
 
-  connectOutput(node: SynthNode, output = 0, input = 0) {
+  connect(node: SynthNode, output = 0, input = 0) {
     this.#assertNotDisposed()
     node.#assertNotDisposed()
 
@@ -67,14 +67,14 @@ export abstract class SynthNode {
     outputSocket.connect(inputSocket)
   }
 
-  disconnectOutput(node: SynthNode, output = 0, input: number | 'all' = 'all') {
+  disconnect(node: SynthNode, output = 0, input: number | 'all' = 'all') {
     this.#assertNotDisposed()
     node.#assertNotDisposed()
     this.#assertOutputIndex(output)
 
     if (input === 'all') {
       for (let nodeInput = 0; nodeInput < node.numberOfInputs; nodeInput++) {
-        this.disconnectOutput(node, output, input)
+        this.disconnect(node, output, input)
       }
       return
     }

@@ -42,9 +42,9 @@ export const Default: Story = {
       reverb.decay.value = Factor.orThrow(1)
       reverb.duration.value = Seconds.orThrow(3)
 
-      oscillator.connectOutput(gate)
-      gate.connectOutput(reverb)
-      reverb.connectOutput(context.output)
+      oscillator.connect(gate)
+      gate.connect(reverb)
+      reverb.connect(context.output)
     },
   },
 }
@@ -63,8 +63,8 @@ export const Wet: Story = {
       reverb.dry.initialValue = Normal.min
       reverb.duration.value = Seconds.orThrow(1)
 
-      oscillator.connectOutput(reverb)
-      reverb.connectOutput(context.output)
+      oscillator.connect(reverb)
+      reverb.connect(context.output)
     },
   },
 }

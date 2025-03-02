@@ -40,7 +40,7 @@ const createGenerator = (params: CreateGeneratorParams) => {
   const { context, attack, decay, sustain, release, waveShape, destination } = params
 
   const generator = new GeneratorSynthNode(context)
-  generator.connectOutput(destination ?? context.output)
+  generator.connect(destination ?? context.output)
 
   generator.attack.initialValue = attack ?? generator.attack.initialValue
   generator.decay.initialValue = decay ?? generator.decay.initialValue
@@ -79,7 +79,7 @@ export const Polyphony: Story = {
 
       const gain = new GainSynthNode(context)
       gain.factor.initialValue = Factor.orThrow(1)
-      gain.connectOutput(context.output)
+      gain.connect(context.output)
 
       const generator = createGenerator({
         context,

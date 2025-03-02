@@ -3,7 +3,7 @@ import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
 
-oscillator.connectOutput(context.output)
+oscillator.connect(context.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.frequency.curve.holdValueAt(SynthTime.half)

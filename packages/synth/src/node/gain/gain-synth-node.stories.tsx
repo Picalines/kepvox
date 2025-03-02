@@ -33,8 +33,8 @@ export const HalfFactor: Story = {
       const gain = new GainSynthNode(context)
       gain.factor.initialValue = Factor.orThrow(0.5)
 
-      constant.connectOutput(gain)
-      gain.connectOutput(context.output)
+      constant.connect(gain)
+      gain.connect(context.output)
     },
   },
 }
@@ -51,8 +51,8 @@ export const Decibel: Story = {
       gain.decibels.initialValue = Decibels.orThrow(0)
       gain.decibels.curve.rampValueUntil(SynthTime.note, Decibels.orThrow(-30), 'exponential')
 
-      constant.connectOutput(gain)
-      gain.connectOutput(context.output)
+      constant.connect(gain)
+      gain.connect(context.output)
     },
   },
 }

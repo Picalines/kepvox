@@ -27,7 +27,7 @@ export const Default: Story = {
   args: {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
-      oscillator.connectOutput(context.output)
+      oscillator.connect(context.output)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz.orThrow(440)
     },
@@ -38,7 +38,7 @@ export const Triangle: Story = {
   args: {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
-      oscillator.connectOutput(context.output)
+      oscillator.connect(context.output)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz.orThrow(4)
     },
@@ -49,7 +49,7 @@ export const Sine: Story = {
   args: {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
-      oscillator.connectOutput(context.output)
+      oscillator.connect(context.output)
       oscillator.waveShape.value = 'sine'
       oscillator.frequency.initialValue = Hertz.orThrow(2)
     },
@@ -60,7 +60,7 @@ export const Sawtooth: Story = {
   args: {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
-      oscillator.connectOutput(context.output)
+      oscillator.connect(context.output)
       oscillator.waveShape.value = 'sawtooth'
       oscillator.frequency.initialValue = Hertz.orThrow(4)
     },
@@ -71,7 +71,7 @@ export const Square: Story = {
   args: {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
-      oscillator.connectOutput(context.output)
+      oscillator.connect(context.output)
       oscillator.waveShape.value = 'square'
       oscillator.frequency.initialValue = Hertz.orThrow(4)
     },
@@ -83,8 +83,8 @@ export const Limited: Story = {
     synthTree: context => {
       const oscillator = new OscillatorSynthNode(context)
       const gain = new GainSynthNode(context)
-      oscillator.connectOutput(gain)
-      gain.connectOutput(context.output)
+      oscillator.connect(gain)
+      gain.connect(context.output)
 
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz.orThrow(4)

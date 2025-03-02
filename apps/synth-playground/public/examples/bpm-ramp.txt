@@ -4,8 +4,8 @@ import { context } from 'synth/playground'
 const oscillator = new OscillatorSynthNode(context)
 const envelope = new ADSREnvelopeSynthNode(context)
 
-oscillator.connectOutput(envelope)
-envelope.connectOutput(context.output)
+oscillator.connect(envelope)
+envelope.connect(context.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.waveShape.value = 'sawtooth'
