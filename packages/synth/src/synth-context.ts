@@ -5,6 +5,7 @@ import { OutputSynthNode } from '#node'
 import { SynthTime } from '#time'
 import { Notes, Seconds } from '#units'
 import { Signal } from '#util/signal'
+import { createSeededRandom } from './seeded-random'
 
 export type SynthContextOpts = {
   /**
@@ -18,6 +19,11 @@ export type SynthContextOpts = {
    * @default 0.1
    */
   lookAhead?: Seconds
+  /**
+   * A number that determines all random computations during audio scheduling.
+   * See {@link SynthContext.random}
+   */
+  randomSeed?: number
 }
 
 export type SynthState = 'idle' | 'playing' | 'disposed'
@@ -29,6 +35,11 @@ export class SynthContext {
    * your composition will have played up to given beat
    */
   readonly secondsPerNote: AutomationCurve<'seconds'>
+
+  /**
+   * Seeded random number generator
+   */
+  readonly random: () => number
 
   readonly #playing = Signal.controlled<{ start: SynthTime }>()
   readonly #stopped = Signal.controlled<{}>()
@@ -50,7 +61,7 @@ export class SynthContext {
   readonly #notesPerSecondNode: PannerNode
 
   constructor(audioContext: AudioContext | OfflineAudioContext, opts?: SynthContextOpts) {
-    const { lookAhead = 0.1 } = opts ?? {}
+    const { lookAhead = 0.1, randomSeed = 0 } = opts ?? {}
 
     this.#audioContext = audioContext
     this.#lookAhead = Seconds.orClamp(Range.positiveNonZero.clamp(lookAhead))
@@ -61,6 +72,8 @@ export class SynthContext {
       initialValue: Seconds.orClamp(2), // 120 bpm in 4/4
       valueRange: Range.positiveNonZero,
     })
+
+    this.random = createSeededRandom(randomSeed)
 
     this.playing.watch(() => {
       this.#playbackStartTime = Seconds.orThrow(this.#audioContext.currentTime + this.#lookAhead)
