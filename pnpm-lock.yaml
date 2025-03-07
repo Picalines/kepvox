@@ -6,6 +6,12 @@ settings:
 
 catalogs:
   default:
+    '@effector/next':
+      specifier: ^0.7.0
+      version: 0.7.0
+    '@effector/swc-plugin':
+      specifier: 0.5.2-swc1.7.0
+      version: 0.5.2-swc1.7.0
     '@playwright/test':
       specifier: ^1.49.1
       version: 1.49.1
@@ -60,12 +66,27 @@ catalogs:
     '@vitest/browser':
       specifier: ^3.0.6
       version: 3.0.6
+    '@withease/factories':
+      specifier: ^1.0.5
+      version: 1.0.5
+    effector:
+      specifier: ^23.3.0
+      version: 23.3.0
+    effector-react:
+      specifier: ^23.3.0
+      version: 23.3.0
+    effector-storage:
+      specifier: ^7.1.0
+      version: 7.1.0
     jsdom:
       specifier: ^25.0.1
       version: 25.0.1
     next:
       specifier: ^15.1.3
       version: 15.1.3
+    patronum:
+      specifier: ^2.3.0
+      version: 2.3.0
     playwright:
       specifier: ^1.49.1
       version: 1.49.1
@@ -87,6 +108,9 @@ catalogs:
     tsup:
       specifier: ^8.3.6
       version: 8.3.6
+    use-sync-external-store:
+      specifier: ^1.4.0
+      version: 1.4.0
     vite:
       specifier: ^6.0.9
       version: 6.1.1
@@ -120,7 +144,7 @@ importers:
   apps/synth-playground:
     dependencies:
       '@effector/next':
-        specifier: ^0.7.0
+        specifier: 'catalog:'
         version: 0.7.0(effector-react@23.3.0(effector@23.3.0)(react@19.0.0))(effector@23.3.0)(react@19.0.0)
       '@monaco-editor/react':
         specifier: 4.7.0-rc.0
@@ -138,22 +162,22 @@ importers:
         specifier: ^1.10.9
         version: 1.10.9
       '@withease/factories':
-        specifier: ^1.0.5
+        specifier: 'catalog:'
         version: 1.0.5
       effector:
-        specifier: ^23.3.0
+        specifier: 'catalog:'
         version: 23.3.0
       effector-react:
-        specifier: ^23.3.0
+        specifier: 'catalog:'
         version: 23.3.0(effector@23.3.0)(react@19.0.0)
       effector-storage:
-        specifier: ^7.1.0
+        specifier: 'catalog:'
         version: 7.1.0(effector@23.3.0)
       next:
         specifier: 'catalog:'
         version: 15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       patronum:
-        specifier: ^2.3.0
+        specifier: 'catalog:'
         version: 2.3.0(effector@23.3.0)
       react:
         specifier: 'catalog:'
@@ -162,11 +186,11 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0(react@19.0.0)
       use-sync-external-store:
-        specifier: ^1.4.0
+        specifier: 'catalog:'
         version: 1.4.0(react@19.0.0)
     devDependencies:
       '@effector/swc-plugin':
-        specifier: 0.5.2-swc1.7.0
+        specifier: 'catalog:'
         version: 0.5.2-swc1.7.0
       '@playwright/test':
         specifier: 'catalog:'
@@ -4152,9 +4176,6 @@ packages:
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-
-  loupe@3.1.2:
-    resolution: {integrity: sha512-23I4pFZHmAemUnz8WZXbYRSKYj801VDaNv9ETuMh7IrMc7VuVVSo+Z9iLE3ni30+U48iDWfi30d3twAXBYmnCg==}
 
   loupe@3.1.3:
     resolution: {integrity: sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug==}
@@ -8619,7 +8640,7 @@ snapshots:
       assertion-error: 2.0.1
       check-error: 2.1.1
       deep-eql: 5.0.2
-      loupe: 3.1.2
+      loupe: 3.1.3
       pathval: 2.0.0
 
   chalk@3.0.0:
@@ -9648,8 +9669,6 @@ snapshots:
   lodash.sortby@4.7.0: {}
 
   lodash@4.17.21: {}
-
-  loupe@3.1.2: {}
 
   loupe@3.1.3: {}
 
