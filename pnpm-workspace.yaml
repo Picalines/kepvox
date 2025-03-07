@@ -8,6 +8,15 @@ catalog:
   react-dom: ^19.0.0
   "@types/react": ^19.0.0
   "@types/react-dom": ^19.0.0
+  use-sync-external-store: ^1.4.0
+
+  effector: ^23.3.0
+  effector-react: ^23.3.0
+  "@effector/next": ^0.7.0
+  "@effector/swc-plugin": 0.5.2-swc1.7.0
+  effector-storage: ^7.1.0
+  patronum: ^2.3.0
+  "@withease/factories": ^1.0.5
 
   next: ^15.1.3
 
