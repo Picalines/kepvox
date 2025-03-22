@@ -15,6 +15,7 @@ export {
   HeadphoneOffIcon,
   HeadphonesIcon,
   Loader2Icon as LoaderIcon,
+  MaximizeIcon,
   MousePointer2Icon as MousePointerIcon,
   MousePointerClickIcon,
   PaletteIcon,
