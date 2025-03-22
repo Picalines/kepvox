@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@repo/ui-kit": "workspace:*",
+        "@xyflow/react": "^12.4.4",
         "react": "catalog:",
         "react-dom": "catalog:"
     },
