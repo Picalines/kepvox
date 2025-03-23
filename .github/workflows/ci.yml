@@ -90,7 +90,7 @@ jobs:
 
   screen-test:
     name: Screen tests
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
