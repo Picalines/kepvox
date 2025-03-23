@@ -6,8 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "next dev",
-        "dev:storybook": "pnpm run dev:storybook:server",
-        "dev:storybook:server": "storybook dev -p 6002 --no-open",
+        "dev:storybook": "storybook dev -p 6002 --no-open",
         "build": "next build",
         "start": "next start",
         "ts:check": "tsc --noEmit",
@@ -42,6 +41,7 @@
     "devDependencies": {
         "@effector/swc-plugin": "catalog:",
         "@playwright/test": "catalog:",
+        "@repo/next-config": "workspace:*",
         "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/tailwind-config": "workspace:*",
