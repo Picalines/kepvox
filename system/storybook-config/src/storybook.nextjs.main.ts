@@ -12,6 +12,15 @@ const config = {
   core: {
     builder: '@storybook/builder-webpack5',
   },
+
+  webpackFinal: config => {
+    config.module?.rules?.push({
+      test: /^.+\.txt$/,
+      type: 'asset/source',
+    })
+
+    return config
+  },
 } satisfies StorybookConfig
 
 export default config
