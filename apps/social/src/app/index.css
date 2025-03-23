@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@repo/ui-kit/style.css";
+
+@source "..";
+@source "../../node_modules/@repo/ui-kit";

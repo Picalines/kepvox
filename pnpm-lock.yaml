@@ -141,6 +141,112 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
 
+  apps/social:
+    dependencies:
+      '@effector/next':
+        specifier: 'catalog:'
+        version: 0.7.0(effector-react@23.3.0(effector@23.3.0)(react@19.0.0))(effector@23.3.0)(react@19.0.0)
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@repo/synth':
+        specifier: workspace:*
+        version: link:../../packages/synth
+      '@repo/ui-kit':
+        specifier: workspace:*
+        version: link:../../packages/ui-kit
+      '@withease/factories':
+        specifier: 'catalog:'
+        version: 1.0.5
+      effector:
+        specifier: 'catalog:'
+        version: 23.3.0
+      effector-react:
+        specifier: 'catalog:'
+        version: 23.3.0(effector@23.3.0)(react@19.0.0)
+      next:
+        specifier: 'catalog:'
+        version: 15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      patronum:
+        specifier: 'catalog:'
+        version: 2.3.0(effector@23.3.0)
+      react:
+        specifier: 'catalog:'
+        version: 19.0.0
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.0.0(react@19.0.0)
+      use-sync-external-store:
+        specifier: 'catalog:'
+        version: 1.4.0(react@19.0.0)
+    devDependencies:
+      '@effector/swc-plugin':
+        specifier: 'catalog:'
+        version: 0.5.2-swc1.7.0
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.49.1
+      '@repo/next-config':
+        specifier: workspace:*
+        version: link:../../system/next-config
+      '@repo/playwright-config':
+        specifier: workspace:*
+        version: link:../../system/playwright-config
+      '@repo/storybook-config':
+        specifier: workspace:*
+        version: link:../../system/storybook-config
+      '@repo/tailwind-config':
+        specifier: workspace:*
+        version: link:../../system/tailwind-config
+      '@repo/test-screen':
+        specifier: workspace:*
+        version: link:../../system/test-screen
+      '@repo/ts-config':
+        specifier: workspace:*
+        version: link:../../system/ts-config
+      '@storybook/addon-essentials':
+        specifier: 'catalog:'
+        version: 8.6.0(@types/react@19.0.2)(storybook@8.6.0(prettier@3.3.3))
+      '@storybook/addon-interactions':
+        specifier: 'catalog:'
+        version: 8.6.0(storybook@8.6.0(prettier@3.3.3))
+      '@storybook/addon-links':
+        specifier: 'catalog:'
+        version: 8.6.0(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))
+      '@storybook/addon-themes':
+        specifier: 'catalog:'
+        version: 8.6.0(storybook@8.6.0(prettier@3.3.3))
+      '@storybook/nextjs':
+        specifier: 'catalog:'
+        version: 8.6.0(esbuild@0.24.2)(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))
+      '@storybook/react':
+        specifier: 'catalog:'
+        version: 8.6.0(@storybook/test@8.6.0(storybook@8.6.0(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(typescript@5.7.2)
+      '@storybook/test':
+        specifier: 'catalog:'
+        version: 8.6.0(storybook@8.6.0(prettier@3.3.3))
+      '@tailwindcss/postcss':
+        specifier: 'catalog:'
+        version: 4.0.9
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.10.5
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.0.2
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.0.2(@types/react@19.0.2)
+      playwright:
+        specifier: 'catalog:'
+        version: 1.49.1
+      storybook:
+        specifier: 'catalog:'
+        version: 8.6.0(prettier@3.3.3)
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.0.9
+
   apps/synth-playground:
     dependencies:
       '@effector/next':
@@ -227,7 +333,7 @@ importers:
         version: 8.6.0(storybook@8.6.0(prettier@3.3.3))
       '@storybook/nextjs':
         specifier: 'catalog:'
-        version: 8.6.0(esbuild@0.24.2)(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))
+        version: 8.6.0(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.0(@storybook/test@8.6.0(storybook@8.6.0(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(typescript@5.7.2)
@@ -634,7 +740,7 @@ importers:
         version: 8.6.0(storybook@8.6.0(prettier@3.3.3))
       '@storybook/nextjs':
         specifier: 'catalog:'
-        version: 8.6.0(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)
+        version: 8.6.0(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.0(@storybook/test@8.6.0(storybook@8.6.0(prettier@3.3.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(typescript@5.7.2)
@@ -7633,7 +7739,7 @@ snapshots:
     dependencies:
       storybook: 8.6.0(prettier@3.3.3)
 
-  '@storybook/nextjs@8.6.0(esbuild@0.24.2)(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))':
+  '@storybook/nextjs@8.6.0(esbuild@0.24.2)(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1(esbuild@0.24.2))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.26.0)
@@ -7698,7 +7804,7 @@ snapshots:
       - webpack-hot-middleware
       - webpack-plugin-serve
 
-  '@storybook/nextjs@8.6.0(next@15.1.3(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)':
+  '@storybook/nextjs@8.6.0(next@15.1.3(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.0(prettier@3.3.3))(type-fest@4.34.0)(typescript@5.7.2)(webpack-hot-middleware@2.26.1)(webpack@5.97.1)':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.26.0)
