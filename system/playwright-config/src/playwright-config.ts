@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
   outputDir: './test-results',
 
   testMatch: /^.*\.screen\.spec\.ts$/,
-  snapshotPathTemplate: '{snapshotDir}/{testFileDir}/__screenshots__/{platform}-{projectName}/{arg}{ext}',
+  snapshotPathTemplate: '{snapshotDir}/{testFileDir}/__screenshots__/{arg}{ext}',
   reporter: 'html',
 
   timeout: 30_000,
