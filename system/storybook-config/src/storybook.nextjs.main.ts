@@ -19,6 +19,8 @@ const config = {
       type: 'asset/source',
     })
 
+    config.infrastructureLogging = { level: 'warn' }
+
     return config
   },
 } satisfies StorybookConfig
