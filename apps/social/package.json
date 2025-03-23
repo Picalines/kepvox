@@ -5,14 +5,16 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "next dev -p 3002",
+        "dev": "NODE_ENV=development concurrently \"pnpm run dev:podman\" \"next dev -p 3002\" \"drizzle-kit studio --port 3032\" \"pnpm run dev:storybook\" -n podman,next,drizzle-kit,storybook -c magenta,blue,yellow,green",
         "dev:storybook": "storybook dev -p 6005 --no-open",
+        "dev:podman": "podman compose --file compose.development.yaml up",
         "dev:db:migrate": "NODE_ENV=development drizzle-kit push",
         "build": "next build",
         "start": "next start",
         "ts:check": "tsc --noEmit",
         "playwright:install": "playwright install chromium --with-deps",
-        "playwright:server": "pnpm run dev:storybook"
+        "playwright:server": "pnpm run dev:storybook",
+        "gen:better-auth-schema": "NODE_ENV=development pnpm dlx @better-auth/cli@latest generate --config ./src/shared/auth-server/auth-server.ts"
     },
     "imports": {
         "#screens/*": "./src/screens/*/index.ts",
@@ -26,6 +28,8 @@
         "@repo/ui-kit": "workspace:*",
         "@types/pg": "^8.11.11",
         "@withease/factories": "catalog:",
+        "better-auth": "^1.2.4",
+        "client-only": "catalog:",
         "drizzle-orm": "^0.41.0",
         "effector": "catalog:",
         "effector-react": "catalog:",
@@ -34,6 +38,7 @@
         "pg": "^8.14.1",
         "react": "catalog:",
         "react-dom": "catalog:",
+        "server-only": "catalog:",
         "use-sync-external-store": "catalog:",
         "zod": "catalog:"
     },
