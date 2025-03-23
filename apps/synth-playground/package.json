@@ -5,7 +5,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev -p 3001",
         "dev:storybook": "storybook dev -p 6002 --no-open",
         "build": "next build",
         "start": "next start",
