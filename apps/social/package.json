@@ -29,7 +29,8 @@
         "patronum": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "use-sync-external-store": "catalog:"
+        "use-sync-external-store": "catalog:",
+        "zod": "catalog:"
     },
     "devDependencies": {
         "@effector/swc-plugin": "catalog:",
