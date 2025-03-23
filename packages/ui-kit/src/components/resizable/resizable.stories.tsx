@@ -22,11 +22,6 @@ export default {
       ))}
     </Resizable.Group>
   ),
-  argTypes: {
-    as: {
-      table: { disable: true },
-    },
-  },
   decorators: [
     Story => (
       <div className="size-96">
