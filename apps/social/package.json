@@ -1,0 +1,58 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "social",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "next dev -p 3002",
+        "dev:storybook": "storybook dev -p 6005 --no-open",
+        "build": "next build",
+        "start": "next start",
+        "ts:check": "tsc --noEmit",
+        "playwright:install": "playwright install chromium --with-deps",
+        "playwright:server": "pnpm run dev:storybook"
+    },
+    "imports": {
+        "#screens/*": "./src/screens/*/index.ts",
+        "#shared/lib/*": "./src/shared/lib/*/index.ts"
+    },
+    "dependencies": {
+        "@effector/next": "catalog:",
+        "@repo/common": "workspace:*",
+        "@repo/synth": "workspace:*",
+        "@repo/ui-kit": "workspace:*",
+        "@withease/factories": "catalog:",
+        "effector": "catalog:",
+        "effector-react": "catalog:",
+        "next": "catalog:",
+        "patronum": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "use-sync-external-store": "catalog:"
+    },
+    "devDependencies": {
+        "@effector/swc-plugin": "catalog:",
+        "@playwright/test": "catalog:",
+        "@repo/next-config": "workspace:*",
+        "@repo/playwright-config": "workspace:*",
+        "@repo/storybook-config": "workspace:*",
+        "@repo/tailwind-config": "workspace:*",
+        "@repo/test-screen": "workspace:*",
+        "@repo/ts-config": "workspace:*",
+        "@storybook/addon-essentials": "catalog:",
+        "@storybook/addon-interactions": "catalog:",
+        "@storybook/addon-links": "catalog:",
+        "@storybook/addon-themes": "catalog:",
+        "@storybook/nextjs": "catalog:",
+        "@storybook/react": "catalog:",
+        "@storybook/test": "catalog:",
+        "@tailwindcss/postcss": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "playwright": "catalog:",
+        "storybook": "catalog:",
+        "tailwindcss": "catalog:"
+    }
+}
