@@ -117,6 +117,9 @@ catalogs:
     tsup:
       specifier: ^8.3.6
       version: 8.3.6
+    tw-animate-css:
+      specifier: ^1.2.4
+      version: 1.2.4
     use-sync-external-store:
       specifier: ^1.4.0
       version: 1.4.0
@@ -703,6 +706,9 @@ importers:
       tailwindcss:
         specifier: 'catalog:'
         version: 4.0.9
+      tw-animate-css:
+        specifier: 'catalog:'
+        version: 1.2.4
       vite:
         specifier: 'catalog:'
         version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0)
@@ -783,10 +789,13 @@ importers:
         version: link:../ts-config
 
   system/tailwind-config:
-    devDependencies:
+    dependencies:
       tailwindcss:
         specifier: 'catalog:'
         version: 4.0.9
+      tw-animate-css:
+        specifier: 'catalog:'
+        version: 1.2.4
 
   system/test-screen:
     dependencies:
@@ -6077,6 +6086,9 @@ packages:
   turbo@2.2.3:
     resolution: {integrity: sha512-5lDvSqIxCYJ/BAd6rQGK/AzFRhBkbu4JHVMLmGh/hCb7U3CqSnr5Tjwfy9vc+/5wG2DJ6wttgAaA7MoCgvBKZQ==}
     hasBin: true
+
+  tw-animate-css@1.2.4:
+    resolution: {integrity: sha512-yt+HkJB41NAvOffe4NweJU6fLqAlVx/mBX6XmHRp15kq0JxTtOKaIw8pVSWM1Z+n2nXtyi7cW6C9f0WG/F/QAQ==}
 
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
@@ -12210,6 +12222,8 @@ snapshots:
       turbo-linux-arm64: 2.2.3
       turbo-windows-64: 2.2.3
       turbo-windows-arm64: 2.2.3
+
+  tw-animate-css@1.2.4: {}
 
   type-fest@0.21.3:
     optional: true

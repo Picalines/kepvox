@@ -58,6 +58,7 @@
         "playwright": "catalog:",
         "storybook": "catalog:",
         "tailwindcss": "catalog:",
+        "tw-animate-css": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     },
