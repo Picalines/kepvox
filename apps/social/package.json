@@ -65,7 +65,6 @@
         "concurrently": "catalog:",
         "drizzle-kit": "^0.30.5",
         "playwright": "catalog:",
-        "storybook": "catalog:",
-        "tailwindcss": "catalog:"
+        "storybook": "catalog:"
     }
 }

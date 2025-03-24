@@ -44,7 +44,6 @@
         "jsdom": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
-        "tailwindcss": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     }

@@ -285,9 +285,6 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.0(prettier@3.3.3)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.0.9
 
   apps/synth-playground:
     dependencies:
@@ -400,9 +397,6 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.0(prettier@3.3.3)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.0.9
 
   packages/common:
     devDependencies:
@@ -497,9 +491,6 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.0(prettier@3.3.3)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.0.9
       vite:
         specifier: 'catalog:'
         version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.36.0)(yaml@2.5.0)
