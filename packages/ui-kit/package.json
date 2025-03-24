@@ -8,9 +8,9 @@
     "scripts": {
         "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6001 --no-open",
-        "dev:unit": "vitest watch --browser.api.port=6011 --browser.headless",
+        "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
-        "test:unit": "vitest run --browser.api.port=6011 --browser.headless",
+        "test:unit": "vitest run",
         "test:screen": "PLAYWRIGHT_PORT=6001 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
         "playwright:install": "playwright install chromium --with-deps",
@@ -54,14 +54,12 @@
         "@testing-library/user-event": "catalog:",
         "@types/react": "catalog:",
         "@vitejs/plugin-react": "catalog:",
-        "@vitest/browser": "catalog:",
         "jsdom": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
         "tailwindcss": "catalog:",
         "vite": "catalog:",
-        "vitest": "catalog:",
-        "vitest-browser-react": "catalog:"
+        "vitest": "catalog:"
     },
     "dependencies": {
         "@radix-ui/react-checkbox": "^1.1.3",

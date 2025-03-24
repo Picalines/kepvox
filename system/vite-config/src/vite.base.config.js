@@ -44,26 +44,6 @@ export default defineConfig({
           css: false,
         },
       },
-      {
-        extends: true,
-        test: {
-          name: 'browser',
-          include: ['**/*.browser.spec.ts(x)?'],
-          setupFiles: ['./vitest.setup.browser.ts'],
-          browser: {
-            enabled: true,
-            provider: 'playwright',
-            headless: true,
-            screenshotFailures: false,
-            instances: [
-              {
-                browser: 'chromium',
-                viewport: { width: 800, height: 600 },
-              },
-            ],
-          },
-        },
-      },
     ],
   },
 })
