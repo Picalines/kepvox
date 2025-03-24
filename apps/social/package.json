@@ -5,9 +5,11 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "NODE_ENV=development concurrently \"pnpm run dev:podman\" \"next dev -p 3002\" \"drizzle-kit studio --port 3032\" \"pnpm run dev:storybook\" -n podman,next,drizzle-kit,storybook -c magenta,blue,yellow,green",
-        "dev:storybook": "storybook dev -p 6005 --no-open",
-        "dev:podman": "podman compose --file compose.development.yaml up",
+        "dev": "turbo run --ui=stream dev:next dev:drizzle-kit dev:podman dev:storybook",
+        "dev:next": "NODE_ENV=development next dev -p 3002",
+        "dev:drizzle-kit": "NODE_ENV=development drizzle-kit studio --port 3032",
+        "dev:storybook": "NODE_ENV=development storybook dev -p 6005 --no-open",
+        "dev:podman": "NODE_ENV=development podman compose --file compose.development.yaml up",
         "dev:db:migrate": "NODE_ENV=development drizzle-kit push",
         "build": "next build",
         "start": "next start",
@@ -62,7 +64,6 @@
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
-        "concurrently": "catalog:",
         "drizzle-kit": "^0.30.5",
         "playwright": "catalog:",
         "storybook": "catalog:"

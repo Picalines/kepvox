@@ -3,6 +3,8 @@
 
     "ui": "tui",
 
+    "globalPassThroughEnv": ["TMPDIR"],
+
     "tasks": {
         "build": {
             "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
@@ -43,6 +45,11 @@
             "dependsOn": ["^build", "dev:setup"]
         },
         "dev:storybook": {
+            "cache": false,
+            "persistent": true,
+            "dependsOn": ["^build", "dev:setup"]
+        },
+        "dev:next": {
             "cache": false,
             "persistent": true,
             "dependsOn": ["^build", "dev:setup"]
