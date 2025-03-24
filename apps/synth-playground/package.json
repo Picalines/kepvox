@@ -59,7 +59,6 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "playwright": "catalog:",
-        "storybook": "catalog:",
-        "tailwindcss": "catalog:"
+        "storybook": "catalog:"
     }
 }
