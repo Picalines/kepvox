@@ -2,8 +2,13 @@
     "$schema": "https://turbo.build/schema.json",
     "extends": ["//"],
     "tasks": {
-        "dev": {
-            "env": ["TMPDIR"]
+        "dev:drizzle-kit": {
+            "cache": false,
+            "persistent": true
+        },
+        "dev:podman": {
+            "cache": false,
+            "persistent": true
         }
     }
 }
