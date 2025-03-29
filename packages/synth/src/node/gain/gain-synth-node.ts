@@ -3,11 +3,9 @@ import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam } from '#param'
 import { Decibels, Factor } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 export class GainSynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'gain'
-
   readonly decibels: CurveSynthParam<'decibels'>
   readonly factor: CurveSynthParam<'factor'>
 

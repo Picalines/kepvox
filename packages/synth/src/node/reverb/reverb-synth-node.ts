@@ -3,11 +3,9 @@ import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam, NumberSynthParam } from '#param'
 import { Factor, Normal, Seconds } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 export class ReverbSynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'reverb'
-
   readonly dry
   readonly wet
 

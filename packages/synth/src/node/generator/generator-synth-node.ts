@@ -8,7 +8,7 @@ import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import type { SynthTime } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 export type GeneratorSynthNodeOpts = {
   /**
@@ -27,8 +27,6 @@ const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
 export type GeneratorWaveShape = (typeof WAVE_SPAHES)[number]
 
 export class GeneratorSynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'generator'
-
   readonly waveShape
 
   readonly attack
