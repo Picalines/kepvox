@@ -1,29 +1,21 @@
-import { Resizable } from '@repo/ui-kit/components/resizable'
-import { Text } from '@repo/ui-kit/components/text'
+'use client'
+
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
-import type { FC } from 'react'
-import { NodesTile } from '#components/nodes-tile'
+import { fork } from 'effector'
+import { Provider } from 'effector-react'
+import { type FC, useMemo } from 'react'
+import { editorModel } from '#model'
+import { EditorPanels } from './editor-panels'
 
 export const Editor: FC = () => {
+  const scope = useMemo(() => fork(), [])
+
   return (
-    <Tooltip.Provider>
-      <Resizable.Group direction="horizontal" className="h-full w-full">
-        <Resizable.Panel>
-          <Text>timeline</Text>
-        </Resizable.Panel>
-        <Resizable.Handle />
-        <Resizable.Panel>
-          <Resizable.Group direction="vertical">
-            <Resizable.Panel>
-              <NodesTile />
-            </Resizable.Panel>
-            <Resizable.Handle />
-            <Resizable.Panel>
-              <Text>parameters</Text>
-            </Resizable.Panel>
-          </Resizable.Group>
-        </Resizable.Panel>
-      </Resizable.Group>
-    </Tooltip.Provider>
+    <Provider value={scope}>
+      <editorModel.Gate />
+      <Tooltip.Provider>
+        <EditorPanels />
+      </Tooltip.Provider>
+    </Provider>
   )
 }
