@@ -2,13 +2,11 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
 
 export class OscillatorSynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'oscillator'
-
   readonly waveShape: EnumSynthParam<(typeof WAVE_SPAHES)[number]>
   readonly frequency: CurveSynthParam<'hertz'>
 

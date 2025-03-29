@@ -2,11 +2,9 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { CurveSynthParam } from '#param'
 import { Factor } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 export class ConstantSynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'constant'
-
   readonly value: CurveSynthParam<'factor'>
 
   constructor(context: SynthContext) {

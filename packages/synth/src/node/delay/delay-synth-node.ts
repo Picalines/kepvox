@@ -4,13 +4,11 @@ import { Range } from '#math'
 import { CurveSynthParam } from '#param'
 import type { SynthTime } from '#time'
 import { Normal, Notes, Seconds } from '#units'
-import { SYNTH_NODE_TYPE, SynthNode } from '../synth-node'
+import { SynthNode } from '../synth-node'
 
 const MAX_DELAY = Seconds.orThrow(60)
 
 export class DelaySynthNode extends SynthNode {
-  readonly [SYNTH_NODE_TYPE] = 'delay'
-
   readonly delayLeft: CurveSynthParam<'notes'>
   readonly delayRight: CurveSynthParam<'notes'>
 

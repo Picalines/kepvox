@@ -3,8 +3,6 @@ import type { SynthContext } from '#context'
 import { Signal } from '#util/signal'
 import { SynthNodeSocket } from './synth-node-socket'
 
-export const SYNTH_NODE_TYPE: unique symbol = Symbol('SynthNode.type')
-
 export type SynthNodeOpts = {
   context: SynthContext
 
@@ -24,8 +22,6 @@ export type SynthNodeOpts = {
 }
 
 export abstract class SynthNode {
-  abstract get [SYNTH_NODE_TYPE](): string
-
   readonly context: SynthContext
 
   readonly #inputs: readonly SynthNodeSocket[]
