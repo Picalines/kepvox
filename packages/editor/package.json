@@ -13,11 +13,19 @@
         "ts:check": "tsc --noEmit"
     },
     "imports": {
-        "#components/*": "./src/components/*/index.ts"
+        "#components/*": "./src/components/*/index.ts",
+        "#model": "./src/model/index.ts"
     },
     "dependencies": {
+        "@repo/common": "workspace:*",
+        "@repo/synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
+        "@withease/factories": "catalog:",
         "@xyflow/react": "^12.4.4",
+        "effector": "catalog:",
+        "effector-react": "catalog:",
+        "nanoid": "catalog:",
+        "patronum": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:"
     },
