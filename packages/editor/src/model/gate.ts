@@ -1,3 +1,3 @@
 import { createGate } from 'effector-react'
 
-export const Gate = createGate()
+export const Gate = createGate<void>()

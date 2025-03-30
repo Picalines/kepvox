@@ -1,8 +1,9 @@
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
-import { nanoid } from 'nanoid'
 import { readonly, spread } from 'patronum'
+import type { ActionPayload } from './action'
+import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
 import { CREATABLE_SYNTH_NODES } from './synth-node-meta'
 
@@ -34,65 +35,59 @@ export type Edge = {
 }
 
 type Params = {
+  history: HistoryStore
   playback: PlaybackStore
 }
-
-const OUTPUT_NODE_ID: NodeId = 'output'
 
 export type SynthTreeStore = ReturnType<typeof createSynthTree>
 
 export const createSynthTree = createFactory((params: Params) => {
-  const { playback } = params
+  const { history, playback } = params
 
   const $nodes = createStore<ReadonlyMap<NodeId, Node>>(new Map())
   const $edges = createStore<ReadonlyMap<EdgeId, Edge>>(new Map())
 
-  const nodeCreated = createEvent<{ id: NodeId; type: NodeType; position: NodePosition }>()
-  const nodeSelected = createEvent<{ id: NodeId; selected: boolean }>()
-  const nodeMoved = createEvent<{ id: NodeId; position: NodePosition }>()
-  const nodeDeleted = createEvent<{ id: NodeId }>()
-  const edgeCreated = createEvent<{ source: ConnectionPoint; target: ConnectionPoint }>()
-  const edgeSelected = createEvent<{ id: EdgeId; selected: boolean }>()
-  const edgeDeleted = createEvent<{ id: EdgeId }>()
+  const $hasOutputNode = createStore(false)
+
+  const initialized = createEvent()
 
   sample({
-    clock: playback.$context,
-    filter: Boolean,
-    target: $nodes,
-    fn: context => {
-      const outputNode: Node = {
-        id: OUTPUT_NODE_ID,
-        type: 'output',
-        position: { x: 0, y: 0 },
-        synthNode: context.output,
-        selected: false,
-      }
-      return new Map([[OUTPUT_NODE_ID, outputNode]])
-    },
+    clock: playback.initialized,
+    target: initialized,
+  })
+
+  const createNodeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-node-created',
   })
 
   sample({
-    clock: nodeCreated,
-    source: { nodes: $nodes, context: playback.$context },
-    target: $nodes,
-    fn: ({ nodes, context }, { id, type, position }) => {
-      if (!context || type === 'output' || nodes.has(id)) {
-        return nodes
+    clock: createNodeDispatched,
+    source: { nodes: $nodes, context: playback.$context, hasOutputNode: $hasOutputNode },
+    target: spread({ nodes: $nodes, hasOutputNode: $hasOutputNode }),
+    fn: ({ nodes, context, hasOutputNode }, { id, type, position }) => {
+      if (!context || nodes.has(id) || (hasOutputNode && type === 'output')) {
+        return { nodes, hasOutputNode }
       }
 
-      const synthNode = new CREATABLE_SYNTH_NODES[type](context)
+      const synthNode = type === 'output' ? context.output : new CREATABLE_SYNTH_NODES[type](context)
 
       const newNodes = new Map(nodes)
       newNodes.set(id, { id, type, position, synthNode, selected: false })
-      return newNodes
+      return { nodes: newNodes, hasOutputNode: hasOutputNode || type === 'output' }
     },
   })
 
+  const moveNodeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-node-moved',
+  })
+
   sample({
-    clock: nodeMoved,
+    clock: moveNodeDispatched,
     source: $nodes,
     target: $nodes,
-    fn: (nodes, { id, position }) => {
+    fn: (nodes, { id, to: position }) => {
       const node = nodes.get(id)
       if (!node) {
         return nodes
@@ -104,8 +99,13 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  const deleteNodeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-node-deleted',
+  })
+
   sample({
-    clock: nodeDeleted,
+    clock: deleteNodeDispatched,
     source: { nodes: $nodes, edges: $edges },
     target: spread({ nodes: $nodes, edges: $edges }),
     fn: ({ nodes, edges }, { id }) => {
@@ -130,14 +130,19 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  const createEdgeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-edge-created',
+  })
+
   sample({
-    clock: edgeCreated,
+    clock: createEdgeDispatched,
     source: { nodes: $nodes, edges: $edges },
     target: $edges,
-    fn: ({ nodes, edges }, { source, target }) => {
+    fn: ({ nodes, edges }, { id, source, target }) => {
       const sourceNode = nodes.get(source.node)
       const targetNode = nodes.get(target.node)
-      if (!sourceNode || !targetNode) {
+      if (!sourceNode || !targetNode || edges.has(id)) {
         return edges
       }
 
@@ -154,8 +159,6 @@ export const createSynthTree = createFactory((params: Params) => {
       }
 
       const newEdges = new Map(edges)
-
-      const id = nanoid() as EdgeId
       newEdges.set(id, { id, source, target, selected: false })
 
       sourceNode.synthNode.connect(targetNode.synthNode, source.socket, target.socket)
@@ -164,8 +167,13 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  const deleteEdgeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-edge-deleted',
+  })
+
   sample({
-    clock: edgeDeleted,
+    clock: deleteEdgeDispatched,
     source: { nodes: $nodes, edges: $edges },
     target: $edges,
     fn: ({ nodes, edges }, { id }) => {
@@ -189,8 +197,13 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  const selectNodeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-node-selected',
+  })
+
   sample({
-    clock: nodeSelected,
+    clock: selectNodeDispatched,
     source: $nodes,
     filter: (nodes, { id }) => nodes.has(id),
     target: $nodes,
@@ -206,8 +219,13 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  const selectEdgeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-tree-edge-selected',
+  })
+
   sample({
-    clock: edgeSelected,
+    clock: selectEdgeDispatched,
     source: $edges,
     filter: (edges, { id }) => edges.has(id),
     target: $edges,
@@ -226,13 +244,7 @@ export const createSynthTree = createFactory((params: Params) => {
   return {
     $nodes: readonly($nodes),
     $edges: readonly($edges),
-    nodeCreated,
-    nodeSelected,
-    nodeMoved,
-    nodeDeleted,
-    edgeCreated,
-    edgeSelected,
-    edgeDeleted,
+    initialized,
   }
 })
 
