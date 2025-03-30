@@ -1,13 +1,13 @@
 import { SynthContext, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
-import type { Gate } from 'effector-react'
 import { equals, interval, not, readonly, spread } from 'patronum'
+import type { EditorGate } from './gate'
 
 export type PlaybackStore = ReturnType<typeof createPlayback>
 
 type Params = {
-  gate: Gate<void>
+  gate: EditorGate
 }
 
 export const createPlayback = createFactory((params: Params) => {
