@@ -3,20 +3,49 @@ import { Text } from '@repo/ui-kit/components/text'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { MaximizeIcon, PlusIcon, ZoomInIcon, ZoomOutIcon } from '@repo/ui-kit/icons'
 import { Controls as ReactFlowControls, useReactFlow } from '@xyflow/react'
-import type { ComponentProps, FC } from 'react'
+import { useUnit } from 'effector-react'
+import { nanoid } from 'nanoid'
+import { type ComponentProps, type FC, type RefObject, useCallback } from 'react'
+import { editorModel } from '#model'
 
-export const Controls: FC = () => {
-  const { zoomIn, zoomOut, fitView } = useReactFlow()
+type Props = {
+  containerRef: RefObject<HTMLElement | null>
+}
+
+export const Controls: FC<Props> = props => {
+  const { containerRef } = props
+
+  const { dispatch } = useUnit({ dispatch: editorModel.actionDispatched })
+
+  const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow()
+
+  const onAddClick = useCallback(() => {
+    const container = containerRef.current
+    if (!container) {
+      return
+    }
+
+    const bounds = container.getBoundingClientRect()
+    const centerX = bounds.left + bounds.width / 2
+    const centerY = bounds.top + bounds.height / 2
+
+    dispatch({
+      type: 'synth-tree-node-created',
+      id: nanoid(),
+      nodeType: 'oscillator',
+      position: screenToFlowPosition({ x: centerX, y: centerY }),
+    })
+  }, [containerRef, dispatch, screenToFlowPosition])
 
   return (
     <>
       <ControlsAnchor position="top-right">
-        <ControlButton Icon={PlusIcon} tooltip="Add" />
+        <ControlButton Icon={PlusIcon} tooltip="Add" onClick={onAddClick} />
       </ControlsAnchor>
       <ControlsAnchor position="bottom-right">
-        <ControlButton Icon={ZoomInIcon} onClick={() => zoomIn()} tooltip="Zoom in" />
-        <ControlButton Icon={ZoomOutIcon} onClick={() => zoomOut()} tooltip="Zoom out" />
-        <ControlButton Icon={MaximizeIcon} onClick={() => fitView()} tooltip="Fit view" />
+        <ControlButton Icon={ZoomInIcon} tooltip="Zoom in" onClick={zoomIn} />
+        <ControlButton Icon={ZoomOutIcon} tooltip="Zoom out" onClick={zoomOut} />
+        <ControlButton Icon={MaximizeIcon} tooltip="Fit view" onClick={fitView} />
       </ControlsAnchor>
     </>
   )
@@ -48,7 +77,7 @@ const ControlButton: FC<ControlButtonProps> = ({ Icon, tooltip, onClick }) => {
   return (
     <Tooltip.Root>
       <Tooltip.Trigger>
-        <Button variant="outline" className="relative size-8" onClick={onClick}>
+        <Button variant="outline" className="relative size-10" onClick={onClick}>
           <Icon className="absolute" />
         </Button>
       </Tooltip.Trigger>
