@@ -4,6 +4,8 @@ import { ENV } from '#shared/env'
 
 const pgClient = new PostgresClient({ connectionString: ENV.DATABASE_URL })
 
-await pgClient.connect()
+if (ENV.IS_BUILD !== 'true') {
+  await pgClient.connect()
+}
 
 export const database = drizzle(pgClient)
