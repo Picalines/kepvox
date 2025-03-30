@@ -1,10 +1,10 @@
-import type { ConnectionPoint, EdgeId, NodeId, SynthTreeNodeType } from './synth-tree'
+import type { ConnectionPoint, EdgeId, NodeId, NodeType } from './synth-tree'
 
 export type EditorAction =
   | {
       type: 'synth-tree-node-created'
       id: NodeId
-      nodeType: SynthTreeNodeType
+      nodeType: NodeType
       position: { x: number; y: number }
     }
   | { type: 'synth-tree-node-moved'; id: NodeId; to: { x: number; y: number } }

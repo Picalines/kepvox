@@ -10,13 +10,13 @@ declare const SYNTH_TREE_ID: unique symbol
 
 export type NodeId = string & { [SYNTH_TREE_ID]?: 'node' }
 
-export type SynthTreeNodeType = 'output' | keyof typeof CREATABLE_SYNTH_NODES
+export type NodeType = 'output' | keyof typeof CREATABLE_SYNTH_NODES
 
 export type NodePosition = { x: number; y: number }
 
 export type Node = {
   id: NodeId
-  type: SynthTreeNodeType
+  type: NodeType
   position: { x: number; y: number }
   selected: boolean
   synthNode: SynthNode
@@ -47,7 +47,7 @@ export const createSynthTree = createFactory((params: Params) => {
   const $nodes = createStore<ReadonlyMap<NodeId, Node>>(new Map())
   const $edges = createStore<ReadonlyMap<EdgeId, Edge>>(new Map())
 
-  const nodeCreated = createEvent<{ id: NodeId; type: SynthTreeNodeType; position: NodePosition }>()
+  const nodeCreated = createEvent<{ id: NodeId; type: NodeType; position: NodePosition }>()
   const nodeSelected = createEvent<{ id: NodeId; selected: boolean }>()
   const nodeMoved = createEvent<{ id: NodeId; position: NodePosition }>()
   const nodeDeleted = createEvent<{ id: NodeId }>()
