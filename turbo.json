@@ -6,6 +6,13 @@
     "globalPassThroughEnv": ["TMPDIR"],
 
     "tasks": {
+        "start": {
+            "persistent": true,
+            "cache": false,
+            "dependsOn": ["build", "start:setup"]
+        },
+        "start:setup": {},
+
         "build": {
             "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
             "dependsOn": ["^build", "build:setup"]
