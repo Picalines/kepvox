@@ -23,11 +23,12 @@ const MemoizedControls = memo(Controls)
 const proOptions = { hideAttribution: true }
 
 export const NodesTile: FC = () => {
-  const { dispatch, state, nodes, edges } = useUnit({
+  const { dispatch, state, nodes, edges, isLoaded } = useUnit({
     dispatch: editorModel.actionDispatched,
     state: editorModel.playback.$state,
     nodes: editorModel.$synthNodes,
     edges: editorModel.$synthEdges,
+    isLoaded: editorModel.$isLoaded,
   })
 
   const flowNodes = useMemo(() => nodes.values().map(synthTreeNodeToFlow).toArray(), [nodes])
@@ -65,7 +66,12 @@ export const NodesTile: FC = () => {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
+  if (!isLoaded) {
+    return <Loader centered />
+  }
+
   if (state === 'disposed') {
+    // TODO: should be an error state probably
     return <Loader centered />
   }
 
