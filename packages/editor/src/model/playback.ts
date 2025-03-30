@@ -1,11 +1,18 @@
 import { SynthContext, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
+import type { Gate } from 'effector-react'
 import { equals, interval, not, readonly, spread } from 'patronum'
 
 export type PlaybackStore = ReturnType<typeof createPlayback>
 
-export const createPlayback = createFactory(() => {
+type Params = {
+  gate: Gate<void>
+}
+
+export const createPlayback = createFactory((params: Params) => {
+  const { gate } = params
+
   const stateChanged = createEvent<SynthState>()
 
   const $context = createStore<SynthContext | null>(null)
@@ -15,7 +22,7 @@ export const createPlayback = createFactory(() => {
   const $elapsedSeconds = createStore(0)
   const $elapsedNotes = createStore(0)
 
-  const initialized = createEvent()
+  const initialized = createEvent<SynthContext>()
   const playbackStarted = createEvent()
   const playbackStopped = createEvent()
   const disposed = createEvent()
@@ -49,13 +56,24 @@ export const createPlayback = createFactory(() => {
   })
 
   sample({
-    clock: initialized,
+    clock: gate.open,
     target: initContextFx,
+  })
+
+  sample({
+    clock: gate.close,
+    target: disposed,
   })
 
   sample({
     clock: initContextFx.doneData,
     target: $context,
+  })
+
+  sample({
+    clock: $context,
+    filter: Boolean,
+    target: initialized,
   })
 
   sample({
