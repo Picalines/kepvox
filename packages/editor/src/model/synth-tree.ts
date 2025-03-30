@@ -18,6 +18,7 @@ export type Node = {
   id: NodeId
   type: SynthTreeNodeType
   position: { x: number; y: number }
+  selected: boolean
   synthNode: SynthNode
 }
 
@@ -29,6 +30,7 @@ export type Edge = {
   id: EdgeId
   source: ConnectionPoint
   target: ConnectionPoint
+  selected: boolean
 }
 
 type Params = {
@@ -45,10 +47,12 @@ export const createSynthTree = createFactory((params: Params) => {
   const $nodes = createStore<ReadonlyMap<NodeId, Node>>(new Map())
   const $edges = createStore<ReadonlyMap<EdgeId, Edge>>(new Map())
 
-  const nodeCreated = createEvent<{ type: SynthTreeNodeType; position: NodePosition }>()
+  const nodeCreated = createEvent<{ id: NodeId; type: SynthTreeNodeType; position: NodePosition }>()
+  const nodeSelected = createEvent<{ id: NodeId; selected: boolean }>()
   const nodeMoved = createEvent<{ id: NodeId; position: NodePosition }>()
   const nodeDeleted = createEvent<{ id: NodeId }>()
   const edgeCreated = createEvent<{ source: ConnectionPoint; target: ConnectionPoint }>()
+  const edgeSelected = createEvent<{ id: EdgeId; selected: boolean }>()
   const edgeDeleted = createEvent<{ id: EdgeId }>()
 
   sample({
@@ -61,6 +65,7 @@ export const createSynthTree = createFactory((params: Params) => {
         type: 'output',
         position: { x: 0, y: 0 },
         synthNode: context.output,
+        selected: false,
       }
       return new Map([[OUTPUT_NODE_ID, outputNode]])
     },
@@ -70,16 +75,15 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: nodeCreated,
     source: { nodes: $nodes, context: playback.$context },
     target: $nodes,
-    fn: ({ nodes, context }, { type, position }) => {
-      if (!context || type === 'output') {
+    fn: ({ nodes, context }, { id, type, position }) => {
+      if (!context || type === 'output' || nodes.has(id)) {
         return nodes
       }
 
-      const id = nanoid() as NodeId
       const synthNode = new CREATABLE_SYNTH_NODES[type](context)
 
       const newNodes = new Map(nodes)
-      newNodes.set(id, { id, type, position, synthNode })
+      newNodes.set(id, { id, type, position, synthNode, selected: false })
       return newNodes
     },
   })
@@ -152,7 +156,7 @@ export const createSynthTree = createFactory((params: Params) => {
       const newEdges = new Map(edges)
 
       const id = nanoid() as EdgeId
-      newEdges.set(id, { id, source, target })
+      newEdges.set(id, { id, source, target, selected: false })
 
       sourceNode.synthNode.connect(targetNode.synthNode, source.socket, target.socket)
 
@@ -185,13 +189,49 @@ export const createSynthTree = createFactory((params: Params) => {
     },
   })
 
+  sample({
+    clock: nodeSelected,
+    source: $nodes,
+    filter: (nodes, { id }) => nodes.has(id),
+    target: $nodes,
+    fn: (nodes, { id, selected }) => {
+      const node = nodes.get(id)
+      if (!node) {
+        return nodes
+      }
+
+      const newNodes = new Map(nodes)
+      newNodes.set(id, { ...node, selected })
+      return newNodes
+    },
+  })
+
+  sample({
+    clock: edgeSelected,
+    source: $edges,
+    filter: (edges, { id }) => edges.has(id),
+    target: $edges,
+    fn: (edges, { id, selected }) => {
+      const edge = edges.get(id)
+      if (!edge) {
+        return edges
+      }
+
+      const newEdges = new Map(edges)
+      newEdges.set(id, { ...edge, selected })
+      return newEdges
+    },
+  })
+
   return {
     $nodes: readonly($nodes),
     $edges: readonly($edges),
     nodeCreated,
+    nodeSelected,
     nodeMoved,
     nodeDeleted,
     edgeCreated,
+    edgeSelected,
     edgeDeleted,
   }
 })

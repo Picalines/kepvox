@@ -1,34 +1,8 @@
 import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
 import { readonly, spread } from 'patronum'
-import type { ConnectionPoint, EdgeId, NodeId, SynthTreeNodeType, SynthTreeStore } from './synth-tree'
-
-export type EditorAction =
-  | {
-      type: 'synth-tree-node-created'
-      id: NodeId
-      nodeType: SynthTreeNodeType
-      position: { x: number; y: number }
-    }
-  | {
-      type: 'synth-tree-node-moved'
-      id: NodeId
-      to: { x: number; y: number }
-    }
-  | {
-      type: 'synth-tree-node-deleted'
-      id: NodeId
-    }
-  | {
-      type: 'synth-tree-edge-created'
-      id: EdgeId
-      source: ConnectionPoint
-      target: ConnectionPoint
-    }
-  | {
-      type: 'synth-tree-edge-deleted'
-      id: EdgeId
-    }
+import { type EditorAction, TRACKED_EDITOR_ACTIONS } from './editor-action'
+import type { SynthTreeStore } from './synth-tree'
 
 const MAX_HISTORY_LENGTH = 1_000
 
@@ -51,6 +25,10 @@ export const createHistory = createFactory((params: Params) => {
     fn: (actions, newAction) => {
       if (!actions.length) {
         return { actions: [newAction], appliedAction: newAction }
+      }
+
+      if (!TRACKED_EDITOR_ACTIONS.includes(newAction.type)) {
+        return { actions, appliedAction: newAction }
       }
 
       const newActions = [...actions]
@@ -98,6 +76,18 @@ export const createHistory = createFactory((params: Params) => {
     clock: actionApplied,
     filter: (action: EditorAction) => action.type === 'synth-tree-edge-deleted',
     target: synthTree.edgeDeleted,
+  })
+
+  sample({
+    clock: actionApplied,
+    filter: (action: EditorAction) => action.type === 'synth-tree-node-selected',
+    target: synthTree.nodeSelected,
+  })
+
+  sample({
+    clock: actionApplied,
+    filter: (action: EditorAction) => action.type === 'synth-tree-edge-selected',
+    target: synthTree.edgeSelected,
   })
 
   return {
