@@ -6,6 +6,7 @@
     "description": "Web audio synthesizer inspired by SunVox",
     "scripts": {
         "build": "turbo build --",
+        "start": "turbo start --",
         "test:unit": "turbo run test:unit --",
         "test:screen": "turbo run test:screen --",
         "ts:check": "turbo run ts:check --",
