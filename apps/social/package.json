@@ -9,7 +9,7 @@
         "dev:next": "NODE_ENV=development next dev -p 3002",
         "dev:drizzle-kit": "NODE_ENV=development drizzle-kit studio --port 3032",
         "dev:storybook": "NODE_ENV=development storybook dev -p 6005 --no-open",
-        "dev:docker": "NODE_ENV=development docker compose -f compose.development.yaml up",
+        "dev:docker": "NODE_ENV=development docker compose -f compose.dev.yaml up",
         "dev:db:migrate": "NODE_ENV=development drizzle-kit push",
         "build": "next build",
         "start": "next start",
