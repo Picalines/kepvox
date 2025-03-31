@@ -8,6 +8,27 @@
             "when": 1742752150591,
             "tag": "0000_marvelous_bishop",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1743453202931,
+            "tag": "0001_overconfident_silver_centurion",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1743458587444,
+            "tag": "0002_unusual_spot",
+            "breakpoints": true
+        },
+        {
+            "idx": 3,
+            "version": "7",
+            "when": 1743460220637,
+            "tag": "0003_purple_stingray",
+            "breakpoints": true
         }
     ]
 }
