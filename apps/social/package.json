@@ -27,6 +27,7 @@
         "@effector/next": "catalog:",
         "@next/env": "catalog:",
         "@repo/common": "workspace:*",
+        "@repo/editor": "workspace:*",
         "@repo/synth": "workspace:*",
         "@repo/ui-kit": "workspace:*",
         "@types/pg": "^8.11.11",
