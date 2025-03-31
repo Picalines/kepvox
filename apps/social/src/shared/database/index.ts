@@ -1,2 +1,2 @@
 export * from './database'
-export * as databaseSchema from './schema'
+export * as tables from './schema'
