@@ -11,10 +11,12 @@
         "dev:storybook": "NODE_ENV=development storybook dev -p 6005 --no-open",
         "dev:docker": "NODE_ENV=development docker compose -f compose.dev.yaml up",
         "dev:db:migrate": "NODE_ENV=development drizzle-kit generate && NODE_ENV=development drizzle-kit push",
+        "dev:unit": "vitest watch",
         "build": "NODE_ENV=production IS_BUILD=true next build",
         "start": "NODE_ENV=production next start -p 80",
         "start:db:migrate": "NODE_ENV=production drizzle-kit push",
         "ts:check": "tsc --noEmit",
+        "test:unit": "vitest run",
         "playwright:install": "playwright install chromium --with-deps",
         "playwright:server": "pnpm run dev:storybook",
         "gen:better-auth-schema": "NODE_ENV=development pnpm dlx @better-auth/cli@latest generate --config ./src/shared/auth-server/auth-server.ts"
@@ -55,6 +57,7 @@
         "@repo/tailwind-config": "workspace:*",
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
+        "@repo/vite-config": "workspace:*",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",
@@ -68,6 +71,7 @@
         "@types/react-dom": "catalog:",
         "drizzle-kit": "^0.30.5",
         "playwright": "catalog:",
-        "storybook": "catalog:"
+        "storybook": "catalog:",
+        "vitest": "catalog:"
     }
 }
