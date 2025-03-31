@@ -13,8 +13,6 @@ export type SynthFlowNode = FlowNode<{ type: SynthNodeType }, typeof SYNTH_FLOW_
 
 const NODE_TYPE_CLASSNAMES: Record<SynthNodeType, string> = {
   output: tw`bg-gray-500`,
-  'adsr-envelope': tw`bg-blue-500`,
-  constant: tw`bg-green-500`,
   delay: tw`bg-blue-500`,
   gain: tw`bg-blue-500`,
   generator: tw`bg-green-500`,

@@ -1,6 +1,4 @@
 import {
-  ADSREnvelopeSynthNode,
-  ConstantSynthNode,
   DelaySynthNode,
   GainSynthNode,
   GeneratorSynthNode,
@@ -11,8 +9,6 @@ import {
 } from '@repo/synth'
 
 export const CREATABLE_SYNTH_NODES = {
-  'adsr-envelope': ADSREnvelopeSynthNode,
-  constant: ConstantSynthNode,
   delay: DelaySynthNode,
   gain: GainSynthNode,
   generator: GeneratorSynthNode,
