@@ -10,7 +10,7 @@
         "dev:drizzle-kit": "NODE_ENV=development drizzle-kit studio --port 3032",
         "dev:storybook": "NODE_ENV=development storybook dev -p 6005 --no-open",
         "dev:docker": "NODE_ENV=development docker compose -f compose.dev.yaml up",
-        "dev:db:migrate": "NODE_ENV=development drizzle-kit push",
+        "dev:db:migrate": "NODE_ENV=development drizzle-kit generate && NODE_ENV=development drizzle-kit push",
         "build": "NODE_ENV=production IS_BUILD=true next build",
         "start": "NODE_ENV=production next start -p 80",
         "start:db:migrate": "NODE_ENV=production drizzle-kit push",
