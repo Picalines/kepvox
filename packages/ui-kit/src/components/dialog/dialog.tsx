@@ -79,10 +79,7 @@ export const Root: FC<RootProps> = props => {
         {content && (
           <RadixDialog.Content
             {...contentProps}
-            className={cn(
-              'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-50% data-[state=closed]:slide-out-to-top-50% data-[state=open]:slide-in-from-left-50% data-[state=open]:slide-in-from-top-50% -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 grid w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=open]:animate-in',
-              content.props.className,
-            )}
+            className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-50% data-[state=closed]:slide-out-to-top-50% data-[state=open]:slide-in-from-left-50% data-[state=open]:slide-in-from-top-50% -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 grid w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=open]:animate-in"
             onInteractOutside={onInteractOutside}
           >
             {(title || description) && (
@@ -99,7 +96,7 @@ export const Root: FC<RootProps> = props => {
                 )}
               </Heading.Root>
             )}
-            {content.children}
+            <div className={content.props.className}>{content.children}</div>
             {closable ? (
               <RadixDialog.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
                 <XIcon className="h-4 w-4" />
