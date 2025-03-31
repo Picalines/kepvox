@@ -25,7 +25,7 @@ const proOptions = { hideAttribution: true }
 export const NodesTile: FC = () => {
   const { dispatch, state, nodes, edges, isLoaded } = useUnit({
     dispatch: editorModel.actionDispatched,
-    state: editorModel.playback.$state,
+    state: editorModel.$playbackState,
     nodes: editorModel.$synthNodes,
     edges: editorModel.$synthEdges,
     isLoaded: editorModel.$isLoaded,

@@ -15,24 +15,31 @@ export const createPlayback = createFactory((params: Params) => {
 
   const stateChanged = createEvent<SynthState>()
 
+  const $hasAudioPermission = createStore(true) // Assume that it's there
   const $context = createStore<SynthContext | null>(null)
-
   const $state = restore(stateChanged, 'disposed')
-
   const $elapsedSeconds = createStore(0)
   const $elapsedNotes = createStore(0)
 
+  const audioPermissionGranted = createEvent()
   const initialized = createEvent<SynthContext>()
   const playbackStarted = createEvent()
   const playbackStopped = createEvent()
   const disposed = createEvent()
 
-  const initContextFx = createEffect(() => {
+  const AUDIO_NOT_ALLOWED = new Error()
+
+  const initContextFx = createEffect(async () => {
     if (typeof window === 'undefined') {
       return null
     }
 
-    const synthContext = new SynthContext(new AudioContext())
+    const audioContext = new AudioContext()
+    if (audioContext.state === 'suspended') {
+      throw AUDIO_NOT_ALLOWED
+    }
+
+    const synthContext = new SynthContext(audioContext)
 
     const scopedStateChanged = scopeBind(stateChanged)
     synthContext.stateChanged.watch(() => scopedStateChanged(synthContext.state))
@@ -63,6 +70,20 @@ export const createPlayback = createFactory((params: Params) => {
   sample({
     clock: gate.close,
     target: disposed,
+  })
+
+  sample({
+    clock: initContextFx.failData,
+    filter: error => error === AUDIO_NOT_ALLOWED,
+    target: $hasAudioPermission,
+    fn: () => false,
+  })
+
+  sample({
+    clock: audioPermissionGranted,
+    filter: not($hasAudioPermission),
+    target: spread({ hasAudioPermission: $hasAudioPermission, init: initContextFx }),
+    fn: () => ({ hasAudioPermission: true, init: undefined }),
   })
 
   sample({
@@ -123,10 +144,12 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   return {
+    $hasAudioPermission: readonly($hasAudioPermission),
     $context: readonly($context),
     $state: readonly($state),
     $elapsedSeconds: readonly($elapsedSeconds),
     $elapsedNotes: readonly($elapsedNotes),
+    audioPermissionGranted,
     initialized,
     playbackStarted,
     playbackStopped,

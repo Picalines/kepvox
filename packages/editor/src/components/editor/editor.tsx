@@ -4,12 +4,13 @@ import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { fork } from 'effector'
 import { Provider, useUnit } from 'effector-react'
 import { type FC, useEffect, useMemo } from 'react'
+import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { type Project, editorModel } from '#model'
 import { EditorPanels } from './editor-panels'
 
 type Props = {
   initialProject: Project
-  onProjectSerialized: (project: Project) => void
+  onProjectSerialized?: (project: Project) => void
 }
 
 export const Editor: FC<Props> = props => {
@@ -22,6 +23,7 @@ export const Editor: FC<Props> = props => {
       <editorModel.Gate initialProject={initialProject} />
       <ProjectWatcher onProjectSerialized={onProjectSerialized} />
       <Tooltip.Provider>
+        <AudioPermissionDialog />
         <EditorPanels />
       </Tooltip.Provider>
     </Provider>
@@ -35,7 +37,7 @@ const ProjectWatcher: FC<Pick<Props, 'onProjectSerialized'>> = props => {
 
   useEffect(() => {
     if (project) {
-      onProjectSerialized(project)
+      onProjectSerialized?.(project)
     }
   }, [project, onProjectSerialized])
 
