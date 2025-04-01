@@ -1,18 +1,25 @@
 'use client'
 
 import { Editor, type Project } from '@repo/editor'
+import { Heading } from '@repo/ui-kit/components/heading'
 import { type FC, useCallback, useState } from 'react'
 import type { z } from 'zod'
+import { BackButton } from '#shared/components/back-button'
 import type { projectSchema } from '#shared/schema'
 import { updateProject } from './update-project'
 
 type Props = {
-  project: { id: string; content: z.infer<typeof projectSchema> }
+  project: {
+    id: string
+    name: string
+    description: string
+    content: z.infer<typeof projectSchema>
+  }
 }
 
 export const ProjectEditorPage: FC<Props> = props => {
   const {
-    project: { id, content },
+    project: { id, name, description, content },
   } = props
 
   const { version } = content
@@ -29,8 +36,17 @@ export const ProjectEditorPage: FC<Props> = props => {
   )
 
   return (
-    <div className="h-dvh w-dvw">
-      <Editor initialProject={content} loading={loading} onProjectSerialized={onProjectSerialized} />
+    <div className="flex h-dvh w-dvw flex-col">
+      <div className="flex h-min items-center gap-2 border-b-2 p-2">
+        <BackButton variant="ghost" />
+        <Heading.Root>
+          <Heading.Title>{name}</Heading.Title>
+          <Heading.Description>{description}</Heading.Description>
+        </Heading.Root>
+      </div>
+      <div className="grow">
+        <Editor initialProject={content} loading={loading} onProjectSerialized={onProjectSerialized} />
+      </div>
     </div>
   )
 }

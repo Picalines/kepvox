@@ -23,7 +23,8 @@
     },
     "imports": {
         "#screens/*": "./src/screens/*/index.ts",
-        "#shared/*": "./src/shared/*/index.ts"
+        "#shared/*": "./src/shared/*/index.ts",
+        "#shared/components/*": "./src/shared/components/*/index.ts"
     },
     "dependencies": {
         "@effector/next": "catalog:",
