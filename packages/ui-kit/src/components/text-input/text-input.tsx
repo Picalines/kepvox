@@ -25,7 +25,7 @@ export type RootProps = {
   onChange?: ChangeEventHandler<HTMLInputElement>
   onFocus?: FocusEventHandler<HTMLInputElement>
   onBlur?: FocusEventHandler<HTMLInputElement>
-  children: ReactNode
+  children?: ReactNode
 }
 
 export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFor'>
