@@ -2,6 +2,7 @@
 
 import { isNonEmpty } from '@repo/common/array'
 import { revalidatePath } from 'next/cache'
+import { RedirectType, redirect } from 'next/navigation'
 import type { z } from 'zod'
 import { authenticateOrRedirect } from '#shared/auth-server'
 import { database, tables } from '#shared/database'
@@ -26,7 +27,8 @@ export const createProject = async () => {
   }
 
   revalidatePath('/projects')
-  revalidatePath(`/projects/${inserted[0].id}`)
+
+  redirect(`/projects/${inserted[0].id}`, RedirectType.push)
 }
 
 const INITIAL_PROJECT_CONTENT: z.infer<typeof projectSchema> = {
