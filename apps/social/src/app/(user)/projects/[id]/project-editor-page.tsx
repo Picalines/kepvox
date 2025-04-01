@@ -1,7 +1,9 @@
 'use client'
 
 import { Editor, type Project } from '@repo/editor'
+import { buttonVariants } from '@repo/ui-kit/components/button'
 import { Heading } from '@repo/ui-kit/components/heading'
+import Link from 'next/link'
 import { type FC, useCallback, useState } from 'react'
 import type { z } from 'zod'
 import { BackButton } from '#shared/components/back-button'
@@ -43,6 +45,10 @@ export const ProjectEditorPage: FC<Props> = props => {
           <Heading.Title>{name}</Heading.Title>
           <Heading.Description>{description}</Heading.Description>
         </Heading.Root>
+        <div className="grow" />
+        <Link href={`/projects/${id}/publish`} className={buttonVariants({ variant: 'ghost' })}>
+          Publish
+        </Link>
       </div>
       <div className="grow">
         <Editor initialProject={content} loading={loading} onProjectSerialized={onProjectSerialized} />
