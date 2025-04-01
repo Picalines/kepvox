@@ -61,3 +61,15 @@ export const project = pgTable('project', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
+
+export const publication = pgTable('publication', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  projectId: uuid('project_id')
+    .notNull()
+    .unique()
+    .references(() => project.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})
