@@ -80,6 +80,8 @@ export const NodesTile: FC = () => {
       nodeTypes={FLOW_NODE_TYPES}
       nodes={flowNodes}
       edges={flowEdges}
+      fitView
+      fitViewOptions={{ maxZoom: 1.1 }}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
@@ -99,9 +101,10 @@ const synthTreeNodeToFlow = (node: SynthTreeNode): SynthFlowNode => {
     position: node.position,
     selected: node.selected,
     data: { type: node.type },
-    width: 100,
+    width: 125,
     height: 75,
-    measured: { width: 100, height: 75 },
+    measured: { width: 125, height: 75 },
+    origin: [0.5, 0.5],
   }
 }
 
@@ -113,5 +116,6 @@ const synthTreeEdgeToFlow = (edge: SynthTreeEdge): FlowEdge => {
     sourceHandle: String(edge.source.socket),
     targetHandle: String(edge.target.socket),
     selected: edge.selected,
+    animated: true,
   }
 }
