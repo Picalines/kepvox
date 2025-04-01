@@ -1,4 +1,4 @@
-import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, jsonb, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core'
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -73,3 +73,15 @@ export const publication = pgTable('publication', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
+
+export const listen = pgTable(
+  'listen',
+  {
+    listenerId: text('listener_id').references(() => user.id, { onDelete: 'set null' }),
+    publicationId: uuid('publication_id')
+      .notNull()
+      .references(() => publication.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  table => [unique().on(table.listenerId, table.publicationId)],
+)
