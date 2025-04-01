@@ -19,7 +19,11 @@ const ProjectPage: FC<Props> = async props => {
   const { id: projectId } = await params
 
   const selectedProjects = await database
-    .select({ content: tables.project.content })
+    .select({
+      name: tables.project.name,
+      description: tables.project.description,
+      content: tables.project.content,
+    })
     .from(tables.project)
     .where(and(eq(tables.project.id, projectId), eq(tables.project.authorId, user.id)))
 
@@ -27,7 +31,7 @@ const ProjectPage: FC<Props> = async props => {
     notFound()
   }
 
-  const [{ content: oldProjectContent }] = selectedProjects
+  const [{ name, description, content: oldProjectContent }] = selectedProjects
 
   const content = migrateProject(oldProjectContent)
 
@@ -35,7 +39,7 @@ const ProjectPage: FC<Props> = async props => {
     throw new Error('project migration failed')
   }
 
-  return <ProjectEditorPage project={{ id: projectId, content }} />
+  return <ProjectEditorPage project={{ id: projectId, name, description, content }} />
 }
 
 export default ProjectPage
