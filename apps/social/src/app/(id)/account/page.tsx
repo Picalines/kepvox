@@ -1,19 +1,24 @@
 'use server'
 
+import { buttonVariants } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import type { FC } from 'react'
-import { authServer } from '#shared/auth-server'
+import { authenticateOrRedirect } from '#shared/auth-server'
 
 const AccountPage: FC = async () => {
-  const session = await authServer.api.getSession({ headers: await headers() })
+  const { user } = await authenticateOrRedirect()
 
-  if (!session) {
-    redirect('/sign-in')
-  }
-
-  return <Text>Current user: {session.user.name}</Text>
+  return (
+    <>
+      <div>
+        <Text>Current user: {user.name}</Text>
+      </div>
+      <Link href="/projects" className={buttonVariants()}>
+        Projects
+      </Link>
+    </>
+  )
 }
 
 export default AccountPage
