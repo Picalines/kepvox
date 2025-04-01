@@ -5,26 +5,31 @@ import { fork } from 'effector'
 import { Provider, useUnit } from 'effector-react'
 import { type FC, useEffect, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
+import { LoadingIndicator } from '#components/loading-indicator'
 import { type Project, editorModel } from '#model'
 import { EditorPanels } from './editor-panels'
 
 type Props = {
   initialProject: Project
+  loading?: boolean
   onProjectSerialized?: (project: Project) => void
 }
 
 export const Editor: FC<Props> = props => {
-  const { initialProject, onProjectSerialized } = props
+  const { initialProject, loading = false, onProjectSerialized } = props
 
   const scope = useMemo(() => fork(), [])
 
   return (
     <Provider value={scope}>
-      <editorModel.Gate initialProject={initialProject} />
+      <editorModel.Gate initialProject={initialProject} externalLoading={loading} />
       <ProjectWatcher onProjectSerialized={onProjectSerialized} />
       <Tooltip.Provider>
-        <AudioPermissionDialog />
-        <EditorPanels />
+        <div className="relative h-full w-full">
+          <LoadingIndicator />
+          <AudioPermissionDialog />
+          <EditorPanels />
+        </div>
       </Tooltip.Provider>
     </Provider>
   )

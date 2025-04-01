@@ -19,7 +19,7 @@ const { $hasAudioPermission, $state: $playbackState, audioPermissionGranted } = 
 
 const { $nodes: $synthNodes, $edges: $synthEdges } = synthTree
 
-const { $isDeserialized: $isLoaded, $serializedProject } = serializer
+const { $isDeserialized: $isLoaded, $serializedProject, $haveChanged } = serializer
 
 export {
   Gate,
@@ -31,4 +31,5 @@ export {
   $synthEdges,
   $isLoaded,
   $serializedProject,
+  $haveChanged,
 }

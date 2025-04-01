@@ -16,6 +16,7 @@ export const createSerializer = createFactory((params: Params) => {
   const { gate, history, synthTree } = params
 
   const $isDeserialized = createStore(false)
+  const $haveChanged = createStore(false)
   const $serializedProject = createStore<Project | null>(null)
 
   const deserializeFx = createEffect((project: Project) => {
@@ -59,20 +60,31 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   sample({
+    clock: projectChanged,
+    target: $serializedProject,
+    fn: () => null,
+  })
+
+  sample({
+    clock: projectChanged,
+    target: $haveChanged,
+    fn: () => true,
+  })
+
+  sample({
     clock: debounce(projectChanged, 3_000),
     target: $serializedProject,
-    fn: ({ nodes, edges }) => {
-      return {
-        synthTree: {
-          nodes: Object.fromEntries(nodes.entries().map(([id, { type, position }]) => [id, { type, position }])),
-          edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
-        },
-      }
-    },
+    fn: ({ nodes, edges }) => ({
+      synthTree: {
+        nodes: Object.fromEntries(nodes.entries().map(([id, { type, position }]) => [id, { type, position }])),
+        edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
+      },
+    }),
   })
 
   return {
     $isDeserialized: readonly($isDeserialized),
     $serializedProject: readonly($serializedProject),
+    $haveChanged: readonly($haveChanged),
   }
 })
