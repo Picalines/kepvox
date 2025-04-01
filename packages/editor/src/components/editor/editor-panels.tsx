@@ -5,19 +5,19 @@ import { NodesTile } from '#components/nodes-tile'
 
 export const EditorPanels: FC = () => {
   return (
-    <Resizable.Group direction="horizontal" className="h-full w-full">
-      <Resizable.Panel>
+    <Resizable.Group direction="vertical" className="h-full w-full">
+      <Resizable.Panel defaultSize={50}>
         <Text>timeline</Text>
       </Resizable.Panel>
       <Resizable.Handle />
-      <Resizable.Panel>
-        <Resizable.Group direction="vertical">
-          <Resizable.Panel className="relative">
-            <NodesTile />
+      <Resizable.Panel defaultSize={50}>
+        <Resizable.Group direction="horizontal">
+          <Resizable.Panel defaultSize={25}>
+            <Text>parameters</Text>
           </Resizable.Panel>
           <Resizable.Handle />
-          <Resizable.Panel>
-            <Text>parameters</Text>
+          <Resizable.Panel defaultSize={75} className="relative">
+            <NodesTile />
           </Resizable.Panel>
         </Resizable.Group>
       </Resizable.Panel>
