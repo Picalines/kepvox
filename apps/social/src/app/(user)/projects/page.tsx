@@ -1,28 +1,19 @@
 'use server'
+
 import { Button } from '@repo/ui-kit/components/button'
 import { Card } from '@repo/ui-kit/components/card'
 import { Heading } from '@repo/ui-kit/components/heading'
 import { Text } from '@repo/ui-kit/components/text'
-import { desc, eq } from 'drizzle-orm'
 import Link from 'next/link'
 import type { FC } from 'react'
 import { authenticateOrRedirect } from '#shared/auth-server'
-import { database, tables } from '#shared/database'
 import { createProject } from './create-project'
+import { getProjects } from './get-projects'
 
 const ProjectsPage: FC = async () => {
   const { user } = await authenticateOrRedirect()
 
-  const projects = await database
-    .select({
-      id: tables.project.id,
-      name: tables.project.name,
-      description: tables.project.description,
-      updatedAt: tables.project.updatedAt,
-    })
-    .from(tables.project)
-    .where(eq(tables.project.authorId, user.id))
-    .orderBy(desc(tables.project.updatedAt))
+  const projects = await getProjects({ authorId: user.id })
 
   return (
     <div className="flex flex-col gap-2 p-2">
