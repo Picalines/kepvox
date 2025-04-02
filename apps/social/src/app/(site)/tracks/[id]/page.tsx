@@ -3,6 +3,7 @@ import { Text } from '@repo/ui-kit/components/text'
 import type { FC } from 'react'
 import { getPublication } from './get-publication'
 import { listenPublication } from './listen-publication'
+import { reactToPublication } from './react-to-publication'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -13,15 +14,10 @@ const TrackPage: FC<Props> = async props => {
 
   const { id: publicationId } = await params
 
-  const { publication, author, project } = await getPublication({ publication: { id: publicationId } })
+  const publicationData = await getPublication({ publication: { id: publicationId } })
 
   return (
     <>
-      <div>
-        <Text>
-          <pre>{JSON.stringify({ publication, author, project }, null, 2)}</pre>
-        </Text>
-      </div>
       <form
         action={async () => {
           'use server'
@@ -30,6 +26,27 @@ const TrackPage: FC<Props> = async props => {
       >
         <Button type="submit">Listen</Button>
       </form>
+      <form
+        action={async () => {
+          'use server'
+          await reactToPublication({ publication: { id: publicationId }, reaction: { isPositive: true } })
+        }}
+      >
+        <Button type="submit">Like</Button>
+      </form>
+      <form
+        action={async () => {
+          'use server'
+          await reactToPublication({ publication: { id: publicationId }, reaction: { isPositive: false } })
+        }}
+      >
+        <Button type="submit">Dislike</Button>
+      </form>
+      <div>
+        <Text>
+          <pre>{JSON.stringify(publicationData, null, 2)}</pre>
+        </Text>
+      </div>
     </>
   )
 }
