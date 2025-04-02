@@ -23,6 +23,18 @@ export const authServer = betterAuth({
   },
 })
 
+type AuthenticateOrNullParams = {
+  headers?: ReadonlyHeaders
+}
+
+export const authenticateOrNull = async (params?: AuthenticateOrNullParams) => {
+  const { headers: headersParam } = params ?? {}
+
+  return await authServer.api.getSession({
+    headers: headersParam ?? (await headers()),
+  })
+}
+
 type AuthenticateOrRedirectParams = {
   headers?: ReadonlyHeaders
   fallbackUrl?: string
