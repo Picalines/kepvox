@@ -1,7 +1,7 @@
 'use server'
 
 import { isTuple } from '@repo/common/array'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
 import { authenticateOrNull } from '#shared/auth-server'
@@ -29,6 +29,7 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
       project: { content: tables.project.content },
       author: { id: tables.user.id, name: tables.user.name },
       reaction: { isPositive: tables.reaction.isPositive },
+      listened: isNotNull(tables.listen.publicationId),
     })
     .from(tables.publication)
     .innerJoin(tables.project, eq(tables.publication.projectId, tables.project.id))
@@ -37,7 +38,13 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
       tables.reaction,
       session
         ? and(eq(tables.publication.id, tables.reaction.publicationId), eq(tables.reaction.listenerId, session.user.id))
-        : undefined,
+        : sql`false`,
+    )
+    .leftJoin(
+      tables.listen,
+      session
+        ? and(eq(tables.publication.id, tables.listen.publicationId), eq(tables.listen.listenerId, session.user.id))
+        : sql`false`,
     )
     .where(eq(tables.publication.id, publicationId))
 
@@ -51,6 +58,7 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
       project: { content: oldProjectContent },
       author,
       reaction,
+      listened,
     },
   ] = selectedPublication
 
@@ -60,5 +68,5 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
     throw new Error('project migration failed')
   }
 
-  return { publication, project, author, reaction }
+  return { publication, project, author, reaction, listened }
 }
