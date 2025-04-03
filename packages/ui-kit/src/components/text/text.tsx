@@ -15,11 +15,8 @@ const textVariants = cva('', {
     },
     color: {
       inherit: 'text-inherit',
-      primary: 'text-black dark:text-white',
-      secondary: 'text-gray-500 dark:text-gray-400',
-      positive: 'text-green-500 dark:text-green-400',
-      negative: 'text-red-500 dark:text-red-400',
-      warning: 'text-yellow-500 dark:text-yellow-400',
+      muted: 'text-muted-foreground',
+      destructive: 'text-destructive',
     },
     weight: {
       light: 'font-light',

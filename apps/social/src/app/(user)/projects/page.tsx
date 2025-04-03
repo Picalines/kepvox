@@ -27,7 +27,7 @@ const ProjectsPage: FC = async () => {
               </Heading.Root>
             </Card.Header>
             <Card.Footer>
-              <Text color="secondary">{project.updatedAt.toUTCString()}</Text>
+              <Text color="muted">{project.updatedAt.toUTCString()}</Text>
             </Card.Footer>
           </Card.Root>
         </Link>

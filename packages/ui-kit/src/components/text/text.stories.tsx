@@ -13,7 +13,7 @@ export default {
     <div className="flex flex-col gap-2">
       {fontVariants.map(variant => (
         <div key={variant}>
-          <Text variant="text-s" color="secondary" className="block">
+          <Text variant="text-s" color="muted" className="block">
             {variant}
           </Text>
           <Text variant={variant} className="block" {...args}>
@@ -32,7 +32,7 @@ export default {
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'positive', 'negative', 'warning'] satisfies TextColor[],
+      options: ['inherit', 'muted', 'destructive'] satisfies TextColor[],
     },
     italic: {
       control: 'boolean',
@@ -48,7 +48,7 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     text: 'The quick brown fox jumps over the lazy dog',
-    color: 'primary',
+    color: 'inherit',
     weight: undefined,
     italic: false,
     underline: false,
