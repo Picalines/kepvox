@@ -98,3 +98,17 @@ export const reaction = pgTable(
   },
   table => [unique().on(table.listenerId, table.publicationId)],
 )
+
+export const subscription = pgTable(
+  'subscription',
+  {
+    listenerId: text('listener_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    authorId: text('author_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  table => [unique().on(table.listenerId, table.authorId)],
+)
