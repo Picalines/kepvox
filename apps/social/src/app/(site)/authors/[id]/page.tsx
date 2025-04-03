@@ -3,6 +3,7 @@ import { Text } from '@repo/ui-kit/components/text'
 import type { FC } from 'react'
 import { getAuthor } from './get-author'
 import { subscribeToAuthor } from './subscribe-to-author'
+import { unsubscribeFromAuthor } from './unsubscribe-from-author'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -24,6 +25,14 @@ const AuthorPage: FC<Props> = async props => {
         }}
       >
         <Button type="submit">Subscribe</Button>
+      </form>
+      <form
+        action={async () => {
+          'use server'
+          await unsubscribeFromAuthor({ author: { id: authorId } })
+        }}
+      >
+        <Button type="submit">Unsubscribe</Button>
       </form>
       <div>
         <Text>
