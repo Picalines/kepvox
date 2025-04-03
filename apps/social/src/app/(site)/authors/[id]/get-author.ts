@@ -1,9 +1,10 @@
 'use server'
 
 import { isTuple } from '@repo/common/array'
-import { eq } from 'drizzle-orm'
+import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
+import { authenticateOrNull } from '#shared/auth-server'
 import { database, tables } from '#shared/database'
 
 const inputSchema = z.object({
@@ -19,11 +20,19 @@ export const getAuthor = async (input: z.infer<typeof inputSchema>) => {
     author: { id: authorId },
   } = input
 
+  const session = await authenticateOrNull()
+
   const { error, author, publications } = await database.transaction(
     async tx => {
       const selectedUsers = await tx
-        .select({ name: tables.user.name })
+        .select({ name: tables.user.name, subscribed: isNotNull(tables.subscription.authorId) })
         .from(tables.user)
+        .leftJoin(
+          tables.subscription,
+          session
+            ? and(eq(tables.subscription.listenerId, session.user.id), eq(tables.subscription.authorId, authorId))
+            : sql`false`,
+        )
         .where(eq(tables.user.id, authorId))
 
       if (!isTuple(selectedUsers, 1)) {
