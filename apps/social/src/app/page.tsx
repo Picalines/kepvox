@@ -13,6 +13,18 @@ const HomePage: FC = async () => {
       <Link href="/account" prefetch={false} className={buttonVariants()}>
         Account
       </Link>
+      <Link href="/projects" prefetch={false} className={buttonVariants()}>
+        Projects
+      </Link>
+      <Link href="/library" prefetch={false} className={buttonVariants()}>
+        Library
+      </Link>
+      <Link href="/tracks" prefetch={false} className={buttonVariants()}>
+        Tracks
+      </Link>
+      <Link href="/authors" prefetch={false} className={buttonVariants()}>
+        Authors
+      </Link>
     </div>
   )
 }
