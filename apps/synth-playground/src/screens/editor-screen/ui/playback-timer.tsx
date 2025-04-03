@@ -31,9 +31,9 @@ export const PlaybackTimer: FC = () => {
 
   return (
     <div className="flex h-1/2 items-center gap-2">
-      <Text color="secondary">{secondsDisplay}</Text>
+      <Text color="muted">{secondsDisplay}</Text>
       <Separator orientation="vertical" />
-      <Text color="secondary">{notesDisplay}</Text>
+      <Text color="muted">{notesDisplay}</Text>
     </div>
   )
 }

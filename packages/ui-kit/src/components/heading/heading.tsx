@@ -44,17 +44,17 @@ export const Root: FC<RootProps> = props => {
       )}
     >
       {superTitle && (
-        <Text variant="text-xs" color="secondary" {...superTitle.props} ref={superTitle.ref}>
+        <Text variant="text-xs" color="muted" {...superTitle.props} ref={superTitle.ref}>
           {superTitle.children}
         </Text>
       )}
       {title && (
-        <Text variant="heading-m" color="primary" {...title.props} ref={title.ref}>
+        <Text variant="heading-m" {...title.props} ref={title.ref}>
           {title.children}
         </Text>
       )}
       {description && (
-        <Text variant="text-m" color="secondary" {...description.props} ref={description.ref}>
+        <Text variant="text-m" color="muted" {...description.props} ref={description.ref}>
           {description.children}
         </Text>
       )}

@@ -10,14 +10,14 @@ export const EditorStatus: FC = () => {
   const { status, error } = useUnit({ status: model.$status, error: model.$jsError })
 
   if (status === 'initializing') {
-    return <Text color="secondary">Initializing...</Text>
+    return <Text color="muted">Initializing...</Text>
   }
 
   if (error) {
     return (
       <Heading.Root>
-        <Heading.SuperTitle color="negative">{error.name}:</Heading.SuperTitle>
-        <Heading.Title variant="text-m" color="negative">
+        <Heading.SuperTitle color="destructive">{error.name}:</Heading.SuperTitle>
+        <Heading.Title variant="text-m" color="destructive">
           {error.message}
         </Heading.Title>
       </Heading.Root>
