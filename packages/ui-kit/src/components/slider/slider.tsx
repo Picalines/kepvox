@@ -54,16 +54,13 @@ export const Root: FC<RootProps> = props => {
         value={value !== undefined ? [value] : undefined}
         defaultValue={defaultValue !== undefined ? [defaultValue] : undefined}
         onValueChange={onValueChange}
-        className="group relative flex h-10 w-full touch-none select-none items-center overflow-clip rounded-md border border-border ring-offset-background transition-all focus-within:ring-2 focus-within:ring-offset-2 data-disabled:cursor-not-allowed"
+        className="group relative flex h-10 w-full cursor-ew-resize touch-none select-none items-center overflow-clip rounded-md border border-border ring-offset-background transition-all focus-within:ring-2 focus-within:ring-offset-2 data-disabled:cursor-not-allowed"
         step={undefined}
       >
-        <RadixSlider.Track className="relative h-full grow border-border bg-background">
-          <RadixSlider.Range className="absolute h-full bg-primary group-data-disabled:opacity-75" />
+        <RadixSlider.Track className="relative h-full grow border-border bg-accent group-hover:bg-accent/90">
+          <RadixSlider.Range className="absolute h-full bg-primary transition-colors group-hover:bg-primary/90 group-data-disabled:opacity-75" />
         </RadixSlider.Track>
-        <RadixSlider.Thumb
-          className="block h-10 w-0 bg-blue-500 transition-all focus:outline-none not-group-data-disabled:group-hover:w-1 dark:bg-blue-400"
-          aria-label={label?.children ? String(label.children) : undefined}
-        />
+        <RadixSlider.Thumb aria-label={label?.children ? String(label.children) : undefined} />
       </RadixSlider.Root>
       <span
         aria-hidden
