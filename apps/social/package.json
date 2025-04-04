@@ -41,6 +41,7 @@
         "effector": "catalog:",
         "effector-react": "catalog:",
         "next": "catalog:",
+        "next-themes": "^0.4.6",
         "patronum": "catalog:",
         "pg": "^8.14.1",
         "react": "catalog:",
