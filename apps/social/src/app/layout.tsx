@@ -1,5 +1,6 @@
 import { EffectorNext } from '@effector/next'
 import type { Metadata } from 'next'
+import { ThemeProvider } from 'next-themes'
 import { JetBrains_Mono } from 'next/font/google'
 import type { FC, ReactNode } from 'react'
 
@@ -15,9 +16,11 @@ const monoFont = JetBrains_Mono({
 
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={monoFont.className}>
-        <EffectorNext>{children}</EffectorNext>
+        <ThemeProvider defaultTheme="dark" attribute="class">
+          <EffectorNext>{children}</EffectorNext>
+        </ThemeProvider>
       </body>
     </html>
   )
