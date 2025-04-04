@@ -23,6 +23,7 @@
     },
     "imports": {
         "#screens/*": "./src/screens/*/index.ts",
+        "#widgets/*": "./src/widgets/*/index.ts",
         "#shared/*": "./src/shared/*/index.ts",
         "#shared/components/*": "./src/shared/components/*/index.ts"
     },
