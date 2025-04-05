@@ -17,8 +17,9 @@
             },
 
             "suspicious": {
+                "noConsoleLog": "error",
                 "noExplicitAny": "off",
-                "noConsoleLog": "error"
+                "noThenProperty": "off"
             },
 
             "style": {
