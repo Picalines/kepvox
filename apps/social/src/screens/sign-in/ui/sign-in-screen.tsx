@@ -12,7 +12,7 @@ export const SignInScreen: FC = async () => {
   const signedIn = (await authenticateOrNull()) !== null
 
   if (signedIn) {
-    redirect('/account', RedirectType.replace)
+    redirect('/profile', RedirectType.replace)
   }
 
   return (
