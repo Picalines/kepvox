@@ -26,7 +26,7 @@ export const AccountLink: FC<Props> = async props => {
   } = session
 
   return (
-    <Link href="/account" prefetch={false} className={className}>
+    <Link href="/profile" prefetch={false} className={className}>
       {avatar ? <img src={avatar} alt={`${username}'s avatar`} className="size-full rounded-full" /> : <UserIcon />}
     </Link>
   )

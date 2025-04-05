@@ -22,7 +22,7 @@ export const AccountSidebarLink: FC = async () => {
 
   return (
     <SidebarLink
-      href="/account"
+      href="/profile"
       icon={avatar ? <img src={avatar} alt={`${username}'s avatar`} className="rounded-full" /> : <UserIcon />}
     >
       Profile
