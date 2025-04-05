@@ -1,0 +1,37 @@
+'use server'
+
+import { Heading } from '@repo/ui-kit/components/heading'
+import type { FC } from 'react'
+import { BackButton } from '#shared/components/back-button'
+import { getProject } from '../api'
+import { EditorShell } from './editor-shell'
+import { PublishLink } from './publish-link'
+
+type Props = {
+  projectId: string
+}
+
+export const EditorScreen: FC<Props> = async props => {
+  const { projectId } = props
+
+  const {
+    project: { name, description, content },
+  } = await getProject({ project: { id: projectId } })
+
+  return (
+    <div className="flex h-dvh w-dvw flex-col">
+      <div className="flex h-min items-center gap-2 border-b-2 p-2">
+        <BackButton variant="ghost" fallbackPath="/projects" className="p-2" />
+        <Heading.Root>
+          <Heading.Title>{name}</Heading.Title>
+          <Heading.Description>{description}</Heading.Description>
+        </Heading.Root>
+        <div className="grow" />
+        <PublishLink projectId={projectId} />
+      </div>
+      <div className="grow">
+        <EditorShell projectId={projectId} content={content} />
+      </div>
+    </div>
+  )
+}
