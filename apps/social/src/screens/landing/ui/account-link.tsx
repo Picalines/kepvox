@@ -1,8 +1,9 @@
 'use server'
-import { UserIcon } from '@repo/ui-kit/icons'
+
 import Link from 'next/link'
 import type { FC } from 'react'
 import { authenticateOrNull } from '#shared/auth-server'
+import { Avatar } from '#shared/components/avatar'
 
 type Props = {
   className?: string
@@ -22,12 +23,15 @@ export const AccountLink: FC<Props> = async props => {
   }
 
   const {
-    user: { name: username, image: avatar },
+    user: { name: userName, image: avatar },
   } = session
 
   return (
     <Link href="/profile" prefetch={false} className={className}>
-      {avatar ? <img src={avatar} alt={`${username}'s avatar`} className="size-full rounded-full" /> : <UserIcon />}
+      <Avatar.Root className="size-6">
+        <Avatar.Image src={avatar} />
+        <Avatar.Fallback userName={userName} />
+      </Avatar.Root>
     </Link>
   )
 }

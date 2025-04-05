@@ -1,8 +1,9 @@
 'use server'
 
-import { DoorOpenIcon, UserIcon } from '@repo/ui-kit/icons'
+import { DoorOpenIcon } from '@repo/ui-kit/icons'
 import type { FC } from 'react'
 import { authenticateOrNull } from '#shared/auth-server'
+import { Avatar } from '#shared/components/avatar'
 import { SidebarLink } from './sidebar-link'
 
 export const AccountSidebarLink: FC = async () => {
@@ -17,13 +18,18 @@ export const AccountSidebarLink: FC = async () => {
   }
 
   const {
-    user: { name: username, image: avatar },
+    user: { name: userName, image: avatar },
   } = session
 
   return (
     <SidebarLink
       href="/profile"
-      icon={avatar ? <img src={avatar} alt={`${username}'s avatar`} className="rounded-full" /> : <UserIcon />}
+      icon={
+        <Avatar.Root className="size-6">
+          <Avatar.Image src={avatar} />
+          <Avatar.Fallback userName={userName} />
+        </Avatar.Root>
+      }
     >
       Profile
     </SidebarLink>
