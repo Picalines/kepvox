@@ -24,20 +24,20 @@ export const Root: FC<RootProps> = ({ className, children, ...rootProps }) => {
       {...rootProps}
       className={cn('flex flex-col gap-3 rounded-lg border bg-card p-3 text-card-foreground shadow-xs', className)}
     >
-      {header && (
+      {header?.children && (
         <div {...header.props} ref={header.ref}>
           {header.children}
         </div>
       )}
 
-      {content && (
+      {content?.children && (
         <div {...content.props} ref={content.ref}>
           {content.children}
         </div>
       )}
 
-      {footer && (
-        <div {...footer.props} ref={footer.ref}>
+      {footer?.children && (
+        <div {...footer.props} className={cn('mt-auto', footer.props.className)} ref={footer.ref}>
           {footer.children}
         </div>
       )}
