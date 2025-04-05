@@ -1,6 +1,6 @@
 import { createFactory } from '@withease/factories'
 import { combine, createEffect, createStore, sample, scopeBind } from 'effector'
-import { debounce, readonly } from 'patronum'
+import { debounce, readonly, reset } from 'patronum'
 import type { EditorGate } from './gate'
 import type { HistoryStore } from './history'
 import type { Project } from './project'
@@ -39,6 +39,11 @@ export const createSerializer = createFactory((params: Params) => {
         target: edge.target,
       })
     }
+  })
+
+  reset({
+    clock: synthTree.initialized,
+    target: [$isDeserialized, $haveChanged],
   })
 
   sample({
