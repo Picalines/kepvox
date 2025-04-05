@@ -17,8 +17,10 @@ export const getProjects = async (input: z.infer<typeof inputSchema>) => {
       name: tables.project.name,
       description: tables.project.description,
       updatedAt: tables.project.updatedAt,
+      publicationId: tables.publication.id,
     })
     .from(tables.project)
+    .leftJoin(tables.publication, eq(tables.project.id, tables.publication.projectId))
     .where(eq(tables.project.authorId, authorId))
     .orderBy(desc(tables.project.updatedAt))
 }

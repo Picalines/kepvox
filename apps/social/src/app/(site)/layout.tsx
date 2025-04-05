@@ -14,7 +14,7 @@ const SiteLayout: FC<Props> = async props => {
     <Tooltip.Provider>
       <div className="flex h-dvh w-dvw">
         <SiteSidebar />
-        <main className="grow overflow-auto p-2">
+        <main className="grow overflow-auto p-4">
           <Suspense fallback={<Loader centered />}>{children}</Suspense>
         </main>
       </div>
