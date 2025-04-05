@@ -1,7 +1,7 @@
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
-import { readonly, spread } from 'patronum'
+import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
@@ -46,10 +46,14 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const $nodes = createStore<ReadonlyMap<NodeId, Node>>(new Map())
   const $edges = createStore<ReadonlyMap<EdgeId, Edge>>(new Map())
-
   const $hasOutputNode = createStore(false)
 
   const initialized = createEvent()
+
+  reset({
+    clock: playback.initialized,
+    target: [$nodes, $edges, $hasOutputNode],
+  })
 
   sample({
     clock: playback.initialized,
