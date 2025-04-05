@@ -15,21 +15,33 @@ const serializer = invoke(createSerializer, { gate: Gate, history, synthTree })
 
 const { dispatched: actionDispatched } = history
 
-const { $hasAudioPermission, $state: $playbackState, audioPermissionGranted } = playback
+const {
+  $hasAudioPermission,
+  $isPlaying,
+  $progress: $playbackProgress,
+  audioPermissionGranted,
+  playheadSet,
+  started: playbackStarted,
+  stopped: playbackStopped,
+} = playback
 
-const { $nodes: $synthNodes, $edges: $synthEdges } = synthTree
+const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
-const { $isDeserialized: $isLoaded, $serializedProject, $haveChanged } = serializer
+const { $haveChanged, $isDeserialized: $isLoaded, $serializedProject } = serializer
 
 export {
+  $hasAudioPermission,
+  $haveChanged,
+  $isLoaded,
+  $isPlaying,
+  $playbackProgress,
+  $serializedProject,
+  $synthEdges,
+  $synthNodes,
   Gate,
   actionDispatched,
-  $hasAudioPermission,
-  $playbackState,
   audioPermissionGranted,
-  $synthNodes,
-  $synthEdges,
-  $isLoaded,
-  $serializedProject,
-  $haveChanged,
+  playbackStarted,
+  playbackStopped,
+  playheadSet,
 }
