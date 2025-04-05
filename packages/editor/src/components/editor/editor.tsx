@@ -6,6 +6,7 @@ import { Provider, useUnit } from 'effector-react'
 import { type FC, useEffect, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
+import { PlaybackControls } from '#components/playback-controls'
 import { type Project, editorModel } from '#model'
 import { EditorPanels } from './editor-panels'
 
@@ -29,6 +30,9 @@ export const Editor: FC<Props> = props => {
           <LoadingIndicator />
           <AudioPermissionDialog />
           <EditorPanels />
+          <div className="-translate-x-1/2 absolute bottom-4 left-1/2">
+            <PlaybackControls />
+          </div>
         </div>
       </Tooltip.Provider>
     </Provider>
