@@ -3,6 +3,7 @@
 import { Heading } from '@repo/ui-kit/components/heading'
 import type { FC } from 'react'
 import { BackButton } from '#shared/components/back-button'
+import { ThemeSwitcher } from '#shared/components/theme-switcher'
 import { getProject } from '../api'
 import { EditorShell } from './editor-shell'
 import { PublishLink } from './publish-link'
@@ -27,6 +28,7 @@ export const EditorScreen: FC<Props> = async props => {
           <Heading.Description>{description}</Heading.Description>
         </Heading.Root>
         <div className="grow" />
+        <ThemeSwitcher variant="ghost" className="p-2" />
         <PublishLink projectId={projectId} />
       </div>
       <div className="grow">
