@@ -1,22 +1,27 @@
+'use server'
+
 import { isTuple } from '@repo/common/array'
 import { and, eq } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
-import type { FC } from 'react'
+import { z } from 'zod'
 import { authenticateOrRedirect } from '#shared/auth-server'
 import { database, tables } from '#shared/database'
 import { migrateProject } from '#shared/schema'
-import { ProjectEditorPage } from './project-editor-page'
 
-type Props = {
-  params: Promise<{ id: string }>
-}
+const inputSchema = z.object({
+  project: z.object({
+    id: z.string().min(1),
+  }),
+})
 
-const ProjectPage: FC<Props> = async props => {
-  const { params } = props
+export const getProject = async (input: z.infer<typeof inputSchema>) => {
+  inputSchema.parse(input)
+
+  const {
+    project: { id: projectId },
+  } = input
 
   const { user } = await authenticateOrRedirect()
-
-  const { id: projectId } = await params
 
   const selectedProjects = await database
     .select({
@@ -31,7 +36,7 @@ const ProjectPage: FC<Props> = async props => {
     notFound()
   }
 
-  const [{ name, description, content: oldProjectContent }] = selectedProjects
+  const [{ content: oldProjectContent, ...project }] = selectedProjects
 
   const content = migrateProject(oldProjectContent)
 
@@ -39,7 +44,7 @@ const ProjectPage: FC<Props> = async props => {
     throw new Error('project migration failed')
   }
 
-  return <ProjectEditorPage project={{ id: projectId, name, description, content }} />
+  return {
+    project: { ...project, content },
+  }
 }
-
-export default ProjectPage
