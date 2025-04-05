@@ -1,5 +1,3 @@
-'use server'
-
 import { Separator } from '@repo/ui-kit/components/separator'
 import { Skeleton } from '@repo/ui-kit/components/skeleton'
 import { AudioWaveformIcon, HeartIcon, RadioTowerIcon, UserIcon } from '@repo/ui-kit/icons'
@@ -9,7 +7,7 @@ import { SiteLogo } from '#shared/icons'
 import { AccountSidebarLink } from './account-sidebar-link'
 import { SidebarLink } from './sidebar-link'
 
-export const SiteSidebar: FC = async () => {
+export const SiteSidebar: FC = () => {
   return (
     <aside className="flex w-min flex-col gap-2 border-r p-2">
       <SidebarLink href="/" icon={<SiteLogo />} />
