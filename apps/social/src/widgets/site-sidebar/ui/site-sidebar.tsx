@@ -25,7 +25,7 @@ export const SiteSidebar: FC = () => {
         My Projects
       </SidebarLink>
       <div className="flex-grow" />
-      <Suspense fallback={<Skeleton className="h-16 w-16" />}>
+      <Suspense fallback={<Skeleton className="h-10 w-full" />}>
         <AccountSidebarLink />
       </Suspense>
       <ThemeSwitcher variant="ghost" />
