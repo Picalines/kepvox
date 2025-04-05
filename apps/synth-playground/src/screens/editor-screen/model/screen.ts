@@ -3,7 +3,7 @@ import { invoke } from '@withease/factories'
 import { combine, createEvent, sample } from 'effector'
 import { createGate } from 'effector-react'
 import { persist as persistInQuery } from 'effector-storage/query'
-import { equals } from 'patronum'
+import { and, equals, not } from 'patronum'
 import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
 import { createExampleSelector } from './examples'
@@ -80,7 +80,7 @@ sample({
 
 sample({
   clock: jsCodeRan,
-  filter: equals($jsError, null),
+  filter: and(not($isPlaying), equals($jsError, null)),
   target: synthStarted,
 })
 
