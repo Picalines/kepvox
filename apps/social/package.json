@@ -30,6 +30,7 @@
     "dependencies": {
         "@effector/next": "catalog:",
         "@next/env": "catalog:",
+        "@radix-ui/react-avatar": "^1.1.3",
         "@repo/common": "workspace:*",
         "@repo/editor": "workspace:*",
         "@repo/synth": "workspace:*",
