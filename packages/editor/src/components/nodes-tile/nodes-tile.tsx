@@ -23,9 +23,8 @@ const MemoizedControls = memo(Controls)
 const proOptions = { hideAttribution: true }
 
 export const NodesTile: FC = () => {
-  const { dispatch, state, nodes, edges, isLoaded } = useUnit({
+  const { dispatch, nodes, edges, isLoaded } = useUnit({
     dispatch: editorModel.actionDispatched,
-    state: editorModel.$playbackState,
     nodes: editorModel.$synthNodes,
     edges: editorModel.$synthEdges,
     isLoaded: editorModel.$isLoaded,
@@ -67,11 +66,6 @@ export const NodesTile: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   if (!isLoaded) {
-    return <Loader centered />
-  }
-
-  if (state === 'disposed') {
-    // TODO: should be an error state probably
     return <Loader centered />
   }
 
