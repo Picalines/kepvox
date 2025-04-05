@@ -2,12 +2,13 @@ import { Resizable } from '@repo/ui-kit/components/resizable'
 import { Text } from '@repo/ui-kit/components/text'
 import type { FC } from 'react'
 import { NodesTile } from '#components/nodes-tile'
+import { TimelineTile } from '#components/timeline-tile'
 
 export const EditorPanels: FC = () => {
   return (
     <Resizable.Group direction="vertical" className="h-full w-full">
       <Resizable.Panel defaultSize={50}>
-        <Text>timeline</Text>
+        <TimelineTile />
       </Resizable.Panel>
       <Resizable.Handle />
       <Resizable.Panel defaultSize={50}>
