@@ -12,7 +12,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
   [S in keyof SlotMap]: SlotMap[S] extends SlotComponent<infer Props, infer Meta>
     ? Meta['repeatable'] extends true
       ? RenderedSlot<Props>[]
-      : RenderedSlot<Props> | (Meta['required'] extends true ? {} : null)
+      : RenderedSlot<Props> | (Meta['required'] extends true ? never : null)
     : never
 } {
   const collectedSlots: Record<string, RenderedSlot<any>[] | RenderedSlot<any> | null> = {}
