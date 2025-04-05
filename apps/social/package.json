@@ -39,6 +39,7 @@
         "@withease/factories": "catalog:",
         "better-auth": "^1.2.4",
         "client-only": "catalog:",
+        "date-fns": "^4.1.0",
         "drizzle-orm": "^0.41.0",
         "effector": "catalog:",
         "effector-react": "catalog:",
