@@ -1,5 +1,3 @@
-'use server'
-
 import { Button } from '@repo/ui-kit/components/button'
 import { Dialog } from '@repo/ui-kit/components/dialog'
 import { Text } from '@repo/ui-kit/components/text'
