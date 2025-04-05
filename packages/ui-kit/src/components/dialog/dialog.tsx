@@ -5,6 +5,7 @@ import { Heading } from '#components/heading'
 import { XIcon } from '#icons'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
+import { DialogContent } from './dialog-content'
 
 export type RootProps = {
   children: ReactNode
@@ -43,10 +44,6 @@ export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
 export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
 export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 
-type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractOutside']>
-
-const preventClosing: OnInteractOutside = event => event.preventDefault()
-
 export const Root: FC<RootProps> = props => {
   const { children, ...rootProps } = props
 
@@ -58,10 +55,6 @@ export const Root: FC<RootProps> = props => {
   })
 
   const { closable = true, ...contentProps } = content?.props ?? {}
-
-  // TODO: move content to client component, so closable=false
-  // would be available in SSR
-  const onInteractOutside = closable ? undefined : preventClosing
 
   return (
     <RadixDialog.Root {...rootProps}>
@@ -77,10 +70,9 @@ export const Root: FC<RootProps> = props => {
           )}
         />
         {content && (
-          <RadixDialog.Content
+          <DialogContent
             {...contentProps}
             className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-50% data-[state=closed]:slide-out-to-top-50% data-[state=open]:slide-in-from-left-50% data-[state=open]:slide-in-from-top-50% -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 grid w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=open]:animate-in"
-            onInteractOutside={onInteractOutside}
           >
             {(title || description) && (
               <Heading.Root className="mb-2">
@@ -103,7 +95,7 @@ export const Root: FC<RootProps> = props => {
                 <span className="sr-only">Close</span>
               </RadixDialog.Close>
             ) : null}
-          </RadixDialog.Content>
+          </DialogContent>
         )}
       </RadixDialog.Portal>
     </RadixDialog.Root>
