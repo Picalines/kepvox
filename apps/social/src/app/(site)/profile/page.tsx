@@ -14,8 +14,11 @@ const AccountPage: FC = async () => {
       <div>
         <Text>Current user: {user.name}</Text>
       </div>
-      <Link href="/projects" className={buttonVariants()}>
+      <Link href="/projects" prefetch={false} className={buttonVariants()}>
         Projects
+      </Link>
+      <Link href="/sign-out" prefetch={false} className={buttonVariants()}>
+        Sign out
       </Link>
     </>
   )
