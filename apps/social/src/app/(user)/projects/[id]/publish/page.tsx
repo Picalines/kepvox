@@ -19,7 +19,7 @@ const PublishPage: FC<Props> = async props => {
   return (
     <>
       <div>
-        <BackButton />
+        <BackButton fallbackPath={`/projects/${projectId}`} />
       </div>
       <div>
         <Text>Are you sure?</Text>

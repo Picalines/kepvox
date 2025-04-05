@@ -40,7 +40,7 @@ export const ProjectEditorPage: FC<Props> = props => {
   return (
     <div className="flex h-dvh w-dvw flex-col">
       <div className="flex h-min items-center gap-2 border-b-2 p-2">
-        <BackButton variant="ghost" />
+        <BackButton variant="ghost" fallbackPath="/projects" />
         <Heading.Root>
           <Heading.Title>{name}</Heading.Title>
           <Heading.Description>{description}</Heading.Description>
