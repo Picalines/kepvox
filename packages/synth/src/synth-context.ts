@@ -52,6 +52,7 @@ export class SynthContext {
   readonly #output: OutputSynthNode
 
   #state: SynthState = 'idle'
+  #playbackSkippedSeconds = Seconds.orThrow(0)
   #playbackStartTime = Seconds.orThrow(0)
 
   /**
@@ -75,9 +76,12 @@ export class SynthContext {
 
     this.random = createSeededRandom(randomSeed)
 
-    this.playing.watch(() => {
+    this.playing.watch(({ start }) => {
+      this.#playbackSkippedSeconds = this.durationAt(start)
       this.#playbackStartTime = Seconds.orThrow(this.#audioContext.currentTime + this.#lookAhead)
     })
+
+    this.secondsPerNote.changed.watch(() => this.stop())
 
     this.#notesPerSecondNode = new PannerNode(audioContext)
     this.#notesPerSecondNode.connect(audioContext.destination) // won't work without connection
@@ -133,7 +137,9 @@ export class SynthContext {
 
   get elapsedSeconds(): Seconds {
     return Seconds.orThrow(
-      this.state === 'playing' ? Math.max(0, this.#audioContext.currentTime - this.#playbackStartTime) : 0,
+      this.state === 'playing'
+        ? this.#playbackSkippedSeconds + Math.max(0, this.#audioContext.currentTime - this.#playbackStartTime)
+        : 0,
     )
   }
 
@@ -144,7 +150,7 @@ export class SynthContext {
 
     const elapsedSeconds = this.elapsedSeconds
     const [, tempoAutomationEnd] = this.secondsPerNote.timeRange
-    const tempoAutomationEndSeconds = this.secondsPerNote.areaBefore(tempoAutomationEnd)
+    const tempoAutomationEndSeconds = this.durationAt(tempoAutomationEnd)
 
     // See the constructor. If the tempo automation is active,
     // use its current value as the result
@@ -157,6 +163,13 @@ export class SynthContext {
     const constantNoteDuration = this.secondsPerNote.valueAt(tempoAutomationEnd)
     const secondsSinceAutomationEnd = elapsedSeconds - tempoAutomationEndSeconds
     return Notes.orThrow(tempoAutomationEnd.toNotes() + secondsSinceAutomationEnd / constantNoteDuration)
+  }
+
+  /**
+   * @returns number of seconds that would've played at a given note
+   */
+  durationAt(time: SynthTime): Seconds {
+    return Seconds.orThrow(this.secondsPerNote.areaBefore(time))
   }
 
   /**
