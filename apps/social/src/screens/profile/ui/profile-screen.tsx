@@ -1,6 +1,6 @@
 'use server'
 
-import { buttonVariants } from '@repo/ui-kit/components/button'
+import { Button } from '@repo/ui-kit/components/button'
 import { Heading } from '@repo/ui-kit/components/heading'
 import Link from 'next/link'
 import type { FC } from 'react'
@@ -25,10 +25,11 @@ export const ProfileScreen: FC = async () => {
           </Heading.Description>
         </Heading.Root>
       </div>
-
-      <Link href="/sign-out" prefetch={false} className={buttonVariants({ variant: 'outline' })}>
-        Sign out
-      </Link>
+      <Button asChild variant="outline">
+        <Link href="/sign-out" prefetch={false}>
+          Sign out
+        </Link>
+      </Button>
     </div>
   )
 }

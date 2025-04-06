@@ -1,6 +1,5 @@
 'use client'
 
-import { cn } from '@repo/ui-kit/classnames'
 import { Button } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
@@ -24,12 +23,11 @@ export const PlaybackButton = () => {
         <Button
           onMouseDown={toggled}
           size="lg"
-          shape="square"
           variant={status === 'playing' ? 'destructive' : 'outline'}
           className="relative"
           disabled={disabled}
         >
-          <Icon className={cn('absolute', disabled && 'animate-pulse')} />
+          <Icon className={disabled ? 'animate-pulse' : ''} />
         </Button>
       </Tooltip.Trigger>
       <Tooltip.Content>
