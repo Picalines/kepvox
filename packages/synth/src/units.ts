@@ -3,7 +3,6 @@ import { type Branded, createSafeBrand } from '#util/branded'
 
 export type UnitName =
   | 'seconds'
-  | 'beats'
   | 'notes'
   | 'decibels'
   | 'hertz'
@@ -46,7 +45,6 @@ const createUnitMeta = <TUnit extends UnitName>(unitName: TUnit, range: Range): 
 
 export const Unit: { readonly [U in UnitName]: UnitMeta<U> } = {
   seconds: createUnitMeta('seconds', Range.any),
-  beats: createUnitMeta('beats', Range.any),
   notes: createUnitMeta('notes', Range.any),
   decibels: createUnitMeta('decibels', Range.any),
   hertz: createUnitMeta('hertz', Range.positive),
@@ -58,7 +56,6 @@ export const Unit: { readonly [U in UnitName]: UnitMeta<U> } = {
 }
 
 export const Seconds = Unit.seconds
-export const Beats = Unit.beats
 export const Notes = Unit.notes
 export const Decibels = Unit.decibels
 export const Hertz = Unit.hertz
@@ -69,7 +66,6 @@ export const Factor = Unit.factor
 export const Ticks = Unit.ticks
 
 export type Seconds = UnitValue<'seconds'>
-export type Beats = UnitValue<'beats'>
 export type Notes = UnitValue<'notes'>
 export type Decibels = UnitValue<'decibels'>
 export type Hertz = UnitValue<'hertz'>
