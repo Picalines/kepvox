@@ -1,6 +1,6 @@
 import { createFactory } from '@withease/factories'
 import { combine, createEffect, createStore, sample, scopeBind } from 'effector'
-import { debounce, readonly, reset } from 'patronum'
+import { and, debounce, readonly, reset } from 'patronum'
 import type { EditorGate } from './gate'
 import type { HistoryStore } from './history'
 import type { Project } from './project'
@@ -18,6 +18,7 @@ export const createSerializer = createFactory((params: Params) => {
   const $isDeserialized = createStore(false)
   const $haveChanged = createStore(false)
   const $serializedProject = createStore<Project | null>(null)
+  const $serializationTimeout = createStore(-1)
 
   const deserializeFx = createEffect((project: Project) => {
     const dispatch = scopeBind(history.dispatched)
@@ -54,6 +55,14 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   sample({
+    clock: gate.status,
+    filter: gate.status,
+    source: gate.state,
+    target: $serializationTimeout,
+    fn: ({ serializationTimeout }) => serializationTimeout,
+  })
+
+  sample({
     clock: deserializeFx.done,
     target: $isDeserialized,
     fn: () => true,
@@ -61,7 +70,10 @@ export const createSerializer = createFactory((params: Params) => {
 
   const projectChanged = sample({
     clock: combine({ nodes: synthTree.$nodes, edges: synthTree.$edges }),
-    filter: $isDeserialized,
+    filter: and(
+      $isDeserialized,
+      $serializationTimeout.map(t => t >= 0),
+    ),
   })
 
   sample({
@@ -77,7 +89,7 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   sample({
-    clock: debounce(projectChanged, 3_000),
+    clock: debounce(projectChanged, $serializationTimeout),
     target: $serializedProject,
     fn: ({ nodes, edges }) => ({
       synthTree: {

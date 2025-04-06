@@ -36,7 +36,7 @@ export const Playing: Story = {
   parameters: { scope: playingScope },
 
   beforeEach: async () => {
-    const state = { externalLoading: false, initialProject: simpleProjectMock } as const
+    const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
     await allSettled(editorModel.Gate.close, { scope: playingScope, params: state })
     await allSettled(editorModel.Gate.open, { scope: playingScope, params: state })
 

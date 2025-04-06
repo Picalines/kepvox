@@ -14,18 +14,23 @@ import { useEditorScope } from './editor-scope'
 type Props = {
   initialProject: Project
   loading?: boolean
+  serializationTimeout?: number
   onProjectSerialized?: (project: Project) => void
 }
 
 export const Editor: FC<Props> = props => {
-  const { initialProject, loading = false, onProjectSerialized } = props
+  const { initialProject, loading = false, serializationTimeout = 1_000, onProjectSerialized } = props
 
   const parentScope = useEditorScope()
   const scope = useMemo(() => parentScope ?? fork(), [parentScope])
 
   return (
     <Provider value={scope}>
-      <editorModel.Gate initialProject={initialProject} externalLoading={loading} />
+      <editorModel.Gate
+        initialProject={initialProject}
+        externalLoading={loading}
+        serializationTimeout={serializationTimeout}
+      />
       <ProjectWatcher onProjectSerialized={onProjectSerialized} />
       <Tooltip.Provider>
         <div className="relative h-full w-full">
