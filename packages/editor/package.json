@@ -14,7 +14,8 @@
     },
     "imports": {
         "#components/*": "./src/components/*/index.ts",
-        "#model": "./src/model/index.ts"
+        "#model": "./src/model/index.ts",
+        "#__mock__/*": "./src/__mock__/*/index.ts"
     },
     "dependencies": {
         "@repo/common": "workspace:*",
