@@ -34,7 +34,7 @@ export const createPlayback = createFactory((params: Params) => {
 
   const AUDIO_NOT_ALLOWED = new Error()
 
-  const initContextFx = createEffect(async () => {
+  const initContextFx = createEffect(() => {
     if (typeof window === 'undefined') {
       return null
     }
