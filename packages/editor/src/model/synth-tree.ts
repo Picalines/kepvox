@@ -1,6 +1,6 @@
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
-import { createEvent, createStore, sample } from 'effector'
+import { combine, createEvent, createStore, sample } from 'effector'
 import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
@@ -46,19 +46,13 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const $nodes = createStore<ReadonlyMap<NodeId, Node>>(new Map())
   const $edges = createStore<ReadonlyMap<EdgeId, Edge>>(new Map())
-  const $hasOutputNode = createStore(false)
 
   const initialized = createEvent()
 
-  reset({
-    clock: playback.initialized,
-    target: [$nodes, $edges, $hasOutputNode],
-  })
+  reset({ clock: playback.initialized, target: [$nodes, $edges] })
+  sample({ clock: playback.initialized, target: initialized })
 
-  sample({
-    clock: playback.initialized,
-    target: initialized,
-  })
+  const $hasOutputNode = combine($nodes, nodes => nodes.values().some(node => node.type === 'output'))
 
   const createNodeDispatched = sample({
     clock: history.dispatched,
@@ -68,17 +62,17 @@ export const createSynthTree = createFactory((params: Params) => {
   sample({
     clock: createNodeDispatched,
     source: { nodes: $nodes, context: playback.$context, hasOutputNode: $hasOutputNode },
-    target: spread({ nodes: $nodes, hasOutputNode: $hasOutputNode }),
+    target: $nodes,
     fn: ({ nodes, context, hasOutputNode }, { id, type, position }) => {
       if (!context || nodes.has(id) || (hasOutputNode && type === 'output')) {
-        return { nodes, hasOutputNode }
+        return nodes
       }
 
       const synthNode = type === 'output' ? context.output : new CREATABLE_SYNTH_NODES[type](context)
 
       const newNodes = new Map(nodes)
       newNodes.set(id, { id, type, position, synthNode, selected: false })
-      return { nodes: newNodes, hasOutputNode: hasOutputNode || type === 'output' }
+      return newNodes
     },
   })
 
