@@ -24,7 +24,7 @@ export const createSerializer = createFactory((params: Params) => {
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
       dispatch({
-        action: 'synth-tree-node-created',
+        action: 'synth-node-created',
         id: nodeId,
         type: node.type,
         position: node.position,
@@ -33,7 +33,7 @@ export const createSerializer = createFactory((params: Params) => {
 
     for (const [edgeId, edge] of Object.entries(project.synthTree.edges)) {
       dispatch({
-        action: 'synth-tree-edge-created',
+        action: 'synth-edge-created',
         id: edgeId,
         source: edge.source,
         target: edge.target,
