@@ -63,7 +63,7 @@ export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
 const variants = cva(
-  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed',
+  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-within:outline-hidden focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed',
   {
     variants: {
       size: {
@@ -105,7 +105,7 @@ export const Root: FC<RootProps> = props => {
               ref={label.ref}
               id={labelId}
               className={cn(
-                '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-visible:text-ring peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
+                '-translate-y-1/2 peer-focus-within:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-within:text-ring peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
                 label.props.className,
               )}
             >
