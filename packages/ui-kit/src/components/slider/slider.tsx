@@ -55,7 +55,6 @@ export const Root: FC<RootProps> = props => {
         defaultValue={defaultValue !== undefined ? [defaultValue] : undefined}
         onValueChange={onValueChange}
         className="group relative flex h-10 w-full cursor-ew-resize touch-none select-none items-center overflow-clip rounded-md border border-border ring-offset-background transition-all focus-within:ring-2 focus-within:ring-offset-2 data-disabled:cursor-not-allowed"
-        step={undefined}
       >
         <RadixSlider.Track className="relative h-full grow border-border bg-accent group-hover:bg-accent/90">
           <RadixSlider.Range className="absolute h-full bg-primary transition-colors group-hover:bg-primary/90 group-data-disabled:opacity-75" />
