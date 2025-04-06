@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { z } from 'zod'
 import { authenticateOrNull } from '#shared/auth-server'
 import { database, tables } from '#shared/database'
-import { migrateProject } from '#shared/schema'
+import { projectSchema } from '#shared/schema'
 
 const inputSchema = z.object({
   publication: z.object({
@@ -55,16 +55,16 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
   const [
     {
       publication,
-      project: { content: oldProjectContent },
+      project: { content: rawProject },
       author,
       reaction,
       listened,
     },
   ] = selectedPublication
 
-  const project = migrateProject(oldProjectContent)
+  const { success, data: project } = projectSchema.safeParse(rawProject)
 
-  if (!project) {
+  if (!success) {
     throw new Error('project migration failed')
   }
 

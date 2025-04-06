@@ -32,16 +32,17 @@ export const createProject = async () => {
 }
 
 const INITIAL_PROJECT_CONTENT: z.infer<typeof projectSchema> = {
-  version: 1,
   synthTree: {
     nodes: {
       output: {
         type: 'output',
         position: { x: 0, y: 0 },
+        params: {},
       },
       generator: {
         type: 'generator',
         position: { x: -200, y: 0 },
+        params: {},
       },
     },
     edges: {

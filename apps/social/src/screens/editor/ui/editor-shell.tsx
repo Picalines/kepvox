@@ -14,23 +14,18 @@ type Props = {
 export const EditorShell: FC<Props> = props => {
   const { projectId, content } = props
 
-  const { version, ...contentWithoutId } = content
-
   const [loading, setLoading] = useState(false)
 
   const onProjectSerialized = useCallback(
     async (project: SerializedProject) => {
       setLoading(true)
       await updateProject({
-        project: {
-          id: projectId,
-          content: { ...project, version },
-        },
+        project: { id: projectId, content: project },
       })
       setLoading(false)
     },
-    [projectId, version],
+    [projectId],
   )
 
-  return <Editor initialProject={contentWithoutId} loading={loading} onProjectSerialized={onProjectSerialized} />
+  return <Editor initialProject={content} loading={loading} onProjectSerialized={onProjectSerialized} />
 }
