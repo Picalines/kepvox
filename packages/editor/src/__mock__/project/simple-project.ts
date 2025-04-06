@@ -6,10 +6,12 @@ export const simpleProjectMock: Project = {
       out: {
         type: 'output',
         position: { x: 0, y: 0 },
+        params: {},
       },
       gen: {
         type: 'generator',
         position: { x: -200, y: 0 },
+        params: { waveShape: 'sawtooth', release: 1 },
       },
     },
     edges: {
