@@ -3,6 +3,7 @@ import { Gate } from './gate'
 import { createHistory } from './history'
 import { createPlayback } from './playback'
 import { createSerializer } from './serializer'
+import { createSynthNodePanel } from './synth-node-panel'
 import { createSynthTree } from './synth-tree'
 
 const history = invoke(createHistory)
@@ -10,6 +11,8 @@ const history = invoke(createHistory)
 const playback = invoke(createPlayback, { gate: Gate })
 
 const synthTree = invoke(createSynthTree, { history, playback })
+
+const synthNodePanel = invoke(createSynthNodePanel, { history, synthTree })
 
 const serializer = invoke(createSerializer, { gate: Gate, history, synthTree })
 
@@ -27,13 +30,17 @@ const {
 
 const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
+const { $activeNodeId, $nodeParams } = synthNodePanel
+
 const { $haveChanged, $isDeserialized: $isLoaded, $serializedProject } = serializer
 
 export {
+  $activeNodeId,
   $hasAudioPermission,
   $haveChanged,
   $isLoaded,
   $isPlaying,
+  $nodeParams,
   $playbackProgress,
   $serializedProject,
   $synthEdges,
