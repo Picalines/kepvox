@@ -1,1 +1,2 @@
-export * from './editor'
+export { Editor } from './editor'
+export { EditorScope } from './editor-scope'

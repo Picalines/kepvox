@@ -2,7 +2,7 @@
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { fork } from 'effector'
-import { Provider, useUnit } from 'effector-react'
+import { Provider, useProvidedScope, useUnit } from 'effector-react'
 import { type FC, useEffect, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
@@ -19,7 +19,8 @@ type Props = {
 export const Editor: FC<Props> = props => {
   const { initialProject, loading = false, onProjectSerialized } = props
 
-  const scope = useMemo(() => fork(), [])
+  const parentScope = useProvidedScope()
+  const scope = useMemo(() => parentScope ?? fork(), [parentScope])
 
   return (
     <Provider value={scope}>
