@@ -1,3 +1,4 @@
+import { CurveSynthParam, EnumSynthParam, type SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
@@ -30,6 +31,10 @@ export const createSerializer = createFactory((params: Params) => {
         type: node.type,
         position: node.position,
       })
+
+      for (const [param, value] of Object.entries(node.params)) {
+        dispatch({ action: 'synth-node-param-set', id: nodeId, param, value })
+      }
     }
 
     for (const [edgeId, edge] of Object.entries(project.synthTree.edges)) {
@@ -93,7 +98,30 @@ export const createSerializer = createFactory((params: Params) => {
     target: $serializedProject,
     fn: ({ nodes, edges }) => ({
       synthTree: {
-        nodes: Object.fromEntries(nodes.entries().map(([id, { type, position }]) => [id, { type, position }])),
+        nodes: Object.fromEntries(
+          nodes.entries().map(([id, { type, position, synthNode }]) => [
+            id,
+            {
+              type,
+              position,
+              params: Object.fromEntries(
+                Object.keys(synthNode).flatMap(key => {
+                  const param = synthNode[key as keyof SynthNode]
+
+                  if (param instanceof CurveSynthParam) {
+                    return [[key, param.initialValue]]
+                  }
+
+                  if (param instanceof EnumSynthParam) {
+                    return [[key, param.value]]
+                  }
+
+                  return []
+                }),
+              ),
+            },
+          ]),
+        ),
         edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
       },
     }),
