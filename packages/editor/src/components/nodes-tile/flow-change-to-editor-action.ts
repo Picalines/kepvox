@@ -8,7 +8,7 @@ export const flowNodeChangeToEditorAction = (change: FlowNodeChange): ActionPayl
       const { id, position } = change
 
       if (position) {
-        return { action: 'synth-tree-node-moved', id, to: position }
+        return { action: 'synth-node-moved', id, to: position }
       }
 
       break
@@ -16,12 +16,12 @@ export const flowNodeChangeToEditorAction = (change: FlowNodeChange): ActionPayl
 
     case 'remove': {
       const { id } = change
-      return { action: 'synth-tree-node-deleted', id }
+      return { action: 'synth-node-deleted', id }
     }
 
     case 'select': {
       const { id, selected } = change
-      return { action: 'synth-tree-node-selected', id, selected }
+      return { action: 'synth-node-selected', id, selected }
     }
   }
 
@@ -33,7 +33,7 @@ export const flowEdgeChangeToEditorAction = (change: FlowEdgeChange): ActionPayl
     case 'add': {
       const { id, source, sourceHandle, target, targetHandle } = change.item
       return {
-        action: 'synth-tree-edge-created',
+        action: 'synth-edge-created',
         id,
         source: { node: source, socket: Number.parseInt(sourceHandle ?? '0') },
         target: { node: target, socket: Number.parseInt(targetHandle ?? '0') },
@@ -42,12 +42,12 @@ export const flowEdgeChangeToEditorAction = (change: FlowEdgeChange): ActionPayl
 
     case 'remove': {
       const { id } = change
-      return { action: 'synth-tree-edge-deleted', id }
+      return { action: 'synth-edge-deleted', id }
     }
 
     case 'select': {
       const { id, selected } = change
-      return { action: 'synth-tree-edge-selected', id, selected }
+      return { action: 'synth-edge-selected', id, selected }
     }
   }
 

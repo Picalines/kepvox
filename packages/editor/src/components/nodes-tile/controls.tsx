@@ -30,7 +30,7 @@ export const Controls: FC<Props> = props => {
     const centerY = bounds.top + bounds.height / 2
 
     dispatch({
-      action: 'synth-tree-node-created',
+      action: 'synth-node-created',
       id: nanoid(),
       type: 'oscillator',
       position: screenToFlowPosition({ x: centerX, y: centerY }),
