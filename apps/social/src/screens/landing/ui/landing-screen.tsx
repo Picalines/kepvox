@@ -13,7 +13,7 @@ export const LandingScreen: FC = () => {
           <AccountLink />
         </Suspense>
         <div className="inline flex-grow" />
-        <ThemeSwitcher variant="ghost" className="p-2" />
+        <ThemeSwitcher variant="ghost" />
       </div>
       <div className="relative h-[60vh]">
         <LandingLogo className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2" />

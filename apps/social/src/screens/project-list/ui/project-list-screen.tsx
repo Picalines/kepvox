@@ -20,7 +20,7 @@ export const ProjectListScreen: FC = async () => {
         <form action={createProject}>
           <Tooltip.Root>
             <Tooltip.Trigger>
-              <Button type="submit" variant="outline" className="rounded-full p-2">
+              <Button type="submit" variant="outline" size="sm" className="rounded-full">
                 <PlusIcon />
               </Button>
             </Tooltip.Trigger>
