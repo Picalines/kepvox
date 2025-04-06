@@ -83,7 +83,7 @@ export class SynthContext {
 
     this.secondsPerNote.changed.watch(() => this.stop())
 
-    this.#notesPerSecondNode = new PannerNode(audioContext)
+    this.#notesPerSecondNode = audioContext.createPanner()
     this.#notesPerSecondNode.connect(audioContext.destination) // won't work without connection
     this.disposed.watch(() => this.#notesPerSecondNode.disconnect())
 
