@@ -5,7 +5,7 @@ import type { ComponentProps, FC } from 'react'
 import { cn } from '#lib/classnames'
 
 const buttonVariants = cva(
-  '-outline-offset-1 relative inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium text-sm outline-input ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  '-outline-offset-1 relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-input ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-6 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -16,9 +16,9 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
       },
       size: {
-        sm: 'h-8 px-3',
-        md: 'h-10 px-4 py-2',
-        lg: 'h-12 px-8',
+        sm: 'h-8 px-3 [&:has(svg:only-child)]:p-1',
+        md: 'h-10 px-4 py-2 [&:has(svg:only-child)]:p-2',
+        lg: 'h-12 px-8 [&:has(svg:only-child)]:p-3',
       },
     },
     defaultVariants: {

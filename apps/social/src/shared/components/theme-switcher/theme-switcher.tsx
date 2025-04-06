@@ -15,10 +15,12 @@ export const ThemeSwitcher: FC<Props> = props => {
 
   return (
     <Button {...props} onClick={toggleTheme}>
-      <div className="relative h-full min-h-6 w-full min-w-6">
-        <SunIcon className="absolute rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-        <MoonIcon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      </div>
+      <svg role="graphics-symbol" className="transition-all dark:rotate-90">
+        <SunIcon className="block dark:hidden" />
+        <g className="-rotate-90 origin-center">
+          <MoonIcon className="hidden dark:block" />
+        </g>
+      </svg>
     </Button>
   )
 }

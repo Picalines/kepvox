@@ -11,7 +11,7 @@ export const PublishLink: FC<Props> = props => {
   const { projectId } = props
 
   return (
-    <Button asChild variant="ghost" className="p-2">
+    <Button asChild variant="ghost">
       <Link href={`/projects/${projectId}/publish`}>
         <RadioTowerIcon />
       </Link>

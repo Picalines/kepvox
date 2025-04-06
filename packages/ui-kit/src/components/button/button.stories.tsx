@@ -57,3 +57,20 @@ export const Icon: Story = {
     },
   },
 }
+
+export const IconWithText: Story = {
+  args: {
+    ...Primary.args,
+    children: (
+      <>
+        <PaletteIcon /> Palette
+      </>
+    ),
+    size: 'md',
+  },
+  argTypes: {
+    children: {
+      table: { disable: true },
+    },
+  },
+}

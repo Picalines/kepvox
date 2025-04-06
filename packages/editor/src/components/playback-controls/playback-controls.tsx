@@ -27,15 +27,11 @@ export const PlaybackControls: FC = () => {
 
   return (
     <div className="w-fit overflow-hidden rounded-lg border-2 bg-background">
-      <Button onClick={onPlayClick} size="lg" shape="square" variant="ghost">
-        {isPlaying ? (
-          <PauseIcon className="absolute text-blue-500" />
-        ) : (
-          <PlayIcon className="absolute text-green-500" />
-        )}
+      <Button onClick={onPlayClick} size="lg" variant="ghost">
+        {isPlaying ? <PauseIcon className="text-blue-500" /> : <PlayIcon className="text-green-500" />}
       </Button>
-      <Button onClick={onStopClick} size="lg" shape="square" variant="ghost">
-        <SquareIcon className="absolute text-red-500" />
+      <Button onClick={onStopClick} size="lg" variant="ghost">
+        <SquareIcon className="text-red-500" />
       </Button>
     </div>
   )
