@@ -1,16 +1,20 @@
-import { buttonVariants } from '@repo/ui-kit/components/button'
+import { Button } from '@repo/ui-kit/components/button'
 import Link from 'next/link'
 import type { FC } from 'react'
 
 export const SiteEntrypoint: FC = async () => {
   return (
     <div className="flex gap-2">
-      <Link href="/tracks" className={buttonVariants({ variant: 'outline' })} prefetch={false}>
-        Explore
-      </Link>
-      <Link href="/projects" className={buttonVariants({ variant: 'outline' })} prefetch={false}>
-        Create
-      </Link>
+      <Button asChild variant="outline">
+        <Link href="/tracks" prefetch={false}>
+          Explore
+        </Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href="/projects" prefetch={false}>
+          Create
+        </Link>
+      </Button>
     </div>
   )
 }

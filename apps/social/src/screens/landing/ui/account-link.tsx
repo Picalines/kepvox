@@ -1,24 +1,21 @@
 'use server'
 
+import { Button } from '@repo/ui-kit/components/button'
 import Link from 'next/link'
 import type { FC } from 'react'
 import { authenticateOrNull } from '#shared/auth-server'
 import { Avatar } from '#shared/components/avatar'
 
-type Props = {
-  className?: string
-}
-
-export const AccountLink: FC<Props> = async props => {
-  const { className } = props
-
+export const AccountLink: FC = async () => {
   const session = await authenticateOrNull()
 
   if (!session) {
     return (
-      <Link href="/sign-in" prefetch={false} className={className}>
-        Sign in
-      </Link>
+      <Button asChild variant="ghost">
+        <Link href="/sign-in" prefetch={false}>
+          Sign in
+        </Link>
+      </Button>
     )
   }
 
@@ -27,11 +24,13 @@ export const AccountLink: FC<Props> = async props => {
   } = session
 
   return (
-    <Link href="/profile" prefetch={false} className={className}>
-      <Avatar.Root className="size-6">
-        <Avatar.Image src={avatar} />
-        <Avatar.Fallback userName={userName} />
-      </Avatar.Root>
-    </Link>
+    <Button asChild variant="ghost" className="p-2">
+      <Link href="/profile" prefetch={false}>
+        <Avatar.Root className="size-6">
+          <Avatar.Image src={avatar} />
+          <Avatar.Fallback userName={userName} />
+        </Avatar.Root>
+      </Link>
+    </Button>
   )
 }

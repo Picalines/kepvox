@@ -1,4 +1,4 @@
-import { buttonVariants } from '@repo/ui-kit/components/button'
+import { Button } from '@repo/ui-kit/components/button'
 import { Text } from '@repo/ui-kit/components/text'
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import Link from 'next/link'
@@ -16,9 +16,11 @@ export const SidebarLink: FC<Props> = props => {
   return (
     <Tooltip.Root>
       <Tooltip.Trigger>
-        <Link href={href} prefetch={false} className={buttonVariants({ variant: 'ghost' })}>
-          {icon}
-        </Link>
+        <Button asChild variant="ghost">
+          <Link href={href} prefetch={false}>
+            {icon}
+          </Link>
+        </Button>
       </Tooltip.Trigger>
       {children && (
         <Tooltip.Content side="right" sideOffset={0}>

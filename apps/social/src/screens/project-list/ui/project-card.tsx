@@ -1,5 +1,5 @@
 import { cn } from '@repo/ui-kit/classnames'
-import { type ButtonVariant, buttonVariants } from '@repo/ui-kit/components/button'
+import { Button, type ButtonVariant } from '@repo/ui-kit/components/button'
 import { Card } from '@repo/ui-kit/components/card'
 import { Heading } from '@repo/ui-kit/components/heading'
 import { PencilIcon, RadioTowerIcon } from '@repo/ui-kit/icons'
@@ -48,8 +48,10 @@ const FooterLink: FC<FooterLinkProps> = props => {
   const { href, variant, Icon } = props
 
   return (
-    <Link href={href} prefetch={false} className={cn(buttonVariants({ variant, size: 'sm' }), 'p-1')}>
-      <Icon className="h-4" />
-    </Link>
+    <Button asChild variant={variant} size="sm" className="p-1">
+      <Link href={href} prefetch={false} className={cn('p-1')}>
+        <Icon className="h-4" />
+      </Link>
+    </Button>
   )
 }

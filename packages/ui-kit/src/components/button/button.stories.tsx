@@ -21,7 +21,6 @@ export const Primary: Story = {
     children: 'Button',
     variant: 'primary',
     size: 'md',
-    shape: 'pill',
   },
 }
 
@@ -49,9 +48,8 @@ export const Outline: Story = {
 export const Icon: Story = {
   args: {
     ...Primary.args,
-    children: <PaletteIcon className="absolute" />,
+    children: <PaletteIcon />,
     size: 'md',
-    shape: 'square',
   },
   argTypes: {
     children: {
