@@ -13,18 +13,16 @@ const connectionPointSchema = z.object({
   socket: z.number().int().nonnegative(),
 })
 
-const projectSchemaV1 = z.object({
-  version: z.literal(1),
+export const projectSchema = z.object({
   synthTree: z.object({
-    nodes: z.record(nodeIdSchema, z.object({ position: positionSchema, type: nodeTypeSchema })),
+    nodes: z.record(
+      nodeIdSchema,
+      z.object({
+        position: positionSchema,
+        type: nodeTypeSchema,
+        params: z.record(z.string().min(1), z.union([z.number(), z.string()])).default({}),
+      }),
+    ),
     edges: z.record(edgeIdSchema, z.object({ source: connectionPointSchema, target: connectionPointSchema })),
   }),
 })
-
-export const projectSchema = projectSchemaV1
-
-export const migrateProject = (project: unknown): z.infer<typeof projectSchema> | null => {
-  // TODO: migration algorithm
-  const { success, data } = projectSchema.safeParse(project)
-  return success ? data : null
-}
