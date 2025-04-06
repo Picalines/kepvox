@@ -1,7 +1,8 @@
 import { CurveSynthParam, EnumSynthParam, type SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
-import { combine, createEffect, createStore, sample, scopeBind } from 'effector'
+import { createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
+import { TRACKED_EDITOR_ACTIONS } from './action'
 import type { EditorGate } from './gate'
 import type { HistoryStore } from './history'
 import type { Project } from './project'
@@ -74,7 +75,7 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   const projectChanged = sample({
-    clock: combine({ nodes: synthTree.$nodes, edges: synthTree.$edges }),
+    clock: history.dispatched.filter({ fn: ({ action }) => TRACKED_EDITOR_ACTIONS.includes(action) }),
     filter: and(
       $isDeserialized,
       $serializationTimeout.map(t => t >= 0),
@@ -95,6 +96,7 @@ export const createSerializer = createFactory((params: Params) => {
 
   sample({
     clock: debounce(projectChanged, $serializationTimeout),
+    source: { nodes: synthTree.$nodes, edges: synthTree.$edges },
     target: $serializedProject,
     fn: ({ nodes, edges }) => ({
       synthTree: {
