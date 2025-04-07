@@ -2,8 +2,15 @@ import { cn, tw } from '@repo/ui-kit/classnames'
 import { Card } from '@repo/ui-kit/components/card'
 import { Loader } from '@repo/ui-kit/components/loader'
 import { Text } from '@repo/ui-kit/components/text'
-import { type Node as FlowNode, Handle, type NodeProps, type NodeTypes, Position } from '@xyflow/react'
-import { useStoreMap } from 'effector-react'
+import {
+  type Node as FlowNode,
+  Handle,
+  type NodeProps,
+  type NodeTypes,
+  Position,
+  useNodeConnections,
+} from '@xyflow/react'
+import { useStoreMap, useUnit } from 'effector-react'
 import type { FC } from 'react'
 import { type NodeType as SynthNodeType, editorModel } from '#model'
 
@@ -29,11 +36,15 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
     data: { type },
   } = props
 
+  const { isPlaying } = useUnit({ isPlaying: editorModel.$isPlaying })
+
   const node = useStoreMap({
     store: editorModel.$synthNodes,
     keys: [id],
     fn: nodes => nodes.get(id),
   })
+
+  const { length: outgoingConnections } = useNodeConnections({ handleType: 'source' })
 
   if (!node) {
     return <Loader />
@@ -48,6 +59,7 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
           'border-2 border-accent bg-gradient-to-b ring-offset-background transition-all',
           selected && 'ring-2 ring-offset-2',
           NODE_TYPE_CLASSNAMES[type],
+          isPlaying && !outgoingConnections && numberOfOutputs && 'opacity-65',
         )}
         style={{ width: `${width}px`, height: `${height}px` }}
       >
