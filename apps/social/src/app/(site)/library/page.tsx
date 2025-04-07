@@ -1,5 +1,3 @@
-'use server'
-
 import { Text } from '@repo/ui-kit/components/text'
 import type { FC } from 'react'
 import { getReactions } from './get-reactions'

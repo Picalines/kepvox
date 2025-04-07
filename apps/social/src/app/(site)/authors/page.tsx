@@ -1,5 +1,3 @@
-'use server'
-
 import { Text } from '@repo/ui-kit/components/text'
 import type { FC } from 'react'
 import { searchAuthors } from './search-authors'
