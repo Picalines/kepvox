@@ -29,30 +29,26 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-const defaultScope = fork()
-
 export const Default: Story = {
-  parameters: { scope: defaultScope },
+  parameters: { scope: fork() },
 
-  beforeEach: async () => {
+  beforeEach: async ({ parameters: { scope } }) => {
     const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
-    await allSettled(editorModel.Gate.close, { scope: selectedScope, params: state })
-    await allSettled(editorModel.Gate.open, { scope: selectedScope, params: state })
+    await allSettled(editorModel.Gate.close, { scope, params: state })
+    await allSettled(editorModel.Gate.open, { scope, params: state })
   },
 }
 
-const selectedScope = fork()
-
 export const Selected: Story = {
-  parameters: { scope: selectedScope },
+  parameters: { scope: fork() },
 
-  beforeEach: async () => {
+  beforeEach: async ({ parameters: { scope } }) => {
     const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
-    await allSettled(editorModel.Gate.close, { scope: selectedScope, params: state })
-    await allSettled(editorModel.Gate.open, { scope: selectedScope, params: state })
+    await allSettled(editorModel.Gate.close, { scope, params: state })
+    await allSettled(editorModel.Gate.open, { scope, params: state })
 
     await allSettled(editorModel.actionDispatched, {
-      scope: selectedScope,
+      scope,
       params: {
         action: 'synth-node-selected',
         id: 'gen',
