@@ -9,7 +9,7 @@ import { SidebarLink } from './sidebar-link'
 
 export const SiteSidebar: FC = () => {
   return (
-    <aside className="flex w-min flex-col gap-2 border-r p-2">
+    <aside className="flex w-20 flex-col gap-2 border-r p-2">
       <SidebarLink href="/" icon={<SiteLogo />} />
       <Separator />
       <SidebarLink href="/tracks" icon={<RadioTowerIcon />}>
