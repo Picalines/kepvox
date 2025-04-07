@@ -24,23 +24,19 @@ export default {
 
 type Story = StoryObj<StoryArgs>
 
-const defaultScope = fork()
-
 export const Default: Story = {
-  parameters: { scope: defaultScope },
+  parameters: { scope: fork() },
 }
 
-const playingScope = fork()
-
 export const Playing: Story = {
-  parameters: { scope: playingScope },
+  parameters: { scope: fork() },
 
-  beforeEach: async () => {
+  beforeEach: async ({ parameters: { scope } }) => {
     const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
-    await allSettled(editorModel.Gate.close, { scope: playingScope, params: state })
-    await allSettled(editorModel.Gate.open, { scope: playingScope, params: state })
+    await allSettled(editorModel.Gate.close, { scope, params: state })
+    await allSettled(editorModel.Gate.open, { scope, params: state })
 
     // NOTE: it won't settle, so don't await
-    allSettled(editorModel.playbackStarted, { scope: playingScope })
+    allSettled(editorModel.playbackStarted, { scope })
   },
 }
