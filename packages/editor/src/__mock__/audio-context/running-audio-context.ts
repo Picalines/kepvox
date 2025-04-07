@@ -17,3 +17,19 @@ export const mockRunningAudioContext = () => {
     window.AudioContext = RealAudioContext
   }
 }
+
+export const mockSuspendedAudioContext = () => {
+  const RealAudioContext = window.AudioContext
+
+  window.AudioContext = new Proxy(RealAudioContext, {
+    construct: (target, args) => {
+      return Object.defineProperty(new target(...args), 'state', {
+        get: () => 'suspended',
+      })
+    },
+  })
+
+  return () => {
+    window.AudioContext = RealAudioContext
+  }
+}
