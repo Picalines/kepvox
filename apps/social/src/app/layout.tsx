@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { JetBrains_Mono } from 'next/font/google'
 import type { FC, ReactNode } from 'react'
+import { ENV } from '#shared/env'
 
 import './index.css'
 
@@ -17,6 +18,7 @@ const monoFont = JetBrains_Mono({
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>{ENV.NODE_ENV === 'development' && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}</head>
       <body className={monoFont.className}>
         <ThemeProvider defaultTheme="dark" attribute="class">
           <EffectorNext>{children}</EffectorNext>
