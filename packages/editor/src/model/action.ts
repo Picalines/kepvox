@@ -1,4 +1,5 @@
-import type { ConnectionPoint, EdgeId, NodeId, NodeType } from './synth-tree'
+import type { EdgeId, NodeId } from './project'
+import type { ConnectionPoint, NodeType } from './synth-tree'
 
 export type ActionPayload =
   | {
