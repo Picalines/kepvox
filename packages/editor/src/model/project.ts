@@ -1,4 +1,10 @@
-import type { ConnectionPoint, EdgeId, NodeId, NodeType } from './synth-tree'
+import type { ConnectionPoint, NodeType } from './synth-tree'
+
+declare const EDITOR_ID: unique symbol
+
+export type NodeId = string & { [EDITOR_ID]?: 'node' }
+
+export type EdgeId = string & { [EDITOR_ID]?: 'edge' }
 
 export type Project = {
   synthTree: {
@@ -10,6 +16,12 @@ export type Project = {
         params: Record<string, number | string>
       }
     >
-    edges: Record<EdgeId, { source: ConnectionPoint; target: ConnectionPoint }>
+    edges: Record<
+      EdgeId,
+      {
+        source: ConnectionPoint
+        target: ConnectionPoint
+      }
+    >
   }
 }
