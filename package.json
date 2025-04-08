@@ -23,7 +23,7 @@
     "keywords": [],
     "author": "picalines",
     "license": "ISC",
-    "packageManager": "pnpm@9.6.0",
+    "packageManager": "pnpm@10.8.0",
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "lefthook": "^1.7.9",
