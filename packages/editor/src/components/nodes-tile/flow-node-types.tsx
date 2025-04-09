@@ -14,9 +14,7 @@ import { useStoreMap, useUnit } from 'effector-react'
 import type { FC } from 'react'
 import { type NodeType as SynthNodeType, editorModel } from '#model'
 
-export const SYNTH_FLOW_NODE_TYPE = 'synth'
-
-export type SynthFlowNode = FlowNode<{ type: SynthNodeType }, typeof SYNTH_FLOW_NODE_TYPE>
+export type SynthFlowNode = FlowNode<{ type: SynthNodeType }, 'synth'>
 
 const NODE_TYPE_CLASSNAMES: Record<SynthNodeType, string> = {
   output: tw`from-zinc-500 to-zinc-600`,
@@ -80,6 +78,4 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
   )
 }
 
-export const FLOW_NODE_TYPES = {
-  [SYNTH_FLOW_NODE_TYPE]: SynthFlowNodeComponent,
-} satisfies NodeTypes
+export const FLOW_NODE_TYPES = { synth: SynthFlowNodeComponent } satisfies NodeTypes
