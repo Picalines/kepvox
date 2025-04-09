@@ -1,9 +1,18 @@
-export * as editorModel from './editor'
+import type { Action, ActionPayload } from './action'
+import * as editorModel from './editor'
+import type { EdgeId, NodeId, NodeType, Project } from './project'
+import type { NodeParam } from './synth-node-panel'
+import type { Edge, Node } from './synth-tree'
 
-export type { NodeId, EdgeId, Project } from './project'
-
-export type { Edge, Node, NodeType } from './synth-tree'
-
-export type { NodeParam } from './synth-node-panel'
-
-export type { ActionPayload, Action } from './action'
+export {
+  editorModel,
+  type Action,
+  type ActionPayload,
+  type Edge,
+  type EdgeId,
+  type Node,
+  type NodeId,
+  type NodeParam,
+  type NodeType,
+  type Project,
+}

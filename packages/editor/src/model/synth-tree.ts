@@ -5,12 +5,8 @@ import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
-import type { EdgeId, NodeId } from './project'
+import type { ConnectionPoint, EdgeId, NodeId, NodeType } from './project'
 import { CREATABLE_SYNTH_NODES } from './synth-node-meta'
-
-export type NodeType = 'output' | keyof typeof CREATABLE_SYNTH_NODES
-
-export type NodePosition = { x: number; y: number }
 
 export type Node = {
   id: NodeId
@@ -19,8 +15,6 @@ export type Node = {
   selected: boolean
   synthNode: SynthNode
 }
-
-export type ConnectionPoint = { node: NodeId; socket: number }
 
 export type Edge = {
   id: EdgeId
