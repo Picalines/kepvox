@@ -17,7 +17,7 @@ export default {
     ),
   ],
   args: {
-    onProjectSerialized: fn(),
+    onSerialized: fn(),
   },
   parameters: {
     layout: 'fullscreen',

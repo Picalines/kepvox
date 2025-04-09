@@ -16,7 +16,7 @@ export const EditorShell: FC<Props> = props => {
 
   const [loading, setLoading] = useState(false)
 
-  const onProjectSerialized = useCallback(
+  const onSerialized = useCallback(
     async (project: SerializedProject) => {
       setLoading(true)
       await updateProject({
@@ -27,5 +27,5 @@ export const EditorShell: FC<Props> = props => {
     [projectId],
   )
 
-  return <Editor initialProject={content} loading={loading} onProjectSerialized={onProjectSerialized} />
+  return <Editor initialProject={content} loading={loading} onSerialized={onSerialized} />
 }
