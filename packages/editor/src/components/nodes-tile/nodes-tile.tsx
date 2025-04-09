@@ -9,7 +9,7 @@ import {
   ReactFlow,
 } from '@xyflow/react'
 import { useUnit } from 'effector-react'
-import { type FC, memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, memo, useCallback, useId, useMemo, useRef } from 'react'
 import { type Edge as SynthTreeEdge, type Node as SynthTreeNode, editorModel } from '#model'
 import { Controls } from './controls'
 import { flowEdgeChangeToEditorAction, flowNodeChangeToEditorAction } from './flow-change-to-editor-action'
@@ -76,12 +76,15 @@ export const NodesTile: FC = () => {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const id = useId() // NOTE: needed for this ReactFlow to be unique
+
   if (!isLoaded) {
     return <Loader centered />
   }
 
   return (
     <ReactFlow
+      id={id}
       nodeTypes={FLOW_NODE_TYPES}
       nodes={flowNodes}
       edges={flowEdges}
