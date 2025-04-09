@@ -15,6 +15,7 @@ import { Controls } from './controls'
 import { flowEdgeChangeToEditorAction, flowNodeChangeToEditorAction } from './flow-change-to-editor-action'
 
 import '@xyflow/react/dist/style.css'
+import { assertDefined } from '@repo/common/assert'
 import { nanoid } from 'nanoid'
 import { FLOW_NODE_TYPES, type SynthFlowNode } from './flow-node-types'
 
@@ -30,8 +31,18 @@ export const NodesTile: FC = () => {
     isLoaded: editorModel.$isLoaded,
   })
 
-  const flowNodes = useMemo(() => nodes.values().map(synthTreeNodeToFlow).toArray(), [nodes])
-  const flowEdges = useMemo(() => edges.values().map(synthTreeEdgeToFlow).toArray(), [edges])
+  const flowNodeCache = useRef(new WeakMap<SynthTreeNode, SynthFlowNode>())
+  const flowEdgeCache = useRef(new WeakMap<SynthTreeEdge, FlowEdge>())
+
+  const flowNodes = useMemo(
+    () => mapWithWeakMemo(nodes.values(), flowNodeCache.current, synthTreeNodeToFlow).toArray(),
+    [nodes],
+  )
+
+  const flowEdges = useMemo(
+    () => mapWithWeakMemo(edges.values(), flowEdgeCache.current, synthTreeEdgeToFlow).toArray(),
+    [edges],
+  )
 
   const onNodesChange = useCallback<OnNodesChange>(
     changes =>
@@ -87,6 +98,19 @@ export const NodesTile: FC = () => {
     </ReactFlow>
   )
 }
+
+const mapWithWeakMemo = <T extends WeakKey, U>(items: IteratorObject<T>, cache: WeakMap<T, U>, map: (item: T) => U) =>
+  items.map(item => {
+    if (cache.has(item)) {
+      const cachedTransform = cache.get(item)
+      assertDefined(cachedTransform)
+      return cachedTransform
+    }
+
+    const transformed = map(item)
+    cache.set(item, transformed)
+    return transformed
+  })
 
 const synthTreeNodeToFlow = (node: SynthTreeNode): SynthFlowNode => {
   return {
