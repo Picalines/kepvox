@@ -3,7 +3,7 @@
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { fork } from 'effector'
 import { Provider, useUnit } from 'effector-react'
-import { type FC, useEffect, useMemo } from 'react'
+import { type FC, memo, useEffect, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
 import { PlaybackControls } from '#components/playback-controls'
@@ -32,16 +32,7 @@ export const Editor: FC<Props> = props => {
         serializationTimeout={serializationTimeout}
       />
       <ProjectWatcher onProjectSerialized={onProjectSerialized} />
-      <Tooltip.Provider>
-        <div className="relative h-full w-full">
-          <LoadingIndicator />
-          <AudioPermissionDialog />
-          <EditorPanels />
-          <div className="-translate-x-1/2 absolute bottom-4 left-1/2">
-            <PlaybackControls />
-          </div>
-        </div>
-      </Tooltip.Provider>
+      <EditorUI />
     </Provider>
   )
 }
@@ -59,3 +50,16 @@ const ProjectWatcher: FC<Pick<Props, 'onProjectSerialized'>> = props => {
 
   return null
 }
+
+const EditorUI = memo(() => (
+  <Tooltip.Provider>
+    <div className="relative size-full">
+      <LoadingIndicator />
+      <AudioPermissionDialog />
+      <EditorPanels />
+      <div className="-translate-x-1/2 absolute bottom-4 left-1/2">
+        <PlaybackControls />
+      </div>
+    </div>
+  </Tooltip.Provider>
+))
