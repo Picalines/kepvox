@@ -1,3 +1,4 @@
+import { assertDefined } from '@repo/common/assert'
 import { Loader } from '@repo/ui-kit/components/loader'
 import {
   Background,
@@ -9,14 +10,11 @@ import {
   ReactFlow,
 } from '@xyflow/react'
 import { useUnit } from 'effector-react'
+import { nanoid } from 'nanoid'
 import { type FC, memo, useCallback, useId, useMemo, useRef } from 'react'
 import { type Edge as SynthTreeEdge, type Node as SynthTreeNode, editorModel } from '#model'
 import { Controls } from './controls'
 import { flowEdgeChangeToEditorAction, flowNodeChangeToEditorAction } from './flow-change-to-editor-action'
-
-import '@xyflow/react/dist/style.css'
-import { assertDefined } from '@repo/common/assert'
-import { nanoid } from 'nanoid'
 import { FLOW_NODE_TYPES, type SynthFlowNode } from './flow-node-types'
 
 const MemoizedControls = memo(Controls)

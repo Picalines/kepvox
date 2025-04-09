@@ -11,6 +11,8 @@ import { type Project, editorModel } from '#model'
 import { EditorPanels } from './editor-panels'
 import { useEditorScope } from './editor-scope'
 
+import '@xyflow/react/dist/style.css'
+
 type Props = {
   initialProject: Project
   loading?: boolean
