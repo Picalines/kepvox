@@ -32,17 +32,16 @@ const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
 const { $activeNodeId, $nodeParams } = synthNodePanel
 
-const { $haveChanged, $isDeserialized: $isLoaded, $serializedProject } = serializer
+const { $isLoaded, $isDirty } = serializer
 
 export {
   $activeNodeId,
   $hasAudioPermission,
-  $haveChanged,
+  $isDirty,
   $isLoaded,
   $isPlaying,
   $nodeParams,
   $playbackProgress,
-  $serializedProject,
   $synthEdges,
   $synthNodes,
   Gate,

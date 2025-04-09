@@ -2,8 +2,8 @@
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { fork } from 'effector'
-import { Provider, useUnit } from 'effector-react'
-import { type FC, memo, useEffect, useMemo } from 'react'
+import { Provider } from 'effector-react'
+import { type FC, memo, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
 import { PlaybackControls } from '#components/playback-controls'
@@ -15,11 +15,11 @@ type Props = {
   initialProject: Project
   loading?: boolean
   serializationTimeout?: number
-  onProjectSerialized?: (project: Project) => void
+  onSerialized?: (project: Project) => void
 }
 
 export const Editor: FC<Props> = props => {
-  const { initialProject, loading = false, serializationTimeout = 1_000, onProjectSerialized } = props
+  const { initialProject, loading = false, serializationTimeout = 1_000, onSerialized } = props
 
   const parentScope = useEditorScope()
   const scope = useMemo(() => parentScope ?? fork(), [parentScope])
@@ -30,25 +30,11 @@ export const Editor: FC<Props> = props => {
         initialProject={initialProject}
         externalLoading={loading}
         serializationTimeout={serializationTimeout}
+        onSerialized={onSerialized}
       />
-      <ProjectWatcher onProjectSerialized={onProjectSerialized} />
       <EditorUI />
     </Provider>
   )
-}
-
-const ProjectWatcher: FC<Pick<Props, 'onProjectSerialized'>> = props => {
-  const { onProjectSerialized } = props
-
-  const { project } = useUnit({ project: editorModel.$serializedProject })
-
-  useEffect(() => {
-    if (project) {
-      onProjectSerialized?.(project)
-    }
-  }, [project, onProjectSerialized])
-
-  return null
 }
 
 const EditorUI = memo(() => (

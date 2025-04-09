@@ -1,6 +1,6 @@
 import { CurveSynthParam, EnumSynthParam, type SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
-import { createEffect, createStore, sample, scopeBind } from 'effector'
+import { attach, combine, createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
 import { TRACKED_EDITOR_ACTIONS } from './action'
 import type { EditorGate } from './gate'
@@ -17,10 +17,8 @@ type Params = {
 export const createSerializer = createFactory((params: Params) => {
   const { gate, history, synthTree } = params
 
-  const $isDeserialized = createStore(false)
-  const $haveChanged = createStore(false)
-  const $serializedProject = createStore<Project | null>(null)
-  const $serializationTimeout = createStore(-1)
+  const $isLoaded = createStore(false)
+  const $isDirty = createStore(false)
 
   const deserializeFx = createEffect((project: Project) => {
     const dispatch = scopeBind(history.dispatched)
@@ -48,9 +46,50 @@ export const createSerializer = createFactory((params: Params) => {
     }
   })
 
+  const serializeFx = attach({
+    source: { nodes: synthTree.$nodes, edges: synthTree.$edges, editorProps: gate.state },
+    effect: ({ nodes, edges, editorProps }) => {
+      if (!editorProps.onSerialized) {
+        return
+      }
+
+      const project: Project = {
+        synthTree: {
+          nodes: Object.fromEntries(
+            nodes.entries().map(([id, { type, position, synthNode }]) => [
+              id,
+              {
+                type,
+                position,
+                params: Object.fromEntries(
+                  Object.keys(synthNode).flatMap(key => {
+                    const param = synthNode[key as keyof SynthNode]
+
+                    if (param instanceof CurveSynthParam) {
+                      return [[key, param.initialValue]]
+                    }
+
+                    if (param instanceof EnumSynthParam) {
+                      return [[key, param.value]]
+                    }
+
+                    return []
+                  }),
+                ),
+              },
+            ]),
+          ),
+          edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
+        },
+      }
+
+      editorProps.onSerialized(project)
+    },
+  })
+
   reset({
     clock: synthTree.initialized,
-    target: [$isDeserialized, $haveChanged],
+    target: [$isLoaded, $isDirty],
   })
 
   sample({
@@ -61,77 +100,51 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   sample({
-    clock: gate.status,
-    filter: gate.status,
-    source: gate.state,
-    target: $serializationTimeout,
-    fn: ({ serializationTimeout }) => serializationTimeout,
-  })
-
-  sample({
     clock: deserializeFx.done,
-    target: $isDeserialized,
+    target: $isLoaded,
     fn: () => true,
   })
 
-  const projectChanged = sample({
-    clock: history.dispatched.filter({ fn: ({ action }) => TRACKED_EDITOR_ACTIONS.includes(action) }),
+  const trackedActionDispatched = sample({
+    clock: history.dispatched,
+    filter: ({ action }) => TRACKED_EDITOR_ACTIONS.includes(action),
+  })
+
+  const $changeTimeout = combine(gate.status, gate.state, (isOpened, props) =>
+    isOpened ? props.serializationTimeout : -1,
+  )
+
+  sample({
+    clock: trackedActionDispatched,
     filter: and(
-      $isDeserialized,
-      $serializationTimeout.map(t => t >= 0),
+      $isLoaded,
+      $changeTimeout.map(t => t >= 0),
     ),
-  })
-
-  sample({
-    clock: projectChanged,
-    target: $serializedProject,
-    fn: () => null,
-  })
-
-  sample({
-    clock: projectChanged,
-    target: $haveChanged,
+    target: $isDirty,
     fn: () => true,
   })
 
   sample({
-    clock: debounce(projectChanged, $serializationTimeout),
-    source: { nodes: synthTree.$nodes, edges: synthTree.$edges },
-    target: $serializedProject,
-    fn: ({ nodes, edges }) => ({
-      synthTree: {
-        nodes: Object.fromEntries(
-          nodes.entries().map(([id, { type, position, synthNode }]) => [
-            id,
-            {
-              type,
-              position,
-              params: Object.fromEntries(
-                Object.keys(synthNode).flatMap(key => {
-                  const param = synthNode[key as keyof SynthNode]
+    clock: debounce($isDirty, $changeTimeout),
+    filter: $isDirty,
+    target: serializeFx,
+  })
 
-                  if (param instanceof CurveSynthParam) {
-                    return [[key, param.initialValue]]
-                  }
+  sample({
+    clock: serializeFx.done,
+    target: $isDirty,
+    fn: () => false,
+  })
 
-                  if (param instanceof EnumSynthParam) {
-                    return [[key, param.value]]
-                  }
-
-                  return []
-                }),
-              ),
-            },
-          ]),
-        ),
-        edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
-      },
-    }),
+  sample({
+    clock: serializeFx.failData,
+    fn: error => {
+      console.error('editor serialization error', error)
+    },
   })
 
   return {
-    $isDeserialized: readonly($isDeserialized),
-    $serializedProject: readonly($serializedProject),
-    $haveChanged: readonly($haveChanged),
+    $isLoaded: readonly($isLoaded),
+    $isDirty: readonly($isDirty),
   }
 })
