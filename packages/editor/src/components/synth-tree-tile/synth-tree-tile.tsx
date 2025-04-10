@@ -11,15 +11,17 @@ import {
 } from '@xyflow/react'
 import { useUnit } from 'effector-react'
 import { nanoid } from 'nanoid'
-import { type FC, memo, useCallback, useId, useMemo, useRef } from 'react'
+import { type ComponentProps, type FC, memo, useCallback, useId, useMemo, useRef } from 'react'
 import { type Edge as SynthTreeEdge, type Node as SynthTreeNode, editorModel } from '#model'
 import { SynthTreeControls } from './synth-tree-controls'
 import { synthTreeEdgeChangeToAction, synthTreeNodeChangeToAction } from './synth-tree-flow-change'
 import { SYNTH_TREE_FLOW_NODES, type SynthFlowNode } from './synth-tree-flow-nodes'
 
+type ReactFlowProps = Required<ComponentProps<typeof ReactFlow>>
+
 const MemoizedControls = memo(SynthTreeControls)
 
-const proOptions = { hideAttribution: true }
+const FLOW_PRO_OPTIONS = { hideAttribution: true }
 
 export const SynthTreeTile: FC = () => {
   const { dispatch, nodes, edges, isLoaded } = useUnit({
@@ -29,6 +31,7 @@ export const SynthTreeTile: FC = () => {
     isLoaded: editorModel.$isLoaded,
   })
 
+  const isHoveringFlow = useRef(false)
   const flowNodeCache = useRef(new WeakMap<SynthTreeNode, SynthFlowNode>())
   const flowEdgeCache = useRef(new WeakMap<SynthTreeEdge, FlowEdge>())
 
@@ -43,20 +46,24 @@ export const SynthTreeTile: FC = () => {
   )
 
   const onNodesChange = useCallback<OnNodesChange>(
-    changes =>
+    changes => {
+      if (!isHoveringFlow.current) return
       changes
         .map(synthTreeNodeChangeToAction)
         .filter(action => action !== null)
-        .forEach(dispatch),
+        .forEach(dispatch)
+    },
     [dispatch],
   )
 
   const onEdgesChange = useCallback<OnEdgesChange>(
-    changes =>
+    changes => {
+      if (!isHoveringFlow.current) return
       changes
         .map(synthTreeEdgeChangeToAction)
         .filter(action => action !== null)
-        .forEach(dispatch),
+        .forEach(dispatch)
+    },
     [dispatch],
   )
 
@@ -71,6 +78,14 @@ export const SynthTreeTile: FC = () => {
     },
     [dispatch],
   )
+
+  const onMouseEnter = useCallback<ReactFlowProps['onMouseEnter']>(() => {
+    isHoveringFlow.current = true
+  }, [])
+
+  const onMouseLeave = useCallback<ReactFlowProps['onMouseLeave']>(() => {
+    isHoveringFlow.current = false
+  }, [])
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -91,7 +106,9 @@ export const SynthTreeTile: FC = () => {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      proOptions={proOptions}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      proOptions={FLOW_PRO_OPTIONS}
       ref={containerRef}
     >
       <MemoizedControls containerRef={containerRef} />
