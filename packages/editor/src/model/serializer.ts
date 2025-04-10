@@ -17,7 +17,7 @@ type Params = {
 }
 
 export const createSerializer = createFactory((params: Params) => {
-  const { gate, history, synthTree } = params
+  const { gate, history, synthTree, musicSheet } = params
 
   const $isLoaded = createStore(false)
   const $isDirty = createStore(false)
@@ -52,8 +52,8 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   const serializeFx = attach({
-    source: { nodes: synthTree.$nodes, edges: synthTree.$edges, editorProps: gate.state },
-    effect: ({ nodes, edges, editorProps }) => {
+    source: { nodes: synthTree.$nodes, edges: synthTree.$edges, notes: musicSheet.$notes, editorProps: gate.state },
+    effect: ({ nodes, edges, notes, editorProps }) => {
       if (!editorProps.onSerialized) {
         return
       }
@@ -85,6 +85,19 @@ export const createSerializer = createFactory((params: Params) => {
             ]),
           ),
           edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
+        },
+        musicSheet: {
+          notes: Object.fromEntries(
+            notes.entries().map(([id, { synthId, time, duration, pitch }]) => [
+              id,
+              {
+                synth: synthId,
+                time: time.toNotes(),
+                duration: duration.toNotes(),
+                pitch,
+              },
+            ]),
+          ),
         },
       }
 
