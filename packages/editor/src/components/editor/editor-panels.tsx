@@ -1,8 +1,7 @@
 import { Resizable } from '@repo/ui-kit/components/resizable'
 import type { FC } from 'react'
 import { NodeTile } from '#components/node-tile'
-import { NodesTile } from '#components/nodes-tile'
-import { TimelineTile } from '#components/timeline-tile'
+import { SynthTreeTile } from '#components/synth-tree-tile'
 
 export const EditorPanels: FC = () => {
   return (
@@ -18,7 +17,7 @@ export const EditorPanels: FC = () => {
           </Resizable.Panel>
           <Resizable.Handle />
           <Resizable.Panel defaultSize={75} className="relative">
-            <NodesTile />
+            <SynthTreeTile />
           </Resizable.Panel>
         </Resizable.Group>
       </Resizable.Panel>
