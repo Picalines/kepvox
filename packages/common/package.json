@@ -9,9 +9,8 @@
         "./assert": "./src/assert.ts",
         "./branded": "./src/branded/index.ts",
         "./disposable": "./src/disposable/index.ts",
-        "./emitter": "./src/emitter/index.ts",
         "./iter": "./src/iter/index.ts",
-        "./math": "./src/math/index.ts",
+        "./math": "./src/math.ts",
         "./predicate": "./src/predicate/index.ts",
         "./promise": "./src/promise/index.ts",
         "./typing": "./src/typing.ts"
