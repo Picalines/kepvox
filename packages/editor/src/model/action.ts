@@ -1,3 +1,4 @@
+import type { PitchNotation, SynthTime } from '@repo/synth'
 import type { ConnectionPoint, EdgeId, NodeId, NodeType, NoteId } from './project'
 
 export type ActionPayload =
@@ -19,6 +20,17 @@ export type ActionPayload =
   | { action: 'synth-edge-selected'; id: EdgeId; selected: boolean }
   | { action: 'synth-edge-deleted'; id: EdgeId }
   | { action: 'synth-node-param-set'; id: NodeId; param: string; value: string | number }
+  | {
+      action: 'sheet-note-created'
+      id: NoteId
+      synthId: NodeId
+      time: SynthTime
+      duration: SynthTime
+      pitch: PitchNotation
+    }
+  | { action: 'sheet-note-selected'; id: NoteId; selected: boolean }
+  | { action: 'sheet-note-moved'; id: NoteId; to: { time: SynthTime; pitch: PitchNotation } }
+  | { action: 'sheet-note-deleted'; id: NoteId }
 
 export type Action = ActionPayload['action']
 
@@ -29,4 +41,7 @@ export const TRACKED_EDITOR_ACTIONS: Action[] = [
   'synth-edge-created',
   'synth-edge-deleted',
   'synth-node-param-set',
+  'sheet-note-created',
+  'sheet-note-moved',
+  'sheet-note-deleted',
 ]
