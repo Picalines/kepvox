@@ -5,6 +5,7 @@ import { and, debounce, readonly, reset } from 'patronum'
 import { TRACKED_EDITOR_ACTIONS } from './action'
 import type { EditorGate } from './gate'
 import type { HistoryStore } from './history'
+import type { MusicSheetStore } from './music-sheet'
 import type { Project } from './project'
 import type { SynthTreeStore } from './synth-tree'
 
@@ -12,6 +13,7 @@ type Params = {
   gate: EditorGate
   history: HistoryStore
   synthTree: SynthTreeStore
+  musicSheet: MusicSheetStore
 }
 
 export const createSerializer = createFactory((params: Params) => {

@@ -1,6 +1,7 @@
 import { invoke } from '@withease/factories'
 import { Gate } from './gate'
 import { createHistory } from './history'
+import { createMusicSheet } from './music-sheet'
 import { createPlayback } from './playback'
 import { createSerializer } from './serializer'
 import { createSynthNodePanel } from './synth-node-panel'
@@ -14,7 +15,9 @@ const synthTree = invoke(createSynthTree, { history, playback })
 
 const synthNodePanel = invoke(createSynthNodePanel, { history, synthTree })
 
-const serializer = invoke(createSerializer, { gate: Gate, history, synthTree })
+const musicSheet = invoke(createMusicSheet, { history, synthTree })
+
+const serializer = invoke(createSerializer, { gate: Gate, history, synthTree, musicSheet })
 
 const { dispatched: actionDispatched } = history
 
@@ -32,6 +35,8 @@ const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
 const { $activeNodeId, $nodeParams } = synthNodePanel
 
+const { $notes: $sheetNotes } = musicSheet
+
 const { $isLoaded, $isDirty } = serializer
 
 export {
@@ -42,6 +47,7 @@ export {
   $isPlaying,
   $nodeParams,
   $playbackProgress,
+  $sheetNotes,
   $synthEdges,
   $synthNodes,
   Gate,
