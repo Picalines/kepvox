@@ -35,6 +35,14 @@ export class SynthTime {
     return new SynthTime(Ticks.orClamp(this.#ticks - time.#ticks))
   }
 
+  min(time: SynthTime): SynthTime {
+    return this.#ticks <= time.#ticks ? this : time
+  }
+
+  max(time: SynthTime): SynthTime {
+    return this.#ticks >= time.#ticks ? this : time
+  }
+
   repeat(times: number): SynthTime {
     return new SynthTime(Ticks.orClamp(this.#ticks * times))
   }
