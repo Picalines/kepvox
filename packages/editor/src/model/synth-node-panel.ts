@@ -1,4 +1,3 @@
-import { isTuple } from '@repo/common/array'
 import { CurveSynthParam, EnumSynthParam, type SynthNode, type UnitName } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, sample } from 'effector'
@@ -21,19 +20,9 @@ export type NodeParam = { name: string } & (
 export const createSynthNodePanel = createFactory((params: Params) => {
   const { history, synthTree } = params
 
-  const $activeNode = combine(synthTree.$nodes, nodes => {
-    const firstTwoSelected = nodes
-      .values()
-      .filter(node => node.selected)
-      .take(2)
-      .toArray()
+  const $activeNodeId = combine(synthTree.$activeNode, node => node?.id ?? null)
 
-    return isTuple(firstTwoSelected, 1) ? firstTwoSelected[0] : null
-  })
-
-  const $activeNodeId = combine($activeNode, node => node?.id ?? null)
-
-  const $activeSynthNode = combine($activeNode, node => node?.synthNode ?? null)
+  const $activeSynthNode = combine(synthTree.$activeNode, node => node?.synthNode ?? null)
 
   const $nodeParams = combine($activeSynthNode, synthNode => {
     if (!synthNode) {

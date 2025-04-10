@@ -1,3 +1,4 @@
+import { isTuple } from '@repo/common/array'
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
@@ -42,6 +43,16 @@ export const createSynthTree = createFactory((params: Params) => {
   sample({ clock: playback.initialized, target: initialized })
 
   const $hasOutputNode = combine($nodes, nodes => nodes.values().some(node => node.type === 'output'))
+
+  const $activeNode = combine($nodes, nodes => {
+    const firstTwoSelected = nodes
+      .values()
+      .filter(node => node.selected)
+      .take(2)
+      .toArray()
+
+    return isTuple(firstTwoSelected, 1) ? firstTwoSelected[0] : null
+  })
 
   const createNodeDispatched = sample({
     clock: history.dispatched,
@@ -231,6 +242,7 @@ export const createSynthTree = createFactory((params: Params) => {
   return {
     $nodes: readonly($nodes),
     $edges: readonly($edges),
+    $activeNode: readonly($activeNode),
     initialized,
   }
 })
