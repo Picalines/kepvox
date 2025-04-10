@@ -1,4 +1,5 @@
 import { assertDefined } from '@repo/common/assert'
+import { IntRange } from '#math'
 import { Hertz } from '#units'
 
 const PITCH_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const
@@ -12,12 +13,14 @@ export type PitchOctave = (typeof PITCH_OCTAVES)[number]
 export type PitchNotation = `${PitchName}${PitchOctave}`
 
 type NotationMeta = {
+  notation: PitchNotation
   name: PitchName
   octave: PitchOctave
   octaveHalfIntervals: number
   halfIntervals: number
   isAccidental: boolean
   hertz: Hertz
+  midi: number
 }
 
 const OCTAVE0_HERTZ: Record<PitchName, number> = {
@@ -35,45 +38,73 @@ const OCTAVE0_HERTZ: Record<PitchName, number> = {
   B: 30.87,
 }
 
-const createNotationMetaMap = () => {
-  const notationMeta = new Map<PitchNotation, NotationMeta>()
+const createPitchTable = () => {
+  const byNotation = new Map<PitchNotation, NotationMeta>()
+  const byMidi = new Map<number, NotationMeta>()
 
   let halfIntervals = 0
+  let midiNote = 16 // MIDI code for C0
 
   for (const octave of PITCH_OCTAVES) {
     let octaveHalfIntervals = 0
 
     for (const pitchName of PITCH_NAMES) {
-      notationMeta.set(`${pitchName}${octave}`, {
+      const notation: PitchNotation = `${pitchName}${octave}`
+
+      const meta: NotationMeta = {
+        notation,
         name: pitchName,
         octave,
         octaveHalfIntervals,
         halfIntervals,
         isAccidental: pitchName.endsWith('#'),
         hertz: Hertz.orThrow(OCTAVE0_HERTZ[pitchName] * 2 ** octave),
-      })
+        midi: midiNote,
+      }
+
+      byNotation.set(notation, meta)
+      byMidi.set(midiNote, meta)
 
       halfIntervals++
       octaveHalfIntervals++
+      midiNote++
     }
   }
 
-  return notationMeta
+  return { byNotation, byMidi } as const
 }
 
-const NOTATION_META: ReadonlyMap<PitchNotation, NotationMeta> = createNotationMetaMap()
+const PITCH_TABLE = createPitchTable()
+
+const LOWEST_PITCH = PITCH_TABLE.byNotation.get('C0')
+const HIGHEST_PITCH = PITCH_TABLE.byNotation.get('B9')
+assertDefined(LOWEST_PITCH)
+assertDefined(HIGHEST_PITCH)
 
 export const Pitch = {
   names: PITCH_NAMES,
   octaves: PITCH_OCTAVES,
 
-  isNotation: (str: string): str is PitchNotation => NOTATION_META.has(str as PitchNotation),
+  lowest: LOWEST_PITCH,
+  highest: HIGHEST_PITCH,
+
+  midiRange: new IntRange(LOWEST_PITCH.midi, HIGHEST_PITCH.midi),
+
+  isNotation: (str: string): str is PitchNotation => PITCH_TABLE.byNotation.has(str as PitchNotation),
 
   parseNotation: (notation: PitchNotation): NotationMeta => {
-    const meta = NOTATION_META.get(notation)
+    const meta = PITCH_TABLE.byNotation.get(notation)
+    assertDefined(meta)
+    return meta
+  },
+
+  parseMidi: (midi: number): NotationMeta => {
+    const meta = PITCH_TABLE.byMidi.get(midi)
     assertDefined(meta)
     return meta
   },
 
   frequency: (notation: PitchNotation) => Pitch.parseNotation(notation).hertz,
+
+  midi: (notation: PitchNotation) => Pitch.parseNotation(notation).midi,
 }
