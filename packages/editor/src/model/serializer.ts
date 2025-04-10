@@ -1,4 +1,4 @@
-import { CurveSynthParam, EnumSynthParam, type SynthNode } from '@repo/synth'
+import { CurveSynthParam, EnumSynthParam, Notes, type SynthNode, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
@@ -24,24 +24,27 @@ export const createSerializer = createFactory((params: Params) => {
     const dispatch = scopeBind(history.dispatched)
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
-      dispatch({
-        action: 'synth-node-created',
-        id: nodeId,
-        type: node.type,
-        position: node.position,
-      })
-
+      const { type, position } = node
+      dispatch({ action: 'synth-node-created', id: nodeId, type, position })
       for (const [param, value] of Object.entries(node.params)) {
         dispatch({ action: 'synth-node-param-set', id: nodeId, param, value })
       }
     }
 
     for (const [edgeId, edge] of Object.entries(project.synthTree.edges)) {
+      const { source, target } = edge
+      dispatch({ action: 'synth-edge-created', id: edgeId, source, target })
+    }
+
+    for (const [noteId, note] of Object.entries(project.musicSheet.notes)) {
+      const { synth: synthId, time, duration, pitch } = note
       dispatch({
-        action: 'synth-edge-created',
-        id: edgeId,
-        source: edge.source,
-        target: edge.target,
+        action: 'sheet-note-created',
+        id: noteId,
+        synthId,
+        time: SynthTime.fromNotes(Notes.orClamp(time)),
+        duration: SynthTime.fromNotes(Notes.orClamp(duration)),
+        pitch,
       })
     }
   })

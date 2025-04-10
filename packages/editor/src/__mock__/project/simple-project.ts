@@ -21,4 +21,14 @@ export const simpleProjectMock: Project = {
       },
     },
   },
+  musicSheet: {
+    notes: {
+      'note-1': { synth: 'gen', pitch: 'C4', time: 0, duration: 0.25 },
+      'note-2': { synth: 'gen', pitch: 'E4', time: 0.25, duration: 0.25 },
+      'note-3': { synth: 'gen', pitch: 'D4', time: 0.5, duration: 0.25 },
+      'note-4': { synth: 'gen', pitch: 'F4', time: 0.75, duration: 0.25 },
+      'note-top': { synth: 'gen', pitch: 'B9', time: 0, duration: 1 },
+      'note-bottom': { synth: 'gen', pitch: 'C0', time: 0, duration: 1 },
+    },
+  },
 }
