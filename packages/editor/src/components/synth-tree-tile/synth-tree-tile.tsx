@@ -13,15 +13,15 @@ import { useUnit } from 'effector-react'
 import { nanoid } from 'nanoid'
 import { type FC, memo, useCallback, useId, useMemo, useRef } from 'react'
 import { type Edge as SynthTreeEdge, type Node as SynthTreeNode, editorModel } from '#model'
-import { Controls } from './controls'
-import { flowEdgeChangeToEditorAction, flowNodeChangeToEditorAction } from './flow-change-to-editor-action'
-import { FLOW_NODE_TYPES, type SynthFlowNode } from './flow-node-types'
+import { SynthTreeControls } from './synth-tree-controls'
+import { synthTreeEdgeChangeToAction, synthTreeNodeChangeToAction } from './synth-tree-flow-change'
+import { SYNTH_TREE_FLOW_NODES, type SynthFlowNode } from './synth-tree-flow-nodes'
 
-const MemoizedControls = memo(Controls)
+const MemoizedControls = memo(SynthTreeControls)
 
 const proOptions = { hideAttribution: true }
 
-export const NodesTile: FC = () => {
+export const SynthTreeTile: FC = () => {
   const { dispatch, nodes, edges, isLoaded } = useUnit({
     dispatch: editorModel.actionDispatched,
     nodes: editorModel.$synthNodes,
@@ -45,7 +45,7 @@ export const NodesTile: FC = () => {
   const onNodesChange = useCallback<OnNodesChange>(
     changes =>
       changes
-        .map(flowNodeChangeToEditorAction)
+        .map(synthTreeNodeChangeToAction)
         .filter(action => action !== null)
         .forEach(dispatch),
     [dispatch],
@@ -54,7 +54,7 @@ export const NodesTile: FC = () => {
   const onEdgesChange = useCallback<OnEdgesChange>(
     changes =>
       changes
-        .map(flowEdgeChangeToEditorAction)
+        .map(synthTreeEdgeChangeToAction)
         .filter(action => action !== null)
         .forEach(dispatch),
     [dispatch],
@@ -83,7 +83,7 @@ export const NodesTile: FC = () => {
   return (
     <ReactFlow
       id={id}
-      nodeTypes={FLOW_NODE_TYPES}
+      nodeTypes={SYNTH_TREE_FLOW_NODES}
       nodes={flowNodes}
       edges={flowEdges}
       fitView

@@ -12,7 +12,7 @@ type Props = {
   containerRef: RefObject<HTMLElement | null>
 }
 
-export const Controls: FC<Props> = props => {
+export const SynthTreeControls: FC<Props> = props => {
   const { containerRef } = props
 
   const { dispatch } = useUnit({ dispatch: editorModel.actionDispatched })

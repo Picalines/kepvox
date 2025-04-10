@@ -1,7 +1,7 @@
 import type { EdgeChange as FlowEdgeChange, NodeChange as FlowNodeChange } from '@xyflow/react'
 import type { ActionPayload } from '#model'
 
-export const flowNodeChangeToEditorAction = (change: FlowNodeChange): ActionPayload | null => {
+export const synthTreeNodeChangeToAction = (change: FlowNodeChange): ActionPayload | null => {
   // NOTE: 'add' is called by <Controls/>
   switch (change.type) {
     case 'position': {
@@ -28,7 +28,7 @@ export const flowNodeChangeToEditorAction = (change: FlowNodeChange): ActionPayl
   return null
 }
 
-export const flowEdgeChangeToEditorAction = (change: FlowEdgeChange): ActionPayload | null => {
+export const synthTreeEdgeChangeToAction = (change: FlowEdgeChange): ActionPayload | null => {
   switch (change.type) {
     case 'add': {
       const { id, source, sourceHandle, target, targetHandle } = change.item

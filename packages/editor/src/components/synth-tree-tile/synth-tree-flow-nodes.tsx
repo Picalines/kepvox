@@ -78,4 +78,4 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
   )
 }
 
-export const FLOW_NODE_TYPES = { synth: SynthFlowNodeComponent } satisfies NodeTypes
+export const SYNTH_TREE_FLOW_NODES = { synth: SynthFlowNodeComponent } satisfies NodeTypes
