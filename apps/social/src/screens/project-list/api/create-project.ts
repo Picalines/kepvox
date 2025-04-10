@@ -52,4 +52,7 @@ const INITIAL_PROJECT_CONTENT: z.infer<typeof projectSchema> = {
       },
     },
   },
+  musicSheet: {
+    notes: {},
+  },
 }
