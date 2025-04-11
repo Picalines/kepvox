@@ -2,11 +2,11 @@ import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
 import { nanoid } from 'nanoid'
 import { spread } from 'patronum'
+import { DEFAULT_NODE_COLORS } from '#meta'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { NodePosition, NodeType } from './project'
 import type { SerializerStore } from './serializer'
-import { DEFAULT_NODE_COLORS } from './synth-node-meta'
 import type { SynthTreeStore } from './synth-tree'
 
 export type SynthTreeViewportStore = ReturnType<typeof createSynthTreeViewport>

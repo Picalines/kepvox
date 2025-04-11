@@ -3,11 +3,11 @@ import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
 import { readonly, reset, spread } from 'patronum'
+import { NODE_SYNTH_CONSTRUCTORS } from '#meta'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
 import type { ConnectionPoint, EdgeId, NodeColor, NodeId, NodeType } from './project'
-import { NODE_SYNTH_CONSTRUCTORS } from './synth-node-meta'
 
 export type Node = {
   id: NodeId

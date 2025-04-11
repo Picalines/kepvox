@@ -1,4 +1,4 @@
-import { NODE_COLORS, NODE_TYPES } from '@repo/editor'
+import { NODE_COLORS, NODE_TYPES } from '@repo/editor/meta'
 import { Pitch, type PitchNotation } from '@repo/synth'
 import { z } from 'zod'
 

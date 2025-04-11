@@ -1,5 +1,5 @@
 import type { PitchNotation } from '@repo/synth'
-import type { NODE_COLORS, NODE_TYPES } from './synth-node-meta'
+import type { NODE_COLORS, NODE_TYPES } from '#meta'
 
 declare const EDITOR_ID: unique symbol
 

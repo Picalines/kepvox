@@ -3,13 +3,10 @@ import * as editorModel from './editor'
 import type { Note } from './music-sheet'
 import type { NotePreview } from './music-sheet-viewport'
 import type { EdgeId, NodeColor, NodeId, NodeType, Project } from './project'
-import { NODE_COLORS, NODE_TYPES } from './synth-node-meta'
 import type { NodeParam } from './synth-node-panel'
 import type { Edge, Node } from './synth-tree'
 
 export {
-  NODE_COLORS,
-  NODE_TYPES,
   editorModel,
   type Action,
   type ActionPayload,
