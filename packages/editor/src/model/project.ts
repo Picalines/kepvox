@@ -1,13 +1,15 @@
 import type { PitchNotation } from '@repo/synth'
-import type { CREATABLE_SYNTH_NODES } from './synth-node-meta'
+import type { NODE_COLORS, NODE_TYPES } from './synth-node-meta'
 
 declare const EDITOR_ID: unique symbol
 
 export type NodeId = string & { [EDITOR_ID]?: 'node' }
 
-export type NodeType = 'output' | keyof typeof CREATABLE_SYNTH_NODES
+export type NodeType = (typeof NODE_TYPES)[number]
 
 export type NodePosition = { x: number; y: number }
+
+export type NodeColor = (typeof NODE_COLORS)[number]
 
 export type EdgeId = string & { [EDITOR_ID]?: 'edge' }
 
@@ -23,6 +25,8 @@ export type Project = {
         type: NodeType
         position: NodePosition
         params: Record<string, number | string>
+        number: number
+        color: NodeColor
       }
     >
     edges: Record<

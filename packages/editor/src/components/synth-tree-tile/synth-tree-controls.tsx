@@ -4,7 +4,6 @@ import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { MaximizeIcon, PlusIcon, ZoomInIcon, ZoomOutIcon } from '@repo/ui-kit/icons'
 import { Controls as ReactFlowControls, useReactFlow } from '@xyflow/react'
 import { useUnit } from 'effector-react'
-import { nanoid } from 'nanoid'
 import { type ComponentProps, type FC, type RefObject, useCallback } from 'react'
 import { editorModel } from '#model'
 
@@ -15,7 +14,7 @@ type Props = {
 export const SynthTreeControls: FC<Props> = props => {
   const { containerRef } = props
 
-  const { dispatch } = useUnit({ dispatch: editorModel.actionDispatched })
+  const { createNode } = useUnit({ createNode: editorModel.nodeRequested })
 
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow()
 
@@ -29,13 +28,11 @@ export const SynthTreeControls: FC<Props> = props => {
     const centerX = bounds.left + bounds.width / 2
     const centerY = bounds.top + bounds.height / 2
 
-    dispatch({
-      action: 'synth-node-created',
-      id: nanoid(),
+    createNode({
       type: 'oscillator',
       position: screenToFlowPosition({ x: centerX, y: centerY }),
     })
-  }, [containerRef, dispatch, screenToFlowPosition])
+  }, [containerRef, createNode, screenToFlowPosition])
 
   return (
     <>
