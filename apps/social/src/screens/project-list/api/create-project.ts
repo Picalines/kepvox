@@ -38,11 +38,15 @@ const INITIAL_PROJECT_CONTENT: z.infer<typeof projectSchema> = {
         type: 'output',
         position: { x: 0, y: 0 },
         params: {},
+        number: 0,
+        color: 'zinc',
       },
       generator: {
         type: 'generator',
         position: { x: -200, y: 0 },
         params: {},
+        number: 1,
+        color: 'emerald',
       },
     },
     edges: {

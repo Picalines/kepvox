@@ -1,5 +1,5 @@
 import type { PitchNotation, SynthTime } from '@repo/synth'
-import type { ConnectionPoint, EdgeId, NodeId, NodeType, NoteId } from './project'
+import type { ConnectionPoint, EdgeId, NodeColor, NodeId, NodeType, NoteId } from './project'
 
 export type ActionPayload =
   | {
@@ -7,6 +7,8 @@ export type ActionPayload =
       id: NodeId
       type: NodeType
       position: { x: number; y: number }
+      number: number
+      color: NodeColor
     }
   | { action: 'synth-node-selected'; id: NodeId; selected: boolean }
   | { action: 'synth-node-moved'; id: NodeId; to: { x: number; y: number } }

@@ -7,11 +7,15 @@ export const simpleProjectMock: Project = {
         type: 'output',
         position: { x: 0, y: 0 },
         params: {},
+        color: 'zinc',
+        number: 0,
       },
       gen: {
         type: 'generator',
         position: { x: -200, y: 0 },
         params: { waveShape: 'sawtooth', release: 1 },
+        color: 'emerald',
+        number: 1,
       },
     },
     edges: {

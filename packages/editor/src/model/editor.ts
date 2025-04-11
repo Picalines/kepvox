@@ -7,6 +7,7 @@ import { createPlayback } from './playback'
 import { createSerializer } from './serializer'
 import { createSynthNodePanel } from './synth-node-panel'
 import { createSynthTree } from './synth-tree'
+import { createSynthTreeViewport } from './synth-tree-viewport'
 
 const history = invoke(createHistory)
 
@@ -21,6 +22,8 @@ const musicSheet = invoke(createMusicSheet, { history, synthTree })
 const musicSheetViewport = invoke(createMusicSheetViewport, { history, synthTree })
 
 const serializer = invoke(createSerializer, { gate: Gate, history, synthTree, musicSheet })
+
+const synthTreeViewport = invoke(createSynthTreeViewport, { history, synthTree, serializer })
 
 const { dispatched: actionDispatched } = history
 
@@ -45,6 +48,8 @@ const { $notePreview, notePreviewMoved, notePreviewStretched, notePreviewHidden,
 
 const { $isLoaded, $isDirty } = serializer
 
+const { nodeRequested } = synthTreeViewport
+
 export {
   $activeNodeId,
   $hasAudioPermission,
@@ -60,6 +65,7 @@ export {
   Gate,
   actionDispatched,
   audioPermissionGranted,
+  nodeRequested,
   notePreviewHidden,
   notePreviewMoved,
   notePreviewStretched,

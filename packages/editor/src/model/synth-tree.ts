@@ -6,13 +6,15 @@ import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
-import type { ConnectionPoint, EdgeId, NodeId, NodeType } from './project'
-import { CREATABLE_SYNTH_NODES } from './synth-node-meta'
+import type { ConnectionPoint, EdgeId, NodeColor, NodeId, NodeType } from './project'
+import { NODE_SYNTH_CONSTRUCTORS } from './synth-node-meta'
 
 export type Node = {
   id: NodeId
   type: NodeType
   position: { x: number; y: number }
+  number: number
+  color: NodeColor
   selected: boolean
   synthNode: SynthNode
 }
@@ -63,15 +65,15 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: createNodeDispatched,
     source: { nodes: $nodes, context: playback.$context, hasOutputNode: $hasOutputNode },
     target: $nodes,
-    fn: ({ nodes, context, hasOutputNode }, { id, type, position }) => {
+    fn: ({ nodes, context, hasOutputNode }, { id, type, position, number, color }) => {
       if (!context || nodes.has(id) || (hasOutputNode && type === 'output')) {
         return nodes
       }
 
-      const synthNode = type === 'output' ? context.output : new CREATABLE_SYNTH_NODES[type](context)
+      const synthNode = type === 'output' ? context.output : new NODE_SYNTH_CONSTRUCTORS[type](context)
 
       const newNodes = new Map(nodes)
-      newNodes.set(id, { id, type, position, synthNode, selected: false })
+      newNodes.set(id, { id, type, position, synthNode, number, color, selected: false })
       return newNodes
     },
   })

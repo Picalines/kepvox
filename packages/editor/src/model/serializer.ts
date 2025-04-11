@@ -9,6 +9,8 @@ import type { MusicSheetStore } from './music-sheet'
 import type { Project } from './project'
 import type { SynthTreeStore } from './synth-tree'
 
+export type SerializerStore = ReturnType<typeof createSerializer>
+
 type Params = {
   gate: EditorGate
   history: HistoryStore
@@ -26,8 +28,8 @@ export const createSerializer = createFactory((params: Params) => {
     const dispatch = scopeBind(history.dispatched)
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
-      const { type, position } = node
-      dispatch({ action: 'synth-node-created', id: nodeId, type, position })
+      const { type, position, number, color } = node
+      dispatch({ action: 'synth-node-created', id: nodeId, type, position, number, color })
       for (const [param, value] of Object.entries(node.params)) {
         dispatch({ action: 'synth-node-param-set', id: nodeId, param, value })
       }
@@ -61,11 +63,13 @@ export const createSerializer = createFactory((params: Params) => {
       const project: Project = {
         synthTree: {
           nodes: Object.fromEntries(
-            nodes.entries().map(([id, { type, position, synthNode }]) => [
+            nodes.entries().map(([id, { type, position, synthNode, number, color }]) => [
               id,
               {
                 type,
                 position,
+                number,
+                color,
                 params: Object.fromEntries(
                   Object.keys(synthNode).flatMap(key => {
                     const param = synthNode[key as keyof SynthNode]
