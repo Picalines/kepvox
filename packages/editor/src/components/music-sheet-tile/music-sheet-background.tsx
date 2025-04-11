@@ -13,11 +13,9 @@ const MusicSheetBackgroundImpl: FC<Props> = props => {
 
   const patternId = useId()
 
-  const accidentalKeys = Pitch.names.flatMap((name, index) => (name.includes('#') ? [index] : []))
-
-  const keyLines = Array.from({ length: 12 }).map((_, index) => ({
+  const keyLines = Pitch.names.toReversed().map((name, index) => ({
     index,
-    className: accidentalKeys.includes(index) ? tw`fill-accent` : tw`fill-background`,
+    className: Pitch.parseName(name).isAccidental ? tw`fill-accent` : tw`fill-background`,
   }))
 
   const separatorHeight = 0.05
