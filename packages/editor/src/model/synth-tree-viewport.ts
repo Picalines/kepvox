@@ -1,7 +1,7 @@
 import { createFactory } from '@withease/factories'
 import { createEvent, createStore, sample } from 'effector'
 import { nanoid } from 'nanoid'
-import { spread } from 'patronum'
+import { readonly, spread } from 'patronum'
 import { DEFAULT_NODE_COLORS } from '#meta'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
@@ -21,8 +21,12 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
   const { history, synthTree, serializer } = params
 
   const $nextNodeNumber = createStore(0)
+  const $newNodePosition = createStore<NodePosition>({ x: 0, y: 0 })
+  const $nodeCreationDialogShown = createStore(false)
 
-  const nodeRequested = createEvent<{ type: NodeType; position: NodePosition }>()
+  const nodePositionSelected = createEvent<{ position: NodePosition }>()
+  const nodeTypeSelected = createEvent<{ type: NodeType }>()
+  const nodeCreationCancelled = createEvent()
 
   sample({
     clock: serializer.$isLoaded,
@@ -33,10 +37,23 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
   })
 
   sample({
-    clock: nodeRequested,
-    source: $nextNodeNumber,
-    target: spread({ action: history.dispatched, nextNumber: $nextNodeNumber }),
-    fn: (number, { type, position }) => ({
+    clock: nodePositionSelected,
+    target: spread({ position: $newNodePosition, dialogShown: $nodeCreationDialogShown }),
+    fn: ({ position }) => ({ position, dialogShown: true }),
+  })
+
+  sample({
+    clock: nodeTypeSelected,
+    filter: $nodeCreationDialogShown,
+    source: { position: $newNodePosition, number: $nextNodeNumber },
+    target: spread({
+      action: history.dispatched,
+      dialogShown: $nodeCreationDialogShown,
+      nextNumber: $nextNodeNumber,
+    }),
+    fn: ({ position, number }, { type }) => ({
+      nextNumber: number + 1,
+      dialogShown: false,
       action: {
         action: 'synth-node-created',
         id: nanoid(),
@@ -45,11 +62,19 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
         number,
         color: DEFAULT_NODE_COLORS[type],
       } as ActionPayload,
-      nextNumber: number + 1,
     }),
   })
 
+  sample({
+    clock: nodeCreationCancelled,
+    target: $nodeCreationDialogShown,
+    fn: () => false,
+  })
+
   return {
-    nodeRequested,
+    $nodeCreationDialogShown: readonly($nodeCreationDialogShown),
+    nodePositionSelected,
+    nodeTypeSelected,
+    nodeCreationCancelled,
   }
 })

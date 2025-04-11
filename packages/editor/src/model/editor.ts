@@ -48,7 +48,7 @@ const { $notePreview, notePreviewMoved, notePreviewStretched, notePreviewHidden,
 
 const { $isLoaded, $isDirty } = serializer
 
-const { nodeRequested } = synthTreeViewport
+const { $nodeCreationDialogShown, nodePositionSelected, nodeTypeSelected, nodeCreationCancelled } = synthTreeViewport
 
 export {
   $activeNodeId,
@@ -56,6 +56,7 @@ export {
   $isDirty,
   $isLoaded,
   $isPlaying,
+  $nodeCreationDialogShown,
   $nodeParams,
   $notePreview,
   $playbackProgress,
@@ -65,7 +66,9 @@ export {
   Gate,
   actionDispatched,
   audioPermissionGranted,
-  nodeRequested,
+  nodeCreationCancelled,
+  nodePositionSelected,
+  nodeTypeSelected,
   notePreviewHidden,
   notePreviewMoved,
   notePreviewStretched,
