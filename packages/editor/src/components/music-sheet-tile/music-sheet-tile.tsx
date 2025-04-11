@@ -2,7 +2,6 @@ import { assertDefined } from '@repo/common/assert'
 import { SynthTime } from '@repo/synth'
 import { Loader } from '@repo/ui-kit/components/loader'
 import {
-  Background,
   type CoordinateExtent,
   type NodeOrigin,
   PanOnScrollMode,
@@ -13,6 +12,7 @@ import {
 import { useUnit } from 'effector-react'
 import { type ComponentProps, type FC, useCallback, useId, useMemo, useRef } from 'react'
 import { type Note as SheetNote, editorModel } from '#model'
+import { MusicSheetBackground } from './music-sheet-background'
 import { musicSheetDimensions } from './music-sheet-dimensions'
 import { musicSheetNodeChangeToAction } from './music-sheet-flow-change'
 import { MUSIC_SHEET_FLOW_NODES, type SheetNoteFlowNode } from './music-sheet-flow-nodes'
@@ -140,7 +140,7 @@ const MusicSheetFlow: FC = () => {
       onNodeMouseLeave={stopHoveringNode}
       onPaneClick={createNoteAtPreview}
     >
-      <Background />
+      <MusicSheetBackground dimensions={DIMENSIONS} />
       <MusicSheetNotePreview dimensions={DIMENSIONS} />
     </ReactFlow>
   )
