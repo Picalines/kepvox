@@ -36,12 +36,20 @@ export class NumberSynthParam<TUnit extends UnitName> extends SynthParam {
     node.disposed.watch(() => this.#changed.cancelAll())
   }
 
-  get changed() {
-    return this.#changed.signal
+  get unit(): TUnit {
+    return this.#unit
+  }
+
+  get range(): Range {
+    return this.#range
   }
 
   get value(): UnitValue<TUnit> {
     return this.#value
+  }
+
+  get changed() {
+    return this.#changed.signal
   }
 
   set value(value: UnitValue<TUnit>) {
