@@ -14,7 +14,7 @@ type Props = {
 export const SynthTreeControls: FC<Props> = props => {
   const { containerRef } = props
 
-  const { createNode } = useUnit({ createNode: editorModel.nodeRequested })
+  const { selectNodePosition } = useUnit({ selectNodePosition: editorModel.nodePositionSelected })
 
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow()
 
@@ -28,11 +28,8 @@ export const SynthTreeControls: FC<Props> = props => {
     const centerX = bounds.left + bounds.width / 2
     const centerY = bounds.top + bounds.height / 2
 
-    createNode({
-      type: 'oscillator',
-      position: screenToFlowPosition({ x: centerX, y: centerY }),
-    })
-  }, [containerRef, createNode, screenToFlowPosition])
+    selectNodePosition({ position: screenToFlowPosition({ x: centerX, y: centerY }) })
+  }, [containerRef, selectNodePosition, screenToFlowPosition])
 
   return (
     <>
