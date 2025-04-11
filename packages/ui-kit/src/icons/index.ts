@@ -32,6 +32,7 @@ export {
   RadioTowerIcon,
   RepeatIcon,
   Rows3Icon,
+  SearchIcon,
   SettingsIcon,
   SquareIcon,
   SquarePlusIcon,
