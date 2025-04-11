@@ -13,7 +13,7 @@ const NoteFlowNodeComponent: FC<NodeProps<SheetNoteFlowNode>> = props => {
   const note = useStoreMap({
     store: editorModel.$sheetNotes,
     keys: [id],
-    fn: notes => notes.get(id),
+    fn: notes => notes.get(id) ?? null,
   })
 
   if (!note) {

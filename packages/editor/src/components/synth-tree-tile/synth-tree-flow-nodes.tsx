@@ -29,7 +29,7 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
   const node = useStoreMap({
     store: editorModel.$synthNodes,
     keys: [id],
-    fn: nodes => nodes.get(id),
+    fn: nodes => nodes.get(id) ?? null,
   })
 
   const { length: outgoingConnections } = useNodeConnections({ handleType: 'source' })
