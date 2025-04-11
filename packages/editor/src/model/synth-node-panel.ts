@@ -2,9 +2,9 @@ import { CurveSynthParam, EnumSynthParam, type SynthNode, type UnitName } from '
 import { createFactory } from '@withease/factories'
 import { combine, sample } from 'effector'
 import { readonly } from 'patronum'
+import { USER_UNIT_RANGES } from '#meta'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
-import { USER_UNIT_RANGES } from './synth-node-meta'
 import type { SynthTreeStore } from './synth-tree'
 
 type Params = {

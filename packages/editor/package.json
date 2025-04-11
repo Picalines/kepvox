@@ -5,7 +5,8 @@
     "private": true,
     "type": "module",
     "exports": {
-        ".": "./src/index.ts"
+        ".": "./src/index.ts",
+        "./meta": "./src/meta/index.ts"
     },
     "scripts": {
         "dev": "pnpm run dev:storybook",
@@ -19,6 +20,7 @@
     "imports": {
         "#components/*": "./src/components/*/index.ts",
         "#model": "./src/model/index.ts",
+        "#meta": "./src/meta/index.ts",
         "#__mock__/*": "./src/__mock__/*/index.ts"
     },
     "dependencies": {
