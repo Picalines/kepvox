@@ -18,7 +18,7 @@ export const NodeParamControl: FC<Props> = props => {
 
   const param = useStoreMap({
     store: editorModel.$nodeParams,
-    fn: params => params?.find(param => param.name === name),
+    fn: params => params?.find(param => param.name === name) ?? null,
     keys: [name],
   })
 
