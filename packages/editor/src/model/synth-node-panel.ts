@@ -1,4 +1,4 @@
-import { CurveSynthParam, EnumSynthParam, type SynthNode, type UnitName } from '@repo/synth'
+import { CurveSynthParam, EnumSynthParam, NumberSynthParam, type SynthNode, type UnitName } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, sample } from 'effector'
 import { readonly } from 'patronum'
@@ -32,6 +32,13 @@ export const createSynthNodePanel = createFactory((params: Params) => {
     return Object.keys(synthNode).flatMap<NodeParam>(key => {
       const param = synthNode[key as keyof SynthNode]
 
+      if (param instanceof NumberSynthParam) {
+        const { value, range: physicalRange, unit } = param
+        const userRange = USER_UNIT_RANGES[unit as UnitName]
+        const { min, max } = userRange ?? physicalRange
+        return [{ type: 'number', name: key, value: value as number, min, max }]
+      }
+
       if (param instanceof CurveSynthParam) {
         const { initialValue: value, range: physicalRange, unit } = param
         const userRange = USER_UNIT_RANGES[unit as UnitName]
@@ -63,6 +70,10 @@ export const createSynthNodePanel = createFactory((params: Params) => {
       }
 
       const synthParam = node.synthNode[param as keyof SynthNode]
+
+      if (typeof value === 'number' && synthParam instanceof NumberSynthParam) {
+        synthParam.value = value
+      }
 
       if (typeof value === 'number' && synthParam instanceof CurveSynthParam) {
         synthParam.initialValue = value

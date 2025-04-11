@@ -1,4 +1,4 @@
-import { CurveSynthParam, EnumSynthParam, Notes, type SynthNode, SynthTime } from '@repo/synth'
+import { CurveSynthParam, EnumSynthParam, Notes, NumberSynthParam, type SynthNode, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
@@ -73,6 +73,10 @@ export const createSerializer = createFactory((params: Params) => {
                 params: Object.fromEntries(
                   Object.keys(synthNode).flatMap(key => {
                     const param = synthNode[key as keyof SynthNode]
+
+                    if (param instanceof NumberSynthParam) {
+                      return [[key, param.value]]
+                    }
 
                     if (param instanceof CurveSynthParam) {
                       return [[key, param.initialValue]]
