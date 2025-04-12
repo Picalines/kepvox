@@ -115,7 +115,7 @@ export const createPlayback = createFactory((params: Params) => {
   const { tick } = interval({
     timeout: 16,
     start: sample({ clock: $isPlaying, filter: $isPlaying }),
-    stop: sample({ clock: $isPlaying, filter: not($isPlaying) }),
+    stop: sample({ clock: $isIdle, filter: $isIdle }),
     leading: true,
     trailing: false,
   })
@@ -140,6 +140,7 @@ export const createPlayback = createFactory((params: Params) => {
   return {
     $context: readonly($context),
     $hasAudioPermission: readonly($hasAudioPermission),
+    $isIdle: readonly($isIdle),
     $isPlaying: readonly($isPlaying),
     $playhead: readonly($playhead),
     audioPermissionGranted,

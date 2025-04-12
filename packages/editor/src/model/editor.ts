@@ -3,6 +3,7 @@ import { Gate } from './gate'
 import { createHistory } from './history'
 import { createMusicSheet } from './music-sheet'
 import { createMusicSheetViewport } from './music-sheet-viewport'
+import { createNoteScheduler } from './note-scheduler'
 import { createPlayback } from './playback'
 import { createSerializer } from './serializer'
 import { createSynthNodePanel } from './synth-node-panel'
@@ -25,17 +26,11 @@ const serializer = invoke(createSerializer, { gate: Gate, history, synthTree, mu
 
 const synthTreeViewport = invoke(createSynthTreeViewport, { history, synthTree, serializer })
 
+const noteScheduler = invoke(createNoteScheduler, { musicSheet, synthTree, playback })
+
 const { dispatched: actionDispatched } = history
 
-const {
-  $hasAudioPermission,
-  $isPlaying,
-  $playhead,
-  audioPermissionGranted,
-  playheadSet,
-  started: playbackStarted,
-  stopped: playbackStopped,
-} = playback
+const { $hasAudioPermission, $isPlaying, $playhead, audioPermissionGranted, playheadSet } = playback
 
 const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
@@ -56,6 +51,8 @@ const {
 const { $isLoaded, $isDirty } = serializer
 
 const { $nodeCreationDialogShown, nodePositionSelected, nodeTypeSelected, nodeCreationCancelled } = synthTreeViewport
+
+const { playbackToggled, playbackStopped } = noteScheduler
 
 export {
   $activeNodeId,
@@ -82,8 +79,8 @@ export {
   notePreviewMoved,
   notePreviewStretched,
   noteRequestedAtPreview,
-  playbackStarted,
   playbackStopped,
+  playbackToggled,
   playheadSet,
   sheetMoved,
 }
