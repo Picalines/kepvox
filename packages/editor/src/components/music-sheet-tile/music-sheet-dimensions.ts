@@ -26,12 +26,14 @@ export const musicSheetDimensions = (params: Params) => {
       top: 0,
       bottom: sheetHeight,
     },
+    octave: {
+      height: Pitch.names.length * halfStepHeightPx,
+    },
     note: {
       height: halfStepHeightPx,
       width: (duration: SynthTime) => duration.toNotes() * wholeNoteWidthPx,
       left: (time: SynthTime) => time.toNotes() * wholeNoteWidthPx,
       top: (pitch: PitchNotation) => (Pitch.midi(HIGHEST_PITCH) - Pitch.midi(pitch)) * halfStepHeightPx,
-
       time: (left: number) => SynthTime.fromNotes(Notes.orClamp(Range.positive.clamp(left / wholeNoteWidthPx))),
       pitch: (top: number) =>
         Pitch.parseMidi(Pitch.midiRange.clamp(-top / halfStepHeightPx + Pitch.midi(HIGHEST_PITCH), 'ceil')).notation,
