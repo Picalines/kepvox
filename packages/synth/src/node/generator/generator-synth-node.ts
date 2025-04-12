@@ -166,4 +166,11 @@ export class GeneratorSynthNode extends SynthNode {
       voice?.adsr.releaseAt(time)
     }
   }
+
+  muteAt(time: SynthTime) {
+    for (const voice of this.#voices) {
+      voice.adsr.muteAt(time)
+      voice.frequency.holdValueAt(time)
+    }
+  }
 }
