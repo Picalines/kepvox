@@ -126,6 +126,17 @@ export class GeneratorSynthNode extends SynthNode {
 
       return { frequency, adsr }
     })
+
+    const mute = () => {
+      masterGain.gain.value = 0
+    }
+
+    const unmute = () => {
+      masterGain.gain.value = 1
+    }
+
+    this.context.playing.watchUntil(this.disposed, unmute)
+    this.context.stopped.watchUntil(this.disposed, mute)
   }
 
   attackAt(time: SynthTime, frequency: Hertz) {
