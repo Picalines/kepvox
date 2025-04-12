@@ -43,8 +43,15 @@ const { $activeNodeId, $nodeParams } = synthNodePanel
 
 const { $notes: $sheetNotes } = musicSheet
 
-const { $notePreview, notePreviewMoved, notePreviewStretched, notePreviewHidden, noteRequestedAtPreview } =
-  musicSheetViewport
+const {
+  $notePreview,
+  $position: $sheetPosition,
+  moved: sheetMoved,
+  notePreviewHidden,
+  notePreviewMoved,
+  notePreviewStretched,
+  noteRequestedAtPreview,
+} = musicSheetViewport
 
 const { $isLoaded, $isDirty } = serializer
 
@@ -61,6 +68,7 @@ export {
   $notePreview,
   $playbackProgress,
   $sheetNotes,
+  $sheetPosition,
   $synthEdges,
   $synthNodes,
   Gate,
@@ -76,4 +84,5 @@ export {
   playbackStarted,
   playbackStopped,
   playheadSet,
+  sheetMoved,
 }
