@@ -12,7 +12,7 @@ export type PitchOctave = (typeof PITCH_OCTAVES)[number]
 
 export type PitchNotation = `${PitchName}${PitchOctave}`
 
-type NotationMeta = {
+type NotationMeta = Readonly<{
   notation: PitchNotation
   name: PitchName
   octave: PitchOctave
@@ -21,7 +21,12 @@ type NotationMeta = {
   isAccidental: boolean
   hertz: Hertz
   midi: number
-}
+}>
+
+type PitchNameMeta = Readonly<{
+  name: PitchName
+  isAccidental: boolean
+}>
 
 const OCTAVE0_HERTZ: Record<PitchName, number> = {
   C: 16.35,
@@ -74,7 +79,18 @@ const createPitchTable = () => {
   return { byNotation, byMidi } as const
 }
 
+const createPitchNameTable = () => {
+  const byName = new Map<PitchName, PitchNameMeta>()
+
+  for (const name of PITCH_NAMES) {
+    byName.set(name, { name, isAccidental: name.endsWith('#') })
+  }
+
+  return { byName } as const
+}
+
 const PITCH_TABLE = createPitchTable()
+const PITCH_NAME_TABLE = createPitchNameTable()
 
 const LOWEST_PITCH = PITCH_TABLE.byNotation.get('C0')
 const HIGHEST_PITCH = PITCH_TABLE.byNotation.get('B9')
@@ -100,6 +116,12 @@ export const Pitch = {
 
   parseMidi: (midi: number): NotationMeta => {
     const meta = PITCH_TABLE.byMidi.get(midi)
+    assertDefined(meta)
+    return meta
+  },
+
+  parseName: (name: PitchName): PitchNameMeta => {
+    const meta = PITCH_NAME_TABLE.byName.get(name)
     assertDefined(meta)
     return meta
   },
