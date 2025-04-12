@@ -31,7 +31,7 @@ export const createSerializer = createFactory((params: Params) => {
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
       const { type, position, number, color } = node
-      dispatch({ action: 'synth-node-created', id: nodeId, type, position, number, color })
+      dispatch({ action: 'synth-node-create', id: nodeId, type, position, number, color })
       for (const [param, value] of Object.entries(node.params)) {
         dispatch({ action: 'synth-node-param-set', id: nodeId, param, value })
       }
@@ -39,13 +39,13 @@ export const createSerializer = createFactory((params: Params) => {
 
     for (const [edgeId, edge] of Object.entries(project.synthTree.edges)) {
       const { source, target } = edge
-      dispatch({ action: 'synth-edge-created', id: edgeId, source, target })
+      dispatch({ action: 'synth-edge-create', id: edgeId, source, target })
     }
 
     for (const [noteId, note] of Object.entries(project.musicSheet.notes)) {
       const { synth: synthId, time, duration, pitch } = note
       dispatch({
-        action: 'sheet-note-created',
+        action: 'sheet-note-create',
         id: noteId,
         synthId,
         time: SynthTime.fromNotes(Notes.orClamp(time)),

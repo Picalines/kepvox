@@ -58,7 +58,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const createNodeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-node-created',
+    filter: (action: ActionPayload) => action.action === 'synth-node-create',
   })
 
   sample({
@@ -80,7 +80,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const moveNodeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-node-moved',
+    filter: (action: ActionPayload) => action.action === 'synth-node-move',
   })
 
   sample({
@@ -101,7 +101,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const deleteNodeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-node-deleted',
+    filter: (action: ActionPayload) => action.action === 'synth-node-delete',
   })
 
   sample({
@@ -132,7 +132,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const createEdgeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-edge-created',
+    filter: (action: ActionPayload) => action.action === 'synth-edge-create',
   })
 
   sample({
@@ -169,7 +169,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const deleteEdgeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-edge-deleted',
+    filter: (action: ActionPayload) => action.action === 'synth-edge-delete',
   })
 
   sample({
@@ -199,7 +199,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const selectNodeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-node-selected',
+    filter: (action: ActionPayload) => action.action === 'synth-node-select',
   })
 
   sample({
@@ -221,7 +221,7 @@ export const createSynthTree = createFactory((params: Params) => {
 
   const selectEdgeDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'synth-edge-selected',
+    filter: (action: ActionPayload) => action.action === 'synth-edge-select',
   })
 
   sample({

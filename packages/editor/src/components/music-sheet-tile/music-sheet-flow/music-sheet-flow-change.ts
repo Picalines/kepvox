@@ -25,17 +25,17 @@ export const musicSheetNodeChangeToAction = (params: MapNodeChangeParams): Actio
       const time = SynthTime.fromNotes(Notes.orClamp(step(dimensions.note.time(x).toNotes(), timeStep)))
       const pitch = dimensions.note.pitch(y)
 
-      return { action: 'sheet-note-moved', id, to: { time, pitch } }
+      return { action: 'sheet-note-move', id, to: { time, pitch } }
     }
 
     case 'remove': {
       const { id } = change
-      return { action: 'sheet-note-deleted', id }
+      return { action: 'sheet-note-delete', id }
     }
 
     case 'select': {
       const { id, selected } = change
-      return { action: 'sheet-note-selected', id, selected }
+      return { action: 'sheet-note-select', id, selected }
     }
   }
 

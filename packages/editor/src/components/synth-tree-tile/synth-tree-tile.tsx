@@ -70,7 +70,7 @@ export const SynthTreeTile: FC = () => {
   const onConnect = useCallback<OnConnect>(
     ({ source, sourceHandle, target, targetHandle }) => {
       dispatch({
-        action: 'synth-edge-created',
+        action: 'synth-edge-create',
         id: nanoid(),
         source: { node: source, socket: Number.parseInt(sourceHandle ?? '0') },
         target: { node: target, socket: Number.parseInt(targetHandle ?? '0') },
