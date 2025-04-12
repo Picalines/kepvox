@@ -16,6 +16,12 @@ export type NotePreview = {
   duration: SynthTime
 }
 
+export type SheetViewportPosition = {
+  x: number
+  y: number
+  zoom: number
+}
+
 const DEFAULT_PREVIEW_DURATION = SynthTime.quarter
 const MIN_PREVIEW_DURATION = SynthTime.sixteenth
 
@@ -27,8 +33,8 @@ type Params = {
 export const createMusicSheetViewport = createFactory((params: Params) => {
   const { history, synthTree } = params
 
+  const $position = createStore<SheetViewportPosition>({ x: 0, y: 0, zoom: 1 })
   const $timeSnapping = createStore(SynthTime.quarter)
-
   const $notePreviewPosition = createStore<Pick<NotePreview, 'pitch' | 'time'> | null>(null)
   const $notePreviewDuration = createStore(DEFAULT_PREVIEW_DURATION)
 
@@ -39,10 +45,13 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
     (activeNode, position, duration) => (activeNode && position ? { ...position, duration } : null),
   )
 
+  const moved = createEvent<SheetViewportPosition>()
   const notePreviewMoved = createEvent<{ pitch: PitchNotation; time: SynthTime }>()
   const notePreviewStretched = createEvent<{ until: SynthTime }>()
   const notePreviewHidden = createEvent()
   const noteRequestedAtPreview = createEvent()
+
+  sample({ clock: moved, target: $position })
 
   sample({
     clock: notePreviewMoved,
@@ -92,9 +101,11 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
 
   return {
     $notePreview: readonly($notePreview),
+    $position: readonly($position),
+    notePreviewHidden,
     notePreviewMoved,
     notePreviewStretched,
-    notePreviewHidden,
     noteRequestedAtPreview,
+    moved,
   }
 })
