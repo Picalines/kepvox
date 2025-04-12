@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react'
 import { mockRunningAudioContext } from '#__mock__/audio-context'
 import { simpleProjectMock } from '#__mock__/project'
 import { EditorScope } from '#components/editor'
-import { editorModel } from '#model'
+import { type Project, editorModel } from '#model'
 import { PlaybackControls } from './playback-controls'
 
 type StoryArgs = ComponentProps<typeof PlaybackControls>
@@ -32,11 +32,16 @@ export const Playing: Story = {
   parameters: { scope: fork() },
 
   beforeEach: async ({ parameters: { scope } }) => {
-    const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
+    const infinteSilentProject: Project = {
+      ...simpleProjectMock,
+      musicSheet: { endingNote: Number.POSITIVE_INFINITY, notes: {} },
+    }
+
+    const state = { externalLoading: false, initialProject: infinteSilentProject, serializationTimeout: 0 } as const
     await allSettled(editorModel.Gate.close, { scope, params: state })
     await allSettled(editorModel.Gate.open, { scope, params: state })
 
     // NOTE: it won't settle, so don't await
-    allSettled(editorModel.playbackStarted, { scope })
+    allSettled(editorModel.playbackToggled, { scope })
   },
 }

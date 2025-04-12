@@ -1,7 +1,7 @@
 import { type PitchNotation, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createStore, sample } from 'effector'
-import { not, readonly, reset, spread } from 'patronum'
+import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
 import type { PlaybackStore } from './playback'
@@ -125,7 +125,7 @@ export const createMusicSheet = createFactory((params: Params) => {
 
   sample({
     clock: setEndingNoteDispatched,
-    filter: not(playback.$isPlaying),
+    filter: playback.$isIdle,
     target: spread({ endTime: $endTime, playDuration: playback.durationSet }),
     fn: ({ time }) => ({ endTime: time, playDuration: time }),
   })
