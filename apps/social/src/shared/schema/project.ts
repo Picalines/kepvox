@@ -35,6 +35,7 @@ export const projectSchema = z.object({
   }),
   musicSheet: z
     .object({
+      endingNote: z.number().positive().default(5),
       notes: z.record(
         noteIdSchema,
         z.object({

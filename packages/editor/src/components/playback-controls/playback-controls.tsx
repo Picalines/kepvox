@@ -1,3 +1,4 @@
+import { SynthTime } from '@repo/synth'
 import { Button } from '@repo/ui-kit/components/button'
 import { PauseIcon, PlayIcon, SquareIcon } from '@repo/ui-kit/icons'
 import { useUnit } from 'effector-react'
@@ -22,7 +23,7 @@ export const PlaybackControls: FC = () => {
 
   const onStopClick = () => {
     stop()
-    setPlayhead({ progress: 0 })
+    setPlayhead(SynthTime.start)
   }
 
   return (

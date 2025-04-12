@@ -1,9 +1,10 @@
-import type { PitchNotation, SynthTime } from '@repo/synth'
+import { type PitchNotation, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createStore, sample } from 'effector'
-import { readonly, reset } from 'patronum'
+import { not, readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
+import type { PlaybackStore } from './playback'
 import type { NodeId, NoteId } from './project'
 import type { SynthTreeStore } from './synth-tree'
 
@@ -21,16 +22,18 @@ export type MusicSheetStore = ReturnType<typeof createMusicSheet>
 type Params = {
   history: HistoryStore
   synthTree: SynthTreeStore
+  playback: PlaybackStore
 }
 
 export const createMusicSheet = createFactory((params: Params) => {
-  const { history, synthTree } = params
+  const { history, synthTree, playback } = params
 
   const $notes = createStore<ReadonlyMap<NoteId, Note>>(new Map())
+  const $endTime = createStore(SynthTime.note.repeat(5))
 
   reset({
     clock: [synthTree.initialized],
-    target: [$notes],
+    target: [$notes, $endTime],
   })
 
   const createNoteDispatched = sample({
@@ -115,7 +118,20 @@ export const createMusicSheet = createFactory((params: Params) => {
     },
   })
 
+  const setEndingNoteDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'ending-note-set',
+  })
+
+  sample({
+    clock: setEndingNoteDispatched,
+    filter: not(playback.$isPlaying),
+    target: spread({ endTime: $endTime, playDuration: playback.durationSet }),
+    fn: ({ time }) => ({ endTime: time, playDuration: time }),
+  })
+
   return {
     $notes: readonly($notes),
+    $endTime: readonly($endTime),
   }
 })

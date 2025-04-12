@@ -57,6 +57,7 @@ const INITIAL_PROJECT_CONTENT: z.infer<typeof projectSchema> = {
     },
   },
   musicSheet: {
+    endingNote: 5,
     notes: {},
   },
 }

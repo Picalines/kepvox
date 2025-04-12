@@ -33,6 +33,7 @@ export type ActionPayload =
   | { action: 'sheet-note-selected'; id: NoteId; selected: boolean }
   | { action: 'sheet-note-moved'; id: NoteId; to: { time: SynthTime; pitch: PitchNotation } }
   | { action: 'sheet-note-deleted'; id: NoteId }
+  | { action: 'ending-note-set'; time: SynthTime }
 
 export type Action = ActionPayload['action']
 
@@ -46,4 +47,5 @@ export const TRACKED_EDITOR_ACTIONS: Action[] = [
   'sheet-note-created',
   'sheet-note-moved',
   'sheet-note-deleted',
+  'ending-note-set',
 ]
