@@ -11,16 +11,20 @@ export type MusicSheetDimensions = ReturnType<typeof musicSheetDimensions>
 type Params = {
   wholeNoteWidthPx: number
   halfStepHeightPx: number
+  timelineHeightPx: number
 }
 
 // NOTE: [0, 0] is top-left, +y goes down
 
 export const musicSheetDimensions = (params: Params) => {
-  const { wholeNoteWidthPx, halfStepHeightPx } = params
+  const { wholeNoteWidthPx, halfStepHeightPx, timelineHeightPx } = params
 
-  const sheetHeight = NOTE_HALF_STEPS * halfStepHeightPx
+  const sheetHeight = NOTE_HALF_STEPS * halfStepHeightPx + timelineHeightPx
 
   return {
+    timeline: {
+      height: timelineHeightPx,
+    },
     sheet: {
       height: sheetHeight,
       top: 0,
