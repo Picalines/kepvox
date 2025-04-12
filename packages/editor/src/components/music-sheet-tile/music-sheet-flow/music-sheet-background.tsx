@@ -4,7 +4,7 @@ import { ViewportPortal } from '@xyflow/react'
 import { useUnit } from 'effector-react'
 import { type FC, useId, useMemo } from 'react'
 import { editorModel } from '#model'
-import type { MusicSheetDimensions } from './music-sheet-dimensions'
+import type { MusicSheetDimensions } from '../music-sheet-dimensions'
 
 type Props = {
   dimensions: MusicSheetDimensions

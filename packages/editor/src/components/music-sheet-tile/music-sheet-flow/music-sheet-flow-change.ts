@@ -2,7 +2,7 @@ import { step } from '@repo/common/math'
 import { Notes, SynthTime } from '@repo/synth'
 import type { NodeChange as FlowNodeChange } from '@xyflow/react'
 import type { ActionPayload } from '#model'
-import type { MusicSheetDimensions } from './music-sheet-dimensions'
+import type { MusicSheetDimensions } from '../music-sheet-dimensions'
 
 type MapNodeChangeParams = {
   dimensions: MusicSheetDimensions
