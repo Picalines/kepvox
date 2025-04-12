@@ -42,8 +42,11 @@ export class GeneratorSynthNode extends SynthNode {
     const audioContext = context[INTERNAL_AUDIO_CONTEXT]
 
     const steroMerger = audioContext.createChannelMerger(2)
+    const masterGain = audioContext.createGain()
 
-    super({ context, inputs: [], outputs: [steroMerger] })
+    steroMerger.connect(masterGain)
+
+    super({ context, inputs: [], outputs: [masterGain] })
 
     this.attack = new CurveSynthParam({
       node: this,
@@ -147,12 +150,20 @@ export class GeneratorSynthNode extends SynthNode {
     voice.adsr.attackAt(time)
   }
 
-  releaseAt(time: SynthTime, frequency: Hertz) {
-    const voice = this.#voices.find(
-      voice =>
-        !isOneOf(voice.adsr.state.valueAt(time), ['idle', 'release']) && voice.frequency.valueAt(time) === frequency,
-    )
+  releaseAt(time: SynthTime, frequency?: Hertz) {
+    const voices =
+      frequency === undefined
+        ? this.#voices
+        : [
+            this.#voices.find(
+              voice =>
+                !isOneOf(voice.adsr.state.valueAt(time), ['idle', 'release']) &&
+                voice.frequency.valueAt(time) === frequency,
+            ),
+          ]
 
-    voice?.adsr.releaseAt(time)
+    for (const voice of voices) {
+      voice?.adsr.releaseAt(time)
+    }
   }
 }
