@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
 import { Factor, Hertz, Seconds } from '#units'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
 import { OscillatorSynthNode } from './oscillator-synth-node'
 
@@ -15,6 +16,7 @@ export default {
     duration: Seconds.orThrow(1),
     numberOfChannels: 1,
     waveformDetails: 0.1,
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
   },
   parameters: {
     layout: 'fullscreen',

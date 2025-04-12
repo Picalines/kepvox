@@ -5,6 +5,7 @@ import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
 import { Normal, Notes, Seconds } from '#units'
 import { ConstantSynthNode } from '../constant'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { OscillatorSynthNode } from '../oscillator'
 import type { SynthNode } from '../synth-node'
 import { ADSREnvelopeSynthNode } from './adsr-envelope-synth-node'
@@ -97,6 +98,7 @@ export const Chained: Story = {
 export const Oscillator: Story = {
   args: {
     timeMarkers: [SynthTime.note, SynthTime.note.repeat(2), SynthTime.note.repeat(3)],
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
 
