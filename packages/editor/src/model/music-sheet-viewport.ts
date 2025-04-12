@@ -95,7 +95,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
     fn: ({ preview, activeNode }) => {
       const { pitch, time, duration } = preview
       const { id: synthId } = activeNode
-      return { action: 'sheet-note-created', id: nanoid(), synthId, pitch, time, duration } satisfies ActionPayload
+      return { action: 'sheet-note-create', id: nanoid(), synthId, pitch, time, duration } satisfies ActionPayload
     },
   })
 

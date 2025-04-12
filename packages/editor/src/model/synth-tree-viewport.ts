@@ -55,7 +55,7 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
       nextNumber: number + 1,
       dialogShown: false,
       action: {
-        action: 'synth-node-created',
+        action: 'synth-node-create',
         id: nanoid(),
         type,
         position,

@@ -3,49 +3,49 @@ import type { ConnectionPoint, EdgeId, NodeColor, NodeId, NodeType, NoteId } fro
 
 export type ActionPayload =
   | {
-      action: 'synth-node-created'
+      action: 'synth-node-create'
       id: NodeId
       type: NodeType
       position: { x: number; y: number }
       number: number
       color: NodeColor
     }
-  | { action: 'synth-node-selected'; id: NodeId; selected: boolean }
-  | { action: 'synth-node-moved'; id: NodeId; to: { x: number; y: number } }
-  | { action: 'synth-node-deleted'; id: NodeId }
+  | { action: 'synth-node-select'; id: NodeId; selected: boolean }
+  | { action: 'synth-node-move'; id: NodeId; to: { x: number; y: number } }
+  | { action: 'synth-node-delete'; id: NodeId }
   | {
-      action: 'synth-edge-created'
+      action: 'synth-edge-create'
       id: EdgeId
       source: ConnectionPoint
       target: ConnectionPoint
     }
-  | { action: 'synth-edge-selected'; id: EdgeId; selected: boolean }
-  | { action: 'synth-edge-deleted'; id: EdgeId }
+  | { action: 'synth-edge-select'; id: EdgeId; selected: boolean }
+  | { action: 'synth-edge-delete'; id: EdgeId }
   | { action: 'synth-node-param-set'; id: NodeId; param: string; value: string | number }
   | {
-      action: 'sheet-note-created'
+      action: 'sheet-note-create'
       id: NoteId
       synthId: NodeId
       time: SynthTime
       duration: SynthTime
       pitch: PitchNotation
     }
-  | { action: 'sheet-note-selected'; id: NoteId; selected: boolean }
-  | { action: 'sheet-note-moved'; id: NoteId; to: { time: SynthTime; pitch: PitchNotation } }
-  | { action: 'sheet-note-deleted'; id: NoteId }
+  | { action: 'sheet-note-select'; id: NoteId; selected: boolean }
+  | { action: 'sheet-note-move'; id: NoteId; to: { time: SynthTime; pitch: PitchNotation } }
+  | { action: 'sheet-note-delete'; id: NoteId }
   | { action: 'ending-note-set'; time: SynthTime }
 
 export type Action = ActionPayload['action']
 
 export const TRACKED_EDITOR_ACTIONS: Action[] = [
-  'synth-node-created',
-  'synth-node-moved',
-  'synth-node-deleted',
-  'synth-edge-created',
-  'synth-edge-deleted',
+  'synth-node-create',
+  'synth-node-move',
+  'synth-node-delete',
+  'synth-edge-create',
+  'synth-edge-delete',
   'synth-node-param-set',
-  'sheet-note-created',
-  'sheet-note-moved',
-  'sheet-note-deleted',
+  'sheet-note-create',
+  'sheet-note-move',
+  'sheet-note-delete',
   'ending-note-set',
 ]

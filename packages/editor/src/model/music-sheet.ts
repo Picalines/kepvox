@@ -38,7 +38,7 @@ export const createMusicSheet = createFactory((params: Params) => {
 
   const createNoteDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'sheet-note-created',
+    filter: (action: ActionPayload) => action.action === 'sheet-note-create',
   })
 
   sample({
@@ -58,7 +58,7 @@ export const createMusicSheet = createFactory((params: Params) => {
 
   const moveNoteDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'sheet-note-moved',
+    filter: (action: ActionPayload) => action.action === 'sheet-note-move',
   })
 
   sample({
@@ -79,7 +79,7 @@ export const createMusicSheet = createFactory((params: Params) => {
 
   const deleteNoteDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'sheet-note-deleted',
+    filter: (action: ActionPayload) => action.action === 'sheet-note-delete',
   })
 
   sample({
@@ -99,7 +99,7 @@ export const createMusicSheet = createFactory((params: Params) => {
 
   const selectNoteDispatched = sample({
     clock: history.dispatched,
-    filter: (action: ActionPayload) => action.action === 'sheet-note-selected',
+    filter: (action: ActionPayload) => action.action === 'sheet-note-select',
   })
 
   sample({

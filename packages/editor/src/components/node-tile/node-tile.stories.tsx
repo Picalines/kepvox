@@ -50,7 +50,7 @@ export const Selected: Story = {
     await allSettled(editorModel.actionDispatched, {
       scope,
       params: {
-        action: 'synth-node-selected',
+        action: 'synth-node-select',
         id: 'gen',
         selected: true,
       },

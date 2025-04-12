@@ -8,7 +8,7 @@ export const synthTreeNodeChangeToAction = (change: FlowNodeChange): ActionPaylo
       const { id, position } = change
 
       if (position) {
-        return { action: 'synth-node-moved', id, to: position }
+        return { action: 'synth-node-move', id, to: position }
       }
 
       break
@@ -16,12 +16,12 @@ export const synthTreeNodeChangeToAction = (change: FlowNodeChange): ActionPaylo
 
     case 'remove': {
       const { id } = change
-      return { action: 'synth-node-deleted', id }
+      return { action: 'synth-node-delete', id }
     }
 
     case 'select': {
       const { id, selected } = change
-      return { action: 'synth-node-selected', id, selected }
+      return { action: 'synth-node-select', id, selected }
     }
   }
 
@@ -33,7 +33,7 @@ export const synthTreeEdgeChangeToAction = (change: FlowEdgeChange): ActionPaylo
     case 'add': {
       const { id, source, sourceHandle, target, targetHandle } = change.item
       return {
-        action: 'synth-edge-created',
+        action: 'synth-edge-create',
         id,
         source: { node: source, socket: Number.parseInt(sourceHandle ?? '0') },
         target: { node: target, socket: Number.parseInt(targetHandle ?? '0') },
@@ -42,12 +42,12 @@ export const synthTreeEdgeChangeToAction = (change: FlowEdgeChange): ActionPaylo
 
     case 'remove': {
       const { id } = change
-      return { action: 'synth-edge-deleted', id }
+      return { action: 'synth-edge-delete', id }
     }
 
     case 'select': {
       const { id, selected } = change
-      return { action: 'synth-edge-selected', id, selected }
+      return { action: 'synth-edge-select', id, selected }
     }
   }
 
