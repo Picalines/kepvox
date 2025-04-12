@@ -70,9 +70,9 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
         return duration
       }
 
-      return MIN_PREVIEW_DURATION.max(
-        SynthTime.fromNotes(Notes.orClamp(step(until.sub(time).toNotes(), snapping.toNotes()))),
-      )
+      const cellWidth = snapping.toNotes()
+      const snappedNotes = Math.ceil(until.sub(time).toNotes() / cellWidth) * cellWidth
+      return MIN_PREVIEW_DURATION.max(SynthTime.fromNotes(Notes.orClamp(snappedNotes)))
     },
   })
 
