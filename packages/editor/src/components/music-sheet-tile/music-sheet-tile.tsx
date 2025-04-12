@@ -49,7 +49,7 @@ const TimeMarkers: FC = () => {
   return (
     <>
       <MusicSheetTimeMarker dimensions={DIMENSIONS} color="red" time={endTime} />
-      {isPlaying && <MusicSheetTimeMarker dimensions={DIMENSIONS} color="green" time={playhead} />}
+      <MusicSheetTimeMarker dimensions={DIMENSIONS} color={isPlaying ? 'green' : 'muted'} time={playhead} />
     </>
   )
 }
