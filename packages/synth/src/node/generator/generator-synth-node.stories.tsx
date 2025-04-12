@@ -5,6 +5,7 @@ import { Pitch } from '#pitch'
 import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
 import { Factor, Normal, Notes, Seconds } from '#units'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
 import type { SynthNode } from '../synth-node'
 import { GeneratorSynthNode, type GeneratorWaveShape } from './generator-synth-node'
@@ -18,6 +19,7 @@ export default {
     duration: Seconds.orThrow(1),
     numberOfChannels: 1,
     waveformDetails: 0.1,
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
   },
   parameters: {
     layout: 'fullscreen',

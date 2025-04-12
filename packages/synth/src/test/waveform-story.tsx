@@ -14,6 +14,7 @@ type Props<T> = {
   numberOfChannels?: number
   sampleRate?: number
   waveformDetails?: number
+  maxAmplitude?: number
 }
 
 const CANVAS_WIDTH = 1920
@@ -33,6 +34,7 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
     numberOfChannels = 1,
     sampleRate = 44100,
     waveformDetails = 0.05,
+    maxAmplitude = 1,
   } = props
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -89,7 +91,7 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
         data,
         width: canvas.width,
         height: channelLineHeight,
-        maxAmplitude: 1,
+        maxAmplitude,
       })
 
       drawContext.fillStyle = WAVEFORM_COLOR
@@ -111,7 +113,7 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
     }
 
     drawContext.restore()
-  }, [noteMakers, sampleRate, numberOfChannels, duration, synthTree, synthTreeProps, waveformDetails])
+  }, [noteMakers, sampleRate, numberOfChannels, maxAmplitude, duration, synthTree, synthTreeProps, waveformDetails])
 
   useEffect(() => {
     render()

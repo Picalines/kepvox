@@ -8,6 +8,7 @@ import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import type { SynthTime } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { SynthNode } from '../synth-node'
 
 export type GeneratorSynthNodeOpts = {
@@ -42,11 +43,11 @@ export class GeneratorSynthNode extends SynthNode {
     const audioContext = context[INTERNAL_AUDIO_CONTEXT]
 
     const steroMerger = audioContext.createChannelMerger(2)
-    const masterGain = audioContext.createGain()
+    const master = audioContext.createGain()
 
-    steroMerger.connect(masterGain)
+    steroMerger.connect(master)
 
-    super({ context, inputs: [], outputs: [masterGain] })
+    super({ context, inputs: [], outputs: [master] })
 
     this.attack = new CurveSynthParam({
       node: this,
@@ -131,13 +132,14 @@ export class GeneratorSynthNode extends SynthNode {
     })
 
     const mute = () => {
-      masterGain.gain.value = 0
+      master.gain.value = 0
     }
 
     const unmute = () => {
-      masterGain.gain.value = 1
+      master.gain.value = DEFAULT_SOURCE_GAIN
     }
 
+    mute()
     this.context.playing.watchUntil(this.disposed, unmute)
     this.context.stopped.watchUntil(this.disposed, mute)
   }

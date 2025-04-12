@@ -2,6 +2,7 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { SynthNode } from '../synth-node'
 
 const WAVE_SPAHES = ['sine', 'square', 'sawtooth', 'triangle'] as const
@@ -15,15 +16,15 @@ export class OscillatorSynthNode extends SynthNode {
 
     const oscillator = audioContext.createOscillator()
     const merger = audioContext.createChannelMerger(2)
-    const gate = audioContext.createGain()
+    const master = audioContext.createGain()
 
     oscillator.connect(merger, 0, 0)
     oscillator.connect(merger, 0, 1)
-    merger.connect(gate)
+    merger.connect(master)
 
     oscillator.start()
 
-    super({ context, inputs: [], outputs: [gate] })
+    super({ context, inputs: [], outputs: [master] })
 
     this.waveShape = new EnumSynthParam({
       node: this,
@@ -46,11 +47,11 @@ export class OscillatorSynthNode extends SynthNode {
     })
 
     const unmuteOscillator = () => {
-      gate.gain.value = 1
+      master.gain.value = DEFAULT_SOURCE_GAIN
     }
 
     const muteOscillator = () => {
-      gate.gain.value = 0
+      master.gain.value = 0
     }
 
     muteOscillator()

@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
 import { Factor, Hertz, Normal, Seconds } from '#units'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
 import { OscillatorSynthNode } from '../oscillator'
 import { ReverbSynthNode } from './reverb-synth-node'
@@ -15,6 +16,7 @@ export default {
   args: {
     numberOfChannels: 2,
     waveformDetails: 0.1,
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
   },
   parameters: {
     layout: 'fullscreen',

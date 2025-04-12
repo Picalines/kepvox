@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
 import { SynthTime } from '#time'
 import { Factor, Hertz, Normal, Seconds } from '#units'
+import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
 import { OscillatorSynthNode } from '../oscillator'
 import { DelaySynthNode } from './delay-synth-node'
@@ -26,6 +27,7 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
 
@@ -44,6 +46,7 @@ export const Default: Story = {
 
 export const WithOriginal: Story = {
   args: {
+    maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
 
