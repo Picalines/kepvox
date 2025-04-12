@@ -27,6 +27,8 @@ export const createSerializer = createFactory((params: Params) => {
   const deserializeFx = createEffect((project: Project) => {
     const dispatch = scopeBind(history.dispatched)
 
+    dispatch({ action: 'ending-note-set', time: SynthTime.fromNotes(Notes.orClamp(project.musicSheet.endingNote)) })
+
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
       const { type, position, number, color } = node
       dispatch({ action: 'synth-node-created', id: nodeId, type, position, number, color })
@@ -54,8 +56,14 @@ export const createSerializer = createFactory((params: Params) => {
   })
 
   const serializeFx = attach({
-    source: { nodes: synthTree.$nodes, edges: synthTree.$edges, notes: musicSheet.$notes, editorProps: gate.state },
-    effect: ({ nodes, edges, notes, editorProps }) => {
+    source: {
+      nodes: synthTree.$nodes,
+      edges: synthTree.$edges,
+      notes: musicSheet.$notes,
+      endTime: musicSheet.$endTime,
+      editorProps: gate.state,
+    },
+    effect: ({ nodes, edges, notes, endTime, editorProps }) => {
       if (!editorProps.onSerialized) {
         return
       }
@@ -95,6 +103,7 @@ export const createSerializer = createFactory((params: Params) => {
           edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
         },
         musicSheet: {
+          endingNote: endTime.toNotes(),
           notes: Object.fromEntries(
             notes.entries().map(([id, { synthId, time, duration, pitch }]) => [
               id,

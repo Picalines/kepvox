@@ -38,6 +38,7 @@ export type Project = {
     >
   }
   musicSheet: {
+    endingNote: number
     notes: Record<
       NoteId,
       {

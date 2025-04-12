@@ -1,12 +1,10 @@
-import { Notes, SynthContext, type SynthState, SynthTime } from '@repo/synth'
+import { SynthContext, type SynthState, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
-import { and, condition, equals, interval, not, readonly, spread } from 'patronum'
+import { and, condition, interval, not, readonly, spread } from 'patronum'
 import type { EditorGate } from './gate'
 
 export type PlaybackStore = ReturnType<typeof createPlayback>
-
-const DEFAULT_DURATION = Notes.orThrow(1)
 
 type Params = {
   gate: EditorGate
@@ -20,16 +18,18 @@ export const createPlayback = createFactory((params: Params) => {
   const $hasAudioPermission = createStore(true) // Assume that it's there
   const $context = createStore<SynthContext | null>(null)
   const $state = restore(stateChanged, 'disposed')
+  const $isIdle = $state.map(state => state === 'idle')
   const $isPlaying = $state.map(state => state === 'playing')
   const $isDisposed = $state.map(state => state === 'disposed')
-  const $duration = createStore(DEFAULT_DURATION)
-  const $elapsedNotes = createStore(Notes.orThrow(0))
+  const $duration = createStore(SynthTime.note)
+  const $playhead = createStore(SynthTime.start)
 
   const audioPermissionGranted = createEvent()
   const initialized = createEvent<SynthContext>()
   const started = createEvent()
   const stopped = createEvent()
-  const playheadSet = createEvent<{ progress: number }>()
+  const durationSet = createEvent<SynthTime>()
+  const playheadSet = createEvent<SynthTime>()
   const disposed = createEvent()
 
   const AUDIO_NOT_ALLOWED = new Error()
@@ -53,10 +53,8 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   const playFx = attach({
-    source: { context: $context, elapsedNotes: $elapsedNotes },
-    effect: async ({ context, elapsedNotes }) => {
-      context?.play(SynthTime.fromNotes(elapsedNotes))
-    },
+    source: { context: $context, playhead: $playhead },
+    effect: ({ context, playhead }) => context?.play(playhead),
   })
 
   const stopFx = attach({
@@ -101,15 +99,13 @@ export const createPlayback = createFactory((params: Params) => {
     fn: ({ state }) => state,
   })
 
-  const clamp01 = (x: number) => Math.max(0, Math.min(1, x))
-
-  const $progress = combine($duration, $elapsedNotes, (duration, elapsedNotes) => clamp01(elapsedNotes / duration))
+  const $isPlayheadAtEnd = combine($duration, $playhead, (duration, playhead) => playhead.isAfterOrAt(duration))
 
   sample({
     clock: started,
-    filter: equals($progress, 1),
-    target: $elapsedNotes,
-    fn: () => Notes.orThrow(0),
+    filter: $isPlayheadAtEnd,
+    target: $playhead,
+    fn: () => SynthTime.start,
   })
 
   sample({ clock: started, filter: not($isDisposed), target: playFx })
@@ -117,7 +113,7 @@ export const createPlayback = createFactory((params: Params) => {
   sample({ clock: disposed, target: disposeFx })
 
   const { tick } = interval({
-    timeout: 50,
+    timeout: 16,
     start: sample({ clock: $isPlaying, filter: $isPlaying }),
     stop: sample({ clock: $isPlaying, filter: not($isPlaying) }),
     leading: true,
@@ -128,34 +124,30 @@ export const createPlayback = createFactory((params: Params) => {
     clock: tick,
     source: $context,
     filter: Boolean,
-    target: $elapsedNotes,
-    fn: ({ elapsedNotes }) => elapsedNotes,
+    target: $playhead,
+    fn: ({ elapsedNotes }) => SynthTime.fromNotes(elapsedNotes),
   })
 
-  sample({
-    clock: playheadSet,
-    filter: not($isPlaying),
-    source: $duration,
-    target: $elapsedNotes,
-    fn: (duration, { progress }) => Notes.orThrow(duration * clamp01(progress)),
-  })
+  sample({ clock: durationSet, filter: $isIdle, target: $duration })
+  sample({ clock: playheadSet, filter: $isIdle, target: $playhead })
 
   sample({
-    clock: $progress,
-    filter: and($isPlaying, equals($progress, 1)),
+    clock: $isPlayheadAtEnd,
+    filter: and($isPlaying, $isPlayheadAtEnd),
     target: stopped,
   })
 
   return {
-    $hasAudioPermission: readonly($hasAudioPermission),
     $context: readonly($context),
+    $hasAudioPermission: readonly($hasAudioPermission),
     $isPlaying: readonly($isPlaying),
-    $progress: readonly($progress),
+    $playhead: readonly($playhead),
     audioPermissionGranted,
+    disposed,
+    durationSet,
     initialized,
+    playheadSet,
     started,
     stopped,
-    playheadSet,
-    disposed,
   }
 })

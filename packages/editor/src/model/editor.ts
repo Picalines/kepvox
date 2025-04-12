@@ -17,7 +17,7 @@ const synthTree = invoke(createSynthTree, { history, playback })
 
 const synthNodePanel = invoke(createSynthNodePanel, { history, synthTree })
 
-const musicSheet = invoke(createMusicSheet, { history, synthTree })
+const musicSheet = invoke(createMusicSheet, { history, synthTree, playback })
 
 const musicSheetViewport = invoke(createMusicSheetViewport, { history, synthTree })
 
@@ -30,7 +30,7 @@ const { dispatched: actionDispatched } = history
 const {
   $hasAudioPermission,
   $isPlaying,
-  $progress: $playbackProgress,
+  $playhead,
   audioPermissionGranted,
   playheadSet,
   started: playbackStarted,
@@ -41,7 +41,7 @@ const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
 const { $activeNodeId, $nodeParams } = synthNodePanel
 
-const { $notes: $sheetNotes } = musicSheet
+const { $notes: $sheetNotes, $endTime } = musicSheet
 
 const {
   $notePreview,
@@ -59,6 +59,7 @@ const { $nodeCreationDialogShown, nodePositionSelected, nodeTypeSelected, nodeCr
 
 export {
   $activeNodeId,
+  $endTime,
   $hasAudioPermission,
   $isDirty,
   $isLoaded,
@@ -66,7 +67,7 @@ export {
   $nodeCreationDialogShown,
   $nodeParams,
   $notePreview,
-  $playbackProgress,
+  $playhead,
   $sheetNotes,
   $sheetPosition,
   $synthEdges,
