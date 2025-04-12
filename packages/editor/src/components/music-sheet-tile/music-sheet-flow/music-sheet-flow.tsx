@@ -25,7 +25,6 @@ export const MusicSheetFlow: FC<Props> = props => {
   const { dimensions, className } = props
 
   const {
-    viewport,
     notes,
     isLoaded,
     dispatch,
@@ -35,7 +34,6 @@ export const MusicSheetFlow: FC<Props> = props => {
     hideNotePreview,
     createNoteAtPreview,
   } = useUnit({
-    viewport: editorModel.$sheetPosition,
     notes: editorModel.$sheetNotes,
     isLoaded: editorModel.$isLoaded,
     dispatch: editorModel.actionDispatched,
@@ -142,7 +140,6 @@ export const MusicSheetFlow: FC<Props> = props => {
       preventScrolling={false}
       proOptions={FLOW_PRO_OPTIONS}
       translateExtent={translateExtents}
-      viewport={viewport}
     >
       <MusicSheetBackground dimensions={dimensions} />
       <MusicSheetNotePreview dimensions={dimensions} />
