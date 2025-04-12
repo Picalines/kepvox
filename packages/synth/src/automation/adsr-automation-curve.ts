@@ -116,4 +116,15 @@ export class ADSRAutomationCurve {
 
     return releaseEnd
   }
+
+  muteAt(time: SynthTime) {
+    const gain = this.#gain
+    const state = this.#state
+
+    gain.holdValueAt(time)
+    state.holdValueAt(time)
+
+    gain.setValueAt(time, Normal.min)
+    state.setValueAt(time, 'idle')
+  }
 }
