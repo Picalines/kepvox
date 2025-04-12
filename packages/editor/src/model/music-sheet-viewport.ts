@@ -1,5 +1,5 @@
 import { step } from '@repo/common/math'
-import { Notes, type PitchNotation, SynthTime } from '@repo/synth'
+import { GeneratorSynthNode, Notes, type PitchNotation, SynthTime } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
 import { nanoid } from 'nanoid'
@@ -42,7 +42,8 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
     synthTree.$activeNode,
     $notePreviewPosition,
     $notePreviewDuration,
-    (activeNode, position, duration) => (activeNode && position ? { ...position, duration } : null),
+    (activeNode, position, duration) =>
+      activeNode?.synthNode instanceof GeneratorSynthNode && position ? { ...position, duration } : null,
   )
 
   const moved = createEvent<SheetViewportPosition>()
