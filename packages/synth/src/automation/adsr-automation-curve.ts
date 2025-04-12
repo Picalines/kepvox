@@ -105,6 +105,10 @@ export class ADSRAutomationCurve {
     state.holdValueAt(start)
     gain.holdValueAt(start)
 
+    if (state.valueAt(start) === 'idle') {
+      return start
+    }
+
     state.setValueAt(start, 'release')
     if (releaseDuration > 0) {
       gain.rampValueUntil(releaseEnd, Normal.min)
