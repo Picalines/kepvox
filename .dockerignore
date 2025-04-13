@@ -1,0 +1,35 @@
+.idea
+.idea_modules
+.vscode
+.git
+.gitignore
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# build
+*.tsbuildinfo
+.next
+next-env.d.ts
+dist
+
+# testing
+coverage
+playwright-report
+test-results
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*storybook.log
+
+# turbo
+.turbo
+
