@@ -17,7 +17,8 @@
     "imports": {
         "#main/base": "./src/storybook.base.main.ts"
     },
-    "peerDependencies": {
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*",
         "@storybook/addon-essentials": "catalog:",
         "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",
@@ -26,9 +27,7 @@
         "@storybook/react": "catalog:",
         "@storybook/react-vite": "catalog:",
         "@types/react": "catalog:",
-        "storybook": "catalog:"
-    },
-    "devDependencies": {
-        "@repo/ts-config": "workspace:*"
+        "storybook": "catalog:",
+        "typescript": "catalog:"
     }
 }

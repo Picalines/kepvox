@@ -59,6 +59,7 @@
         "jsdom": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
+        "typescript": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     }

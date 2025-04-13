@@ -26,6 +26,7 @@
     "devDependencies": {
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
+        "typescript": "catalog:",
         "vitest": "catalog:"
     }
 }
