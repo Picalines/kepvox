@@ -33,6 +33,7 @@
         "effector": "catalog:",
         "effector-react": "catalog:",
         "effector-storage": "catalog:",
+        "monaco-editor": "0.25.0",
         "next": "catalog:",
         "patronum": "catalog:",
         "react": "catalog:",
@@ -48,18 +49,18 @@
         "@repo/tailwind-config": "workspace:*",
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
-        "@storybook/addon-links": "catalog:",
-        "@storybook/addon-themes": "catalog:",
-        "@storybook/nextjs": "catalog:",
+        "@repo/vite-config": "workspace:*",
         "@storybook/react": "catalog:",
-        "@storybook/test": "catalog:",
         "@tailwindcss/postcss": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "playwright": "catalog:",
-        "storybook": "catalog:"
+        "storybook": "catalog:",
+        "tailwindcss": "catalog:",
+        "tw-animate-css": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
     }
 }

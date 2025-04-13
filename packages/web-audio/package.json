@@ -16,6 +16,7 @@
         "@repo/common": "workspace:*"
     },
     "devDependencies": {
-        "@repo/ts-config": "workspace:*"
+        "@repo/ts-config": "workspace:*",
+        "typescript": "catalog:"
     }
 }

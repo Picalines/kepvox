@@ -63,13 +63,6 @@
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
-        "@storybook/addon-links": "catalog:",
-        "@storybook/addon-themes": "catalog:",
-        "@storybook/nextjs": "catalog:",
-        "@storybook/react": "catalog:",
-        "@storybook/test": "catalog:",
         "@tailwindcss/postcss": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "catalog:",
@@ -78,6 +71,10 @@
         "motion": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
+        "tailwindcss": "catalog:",
+        "tw-animate-css": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
         "vitest": "catalog:"
     }
 }
