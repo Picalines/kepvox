@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@effector/next": "catalog:",
+        "@farfetched/core": "catalog:",
         "@next/env": "catalog:",
         "@radix-ui/react-avatar": "^1.1.3",
         "@repo/common": "workspace:*",
