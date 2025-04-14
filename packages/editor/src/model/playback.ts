@@ -22,12 +22,12 @@ export const createPlayback = createFactory((params: Params) => {
   const $playhead = createStore(SynthTime.start)
 
   const userGrantedAudioPermission = createEvent()
+  const userSetPlayhead = createEvent<SynthTime>()
 
   const initialized = createEvent<SynthContext>()
   const started = createEvent()
   const stopped = createEvent()
   const durationSet = createEvent<SynthTime>()
-  const playheadSet = createEvent<SynthTime>()
   const disposed = createEvent()
 
   const $isIdle = combine($state, state => state === 'idle')
@@ -136,7 +136,14 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   sample({ clock: durationSet, filter: $isIdle, target: $duration })
-  sample({ clock: playheadSet, filter: $isIdle, target: $playhead })
+
+  sample({
+    clock: userSetPlayhead,
+    filter: $isIdle,
+    source: $duration,
+    target: $playhead,
+    fn: (duration, time) => SynthTime.start.max(duration.min(time)),
+  })
 
   sample({
     clock: $isPlayheadAtEnd,
@@ -153,9 +160,9 @@ export const createPlayback = createFactory((params: Params) => {
     disposed,
     durationSet,
     initialized,
-    playheadSet,
     started,
     stopped,
     userGrantedAudioPermission,
+    userSetPlayhead,
   }
 })

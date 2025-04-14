@@ -57,7 +57,7 @@ export const createNoteScheduler = createFactory((params: Params) => {
 
   sample({
     clock: userStoppedPlayback,
-    target: spread({ stopped: playback.stopped, playhead: playback.playheadSet }),
+    target: spread({ stopped: playback.stopped, playhead: playback.userSetPlayhead }),
     fn: () => ({ stopped: undefined, playhead: SynthTime.start }),
   })
 
