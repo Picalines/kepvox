@@ -34,7 +34,7 @@ const { $isExternalLoading, $isReadonly, Gate } = gate
 
 const { userRequestedActions } = history
 
-const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission } = playback
+const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission, userSetPlayhead } = playback
 
 const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
@@ -86,6 +86,7 @@ export {
   userRequestedActions,
   userSelectedNodePosition,
   userSelectedNodeType,
+  userSetPlayhead,
   userStoppedPlayback,
   userStretchedNotePreview,
   userToggledPlayback,
