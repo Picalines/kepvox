@@ -1,6 +1,6 @@
 'use server'
 
-import { eq, sql } from 'drizzle-orm'
+import { desc, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { database, tables } from '#shared/database'
 
@@ -18,12 +18,17 @@ export const searchPublications = async (input: z.infer<typeof inputSchema>) => 
       id: tables.publication.id,
       name: tables.publication.name,
       description: tables.publication.description,
-      author: { id: tables.project.authorId, name: tables.user.name },
+      author: {
+        id: tables.project.authorId,
+        name: tables.user.name,
+        avatar: tables.user.image,
+      },
     })
     .from(tables.publication)
     .innerJoin(tables.project, eq(tables.publication.projectId, tables.project.id))
     .innerJoin(tables.user, eq(tables.project.authorId, tables.user.id))
     .where(sql`${tables.publication.name} ILIKE '%' || ${namePart} || '%'`)
+    .orderBy(desc(tables.publication.createdAt))
 
   return { publications }
 }
