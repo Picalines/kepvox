@@ -8,6 +8,7 @@ import { MusicSheetFlow } from './music-sheet-flow'
 import { MusicSheetPianoRoll } from './music-sheet-piano-roll'
 import { MusicSheetTimeMarker } from './music-sheet-time-marker'
 import { MusicSheetTimeline } from './music-sheet-timeline'
+import { ReadonlyIndicator } from './readonly-indicator'
 
 const DIMENSIONS = musicSheetDimensions({
   wholeNoteWidthPx: 250,
@@ -26,6 +27,9 @@ export const MusicSheetTile: FC = () => {
       <Resizable.Panel defaultSize={85} className="relative">
         <MusicSheetTimeline dimensions={DIMENSIONS} />
         <TimeMarkers />
+        <div className="absolute right-1 bottom-1 z-1">
+          <ReadonlyIndicator />
+        </div>
         <ReactFlowProvider>
           <MusicSheetFlow dimensions={DIMENSIONS} />
         </ReactFlowProvider>
