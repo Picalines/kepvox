@@ -31,17 +31,17 @@ export const PublicationSearchScreen: FC = () => {
   return (
     <div className="space-y-4">
       <Heading.Root>
-        <Heading.Title className="flex items-center gap-2">
+        <Heading.Title className="flex items-center gap-4">
           Tracks <SearchIcon />
         </Heading.Title>
       </Heading.Root>
-      <TextInput.Root value={namePart} onChange={onChange}>
+      <TextInput.Root value={namePart} onChange={onChange} className="max-w-60">
         <TextInput.Label className="flex items-center gap-1">Search</TextInput.Label>
       </TextInput.Root>
       {loading ? (
         <Loader centered />
       ) : publications?.length ? (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-4">
           {publications.map(publication => (
             <PublicationCard key={publication.id} publication={publication} />
           ))}
