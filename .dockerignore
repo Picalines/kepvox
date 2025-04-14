@@ -1,8 +1,16 @@
+Dockerfile
+.dockerignore
+
 .idea
 .idea_modules
 .vscode
 .git
 .gitignore
+
+# env
+.env.local
+.env.development
+.env.production
 
 # dependencies
 node_modules
