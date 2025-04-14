@@ -30,7 +30,7 @@ const noteScheduler = invoke(createNoteScheduler, { musicSheet, synthTree, playb
 
 const { dispatched: actionDispatched } = history
 
-const { $hasAudioPermission, $isPlaying, $playhead, audioPermissionGranted, playheadSet } = playback
+const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission } = playback
 
 const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
@@ -41,18 +41,19 @@ const { $notes: $sheetNotes, $endTime } = musicSheet
 const {
   $notePreview,
   $position: $sheetPosition,
-  moved: sheetMoved,
-  notePreviewHidden,
-  notePreviewMoved,
-  notePreviewStretched,
-  noteRequestedAtPreview,
+  userHidNotePreview,
+  userMovedNotePreview,
+  userMovedSheet,
+  userRequestedANote,
+  userStretchedNotePreview,
 } = musicSheetViewport
 
 const { $isLoaded, $isDirty } = serializer
 
-const { $nodeCreationDialogShown, nodePositionSelected, nodeTypeSelected, nodeCreationCancelled } = synthTreeViewport
+const { $nodeCreationDialogShown, userCancelledNodeCreation, userSelectedNodePosition, userSelectedNodeType } =
+  synthTreeViewport
 
-const { playbackToggled, playbackStopped } = noteScheduler
+const { userStoppedPlayback, userToggledPlayback } = noteScheduler
 
 export {
   $activeNodeId,
@@ -71,16 +72,15 @@ export {
   $synthNodes,
   Gate,
   actionDispatched,
-  audioPermissionGranted,
-  nodeCreationCancelled,
-  nodePositionSelected,
-  nodeTypeSelected,
-  notePreviewHidden,
-  notePreviewMoved,
-  notePreviewStretched,
-  noteRequestedAtPreview,
-  playbackStopped,
-  playbackToggled,
-  playheadSet,
-  sheetMoved,
+  userCancelledNodeCreation,
+  userGrantedAudioPermission,
+  userHidNotePreview,
+  userMovedNotePreview,
+  userMovedSheet,
+  userRequestedANote,
+  userSelectedNodePosition,
+  userSelectedNodeType,
+  userStoppedPlayback,
+  userStretchedNotePreview,
+  userToggledPlayback,
 }

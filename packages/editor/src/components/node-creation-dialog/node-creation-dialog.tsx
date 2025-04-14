@@ -7,9 +7,9 @@ import { editorModel } from '#model'
 
 export const NodeCreationDialog: FC = () => {
   const { opened, cancel, onTypeSelected } = useUnit({
+    cancel: editorModel.userCancelledNodeCreation,
+    onTypeSelected: editorModel.userSelectedNodeType,
     opened: editorModel.$nodeCreationDialogShown,
-    cancel: editorModel.nodeCreationCancelled,
-    onTypeSelected: editorModel.nodeTypeSelected,
   })
 
   return (

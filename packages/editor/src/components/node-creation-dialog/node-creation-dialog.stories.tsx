@@ -32,7 +32,7 @@ export const Default: Story = {
     const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
     await allSettled(editorModel.Gate.close, { scope, params: state })
     await allSettled(editorModel.Gate.open, { scope, params: state })
-    await allSettled(editorModel.nodePositionSelected, {
+    await allSettled(editorModel.userSelectedNodePosition, {
       scope,
       params: { position: { x: 0, y: 0 } },
     })

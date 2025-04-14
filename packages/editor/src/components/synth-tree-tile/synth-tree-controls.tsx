@@ -14,7 +14,7 @@ type Props = {
 export const SynthTreeControls: FC<Props> = props => {
   const { containerRef } = props
 
-  const { selectNodePosition } = useUnit({ selectNodePosition: editorModel.nodePositionSelected })
+  const { selectNodePosition } = useUnit({ selectNodePosition: editorModel.userSelectedNodePosition })
 
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow()
 

@@ -46,16 +46,16 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
       activeNode?.synthNode instanceof GeneratorSynthNode && position ? { ...position, duration } : null,
   )
 
-  const moved = createEvent<SheetViewportPosition>()
-  const notePreviewMoved = createEvent<{ pitch: PitchNotation; time: SynthTime }>()
-  const notePreviewStretched = createEvent<{ until: SynthTime }>()
-  const notePreviewHidden = createEvent()
-  const noteRequestedAtPreview = createEvent()
+  const userMovedSheet = createEvent<SheetViewportPosition>()
+  const userMovedNotePreview = createEvent<{ pitch: PitchNotation; time: SynthTime }>()
+  const userStretchedNotePreview = createEvent<{ until: SynthTime }>()
+  const userHidNotePreview = createEvent()
+  const userRequestedANote = createEvent()
 
-  sample({ clock: moved, target: $position })
+  sample({ clock: userMovedSheet, target: $position })
 
   sample({
-    clock: notePreviewMoved,
+    clock: userMovedNotePreview,
     source: $timeSnapping,
     target: $notePreviewPosition,
     fn: (snapping, { pitch, time }) => ({
@@ -65,13 +65,13 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   })
 
   sample({
-    clock: notePreviewHidden,
+    clock: userHidNotePreview,
     target: $notePreviewPosition,
     fn: () => null,
   })
 
   sample({
-    clock: notePreviewStretched,
+    clock: userStretchedNotePreview,
     source: { position: $notePreviewPosition, duration: $notePreviewDuration, snapping: $timeSnapping },
     target: $notePreviewDuration,
     fn: ({ position, duration, snapping }, { until }) => {
@@ -87,7 +87,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   })
 
   sample({
-    clock: noteRequestedAtPreview,
+    clock: userRequestedANote,
     source: combine($notePreview, synthTree.$activeNode, (preview, activeNode) =>
       preview && activeNode ? { preview, activeNode } : null,
     ),
@@ -103,10 +103,10 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   return {
     $notePreview: readonly($notePreview),
     $position: readonly($position),
-    notePreviewHidden,
-    notePreviewMoved,
-    notePreviewStretched,
-    noteRequestedAtPreview,
-    moved,
+    userHidNotePreview,
+    userMovedNotePreview,
+    userMovedSheet,
+    userRequestedANote,
+    userStretchedNotePreview,
   }
 })

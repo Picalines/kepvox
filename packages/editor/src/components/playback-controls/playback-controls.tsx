@@ -7,9 +7,8 @@ import { editorModel } from '#model'
 export const PlaybackControls: FC = () => {
   const { isPlaying, toggle, stop } = useUnit({
     isPlaying: editorModel.$isPlaying,
-    toggle: editorModel.playbackToggled,
-    stop: editorModel.playbackStopped,
-    setPlayhead: editorModel.playheadSet,
+    stop: editorModel.userStoppedPlayback,
+    toggle: editorModel.userToggledPlayback,
   })
 
   return (
