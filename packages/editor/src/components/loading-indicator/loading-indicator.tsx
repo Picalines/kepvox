@@ -5,13 +5,13 @@ import type { FC } from 'react'
 import { editorModel } from '#model'
 
 export const LoadingIndicator: FC = () => {
-  const { isLoaded, isDirty, gateState } = useUnit({
+  const { isLoaded, isDirty, isExternalLoading } = useUnit({
     isLoaded: editorModel.$isLoaded,
     isDirty: editorModel.$isDirty,
-    gateState: editorModel.Gate.state,
+    isExternalLoading: editorModel.$isExternalLoading,
   })
 
-  const loading = gateState.externalLoading || !isLoaded || isDirty
+  const loading = isExternalLoading || !isLoaded || isDirty
 
   return (
     <div

@@ -1,5 +1,5 @@
 import { invoke } from '@withease/factories'
-import { Gate } from './gate'
+import { createEditorGate } from './gate'
 import { createHistory } from './history'
 import { createMusicSheet } from './music-sheet'
 import { createMusicSheetViewport } from './music-sheet-viewport'
@@ -10,9 +10,11 @@ import { createSynthNodePanel } from './synth-node-panel'
 import { createSynthTree } from './synth-tree'
 import { createSynthTreeViewport } from './synth-tree-viewport'
 
-const history = invoke(createHistory)
+const gate = invoke(createEditorGate)
 
-const playback = invoke(createPlayback, { gate: Gate })
+const history = invoke(createHistory, { gate })
+
+const playback = invoke(createPlayback, { gate })
 
 const synthTree = invoke(createSynthTree, { history, playback })
 
@@ -20,15 +22,17 @@ const synthNodePanel = invoke(createSynthNodePanel, { history, synthTree })
 
 const musicSheet = invoke(createMusicSheet, { history, synthTree, playback })
 
-const musicSheetViewport = invoke(createMusicSheetViewport, { history, synthTree })
+const musicSheetViewport = invoke(createMusicSheetViewport, { gate, history, synthTree })
 
-const serializer = invoke(createSerializer, { gate: Gate, history, synthTree, musicSheet })
+const serializer = invoke(createSerializer, { gate, history, synthTree, musicSheet })
 
 const synthTreeViewport = invoke(createSynthTreeViewport, { history, synthTree, serializer })
 
 const noteScheduler = invoke(createNoteScheduler, { musicSheet, synthTree, playback })
 
-const { dispatched: actionDispatched } = history
+const { $isExternalLoading, $isReadonly, Gate } = gate
+
+const { userRequestedActions } = history
 
 const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission } = playback
 
@@ -60,8 +64,10 @@ export {
   $endTime,
   $hasAudioPermission,
   $isDirty,
+  $isExternalLoading,
   $isLoaded,
   $isPlaying,
+  $isReadonly,
   $nodeCreationDialogShown,
   $nodeParams,
   $notePreview,
@@ -71,13 +77,13 @@ export {
   $synthEdges,
   $synthNodes,
   Gate,
-  actionDispatched,
   userCancelledNodeCreation,
   userGrantedAudioPermission,
   userHidNotePreview,
   userMovedNotePreview,
   userMovedSheet,
   userRequestedANote,
+  userRequestedActions,
   userSelectedNodePosition,
   userSelectedNodeType,
   userStoppedPlayback,

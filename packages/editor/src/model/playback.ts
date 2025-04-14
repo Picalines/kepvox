@@ -30,6 +30,9 @@ export const createPlayback = createFactory((params: Params) => {
   const playheadSet = createEvent<SynthTime>()
   const disposed = createEvent()
 
+  const $isIdle = combine($state, state => state === 'idle')
+  const $isPlaying = combine($state, state => state === 'playing')
+
   const AUDIO_NOT_ALLOWED = new Error()
 
   const initContextFx = createEffect(() => {
@@ -65,12 +68,17 @@ export const createPlayback = createFactory((params: Params) => {
     effect: context => context?.dispose(),
   })
 
-  const $isIdle = combine($state, state => state === 'idle')
-  const $isPlaying = combine($state, state => state === 'playing')
+  sample({
+    clock: $isPlaying,
+    target: attach({
+      source: { editorProps: gate.$props, isPlaying: $isPlaying },
+      effect: ({ editorProps, isPlaying }) => editorProps?.onPlayingChange?.(isPlaying),
+    }),
+  })
 
   condition({
-    source: gate.status,
-    if: gate.status,
+    source: gate.$isOpened,
+    if: gate.$isOpened,
     then: initContextFx,
     else: disposed,
   })

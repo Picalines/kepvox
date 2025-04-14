@@ -5,6 +5,7 @@ import { combine, createEvent, createStore, sample } from 'effector'
 import { nanoid } from 'nanoid'
 import { readonly } from 'patronum'
 import type { ActionPayload } from './action'
+import type { EditorGate } from './gate'
 import type { HistoryStore } from './history'
 import type { SynthTreeStore } from './synth-tree'
 
@@ -26,12 +27,13 @@ const DEFAULT_PREVIEW_DURATION = SynthTime.quarter
 const MIN_PREVIEW_DURATION = SynthTime.sixteenth
 
 type Params = {
+  gate: EditorGate
   history: HistoryStore
   synthTree: SynthTreeStore
 }
 
 export const createMusicSheetViewport = createFactory((params: Params) => {
-  const { history, synthTree } = params
+  const { gate, history, synthTree } = params
 
   const $position = createStore<SheetViewportPosition>({ x: 0, y: 0, zoom: 1 })
   const $timeSnapping = createStore(SynthTime.quarter)
@@ -39,11 +41,12 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   const $notePreviewDuration = createStore(DEFAULT_PREVIEW_DURATION)
 
   const $notePreview = combine(
+    gate.$isReadonly,
     synthTree.$activeNode,
     $notePreviewPosition,
     $notePreviewDuration,
-    (activeNode, position, duration) =>
-      activeNode?.synthNode instanceof GeneratorSynthNode && position ? { ...position, duration } : null,
+    (isReadonly, activeNode, position, duration) =>
+      !isReadonly && activeNode?.synthNode instanceof GeneratorSynthNode && position ? { ...position, duration } : null,
   )
 
   const userMovedSheet = createEvent<SheetViewportPosition>()

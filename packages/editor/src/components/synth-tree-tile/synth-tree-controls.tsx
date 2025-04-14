@@ -14,7 +14,10 @@ type Props = {
 export const SynthTreeControls: FC<Props> = props => {
   const { containerRef } = props
 
-  const { selectNodePosition } = useUnit({ selectNodePosition: editorModel.userSelectedNodePosition })
+  const { isReadonly, selectNodePosition } = useUnit({
+    isReadonly: editorModel.$isReadonly,
+    selectNodePosition: editorModel.userSelectedNodePosition,
+  })
 
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow()
 
@@ -34,7 +37,7 @@ export const SynthTreeControls: FC<Props> = props => {
   return (
     <>
       <ControlsAnchor position="top-right">
-        <ControlButton Icon={PlusIcon} tooltip="Add" onClick={onAddClick} />
+        {!isReadonly && <ControlButton Icon={PlusIcon} tooltip="Add" onClick={onAddClick} />}
       </ControlsAnchor>
       <ControlsAnchor position="bottom-right">
         <ControlButton Icon={ZoomInIcon} tooltip="Zoom in" onClick={zoomIn} />

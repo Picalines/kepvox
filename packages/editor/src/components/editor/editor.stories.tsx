@@ -18,6 +18,7 @@ export default {
   ],
   args: {
     onSerialized: fn(),
+    onPlayingChange: fn(),
   },
   parameters: {
     layout: 'fullscreen',
@@ -29,5 +30,12 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     initialProject: simpleProjectMock,
+  },
+}
+
+export const Readonly: Story = {
+  args: {
+    ...Default.args,
+    readonly: true,
   },
 }
