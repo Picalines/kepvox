@@ -12,6 +12,9 @@ catalogs:
     '@effector/swc-plugin':
       specifier: 0.7.0-swc1.11.0
       version: 0.7.0-swc1.11.0
+    '@farfetched/core':
+      specifier: ^0.13.1
+      version: 0.13.1
     '@next/env':
       specifier: ^15.2.4
       version: 15.2.4
@@ -161,6 +164,9 @@ importers:
       '@effector/next':
         specifier: 'catalog:'
         version: 0.7.1(effector-react@23.3.0(effector@23.3.0)(react@19.0.0))(effector@23.3.0)(react@19.0.0)
+      '@farfetched/core':
+        specifier: 'catalog:'
+        version: 0.13.1(effector@23.3.0)
       '@next/env':
         specifier: 'catalog:'
         version: 15.2.4
@@ -2128,6 +2134,11 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@farfetched/core@0.13.1':
+    resolution: {integrity: sha512-b0v3W+Z/uerIG8iz5IKfGxh2bC8L36eYQvozzBEtydCb8NshvyBrZ+exAzB7yL5Qm6PhIhD5K6POvvCq+0Cc9w==}
+    peerDependencies:
+      effector: ^23.0.0
 
   '@floating-ui/core@1.6.8':
     resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
@@ -7798,6 +7809,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.2':
     optional: true
+
+  '@farfetched/core@0.13.1(effector@23.3.0)':
+    dependencies:
+      effector: 23.3.0
 
   '@floating-ui/core@1.6.8':
     dependencies:

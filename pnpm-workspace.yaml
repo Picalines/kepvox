@@ -21,6 +21,7 @@ catalog:
   effector-storage: ^7.1.0
   patronum: ^2.3.0
   "@withease/factories": ^1.0.5
+  "@farfetched/core": ^0.13.1
 
   next: ^15.2.4
   "@next/env": ^15.2.4
