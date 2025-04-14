@@ -8,20 +8,20 @@ import { SearchIcon } from '@repo/ui-kit/icons'
 import { invoke } from '@withease/factories'
 import { useGate, useUnit } from 'effector-react'
 import { type ChangeEventHandler, type FC, useCallback } from 'react'
-import { createSiteTrackSearch } from '../model'
+import { createPublicationSearch } from '../model'
 import { PublicationCard } from './publication-card'
 
-const search = invoke(createSiteTrackSearch)
+const publicationSearch = invoke(createPublicationSearch)
 
-export const SiteTracksScreen: FC = () => {
+export const PublicationSearchScreen: FC = () => {
   const { namePart, publications, loading, onNameChange } = useUnit({
-    namePart: search.$namePart,
-    publications: search.$publications,
-    onNameChange: search.namePartChanged,
-    loading: search.$loading,
+    namePart: publicationSearch.$namePart,
+    publications: publicationSearch.$publications,
+    onNameChange: publicationSearch.namePartChanged,
+    loading: publicationSearch.$loading,
   })
 
-  useGate(search.Gate)
+  useGate(publicationSearch.Gate)
 
   const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     event => onNameChange(event.target.value),

@@ -1,0 +1,1 @@
+export { PublicationSearchScreen } from './ui'

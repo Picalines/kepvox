@@ -5,7 +5,7 @@ import { createGate } from 'effector-react'
 import { debounce, readonly, spread } from 'patronum'
 import { searchPublications } from '../api'
 
-export const createSiteTrackSearch = createFactory(() => {
+export const createPublicationSearch = createFactory(() => {
   const Gate = createGate()
 
   const $namePart = createStore('')
