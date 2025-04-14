@@ -18,13 +18,11 @@ export const createPlayback = createFactory((params: Params) => {
   const $hasAudioPermission = createStore(true) // Assume that it's there
   const $context = createStore<SynthContext | null>(null)
   const $state = restore(stateChanged, 'disposed')
-  const $isIdle = $state.map(state => state === 'idle')
-  const $isPlaying = $state.map(state => state === 'playing')
-  const $isDisposed = $state.map(state => state === 'disposed')
   const $duration = createStore(SynthTime.note)
   const $playhead = createStore(SynthTime.start)
 
-  const audioPermissionGranted = createEvent()
+  const userGrantedAudioPermission = createEvent()
+
   const initialized = createEvent<SynthContext>()
   const started = createEvent()
   const stopped = createEvent()
@@ -67,6 +65,9 @@ export const createPlayback = createFactory((params: Params) => {
     effect: context => context?.dispose(),
   })
 
+  const $isIdle = combine($state, state => state === 'idle')
+  const $isPlaying = combine($state, state => state === 'playing')
+
   condition({
     source: gate.status,
     if: gate.status,
@@ -82,7 +83,7 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   sample({
-    clock: audioPermissionGranted,
+    clock: userGrantedAudioPermission,
     filter: not($hasAudioPermission),
     target: spread({ hasAudioPermission: $hasAudioPermission, init: initContextFx }),
     fn: () => ({ hasAudioPermission: true, init: undefined }),
@@ -90,13 +91,11 @@ export const createPlayback = createFactory((params: Params) => {
 
   sample({ clock: initContextFx.doneData, target: $context })
 
-  sample({ clock: $context, filter: Boolean, target: initialized })
-
   sample({
     clock: $context,
     filter: Boolean,
-    target: $state,
-    fn: ({ state }) => state,
+    target: spread({ initialized, state: $state }),
+    fn: context => ({ initialized: context, state: context.state }),
   })
 
   const $isPlayheadAtEnd = combine($duration, $playhead, (duration, playhead) => playhead.isAfterOrAt(duration))
@@ -108,8 +107,8 @@ export const createPlayback = createFactory((params: Params) => {
     fn: () => SynthTime.start,
   })
 
-  sample({ clock: started, filter: not($isDisposed), target: playFx })
-  sample({ clock: stopped, target: stopFx })
+  sample({ clock: started, filter: $isIdle, target: playFx })
+  sample({ clock: stopped, filter: $isPlaying, target: stopFx })
   sample({ clock: disposed, target: disposeFx })
 
   const { tick } = interval({
@@ -143,12 +142,12 @@ export const createPlayback = createFactory((params: Params) => {
     $isIdle: readonly($isIdle),
     $isPlaying: readonly($isPlaying),
     $playhead: readonly($playhead),
-    audioPermissionGranted,
     disposed,
     durationSet,
     initialized,
     playheadSet,
     started,
     stopped,
+    userGrantedAudioPermission,
   }
 })

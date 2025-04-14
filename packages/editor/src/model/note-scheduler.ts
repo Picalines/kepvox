@@ -17,8 +17,8 @@ type Params = {
 export const createNoteScheduler = createFactory((params: Params) => {
   const { musicSheet, synthTree, playback } = params
 
-  const playbackToggled = createEvent()
-  const playbackStopped = createEvent()
+  const userToggledPlayback = createEvent()
+  const userStoppedPlayback = createEvent()
 
   const scheduleFx = attach({
     source: { notes: musicSheet.$notes, nodes: synthTree.$nodes },
@@ -44,7 +44,7 @@ export const createNoteScheduler = createFactory((params: Params) => {
   })
 
   condition({
-    source: playbackToggled,
+    source: userToggledPlayback,
     if: playback.$isIdle,
     then: scheduleFx,
     else: playback.stopped,
@@ -56,13 +56,13 @@ export const createNoteScheduler = createFactory((params: Params) => {
   })
 
   sample({
-    clock: playbackStopped,
+    clock: userStoppedPlayback,
     target: spread({ stopped: playback.stopped, playhead: playback.playheadSet }),
     fn: () => ({ stopped: undefined, playhead: SynthTime.start }),
   })
 
   return {
-    playbackToggled,
-    playbackStopped,
+    userToggledPlayback,
+    userStoppedPlayback,
   }
 })

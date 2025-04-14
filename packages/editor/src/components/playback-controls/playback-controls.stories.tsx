@@ -42,6 +42,6 @@ export const Playing: Story = {
     await allSettled(editorModel.Gate.open, { scope, params: state })
 
     // NOTE: it won't settle, so don't await
-    allSettled(editorModel.playbackToggled, { scope })
+    allSettled(editorModel.userToggledPlayback, { scope })
   },
 }

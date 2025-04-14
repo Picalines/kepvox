@@ -24,9 +24,9 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
   const $newNodePosition = createStore<NodePosition>({ x: 0, y: 0 })
   const $nodeCreationDialogShown = createStore(false)
 
-  const nodePositionSelected = createEvent<{ position: NodePosition }>()
-  const nodeTypeSelected = createEvent<{ type: NodeType }>()
-  const nodeCreationCancelled = createEvent()
+  const userSelectedNodePosition = createEvent<{ position: NodePosition }>()
+  const userSelectedNodeType = createEvent<{ type: NodeType }>()
+  const userCancelledNodeCreation = createEvent()
 
   sample({
     clock: serializer.$isLoaded,
@@ -37,13 +37,13 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
   })
 
   sample({
-    clock: nodePositionSelected,
+    clock: userSelectedNodePosition,
     target: spread({ position: $newNodePosition, dialogShown: $nodeCreationDialogShown }),
     fn: ({ position }) => ({ position, dialogShown: true }),
   })
 
   sample({
-    clock: nodeTypeSelected,
+    clock: userSelectedNodeType,
     filter: $nodeCreationDialogShown,
     source: { position: $newNodePosition, number: $nextNodeNumber },
     target: spread({
@@ -66,15 +66,15 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
   })
 
   sample({
-    clock: nodeCreationCancelled,
+    clock: userCancelledNodeCreation,
     target: $nodeCreationDialogShown,
     fn: () => false,
   })
 
   return {
     $nodeCreationDialogShown: readonly($nodeCreationDialogShown),
-    nodePositionSelected,
-    nodeTypeSelected,
-    nodeCreationCancelled,
+    userCancelledNodeCreation,
+    userSelectedNodePosition,
+    userSelectedNodeType,
   }
 })

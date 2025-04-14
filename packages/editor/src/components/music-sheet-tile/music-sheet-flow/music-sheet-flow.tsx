@@ -25,23 +25,23 @@ export const MusicSheetFlow: FC<Props> = props => {
   const { dimensions, className } = props
 
   const {
-    notes,
-    isLoaded,
-    dispatch,
-    moveViewport,
-    moveNotePreview,
-    stretchNotePreview,
-    hideNotePreview,
     createNoteAtPreview,
+    dispatch,
+    hideNotePreview,
+    isLoaded,
+    moveNotePreview,
+    moveViewport,
+    notes,
+    stretchNotePreview,
   } = useUnit({
-    notes: editorModel.$sheetNotes,
-    isLoaded: editorModel.$isLoaded,
+    createNoteAtPreview: editorModel.userRequestedANote,
     dispatch: editorModel.actionDispatched,
-    moveViewport: editorModel.sheetMoved,
-    moveNotePreview: editorModel.notePreviewMoved,
-    stretchNotePreview: editorModel.notePreviewStretched,
-    hideNotePreview: editorModel.notePreviewHidden,
-    createNoteAtPreview: editorModel.noteRequestedAtPreview,
+    hideNotePreview: editorModel.userHidNotePreview,
+    isLoaded: editorModel.$isLoaded,
+    moveNotePreview: editorModel.userMovedNotePreview,
+    moveViewport: editorModel.userMovedSheet,
+    notes: editorModel.$sheetNotes,
+    stretchNotePreview: editorModel.userStretchedNotePreview,
   })
 
   const isHoveringNode = useRef(false)

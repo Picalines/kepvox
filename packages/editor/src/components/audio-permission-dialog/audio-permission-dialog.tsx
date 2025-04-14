@@ -8,7 +8,7 @@ import { editorModel } from '#model'
 export const AudioPermissionDialog: FC = () => {
   const { hasAudioPermission, onConfirmAudio } = useUnit({
     hasAudioPermission: editorModel.$hasAudioPermission,
-    onConfirmAudio: editorModel.audioPermissionGranted,
+    onConfirmAudio: editorModel.userGrantedAudioPermission,
   })
 
   return (
