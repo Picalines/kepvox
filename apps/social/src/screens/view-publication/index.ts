@@ -1,0 +1,1 @@
+export { ViewPublicationScreen } from './ui'
