@@ -1,8 +1,8 @@
 import type { FC } from 'react'
-import { SiteTracksScreen } from '#screens/site-tracks'
+import { PublicationSearchScreen } from '#screens/publication-search'
 
 const TracksPage: FC = async () => {
-  return <SiteTracksScreen />
+  return <PublicationSearchScreen />
 }
 
 export default TracksPage
