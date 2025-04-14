@@ -37,7 +37,13 @@ export const Playing: Story = {
       musicSheet: { endingNote: Number.POSITIVE_INFINITY, notes: {} },
     }
 
-    const state = { externalLoading: false, initialProject: infinteSilentProject, serializationTimeout: 0 } as const
+    const state = {
+      externalLoading: false,
+      initialProject: infinteSilentProject,
+      serializationTimeout: 0,
+      readonly: true,
+    } as const
+
     await allSettled(editorModel.Gate.close, { scope, params: state })
     await allSettled(editorModel.Gate.open, { scope, params: state })
 

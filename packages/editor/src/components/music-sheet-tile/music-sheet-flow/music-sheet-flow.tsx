@@ -26,21 +26,21 @@ export const MusicSheetFlow: FC<Props> = props => {
 
   const {
     createNoteAtPreview,
-    dispatch,
     hideNotePreview,
     isLoaded,
     moveNotePreview,
     moveViewport,
     notes,
+    requestActions,
     stretchNotePreview,
   } = useUnit({
     createNoteAtPreview: editorModel.userRequestedANote,
-    dispatch: editorModel.actionDispatched,
     hideNotePreview: editorModel.userHidNotePreview,
     isLoaded: editorModel.$isLoaded,
     moveNotePreview: editorModel.userMovedNotePreview,
     moveViewport: editorModel.userMovedSheet,
     notes: editorModel.$sheetNotes,
+    requestActions: editorModel.userRequestedActions,
     stretchNotePreview: editorModel.userStretchedNotePreview,
   })
 
@@ -55,13 +55,15 @@ export const MusicSheetFlow: FC<Props> = props => {
 
   const onNodesChange = useCallback<ReactFlowProps['onNodesChange']>(
     changes => {
-      if (!isHoveringFlow.current) return
-      changes
-        .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: SynthTime.eighth.toNotes(), change }))
-        .filter(action => action !== null)
-        .forEach(dispatch)
+      if (isHoveringFlow.current) {
+        requestActions(
+          changes
+            .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: SynthTime.eighth.toNotes(), change }))
+            .filter(action => action !== null),
+        )
+      }
     },
-    [dimensions, dispatch],
+    [requestActions, dimensions],
   )
 
   const { screenToFlowPosition } = useReactFlow()

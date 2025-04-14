@@ -12,8 +12,9 @@ type Props = {
 export const NodeParamControl: FC<Props> = props => {
   const { nodeId, name } = props
 
-  const { dispatch } = useUnit({
-    dispatch: editorModel.actionDispatched,
+  const { requestActions, isReadonly } = useUnit({
+    requestActions: editorModel.userRequestedActions,
+    isReadonly: editorModel.$isReadonly,
   })
 
   const param = useStoreMap({
@@ -24,11 +25,11 @@ export const NodeParamControl: FC<Props> = props => {
 
   const onValueChange = useCallback(
     (value: number | string) => {
-      if (nodeId) {
-        dispatch({ action: 'synth-node-param-set', id: nodeId, param: name, value })
+      if (!isReadonly && nodeId) {
+        requestActions([{ action: 'synth-node-param-set', id: nodeId, param: name, value }])
       }
     },
-    [nodeId, dispatch, name],
+    [isReadonly, nodeId, requestActions, name],
   )
 
   if (!param) {
@@ -44,6 +45,7 @@ export const NodeParamControl: FC<Props> = props => {
         max={param.max}
         step={0.01}
         onChange={onValueChange}
+        disabled={isReadonly}
       >
         <Slider.Label>{name}</Slider.Label>
       </Slider.Root>
@@ -52,7 +54,7 @@ export const NodeParamControl: FC<Props> = props => {
 
   if (param.type === 'select') {
     return (
-      <Select.Root key={nodeId} defaultValue={param.value} onValueChange={onValueChange}>
+      <Select.Root key={nodeId} defaultValue={param.value} onValueChange={onValueChange} disabled={isReadonly}>
         <Select.Trigger />
         <Select.Content>
           <Select.Group>

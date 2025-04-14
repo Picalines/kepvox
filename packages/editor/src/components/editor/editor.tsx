@@ -16,13 +16,22 @@ import '@xyflow/react/dist/style.css'
 
 type Props = {
   initialProject: Project
+  readonly?: boolean
   loading?: boolean
   serializationTimeout?: number
   onSerialized?: (project: Project) => void
+  onPlayingChange?: (isPlaying: boolean) => void
 }
 
 export const Editor: FC<Props> = props => {
-  const { initialProject, loading = false, serializationTimeout = 1_000, onSerialized } = props
+  const {
+    initialProject,
+    readonly = false,
+    loading = false,
+    serializationTimeout = 1_000,
+    onSerialized,
+    onPlayingChange,
+  } = props
 
   const parentScope = useEditorScope()
   const scope = useMemo(() => parentScope ?? fork(), [parentScope])
@@ -30,10 +39,12 @@ export const Editor: FC<Props> = props => {
   return (
     <Provider value={scope}>
       <editorModel.Gate
-        initialProject={initialProject}
         externalLoading={loading}
-        serializationTimeout={serializationTimeout}
+        initialProject={initialProject}
+        onPlayingChange={onPlayingChange}
         onSerialized={onSerialized}
+        readonly={readonly}
+        serializationTimeout={serializationTimeout}
       />
       <EditorUI />
     </Provider>

@@ -61,10 +61,10 @@ export const createSerializer = createFactory((params: Params) => {
       edges: synthTree.$edges,
       notes: musicSheet.$notes,
       endTime: musicSheet.$endTime,
-      editorProps: gate.state,
+      editorProps: gate.$props,
     },
     effect: ({ nodes, edges, notes, endTime, editorProps }) => {
-      if (!editorProps.onSerialized) {
+      if (!editorProps || editorProps.readonly || !editorProps.onSerialized) {
         return
       }
 
@@ -129,7 +129,8 @@ export const createSerializer = createFactory((params: Params) => {
 
   sample({
     clock: synthTree.initialized,
-    source: gate.state,
+    source: gate.$props,
+    filter: Boolean,
     target: deserializeFx,
     fn: ({ initialProject }) => initialProject,
   })
@@ -145,8 +146,8 @@ export const createSerializer = createFactory((params: Params) => {
     filter: ({ action }) => TRACKED_EDITOR_ACTIONS.includes(action),
   })
 
-  const $changeTimeout = combine(gate.status, gate.state, (isOpened, props) =>
-    isOpened ? props.serializationTimeout : -1,
+  const $changeTimeout = combine(gate.$isOpened, gate.$props, (isOpened, props) =>
+    isOpened && props ? props.serializationTimeout : -1,
   )
 
   sample({

@@ -13,9 +13,9 @@ const NOTE_DIVISIONS = 8
 export const MusicSheetTimeline: FC<Props> = props => {
   const { dimensions } = props
 
-  const { position, dispatch } = useUnit({
+  const { position, requestActions } = useUnit({
     position: editorModel.$sheetPosition,
-    dispatch: editorModel.actionDispatched,
+    requestActions: editorModel.userRequestedActions,
   })
 
   const containerRef = useRef<SVGSVGElement>(null)
@@ -35,9 +35,9 @@ export const MusicSheetTimeline: FC<Props> = props => {
         ),
       )
 
-      dispatch({ action: 'ending-note-set', time })
+      requestActions([{ action: 'ending-note-set', time }])
     },
-    [position, wholeNoteWidth, dispatch],
+    [position, wholeNoteWidth, requestActions],
   )
 
   const divisionMarks = useMemo(

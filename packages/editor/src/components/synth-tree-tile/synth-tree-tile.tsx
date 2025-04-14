@@ -24,8 +24,8 @@ const MemoizedControls = memo(SynthTreeControls)
 const FLOW_PRO_OPTIONS = { hideAttribution: true }
 
 export const SynthTreeTile: FC = () => {
-  const { dispatch, nodes, edges, isLoaded } = useUnit({
-    dispatch: editorModel.actionDispatched,
+  const { requestActions, nodes, edges, isLoaded } = useUnit({
+    requestActions: editorModel.userRequestedActions,
     nodes: editorModel.$synthNodes,
     edges: editorModel.$synthEdges,
     isLoaded: editorModel.$isLoaded,
@@ -47,36 +47,34 @@ export const SynthTreeTile: FC = () => {
 
   const onNodesChange = useCallback<OnNodesChange>(
     changes => {
-      if (!isHoveringFlow.current) return
-      changes
-        .map(synthTreeNodeChangeToAction)
-        .filter(action => action !== null)
-        .forEach(dispatch)
+      if (isHoveringFlow.current) {
+        requestActions(changes.map(synthTreeNodeChangeToAction).filter(action => action !== null))
+      }
     },
-    [dispatch],
+    [requestActions],
   )
 
   const onEdgesChange = useCallback<OnEdgesChange>(
     changes => {
-      if (!isHoveringFlow.current) return
-      changes
-        .map(synthTreeEdgeChangeToAction)
-        .filter(action => action !== null)
-        .forEach(dispatch)
+      if (isHoveringFlow.current) {
+        requestActions(changes.map(synthTreeEdgeChangeToAction).filter(action => action !== null))
+      }
     },
-    [dispatch],
+    [requestActions],
   )
 
   const onConnect = useCallback<OnConnect>(
     ({ source, sourceHandle, target, targetHandle }) => {
-      dispatch({
-        action: 'synth-edge-create',
-        id: nanoid(),
-        source: { node: source, socket: Number.parseInt(sourceHandle ?? '0') },
-        target: { node: target, socket: Number.parseInt(targetHandle ?? '0') },
-      })
+      requestActions([
+        {
+          action: 'synth-edge-create',
+          id: nanoid(),
+          source: { node: source, socket: Number.parseInt(sourceHandle ?? '0') },
+          target: { node: target, socket: Number.parseInt(targetHandle ?? '0') },
+        },
+      ])
     },
-    [dispatch],
+    [requestActions],
   )
 
   const onMouseEnter = useCallback<ReactFlowProps['onMouseEnter']>(() => {

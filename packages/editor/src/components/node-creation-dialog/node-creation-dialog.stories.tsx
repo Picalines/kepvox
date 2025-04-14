@@ -29,7 +29,13 @@ export const Default: Story = {
   parameters: { scope: fork() },
 
   beforeEach: async ({ parameters: { scope } }) => {
-    const state = { externalLoading: false, initialProject: simpleProjectMock, serializationTimeout: 0 } as const
+    const state = {
+      externalLoading: false,
+      initialProject: simpleProjectMock,
+      serializationTimeout: 0,
+      readonly: false,
+    } as const
+
     await allSettled(editorModel.Gate.close, { scope, params: state })
     await allSettled(editorModel.Gate.open, { scope, params: state })
     await allSettled(editorModel.userSelectedNodePosition, {
