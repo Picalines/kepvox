@@ -27,7 +27,7 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
     .select({
       publication: { name: tables.publication.name, description: tables.publication.description },
       project: { content: tables.project.content },
-      author: { id: tables.user.id, name: tables.user.name },
+      author: { id: tables.user.id, name: tables.user.name, avatar: tables.user.image },
       reaction: { isPositive: tables.reaction.isPositive },
       listened: isNotNull(tables.listen.publicationId),
     })
@@ -68,5 +68,5 @@ export const getPublication = async (input: z.infer<typeof inputSchema>) => {
     throw new Error('project migration failed')
   }
 
-  return { publication, project, author, reaction, listened }
+  return { publication, project, author, reaction, listened: listened as boolean }
 }

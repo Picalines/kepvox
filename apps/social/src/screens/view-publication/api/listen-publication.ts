@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { authenticateOrRedirect } from '#shared/auth-server'
+import { authenticateOrNull } from '#shared/auth-server'
 import { database, tables } from '#shared/database'
 
 const inputSchema = z.object({
@@ -18,7 +18,13 @@ export const listenPublication = async (input: z.infer<typeof inputSchema>) => {
     publication: { id: publicationId },
   } = input
 
-  const { user } = await authenticateOrRedirect()
+  const session = await authenticateOrNull()
+
+  if (!session) {
+    return
+  }
+
+  const { user } = session
 
   await database.insert(tables.listen).values({ publicationId, listenerId: user.id }).onConflictDoNothing()
 
