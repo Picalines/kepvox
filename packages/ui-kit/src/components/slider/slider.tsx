@@ -74,7 +74,7 @@ export const Root: FC<RootProps> = props => {
             <br />
           </>
         )}
-        <span ref={sliderValueRef}>{sliderValueRef.current?.innerText ?? defaultValue}</span>
+        <span ref={sliderValueRef}>{sliderValueRef.current?.innerText ?? defaultValue ?? value}</span>
       </span>
     </div>
   )
