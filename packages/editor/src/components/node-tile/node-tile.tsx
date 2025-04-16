@@ -27,8 +27,8 @@ export const NodeTile: FC = () => {
     <ScrollArea.Root className="bg-background">
       <ScrollArea.Bar orientation="vertical" />
       <ScrollArea.Content>
-        <div className="@container p-2">
-          <div className="grid @md:grid-cols-2 grid-cols-1 gap-2">{controls}</div>
+        <div className="@container p-3">
+          <div className="grid @md:grid-cols-2 grid-cols-1 gap-3">{controls}</div>
         </div>
       </ScrollArea.Content>
     </ScrollArea.Root>

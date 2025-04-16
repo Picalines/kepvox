@@ -1,3 +1,4 @@
+import { NumberInput } from '@repo/ui-kit/components/number-input'
 import { Select } from '@repo/ui-kit/components/select'
 import { Slider } from '@repo/ui-kit/components/slider'
 import { useStoreMap, useUnit } from 'effector-react'
@@ -25,7 +26,7 @@ export const NodeParamControl: FC<Props> = props => {
 
   const onValueChange = useCallback(
     (value: number | string) => {
-      if (!isReadonly && nodeId) {
+      if (!isReadonly && nodeId && !Number.isNaN(value)) {
         requestActions([{ action: 'synth-node-param-set', id: nodeId, param: name, value }])
       }
     },
@@ -36,6 +37,22 @@ export const NodeParamControl: FC<Props> = props => {
     return null
   }
 
+  if (param.type === 'number') {
+    return (
+      <NumberInput.Root
+        key={nodeId}
+        value={param.value}
+        step={param.step}
+        onValueChange={onValueChange}
+        disabled={isReadonly}
+      >
+        <NumberInput.Label>
+          {name} ({param.unit})
+        </NumberInput.Label>
+      </NumberInput.Root>
+    )
+  }
+
   if (param.type === 'slider') {
     return (
       <Slider.Root
@@ -43,8 +60,8 @@ export const NodeParamControl: FC<Props> = props => {
         value={param.value}
         min={param.min}
         max={param.max}
-        step={0.01}
-        onChange={onValueChange}
+        step={param.step}
+        onValueChange={onValueChange}
         disabled={isReadonly}
       >
         <Slider.Label>{name}</Slider.Label>
@@ -56,9 +73,9 @@ export const NodeParamControl: FC<Props> = props => {
     return (
       <Select.Root key={nodeId} value={param.value} onValueChange={onValueChange} disabled={isReadonly}>
         <Select.Trigger />
+        <Select.Label>{name}</Select.Label>
         <Select.Content>
           <Select.Group>
-            <Select.Header>{name}</Select.Header>
             {param.variants.map(variant => (
               <Select.Item key={variant} value={variant}>
                 {variant}
