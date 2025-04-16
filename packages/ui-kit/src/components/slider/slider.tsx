@@ -1,6 +1,6 @@
 import * as RadixSlider from '@radix-ui/react-slider'
 import { assertedAt } from '@repo/common/assert'
-import { type FC, type FocusEventHandler, type ReactNode, useCallback, useRef } from 'react'
+import { type FC, type ReactNode, useCallback, useRef } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -14,9 +14,7 @@ export type RootProps = {
   step?: number
   disabled?: boolean
   required?: boolean
-  onChange?: (value: number) => void
-  onFocus?: FocusEventHandler<HTMLInputElement>
-  onBlur?: FocusEventHandler<HTMLInputElement>
+  onValueChange?: (value: number) => void
   children: ReactNode
 }
 
@@ -25,7 +23,7 @@ export type LabelProps = { children: ReactNode }
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children, value, defaultValue, onChange: onChangeProp, ...sliderProps } = props
+  const { className, children, value, defaultValue, onValueChange: onValueChangeProp, ...sliderProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
@@ -42,9 +40,9 @@ export const Root: FC<RootProps> = props => {
     (radixValues: number[]) => {
       const sliderValue = assertedAt(radixValues, 0)
       updateSliderValue(sliderValue)
-      onChangeProp?.(sliderValue)
+      onValueChangeProp?.(sliderValue)
     },
-    [updateSliderValue, onChangeProp],
+    [updateSliderValue, onValueChangeProp],
   )
 
   return (
