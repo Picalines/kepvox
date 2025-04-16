@@ -18,7 +18,7 @@ export const NodeParamControl: FC<Props> = props => {
   })
 
   const param = useStoreMap({
-    store: editorModel.$nodeParams,
+    store: editorModel.$nodeControls,
     fn: params => params?.find(param => param.name === name) ?? null,
     keys: [name],
   })
@@ -36,11 +36,11 @@ export const NodeParamControl: FC<Props> = props => {
     return null
   }
 
-  if (param.type === 'number') {
+  if (param.type === 'slider') {
     return (
       <Slider.Root
         key={nodeId}
-        defaultValue={param.value}
+        value={param.value}
         min={param.min}
         max={param.max}
         step={0.01}
@@ -54,7 +54,7 @@ export const NodeParamControl: FC<Props> = props => {
 
   if (param.type === 'select') {
     return (
-      <Select.Root key={nodeId} defaultValue={param.value} onValueChange={onValueChange} disabled={isReadonly}>
+      <Select.Root key={nodeId} value={param.value} onValueChange={onValueChange} disabled={isReadonly}>
         <Select.Trigger />
         <Select.Content>
           <Select.Group>

@@ -1,10 +1,11 @@
-import { CurveSynthParam, EnumSynthParam, NumberSynthParam, type SynthNode, type UnitName } from '@repo/synth'
+import { CurveSynthParam, EnumSynthParam, NumberSynthParam } from '@repo/synth'
 import { createFactory } from '@withease/factories'
-import { combine, sample } from 'effector'
+import { combine, createStore, sample } from 'effector'
+import { produce } from 'immer'
 import { readonly } from 'patronum'
-import { USER_UNIT_RANGES } from '#meta'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
+import { type NodeControl, synthNodeParams, synthParamByName, synthParamToControl } from './synth-node-control'
 import type { SynthTreeStore } from './synth-tree'
 
 type Params = {
@@ -12,47 +13,25 @@ type Params = {
   synthTree: SynthTreeStore
 }
 
-export type NodeParam = { name: string } & (
-  | { type: 'number'; value: number; min: number; max: number }
-  | { type: 'select'; value: string; variants: string[] }
-)
-
 export const createSynthNodePanel = createFactory((params: Params) => {
   const { history, synthTree } = params
+
+  const $nodeControls = createStore<NodeControl[]>([])
 
   const $activeNodeId = combine(synthTree.$activeNode, node => node?.id ?? null)
 
   const $activeSynthNode = combine(synthTree.$activeNode, node => node?.synthNode ?? null)
 
-  const $nodeParams = combine($activeSynthNode, synthNode => {
-    if (!synthNode) {
-      return null
-    }
-
-    return Object.keys(synthNode).flatMap<NodeParam>(key => {
-      const param = synthNode[key as keyof SynthNode]
-
-      if (param instanceof NumberSynthParam) {
-        const { value, range: physicalRange, unit } = param
-        const userRange = USER_UNIT_RANGES[unit as UnitName]
-        const { min, max } = userRange ?? physicalRange
-        return [{ type: 'number', name: key, value: value as number, min, max }]
-      }
-
-      if (param instanceof CurveSynthParam) {
-        const { initialValue: value, range: physicalRange, unit } = param
-        const userRange = USER_UNIT_RANGES[unit as UnitName]
-        const { min, max } = userRange ?? physicalRange
-        return [{ type: 'number', name: key, value: value as number, min, max }]
-      }
-
-      if (param instanceof EnumSynthParam) {
-        const { value, variants } = param
-        return [{ type: 'select', name: key, value: value as string, variants: variants as string[] } as const]
-      }
-
-      return []
-    })
+  sample({
+    clock: $activeSynthNode,
+    target: $nodeControls,
+    fn: synthNode => {
+      if (!synthNode) return []
+      return synthNodeParams(synthNode).flatMap(([key, param]) => {
+        const control = synthParamToControl(key, param)
+        return control ? [control] : []
+      })
+    },
   })
 
   const setParamDispatched = sample({
@@ -60,33 +39,53 @@ export const createSynthNodePanel = createFactory((params: Params) => {
     filter: (action: ActionPayload) => action.action === 'synth-node-param-set',
   })
 
-  sample({
+  const nodeParamChanged = sample({
     clock: setParamDispatched,
     source: synthTree.$nodes,
     fn: (nodes, { id, param, value }) => {
       const node = nodes.get(id)
-      if (!node) {
-        return
+      const synthParam = node && synthParamByName(node.synthNode, param)
+      if (!synthParam) {
+        return null
       }
-
-      const synthParam = node.synthNode[param as keyof SynthNode]
 
       if (typeof value === 'number' && synthParam instanceof NumberSynthParam) {
         synthParam.value = value
+        return { nodeId: id, param, value: synthParam.value }
       }
 
       if (typeof value === 'number' && synthParam instanceof CurveSynthParam) {
         synthParam.initialValue = value
+        return { nodeId: id, param, value: synthParam.initialValue }
       }
 
       if (typeof value === 'string' && synthParam instanceof EnumSynthParam) {
         synthParam.value = value
+        return { nodeId: id, param, value: synthParam.value }
       }
+
+      return null
     },
+  })
+
+  sample({
+    clock: sample({ clock: nodeParamChanged, filter: Boolean }),
+    source: { nodeControls: $nodeControls, synthNode: $activeSynthNode },
+    target: $nodeControls,
+    fn: ({ nodeControls, synthNode }, change) =>
+      produce(nodeControls, draft => {
+        const synthParam = synthNode && synthParamByName(synthNode, change.param)
+        const control = synthParam && synthParamToControl(change.param, synthParam)
+        const controlIndex = nodeControls.findIndex(control => control.name === change.param)
+
+        if (control && controlIndex >= 0) {
+          draft[controlIndex] = control
+        }
+      }),
   })
 
   return {
     $activeNodeId: readonly($activeNodeId),
-    $nodeParams: readonly($nodeParams),
+    $nodeControls: readonly($nodeControls),
   }
 })

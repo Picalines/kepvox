@@ -38,7 +38,7 @@ const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission, 
 
 const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
 
-const { $activeNodeId, $nodeParams } = synthNodePanel
+const { $activeNodeId, $nodeControls } = synthNodePanel
 
 const { $notes: $sheetNotes, $endTime } = musicSheet
 
@@ -68,8 +68,8 @@ export {
   $isLoaded,
   $isPlaying,
   $isReadonly,
+  $nodeControls,
   $nodeCreationDialogShown,
-  $nodeParams,
   $notePreview,
   $playhead,
   $sheetNotes,

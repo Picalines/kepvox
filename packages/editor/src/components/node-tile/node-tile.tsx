@@ -1,19 +1,25 @@
 import { ScrollArea } from '@repo/ui-kit/components/scroll-area'
 import { Text } from '@repo/ui-kit/components/text'
 import { MousePointerClickIcon, XIcon } from '@repo/ui-kit/icons'
-import { useUnit } from 'effector-react'
+import { useList, useUnit } from 'effector-react'
 import type { ComponentType, FC } from 'react'
 import { editorModel } from '#model'
 import { NodeParamControl } from './node-param-control'
 
 export const NodeTile: FC = () => {
-  const { nodeId, params } = useUnit({ nodeId: editorModel.$activeNodeId, params: editorModel.$nodeParams })
+  const { nodeId } = useUnit({ nodeId: editorModel.$activeNodeId })
 
-  if (!nodeId || !params) {
+  const controls = useList(editorModel.$nodeControls, {
+    fn: control => nodeId && <NodeParamControl nodeId={nodeId} name={control.name} />,
+    keys: [nodeId],
+    placeholder: null,
+  })
+
+  if (!nodeId) {
     return <Stub Icon={MousePointerClickIcon}>select node</Stub>
   }
 
-  if (!params.length) {
+  if (controls === null) {
     return <Stub Icon={XIcon}>no parameters</Stub>
   }
 
@@ -22,11 +28,7 @@ export const NodeTile: FC = () => {
       <ScrollArea.Bar orientation="vertical" />
       <ScrollArea.Content>
         <div className="@container p-2">
-          <div className="grid @md:grid-cols-2 grid-cols-1 gap-2">
-            {params.map(({ name }) => (
-              <NodeParamControl key={name} nodeId={nodeId} name={name} />
-            ))}
-          </div>
+          <div className="grid @md:grid-cols-2 grid-cols-1 gap-2">{controls}</div>
         </div>
       </ScrollArea.Content>
     </ScrollArea.Root>
