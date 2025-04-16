@@ -3,7 +3,7 @@ import * as editorModel from './editor'
 import type { Note } from './music-sheet'
 import type { NotePreview } from './music-sheet-viewport'
 import type { EdgeId, NodeColor, NodeId, NodeType, Project } from './project'
-import type { NodeParam } from './synth-node-panel'
+import type { NodeControl } from './synth-node-control'
 import type { Edge, Node } from './synth-tree'
 
 export {
@@ -14,8 +14,8 @@ export {
   type EdgeId,
   type Node,
   type NodeColor,
+  type NodeControl,
   type NodeId,
-  type NodeParam,
   type NodeType,
   type Note,
   type NotePreview,
