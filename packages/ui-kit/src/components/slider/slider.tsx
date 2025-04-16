@@ -63,7 +63,7 @@ export const Root: FC<RootProps> = props => {
         aria-hidden
         className={cn(
           '-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 text-white mix-blend-difference',
-          label?.children && 'text-sm leading-none',
+          label?.children && 'text-xs leading-none',
         )}
       >
         {label?.children && (

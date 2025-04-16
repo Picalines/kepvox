@@ -105,7 +105,7 @@ export const Root: FC<RootProps> = props => {
               ref={label.ref}
               id={labelId}
               className={cn(
-                '-translate-y-1/2 peer-focus-within:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-focus-within:text-ring peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
+                '-translate-y-1/2 peer-focus-within:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-2 bg-background text-muted-foreground text-xs transition-all peer-focus-within:text-ring peer-data-placeholder:top-1/2 peer-data-placeholder:text-base peer-data-placeholder:text-muted-foreground',
                 label.props.className,
               )}
             >

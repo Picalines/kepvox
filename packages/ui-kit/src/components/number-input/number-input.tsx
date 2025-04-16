@@ -34,16 +34,16 @@ export const Root: FC<RootProps> = props => {
       <NumberInputStepButton
         stepDirection="up"
         onValueChange={onValueChange}
-        className="absolute top-1 right-1 flex h-1/2 flex-col items-center text-muted-foreground opacity-50 transition-all hover:opacity-100"
+        className="group absolute top-0 right-0 flex h-1/2 w-11 items-center justify-center border-b border-l text-muted-foreground"
       >
-        <VUpIcon className="h-min w-6" />
+        <VUpIcon className="h-min w-4 opacity-50 transition-all group-hover:opacity-100" />
       </NumberInputStepButton>
       <NumberInputStepButton
         stepDirection="down"
         onValueChange={onValueChange}
-        className="absolute right-1 bottom-1 flex h-1/2 flex-col items-center text-muted-foreground opacity-50 transition-all hover:opacity-100"
+        className="group absolute right-0 bottom-0 flex h-1/2 w-11 items-center justify-center border-l text-muted-foreground"
       >
-        <VDownIcon className="h-min w-6" />
+        <VDownIcon className="h-min w-4 opacity-50 transition-all group-hover:opacity-100" />
       </NumberInputStepButton>
       <NumberInputHeadless
         {...inputProps}
@@ -58,7 +58,7 @@ export const Root: FC<RootProps> = props => {
           ref={label.ref}
           htmlFor={inputId}
           className={cn(
-            '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-sm transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-sm peer-disabled:opacity-50',
+            '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-2 bg-background text-muted-foreground text-xs transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-sm peer-disabled:opacity-50',
             label.props.className,
           )}
         >
