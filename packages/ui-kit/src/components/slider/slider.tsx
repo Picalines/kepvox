@@ -8,7 +8,7 @@ export type RootProps = {
   className?: string
   name?: string
   value?: number
-  defaultValue: number
+  defaultValue?: number
   min: number
   max: number
   step?: number
