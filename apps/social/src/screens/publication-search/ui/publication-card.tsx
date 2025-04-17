@@ -15,7 +15,7 @@ export const PublicationCard: FC<Props> = props => {
 
   return (
     <Link href={`/tracks/${publication.id}`} prefetch={false}>
-      <Card.Root className="hover:-translate-y-1 relative min-h-40 w-min min-w-60 shadow-background shadow-md transition-all hover:shadow-accent">
+      <Card.Root className="hover:-translate-y-1 relative h-full min-h-40 w-min min-w-60 shadow-background shadow-md transition-all hover:shadow-accent">
         <Card.Header>
           <Heading.Root>
             <Heading.Title>{publication.name}</Heading.Title>

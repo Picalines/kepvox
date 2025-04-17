@@ -1,15 +1,8 @@
 import type { OmitExisting } from '@repo/common/typing'
-import {
-  type ChangeEventHandler,
-  type ComponentProps,
-  type FC,
-  type FocusEventHandler,
-  type ReactNode,
-  type RefObject,
-  useId,
-} from 'react'
+import { type ComponentProps, type FC, type ReactNode, useId } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
+import { TextInputHeadless } from './text-input-headless'
 
 export type InputType = 'text' | 'password'
 
@@ -18,13 +11,10 @@ export type RootProps = {
   name?: string
   value?: string
   defaultValue?: string
-  inputRef?: RefObject<HTMLInputElement>
   disabled?: boolean
   required?: boolean
   type?: InputType
-  onChange?: ChangeEventHandler<HTMLInputElement>
-  onFocus?: FocusEventHandler<HTMLInputElement>
-  onBlur?: FocusEventHandler<HTMLInputElement>
+  onValueChange?: (value: string) => void
   children?: ReactNode
 }
 
@@ -33,7 +23,7 @@ export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFo
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, inputRef, children, ...inputProps } = props
+  const { className, children, ...inputProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
@@ -41,9 +31,8 @@ export const Root: FC<RootProps> = props => {
 
   return (
     <div className={cn('relative', className)}>
-      <input
+      <TextInputHeadless
         {...inputProps}
-        ref={inputRef}
         id={inputId}
         className="peer h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-all file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder=" "

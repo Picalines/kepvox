@@ -16,9 +16,7 @@ export default {
     </TextInput.Root>
   ),
   args: {
-    onChange: fn(),
-    onFocus: fn(),
-    onBlur: fn(),
+    onValueChange: fn(),
   },
   decorators: [
     Story => (
