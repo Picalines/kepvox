@@ -63,7 +63,7 @@ export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
 const variants = cva(
-  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs ring-offset-background transition-all focus-within:outline-hidden focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed',
+  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all focus-within:outline-hidden focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed',
   {
     variants: {
       size: {
