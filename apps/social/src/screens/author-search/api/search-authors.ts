@@ -14,7 +14,7 @@ export const searchAuthors = async (input: z.infer<typeof inputSchema>) => {
   const { namePart } = input
 
   const authors = await database
-    .select({ id: tables.user.id, name: tables.user.name })
+    .select({ id: tables.user.id, name: tables.user.name, avatar: tables.user.image })
     .from(tables.user)
     .innerJoin(tables.project, eq(tables.project.authorId, tables.user.id))
     .innerJoin(tables.publication, eq(tables.project.id, tables.publication.projectId))
