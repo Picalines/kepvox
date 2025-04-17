@@ -7,7 +7,7 @@ import { TextInput } from '@repo/ui-kit/components/text-input'
 import { SearchIcon } from '@repo/ui-kit/icons'
 import { invoke } from '@withease/factories'
 import { useGate, useUnit } from 'effector-react'
-import { type ChangeEventHandler, type FC, useCallback } from 'react'
+import type { FC } from 'react'
 import { createPublicationSearch } from '../model'
 import { PublicationCard } from './publication-card'
 
@@ -23,11 +23,6 @@ export const PublicationSearchScreen: FC = () => {
 
   useGate(publicationSearch.Gate)
 
-  const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
-    event => onNameChange(event.target.value),
-    [onNameChange],
-  )
-
   return (
     <div className="space-y-4">
       <Heading.Root>
@@ -35,7 +30,7 @@ export const PublicationSearchScreen: FC = () => {
           Tracks <SearchIcon />
         </Heading.Title>
       </Heading.Root>
-      <TextInput.Root value={namePart} onChange={onChange} className="max-w-60">
+      <TextInput.Root value={namePart} onValueChange={onNameChange} className="max-w-60">
         <TextInput.Label className="flex items-center gap-1">Search</TextInput.Label>
       </TextInput.Root>
       {loading ? (
