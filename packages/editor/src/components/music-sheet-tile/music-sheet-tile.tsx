@@ -39,16 +39,11 @@ export const MusicSheetTile: FC = () => {
 }
 
 const TimeMarkers: FC = () => {
-  const { isLoaded, isPlaying, playhead, endTime } = useUnit({
-    isLoaded: editorModel.$isLoaded,
+  const { isPlaying, playhead, endTime } = useUnit({
     isPlaying: editorModel.$isPlaying,
     playhead: editorModel.$playhead,
     endTime: editorModel.$endTime,
   })
-
-  if (!isLoaded) {
-    return null
-  }
 
   return (
     <>

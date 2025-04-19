@@ -1,9 +1,15 @@
 import { assertDefined } from '@repo/common/assert'
 import { SynthTime } from '@repo/synth'
-import { Loader } from '@repo/ui-kit/components/loader'
-import { type CoordinateExtent, type NodeOrigin, PanOnScrollMode, ReactFlow, useReactFlow } from '@xyflow/react'
+import {
+  type CoordinateExtent,
+  type NodeOrigin,
+  PanOnScrollMode,
+  ReactFlow,
+  type Viewport,
+  useReactFlow,
+} from '@xyflow/react'
 import { useUnit } from 'effector-react'
-import { type ComponentProps, type FC, useCallback, useId, useMemo, useRef } from 'react'
+import { type ComponentProps, type FC, useCallback, useEffect, useId, useMemo, useRef } from 'react'
 import { type Note as SheetNote, editorModel } from '#model'
 import type { MusicSheetDimensions } from '../music-sheet-dimensions'
 import { MusicSheetBackground } from './music-sheet-background'
@@ -27,7 +33,6 @@ export const MusicSheetFlow: FC<Props> = props => {
   const {
     createNoteAtPreview,
     hideNotePreview,
-    isLoaded,
     moveNotePreview,
     moveViewport,
     notes,
@@ -36,7 +41,6 @@ export const MusicSheetFlow: FC<Props> = props => {
   } = useUnit({
     createNoteAtPreview: editorModel.userRequestedANote,
     hideNotePreview: editorModel.userHidNotePreview,
-    isLoaded: editorModel.$isLoaded,
     moveNotePreview: editorModel.userMovedNotePreview,
     moveViewport: editorModel.userMovedSheet,
     notes: editorModel.$sheetNotes,
@@ -103,6 +107,12 @@ export const MusicSheetFlow: FC<Props> = props => {
     isHoveringNode.current = false
   }, [])
 
+  const defaultViewport = useMemo<Viewport>(() => ({ x: 0, y: -dimensions.sheet.bottom / 2, zoom: 1 }), [dimensions])
+
+  useEffect(() => {
+    moveViewport(defaultViewport)
+  }, [moveViewport, defaultViewport])
+
   const translateExtents = useMemo<CoordinateExtent>(
     () => [
       [0, dimensions.sheet.top],
@@ -113,10 +123,6 @@ export const MusicSheetFlow: FC<Props> = props => {
 
   const id = useId() // NOTE: needed for this ReactFlow to be unique
 
-  if (!isLoaded) {
-    return <Loader centered />
-  }
-
   return (
     <ReactFlow
       className={className}
@@ -124,6 +130,7 @@ export const MusicSheetFlow: FC<Props> = props => {
       id={id}
       maxZoom={1}
       minZoom={1}
+      defaultViewport={defaultViewport}
       nodeTypes={MUSIC_SHEET_FLOW_NODES}
       nodes={flowNodes}
       onMouseEnter={startHoveringFlow}
