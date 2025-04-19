@@ -1,5 +1,4 @@
 import { Pitch } from '@repo/synth'
-import { tw } from '@repo/ui-kit/classnames'
 import { ViewportPortal } from '@xyflow/react'
 import { useUnit } from 'effector-react'
 import { type FC, useId, useMemo } from 'react'
@@ -35,15 +34,8 @@ const SheetPattern: FC<PatternProps> = props => {
 
   const patternId = useId()
 
-  const keyLines = Pitch.names.toReversed().map((name, index) => ({
-    index,
-    className: Pitch.parseName(name).isAccidental ? tw`fill-accent` : tw`fill-background`,
-  }))
-
-  const separatorHeight = 0.05
-
   return (
-    <svg role="graphics-symbol" width="100%" height="100%" overflow="visible" className="fill-border">
+    <svg role="graphics-symbol" width="100%" height="100%" overflow="visible">
       <pattern
         id={patternId}
         viewBox="0 0 1 12"
@@ -52,15 +44,14 @@ const SheetPattern: FC<PatternProps> = props => {
         patternUnits="userSpaceOnUse"
         preserveAspectRatio="xMinYMin meet"
       >
-        {keyLines.map(({ index, className: lineClassName }) => (
+        {Pitch.names.toReversed().map((name, index) => (
           <rect
-            key={index}
+            key={name}
             x={0}
-            y={index + separatorHeight / 2}
+            y={index}
             width="100%"
-            height={1 - separatorHeight}
-            className={lineClassName}
-            fillOpacity={0.25}
+            height={1}
+            className={Pitch.parseName(name).isAccidental ? 'fill-secondary/50' : 'fill-background'}
           />
         ))}
       </pattern>
