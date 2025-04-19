@@ -1,5 +1,4 @@
 import { assertDefined } from '@repo/common/assert'
-import { Loader } from '@repo/ui-kit/components/loader'
 import {
   Background,
   BackgroundVariant,
@@ -24,11 +23,10 @@ const MemoizedControls = memo(SynthTreeControls)
 const FLOW_PRO_OPTIONS = { hideAttribution: true }
 
 export const SynthTreeTile: FC = () => {
-  const { requestActions, nodes, edges, isLoaded } = useUnit({
+  const { requestActions, nodes, edges } = useUnit({
     requestActions: editorModel.userRequestedActions,
     nodes: editorModel.$synthNodes,
     edges: editorModel.$synthEdges,
-    isLoaded: editorModel.$isLoaded,
   })
 
   const isHoveringFlow = useRef(false)
@@ -88,10 +86,6 @@ export const SynthTreeTile: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const id = useId() // NOTE: needed for this ReactFlow to be unique
-
-  if (!isLoaded) {
-    return <Loader centered />
-  }
 
   return (
     <ReactFlow
