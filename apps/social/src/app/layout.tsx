@@ -1,4 +1,5 @@
 import { EffectorNext } from '@effector/next'
+import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { JetBrains_Mono } from 'next/font/google'
@@ -28,10 +29,12 @@ const RootLayout: FC<Props> = props => {
       <head>{ENV.NODE_ENV === 'development' && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}</head>
       <body className={monoFont.className}>
         <ThemeProvider defaultTheme="dark" attribute="class">
-          <EffectorNext>
-            {children}
-            {auth}
-          </EffectorNext>
+          <Tooltip.Provider>
+            <EffectorNext>
+              {children}
+              {auth}
+            </EffectorNext>
+          </Tooltip.Provider>
         </ThemeProvider>
       </body>
     </html>
