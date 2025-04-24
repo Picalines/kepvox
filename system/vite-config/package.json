@@ -16,18 +16,12 @@
     "scripts": {
         "ts:check": "tsc --noEmit"
     },
-    "peerDependencies": {
+    "devDependencies": {
+        "@repo/ts-config": "workspace:*",
         "@tailwindcss/vite": "catalog:",
         "@vitejs/plugin-react": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
-    },
-    "peerDependenciesMeta": {
-        "@vitejs/plugin-react": { "optional": true },
-        "@tailwindcss/vite": { "optional": true }
-    },
-    "devDependencies": {
-        "@repo/ts-config": "workspace:*"
     }
 }

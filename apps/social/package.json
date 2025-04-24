@@ -56,7 +56,6 @@
     },
     "devDependencies": {
         "@effector/swc-plugin": "catalog:",
-        "@playwright/test": "catalog:",
         "@repo/next-config": "workspace:*",
         "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
@@ -72,10 +71,7 @@
         "motion": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
-        "tailwindcss": "catalog:",
-        "tw-animate-css": "catalog:",
         "typescript": "catalog:",
-        "vite": "catalog:",
         "vitest": "catalog:"
     }
 }

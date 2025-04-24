@@ -11,10 +11,10 @@
         "ts:check": "tsc --noEmit"
     },
     "peerDependencies": {
-        "@playwright/test": "catalog:",
         "@storybook/react": "catalog:"
     },
     "devDependencies": {
+        "@playwright/test": "catalog:",
         "@repo/ts-config": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:"

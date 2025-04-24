@@ -6,7 +6,7 @@
     "exports": {
         ".": "./tailwind.css"
     },
-    "peerDependencies": {
+    "devDependencies": {
         "tailwindcss": "catalog:",
         "tw-animate-css": "catalog:"
     }

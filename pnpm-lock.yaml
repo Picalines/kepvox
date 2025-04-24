@@ -240,9 +240,6 @@ importers:
       '@effector/swc-plugin':
         specifier: 'catalog:'
         version: 0.7.0-swc1.11.0
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../system/next-config
@@ -288,18 +285,9 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.12
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.3
-      tw-animate-css:
-        specifier: 'catalog:'
-        version: 1.2.4
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
-      vite:
-        specifier: 'catalog:'
-        version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0)
       vitest:
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.2)(terser@5.36.0)
@@ -358,9 +346,6 @@ importers:
       '@effector/swc-plugin':
         specifier: 'catalog:'
         version: 0.7.0-swc1.11.0
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../system/next-config
@@ -403,21 +388,9 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.12
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.3
-      tw-animate-css:
-        specifier: 'catalog:'
-        version: 1.2.4
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
-      vite:
-        specifier: 'catalog:'
-        version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0)
-      vitest:
-        specifier: 'catalog:'
-        version: 3.0.6(@types/node@22.10.5)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.2)(terser@5.36.0)
 
   packages/common:
     devDependencies:
@@ -473,9 +446,6 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0(react@19.0.0)
     devDependencies:
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@repo/playwright-config':
         specifier: workspace:*
         version: link:../../system/playwright-config
@@ -494,30 +464,12 @@ importers:
       '@repo/vite-config':
         specifier: workspace:*
         version: link:../../system/vite-config
-      '@storybook/addon-essentials':
-        specifier: 'catalog:'
-        version: 8.6.12(@types/react@19.0.2)(storybook@8.6.12)
-      '@storybook/addon-interactions':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
-      '@storybook/addon-links':
-        specifier: 'catalog:'
-        version: 8.6.12(react@19.0.0)(storybook@8.6.12)
-      '@storybook/addon-themes':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12)(typescript@5.7.2)
-      '@storybook/react-vite':
-        specifier: 'catalog:'
-        version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.8)(storybook@8.6.12)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       '@storybook/test':
         specifier: 'catalog:'
         version: 8.6.12(storybook@8.6.12)
-      '@tailwindcss/vite':
-        specifier: 'catalog:'
-        version: 4.1.3(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       '@testing-library/react':
         specifier: 'catalog:'
         version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -527,9 +479,6 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.0.2
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 4.3.4(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
@@ -542,12 +491,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
-      vite:
-        specifier: 'catalog:'
-        version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0)
-      vitest:
-        specifier: 'catalog:'
-        version: 3.0.6(@types/node@22.10.5)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.2)(terser@5.36.0)
 
   packages/synth:
     dependencies:
@@ -555,9 +498,6 @@ importers:
         specifier: workspace:*
         version: link:../common
     devDependencies:
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@repo/playwright-config':
         specifier: workspace:*
         version: link:../../system/playwright-config
@@ -576,33 +516,12 @@ importers:
       '@repo/web-audio':
         specifier: workspace:*
         version: link:../web-audio
-      '@storybook/addon-essentials':
-        specifier: 'catalog:'
-        version: 8.6.12(@types/react@19.0.2)(storybook@8.6.12)
-      '@storybook/addon-interactions':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
-      '@storybook/addon-links':
-        specifier: 'catalog:'
-        version: 8.6.12(react@19.0.0)(storybook@8.6.12)
-      '@storybook/addon-themes':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12)(typescript@5.7.2)
-      '@storybook/react-vite':
-        specifier: 'catalog:'
-        version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.8)(storybook@8.6.12)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
-      '@storybook/test':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
       '@types/react':
         specifier: 'catalog:'
         version: 19.0.2
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 4.3.4(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       playwright:
         specifier: 'catalog:'
         version: 1.49.1
@@ -618,9 +537,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
-      vite:
-        specifier: 'catalog:'
-        version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0)
       vite-plugin-dts:
         specifier: 'catalog:'
         version: 4.5.0(@types/node@22.10.5)(rollup@4.34.8)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
@@ -688,9 +604,6 @@ importers:
         specifier: 'catalog:'
         version: 3.0.2
     devDependencies:
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@repo/playwright-config':
         specifier: workspace:*
         version: link:../../system/playwright-config
@@ -709,30 +622,12 @@ importers:
       '@repo/vite-config':
         specifier: workspace:*
         version: link:../../system/vite-config
-      '@storybook/addon-essentials':
-        specifier: 'catalog:'
-        version: 8.6.12(@types/react@19.0.2)(storybook@8.6.12)
-      '@storybook/addon-interactions':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
-      '@storybook/addon-links':
-        specifier: 'catalog:'
-        version: 8.6.12(react@19.0.0)(storybook@8.6.12)
-      '@storybook/addon-themes':
-        specifier: 'catalog:'
-        version: 8.6.12(storybook@8.6.12)
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12)(typescript@5.7.2)
-      '@storybook/react-vite':
-        specifier: 'catalog:'
-        version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.8)(storybook@8.6.12)(typescript@5.7.2)(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       '@storybook/test':
         specifier: 'catalog:'
         version: 8.6.12(storybook@8.6.12)
-      '@tailwindcss/vite':
-        specifier: 'catalog:'
-        version: 4.1.3(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       '@testing-library/react':
         specifier: 'catalog:'
         version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -742,9 +637,6 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.0.2
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 4.3.4(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
@@ -754,18 +646,9 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 8.6.12
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.3
-      tw-animate-css:
-        specifier: 'catalog:'
-        version: 1.2.4
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
-      vite:
-        specifier: 'catalog:'
-        version: 6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0)
       vitest:
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.2)(terser@5.36.0)
@@ -802,11 +685,10 @@ importers:
         version: 5.7.2
 
   system/playwright-config:
-    dependencies:
+    devDependencies:
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.49.1
-    devDependencies:
       '@repo/ts-config':
         specifier: workspace:*
         version: link:../ts-config
@@ -854,7 +736,7 @@ importers:
         version: 5.7.2
 
   system/tailwind-config:
-    dependencies:
+    devDependencies:
       tailwindcss:
         specifier: 'catalog:'
         version: 4.1.3
@@ -864,13 +746,13 @@ importers:
 
   system/test-screen:
     dependencies:
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
       '@storybook/react':
         specifier: 'catalog:'
         version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12)(typescript@5.7.2)
     devDependencies:
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.49.1
       '@repo/ts-config':
         specifier: workspace:*
         version: link:../ts-config
@@ -884,7 +766,10 @@ importers:
   system/ts-config: {}
 
   system/vite-config:
-    dependencies:
+    devDependencies:
+      '@repo/ts-config':
+        specifier: workspace:*
+        version: link:../ts-config
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.1.3(vite@6.1.1(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.36.0))
@@ -900,10 +785,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 3.0.6(@types/node@22.10.5)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.29.2)(terser@5.36.0)
-    devDependencies:
-      '@repo/ts-config':
-        specifier: workspace:*
-        version: link:../ts-config
 
 packages:
 
