@@ -6,6 +6,7 @@ import { BackButton } from '#shared/components/back-button'
 import { ThemeSwitcher } from '#shared/components/theme-switcher'
 import { getProject } from '../api'
 import { EditorShell } from './editor-shell'
+import { ProjectRenameButton } from './project-rename-button'
 import { PublishLink } from './publish-link'
 
 type Props = {
@@ -28,8 +29,9 @@ export const EditorScreen: FC<Props> = async props => {
           <Heading.Description>{description}</Heading.Description>
         </Heading.Root>
         <div className="grow" />
-        <ThemeSwitcher variant="ghost" size="md" />
+        <ProjectRenameButton variant="ghost" size="md" project={{ id: projectId, name, description }} />
         <PublishLink projectId={projectId} />
+        <ThemeSwitcher variant="ghost" size="md" />
       </div>
       <div className="grow">
         <EditorShell projectId={projectId} content={content} />
