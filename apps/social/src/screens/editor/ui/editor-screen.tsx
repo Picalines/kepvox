@@ -21,7 +21,7 @@ export const EditorScreen: FC<Props> = async props => {
 
   return (
     <div className="flex h-dvh w-dvw flex-col">
-      <div className="flex h-min items-center gap-2 border-b-2 p-2">
+      <div className="flex h-16 items-center gap-2 border-b-2 p-2">
         <BackButton variant="ghost" fallbackPath="/projects" />
         <Heading.Root>
           <Heading.Title>{name}</Heading.Title>
