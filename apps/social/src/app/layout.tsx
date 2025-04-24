@@ -15,13 +15,23 @@ const monoFont = JetBrains_Mono({
   subsets: ['latin'],
 })
 
-const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
+type Props = {
+  children: ReactNode
+  auth: ReactNode
+}
+
+const RootLayout: FC<Props> = props => {
+  const { children, auth } = props
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>{ENV.NODE_ENV === 'development' && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}</head>
       <body className={monoFont.className}>
         <ThemeProvider defaultTheme="dark" attribute="class">
-          <EffectorNext>{children}</EffectorNext>
+          <EffectorNext>
+            {children}
+            {auth}
+          </EffectorNext>
         </ThemeProvider>
       </body>
     </html>
