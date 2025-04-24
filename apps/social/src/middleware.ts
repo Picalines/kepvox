@@ -12,7 +12,10 @@ export async function middleware(request: NextRequest) {
   })
 
   if (!session) {
-    return NextResponse.redirect(new URL('/sign-in', request.url))
+    const url = request.nextUrl
+    url.searchParams.append('retpath', url.pathname)
+    url.pathname = '/sign-in'
+    return NextResponse.redirect(url)
   }
 
   return NextResponse.next()

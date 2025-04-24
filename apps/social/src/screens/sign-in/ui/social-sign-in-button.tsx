@@ -2,6 +2,7 @@
 
 import { Button } from '@repo/ui-kit/components/button'
 import { Loader } from '@repo/ui-kit/components/loader'
+import { useSearchParams } from 'next/navigation'
 import { type FC, type ReactNode, useReducer } from 'react'
 import { authClient } from '#shared/auth-client'
 
@@ -15,11 +16,16 @@ type Props = {
 export const SocialSignInButton: FC<Props> = props => {
   const { provider, children } = props
 
+  const searchParams = useSearchParams()
+
   const [isPending, startPending] = useReducer(() => true, false)
 
   const onClick = () => {
     startPending()
-    authClient.signIn.social({ provider, callbackURL: '/library' })
+    authClient.signIn.social({
+      provider,
+      callbackURL: searchParams.get('retpath') || '/library',
+    })
   }
 
   return (
