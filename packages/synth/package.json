@@ -40,28 +40,19 @@
         "@repo/common": "workspace:*"
     },
     "devDependencies": {
-        "@playwright/test": "catalog:",
         "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
         "@repo/web-audio": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
-        "@storybook/addon-links": "catalog:",
-        "@storybook/addon-themes": "catalog:",
         "@storybook/react": "catalog:",
-        "@storybook/react-vite": "catalog:",
-        "@storybook/test": "catalog:",
         "@types/react": "catalog:",
-        "@vitejs/plugin-react": "catalog:",
         "playwright": "catalog:",
         "react": "catalog:",
         "storybook": "catalog:",
         "tsup": "catalog:",
         "typescript": "catalog:",
-        "vite": "catalog:",
         "vite-plugin-dts": "catalog:",
         "vitest": "catalog:"
     }

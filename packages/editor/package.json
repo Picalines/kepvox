@@ -33,35 +33,27 @@
         "effector-react": "catalog:",
         "immer": "^10.1.1",
         "nanoid": "catalog:",
-        "patronum": "catalog:",
+        "patronum": "catalog:"
+    },
+    "peerDependencies": {
         "react": "catalog:",
         "react-dom": "catalog:"
     },
     "devDependencies": {
-        "@playwright/test": "catalog:",
         "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/tailwind-config": "workspace:*",
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
-        "@storybook/addon-links": "catalog:",
-        "@storybook/addon-themes": "catalog:",
         "@storybook/react": "catalog:",
-        "@storybook/react-vite": "catalog:",
         "@storybook/test": "catalog:",
-        "@tailwindcss/vite": "catalog:",
         "@testing-library/react": "catalog:",
         "@testing-library/user-event": "catalog:",
         "@types/react": "catalog:",
-        "@vitejs/plugin-react": "catalog:",
         "jsdom": "catalog:",
         "playwright": "catalog:",
         "storybook": "catalog:",
-        "typescript": "catalog:",
-        "vite": "catalog:",
-        "vitest": "catalog:"
+        "typescript": "catalog:"
     }
 }
