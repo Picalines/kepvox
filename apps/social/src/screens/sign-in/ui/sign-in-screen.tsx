@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { RedirectType, redirect } from 'next/navigation'
 import type { FC } from 'react'
 import { authenticateOrNull } from '#shared/auth-server'
+import { BackButton } from '#shared/components/back-button'
 import { SocialSignInButton } from './social-sign-in-button'
 
 export const SignInScreen: FC = async () => {
@@ -24,6 +25,9 @@ export const SignInScreen: FC = async () => {
       <Dialog.Content closable={false} className="space-y-2">
         <Text className="block">Login to create & publish your projects</Text>
         <SocialSignInButton provider="github">GitHub</SocialSignInButton>
+        <BackButton fallbackPath="/" variant="outline" className="w-full">
+          Cancel
+        </BackButton>
       </Dialog.Content>
     </Dialog.Root>
   )
