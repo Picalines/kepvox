@@ -2,6 +2,7 @@ import { isTuple } from '@repo/common/predicate'
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
+import { produce } from 'immer'
 import { readonly, reset, spread } from 'patronum'
 import { NODE_SYNTH_CONSTRUCTORS } from '#meta'
 import type { ActionPayload } from './action'
@@ -128,6 +129,24 @@ export const createSynthTree = createFactory((params: Params) => {
 
       return { nodes: newNodes, edges: newEdges }
     },
+  })
+
+  const setColorNodeDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'synth-node-color-set',
+  })
+
+  sample({
+    clock: setColorNodeDispatched,
+    source: $nodes,
+    target: $nodes,
+    fn: (nodes, { id, color }) =>
+      produce(nodes, draft => {
+        const node = nodes.get(id)
+        if (node && node.color !== color) {
+          draft.set(id, { ...node, color })
+        }
+      }),
   })
 
   const createEdgeDispatched = sample({

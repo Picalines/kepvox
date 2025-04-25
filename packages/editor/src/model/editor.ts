@@ -1,4 +1,5 @@
 import { invoke } from '@withease/factories'
+import { enableMapSet as immerEnableMapSet } from 'immer'
 import { createEditorGate } from './gate'
 import { createHistory } from './history'
 import { createMusicSheet } from './music-sheet'
@@ -9,6 +10,8 @@ import { createSerializer } from './serializer'
 import { createSynthNodePanel } from './synth-node-panel'
 import { createSynthTree } from './synth-tree'
 import { createSynthTreeViewport } from './synth-tree-viewport'
+
+immerEnableMapSet()
 
 const gate = invoke(createEditorGate)
 
@@ -36,9 +39,9 @@ const { userRequestedActions } = history
 
 const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission, userSetPlayhead } = playback
 
-const { $edges: $synthEdges, $nodes: $synthNodes } = synthTree
+const { $edges: $synthEdges, $nodes: $synthNodes, $activeNode: $activeSynthNode } = synthTree
 
-const { $activeNodeId, $nodeControls } = synthNodePanel
+const { $activeNodeControls, userSelectedNodeColor } = synthNodePanel
 
 const { $notes: $sheetNotes, $endTime } = musicSheet
 
@@ -60,7 +63,7 @@ const { $nodeCreationDialogShown, userCancelledNodeCreation, userSelectedNodePos
 const { userStoppedPlayback, userToggledPlayback } = noteScheduler
 
 export {
-  $activeNodeId,
+  $activeSynthNode,
   $endTime,
   $hasAudioPermission,
   $isDirty,
@@ -68,7 +71,7 @@ export {
   $isLoaded,
   $isPlaying,
   $isReadonly,
-  $nodeControls,
+  $activeNodeControls,
   $nodeCreationDialogShown,
   $notePreview,
   $playhead,
@@ -84,6 +87,7 @@ export {
   userMovedSheet,
   userRequestedANote,
   userRequestedActions,
+  userSelectedNodeColor,
   userSelectedNodePosition,
   userSelectedNodeType,
   userSetPlayhead,

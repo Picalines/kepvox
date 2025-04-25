@@ -19,9 +19,10 @@ export type ActionPayload =
       source: ConnectionPoint
       target: ConnectionPoint
     }
+  | { action: 'synth-node-param-set'; id: NodeId; param: string; value: string | number }
+  | { action: 'synth-node-color-set'; id: NodeId; color: NodeColor }
   | { action: 'synth-edge-select'; id: EdgeId; selected: boolean }
   | { action: 'synth-edge-delete'; id: EdgeId }
-  | { action: 'synth-node-param-set'; id: NodeId; param: string; value: string | number }
   | {
       action: 'sheet-note-create'
       id: NoteId
@@ -41,9 +42,10 @@ export const TRACKED_EDITOR_ACTIONS: Action[] = [
   'synth-node-create',
   'synth-node-move',
   'synth-node-delete',
+  'synth-node-param-set',
+  'synth-node-color-set',
   'synth-edge-create',
   'synth-edge-delete',
-  'synth-node-param-set',
   'sheet-note-create',
   'sheet-note-move',
   'sheet-note-delete',
