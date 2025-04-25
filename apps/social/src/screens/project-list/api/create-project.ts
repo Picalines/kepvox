@@ -1,6 +1,6 @@
 'use server'
 
-import { isNonEmpty } from '@repo/common/array'
+import { isNonEmpty } from '@repo/common/predicate'
 import { revalidatePath } from 'next/cache'
 import { RedirectType, redirect } from 'next/navigation'
 import type { z } from 'zod'

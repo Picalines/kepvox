@@ -1,6 +1,6 @@
 'use server'
 
-import { isTuple } from '@repo/common/array'
+import { isTuple } from '@repo/common/predicate'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { z } from 'zod'

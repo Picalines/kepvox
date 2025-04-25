@@ -1,4 +1,4 @@
-import { isTuple } from '@repo/common/array'
+import { isTuple } from '@repo/common/predicate'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { RedirectType, notFound, redirect } from 'next/navigation'

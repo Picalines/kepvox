@@ -1,5 +1,5 @@
-import { isNonEmpty } from '@repo/common/array'
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
+import { isNonEmpty } from '@repo/common/predicate'
 import type { SynthTime } from '#time'
 import { Signal } from '#util/signal'
 import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timeline'
