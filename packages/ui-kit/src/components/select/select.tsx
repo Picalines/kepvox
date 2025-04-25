@@ -26,6 +26,7 @@ export type LabelProps = Overlay<OmitExisting<ComponentPropsWithRef<'div'>, 'id'
 
 export type TriggerProps = {
   className?: string
+  children?: ReactNode
 }
 
 export type ContentProps = {
@@ -91,12 +92,12 @@ export const Root: FC<RootProps> = props => {
             aria-labelledby={label ? labelId : undefined}
             className={cn(variants({ size }), 'peer group', trigger.props.className)}
           >
-            <RadixSelect.Value className="line-clamp-1" />
+            <RadixSelect.Value className="line-clamp-1">{trigger.children}</RadixSelect.Value>
             {label && rootProps.defaultValue === undefined && rootProps.value === undefined && (
               <span className="hidden opacity-0 group-data-placeholder:inline">{label.children}</span>
             )}
             <RadixSelect.Icon asChild>
-              <VDownIcon className="h-4 w-4 opacity-50" />
+              <VDownIcon className="h-4 w-4 text-foreground opacity-50" />
             </RadixSelect.Icon>
           </RadixSelect.Trigger>
           {label && (
