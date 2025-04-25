@@ -1,3 +1,4 @@
+import { capitalize } from '@repo/common/string'
 import { cn, tw } from '@repo/ui-kit/classnames'
 import { Loader } from '@repo/ui-kit/components/loader'
 import { Text } from '@repo/ui-kit/components/text'
@@ -63,10 +64,7 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
         )}
         style={{ width: `${width}px`, height: `${height}px` }}
       >
-        <Text className="text-white">
-          {type[0]?.toUpperCase()}
-          {type.slice(1)}
-        </Text>
+        <Text className="text-white">{capitalize(type)}</Text>
       </div>
       {Array.from({ length: numberOfInputs }).map((_, i) => (
         <Handle key={String(i)} type="target" id={String(i)} position={Position.Left} className="!h-3 !w-3" />

@@ -6,12 +6,11 @@
     "type": "module",
     "exports": {
         "./assert": "./src/assert.ts",
-        "./branded": "./src/branded/index.ts",
-        "./disposable": "./src/disposable/index.ts",
         "./iter": "./src/iter/index.ts",
         "./math": "./src/math.ts",
         "./predicate": "./src/predicate/index.ts",
         "./promise": "./src/promise/index.ts",
+        "./string": "./src/string/index.ts",
         "./typing": "./src/typing.ts"
     },
     "scripts": {
