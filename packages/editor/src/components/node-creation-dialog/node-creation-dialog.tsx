@@ -1,3 +1,4 @@
+import { capitalize } from '@repo/common/string'
 import { Command } from '@repo/ui-kit/components/command'
 import { Dialog } from '@repo/ui-kit/components/dialog'
 import { useUnit } from 'effector-react'
@@ -23,8 +24,7 @@ export const NodeCreationDialog: FC = () => {
             <Command.Label>Nodes</Command.Label>
             {NODE_TYPES.filter(type => type !== 'output').map(type => (
               <Command.Item key={type} value={type} onSelect={onTypeSelected.bind(null, { type })}>
-                {type[0]?.toUpperCase()}
-                {type.slice(1)}
+                {capitalize(type)}
               </Command.Item>
             ))}
           </Command.Group>
