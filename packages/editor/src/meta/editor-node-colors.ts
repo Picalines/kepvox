@@ -2,9 +2,7 @@ import type { NODE_TYPES } from './editor-node-types'
 
 export const NODE_COLORS = [
   'red',
-  'orange',
-  'amber',
-  'yellow',
+  'rose',
   'orange',
   'amber',
   'yellow',
@@ -20,7 +18,6 @@ export const NODE_COLORS = [
   'purple',
   'fuchsia',
   'pink',
-  'rose',
   'zinc',
 ] as const
 
