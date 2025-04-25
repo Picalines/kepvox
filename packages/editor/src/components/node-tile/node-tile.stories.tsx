@@ -37,7 +37,7 @@ export const Default: Story = {
       externalLoading: false,
       initialProject: simpleProjectMock,
       serializationTimeout: 0,
-      readonly: true,
+      readonly: false,
     } as const
 
     await allSettled(editorModel.Gate.close, { scope, params: state })
@@ -46,6 +46,33 @@ export const Default: Story = {
 }
 
 export const Selected: Story = {
+  parameters: { scope: fork() },
+
+  beforeEach: async ({ parameters: { scope } }) => {
+    const state = {
+      externalLoading: false,
+      initialProject: simpleProjectMock,
+      serializationTimeout: 0,
+      readonly: false,
+    } as const
+
+    await allSettled(editorModel.Gate.close, { scope, params: state })
+    await allSettled(editorModel.Gate.open, { scope, params: state })
+
+    await allSettled(editorModel.userRequestedActions, {
+      scope,
+      params: [
+        {
+          action: 'synth-node-select',
+          id: 'gen',
+          selected: true,
+        },
+      ],
+    })
+  },
+}
+
+export const Readonly: Story = {
   parameters: { scope: fork() },
 
   beforeEach: async ({ parameters: { scope } }) => {

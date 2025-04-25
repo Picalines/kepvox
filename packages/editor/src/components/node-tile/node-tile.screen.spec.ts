@@ -4,6 +4,6 @@ testStoryMatrix({
   meta: {
     title: 'components/NodeTile',
   },
-  stories: ['Default', 'Selected'],
+  stories: ['Default', 'Selected', 'Readonly'],
   themes: ['light', 'dark'],
 })
