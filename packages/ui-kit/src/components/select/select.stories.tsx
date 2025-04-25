@@ -1,4 +1,3 @@
-import { take } from '@repo/common/array'
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { Select } from '.'
@@ -14,16 +13,19 @@ export default {
       <Select.Label>{label}</Select.Label>
       <Select.Trigger />
       <Select.Content>
-        {take(selectGroups, numberOfGroups).map(({ group, items }, index) => (
-          <Select.Group key={group} id={`group-${index}`}>
-            <Select.Header>{group}</Select.Header>
-            {items.map(value => (
-              <Select.Item key={value} value={value}>
-                {value}
-              </Select.Item>
-            ))}
-          </Select.Group>
-        ))}
+        {Iterator.from(selectGroups)
+          .take(numberOfGroups)
+          .map(({ group, items }, index) => (
+            <Select.Group key={group} id={`group-${index}`}>
+              <Select.Header>{group}</Select.Header>
+              {items.map(value => (
+                <Select.Item key={value} value={value}>
+                  {value}
+                </Select.Item>
+              ))}
+            </Select.Group>
+          ))
+          .toArray()}
       </Select.Content>
     </Select.Root>
   ),

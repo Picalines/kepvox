@@ -1,4 +1,4 @@
-import { isTuple } from '@repo/common/array'
+import { isTuple } from '@repo/common/predicate'
 import type { SynthNode } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'

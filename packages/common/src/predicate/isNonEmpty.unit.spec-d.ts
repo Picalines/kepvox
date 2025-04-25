@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from 'vitest'
-import { isNonEmpty, isTuple } from './array-predicate'
+import { isNonEmpty } from './isNonEmpty'
 
 describe('isNonEmpty', () => {
   it('should allow index 0 in true branch', () => {
@@ -16,14 +16,5 @@ describe('isNonEmpty', () => {
     }
 
     expectTypeOf(array[0]).not.toBeUndefined()
-  })
-})
-
-describe('isTuple', () => {
-  it('should convert number literal to  tuple', () => {
-    const array = [0]
-    if (isTuple(array, 3)) {
-      expectTypeOf(array).toEqualTypeOf<[number, number, number]>()
-    }
   })
 })
