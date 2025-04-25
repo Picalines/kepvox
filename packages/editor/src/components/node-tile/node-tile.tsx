@@ -1,56 +1,40 @@
-import { ScrollArea } from '@repo/ui-kit/components/scroll-area'
 import { Text } from '@repo/ui-kit/components/text'
-import { MousePointerClickIcon, XIcon } from '@repo/ui-kit/icons'
-import { useList, useUnit } from 'effector-react'
-import type { ComponentType, FC } from 'react'
+import { MousePointerClickIcon } from '@repo/ui-kit/icons'
+import { useStoreMap } from 'effector-react'
+import type { FC } from 'react'
 import { editorModel } from '#model'
-import { NodeParamControl } from './node-param-control'
+import { NodeColorSelect } from './node-color-select'
+import { NodeControlGrid } from './node-control-grid'
+import { NodeHeading } from './node-heading'
 
 export const NodeTile: FC = () => {
-  const { nodeId } = useUnit({ nodeId: editorModel.$activeNodeId })
-
-  const controls = useList(editorModel.$nodeControls, {
-    fn: control => nodeId && <NodeParamControl nodeId={nodeId} name={control.name} />,
-    keys: [nodeId],
-    placeholder: null,
+  const hasActiveNode = useStoreMap({
+    store: editorModel.$activeSynthNode,
+    fn: Boolean,
+    keys: [],
   })
 
-  if (!nodeId) {
-    return <Stub Icon={MousePointerClickIcon}>select node</Stub>
-  }
-
-  if (controls === null) {
-    return <Stub Icon={XIcon}>no parameters</Stub>
-  }
-
-  return (
-    <ScrollArea.Root className="bg-background">
-      <ScrollArea.Bar orientation="vertical" />
-      <ScrollArea.Content>
-        <div className="@container p-3">
-          <div className="grid @md:grid-cols-2 grid-cols-1 gap-3">{controls}</div>
+  if (!hasActiveNode) {
+    return (
+      <div className="relative size-full bg-background">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 text-nowrap">
+          <Text color="muted" className="flex flex-col items-center">
+            <MousePointerClickIcon />
+            select node
+          </Text>
         </div>
-      </ScrollArea.Content>
-    </ScrollArea.Root>
-  )
-}
-
-type StubProps = {
-  Icon: ComponentType
-  children: string
-}
-
-const Stub: FC<StubProps> = props => {
-  const { Icon, children } = props
+      </div>
+    )
+  }
 
   return (
-    <div className="relative size-full bg-background">
-      <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 text-nowrap">
-        <Text color="muted" className="flex flex-col items-center">
-          <Icon />
-          {children}
-        </Text>
+    <div className="flex h-full flex-col">
+      <div className="flex shrink-0 items-center border-b bg-background p-3">
+        <NodeHeading />
+        <div className="grow" />
+        <NodeColorSelect />
       </div>
+      <NodeControlGrid />
     </div>
   )
 }

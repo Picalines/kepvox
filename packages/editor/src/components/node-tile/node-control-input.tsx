@@ -1,82 +1,72 @@
 import { NumberInput } from '@repo/ui-kit/components/number-input'
 import { Select } from '@repo/ui-kit/components/select'
 import { Slider } from '@repo/ui-kit/components/slider'
-import { useStoreMap, useUnit } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { type FC, useCallback } from 'react'
-import { type NodeId, editorModel } from '#model'
+import { type NodeControl, type NodeId, editorModel } from '#model'
 
 type Props = {
   nodeId: NodeId
-  name: string
+  control: NodeControl
 }
 
-export const NodeParamControl: FC<Props> = props => {
-  const { nodeId, name } = props
+export const NodeControlInput: FC<Props> = props => {
+  const { nodeId, control } = props
 
   const { requestActions, isReadonly } = useUnit({
     requestActions: editorModel.userRequestedActions,
     isReadonly: editorModel.$isReadonly,
   })
 
-  const param = useStoreMap({
-    store: editorModel.$nodeControls,
-    fn: params => params?.find(param => param.name === name) ?? null,
-    keys: [name],
-  })
-
   const onValueChange = useCallback(
     (value: number | string) => {
-      if (!isReadonly && nodeId && !Number.isNaN(value)) {
-        requestActions([{ action: 'synth-node-param-set', id: nodeId, param: name, value }])
+      if (nodeId && !Number.isNaN(value)) {
+        requestActions([{ action: 'synth-node-param-set', id: nodeId, param: control.name, value }])
       }
     },
-    [isReadonly, nodeId, requestActions, name],
+    [nodeId, requestActions, control],
   )
 
-  if (!param) {
-    return null
-  }
-
-  if (param.type === 'number') {
+  if (control.type === 'number') {
     return (
       <NumberInput.Root
         key={nodeId}
-        value={param.value}
-        step={param.step}
+        value={control.value}
+        step={control.step}
         onValueChange={onValueChange}
         disabled={isReadonly}
       >
         <NumberInput.Label>
-          {name} ({param.unit})
+          {control.name} ({control.unit})
         </NumberInput.Label>
       </NumberInput.Root>
     )
   }
 
-  if (param.type === 'slider') {
+  if (control.type === 'slider') {
     return (
       <Slider.Root
         key={nodeId}
-        value={param.value}
-        min={param.min}
-        max={param.max}
-        step={param.step}
+        value={control.value}
+        min={control.min}
+        max={control.max}
+        step={control.step}
         onValueChange={onValueChange}
         disabled={isReadonly}
       >
-        <Slider.Label>{name}</Slider.Label>
+        <Slider.Label>{control.name}</Slider.Label>
       </Slider.Root>
     )
   }
 
-  if (param.type === 'select') {
+  if (control.type === 'select') {
     return (
-      <Select.Root key={nodeId} value={param.value} onValueChange={onValueChange} disabled={isReadonly}>
+      <Select.Root key={nodeId} value={control.value} onValueChange={onValueChange} disabled={isReadonly}>
         <Select.Trigger />
-        <Select.Label>{name}</Select.Label>
+        <Select.Label>{control.name}</Select.Label>
         <Select.Content>
           <Select.Group>
-            {param.variants.map(variant => (
+            {control.variants.map(variant => (
               <Select.Item key={variant} value={variant}>
                 {variant}
               </Select.Item>
