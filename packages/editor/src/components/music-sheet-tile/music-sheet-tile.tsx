@@ -18,7 +18,7 @@ const DIMENSIONS = musicSheetDimensions({
 
 export const MusicSheetTile: FC = () => {
   return (
-    <Resizable.Group direction="horizontal">
+    <Resizable.Group direction="horizontal" className="bg-background">
       <Resizable.Panel defaultSize={15} maxSize={30}>
         <div className="relative z-1 border-b bg-background" style={{ height: DIMENSIONS.timeline.height }} />
         <MusicSheetPianoRoll dimensions={DIMENSIONS} />
