@@ -12,11 +12,11 @@ export const PlaybackControls: FC = () => {
   })
 
   return (
-    <div className="w-fit overflow-hidden rounded-lg border-2 bg-background">
-      <Button onClick={toggle} size="lg" variant="ghost">
+    <div className="w-fit overflow-hidden rounded-md border bg-background">
+      <Button onClick={toggle} size="md" variant="ghost" className="rounded-none">
         {isPlaying ? <PauseIcon className="text-blue-500" /> : <PlayIcon className="text-green-500" />}
       </Button>
-      <Button onClick={stop} size="lg" variant="ghost">
+      <Button onClick={stop} size="md" variant="ghost" className="rounded-none">
         <SquareIcon className="text-red-500" />
       </Button>
     </div>
