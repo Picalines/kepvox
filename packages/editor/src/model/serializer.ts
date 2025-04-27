@@ -1,4 +1,12 @@
-import { CurveSynthParam, EnumSynthParam, Notes, NumberSynthParam, type SynthNode, SynthTime } from '@repo/synth'
+import {
+  CurveSynthParam,
+  EnumSynthParam,
+  Notes,
+  NumberSynthParam,
+  type SynthNode,
+  SynthTime,
+  TimeSignature,
+} from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createStore, sample, scopeBind } from 'effector'
 import { and, debounce, readonly, reset } from 'patronum'
@@ -27,6 +35,8 @@ export const createSerializer = createFactory((params: Params) => {
   const deserializeFx = createEffect((project: Project) => {
     const dispatch = scopeBind(history.dispatched)
 
+    dispatch({ action: 'time-signature-set', timeSignature: new TimeSignature(...project.musicSheet.timeSignature) })
+    dispatch({ action: 'beats-per-minute-set', beatsPerMinute: project.musicSheet.beatsPerMinute })
     dispatch({ action: 'ending-note-set', time: SynthTime.fromNotes(Notes.orClamp(project.musicSheet.endingNote)) })
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
@@ -60,10 +70,12 @@ export const createSerializer = createFactory((params: Params) => {
       nodes: synthTree.$nodes,
       edges: synthTree.$edges,
       notes: musicSheet.$notes,
+      timeSignature: musicSheet.$timeSignature,
+      beatsPerMinute: musicSheet.$beatsPerMinute,
       endTime: musicSheet.$endTime,
       editorProps: gate.$props,
     },
-    effect: ({ nodes, edges, notes, endTime, editorProps }) => {
+    effect: ({ nodes, edges, notes, timeSignature, beatsPerMinute, endTime, editorProps }) => {
       if (!editorProps || editorProps.readonly || !editorProps.onSerialized) {
         return
       }
@@ -103,6 +115,8 @@ export const createSerializer = createFactory((params: Params) => {
           edges: Object.fromEntries(edges.entries().map(([id, { source, target }]) => [id, { source, target }])),
         },
         musicSheet: {
+          timeSignature: [timeSignature.beatsInBar, timeSignature.beatsInNote],
+          beatsPerMinute,
           endingNote: endTime.toNotes(),
           notes: Object.fromEntries(
             notes.entries().map(([id, { synthId, time, duration, pitch }]) => [
