@@ -8,7 +8,11 @@ export const getSubscriptions = async () => {
   const { user } = await authenticateOrRedirect()
 
   const subscriptions = await database
-    .select({ id: tables.user.id, name: tables.user.name })
+    .select({
+      id: tables.user.id,
+      name: tables.user.name,
+      avatar: tables.user.image,
+    })
     .from(tables.user)
     .innerJoin(
       tables.subscription,
