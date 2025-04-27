@@ -30,9 +30,6 @@ export const MusicSheetTile: FC = () => {
         <Resizable.Panel defaultSize={85} className="relative">
           <MusicSheetTimeline dimensions={DIMENSIONS} />
           <TimeMarkers />
-          <div className="absolute right-1 bottom-1 z-1">
-            <ReadonlyIndicator />
-          </div>
           <ReactFlowProvider>
             <MusicSheetFlow dimensions={DIMENSIONS} />
           </ReactFlowProvider>
@@ -41,6 +38,9 @@ export const MusicSheetTile: FC = () => {
       <div className="absolute right-2 bottom-2 z-1 flex justify-end gap-2">
         <TempoControls />
         <PlaybackControls />
+      </div>
+      <div className="absolute top-1 right-1 z-1">
+        <ReadonlyIndicator />
       </div>
     </div>
   )

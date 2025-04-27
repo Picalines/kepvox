@@ -4,6 +4,6 @@ testStoryMatrix({
   meta: {
     title: 'components/MusicSheetTile',
   },
-  stories: ['Default'],
+  stories: ['Default', 'Readonly'],
   themes: ['light', 'dark'],
 })

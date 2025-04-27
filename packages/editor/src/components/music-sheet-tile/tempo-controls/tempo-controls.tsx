@@ -7,9 +7,10 @@ import { type FC, useCallback } from 'react'
 import { editorModel } from '#model'
 
 export const TempoControls: FC = () => {
-  const { timeSignature, beatsPerMinute, requestActions } = useUnit({
+  const { timeSignature, beatsPerMinute, isReadonly, requestActions } = useUnit({
     timeSignature: editorModel.$timeSignature,
     beatsPerMinute: editorModel.$beatsPerMinute,
+    isReadonly: editorModel.$isReadonly,
     requestActions: editorModel.userRequestedActions,
   })
 
@@ -25,7 +26,7 @@ export const TempoControls: FC = () => {
 
   return (
     <>
-      <Select.Root value={timeSignature.toString()} onValueChange={onSignatureChange}>
+      <Select.Root value={timeSignature.toString()} onValueChange={onSignatureChange} disabled={isReadonly}>
         <Select.Label>Time</Select.Label>
         <Select.Trigger>
           {timeSignature.beatsInBar}/{timeSignature.beatsInNote}
@@ -40,7 +41,12 @@ export const TempoControls: FC = () => {
           </Select.Group>
         </Select.Content>
       </Select.Root>
-      <NumberInput.Root value={beatsPerMinute} onValueChange={onBeatsPerMinuteChange} className="w-30">
+      <NumberInput.Root
+        value={beatsPerMinute}
+        onValueChange={onBeatsPerMinuteChange}
+        disabled={isReadonly}
+        className="w-30"
+      >
         <NumberInput.Label>BPM</NumberInput.Label>
       </NumberInput.Root>
     </>
