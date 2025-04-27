@@ -10,7 +10,7 @@ import { PlaybackControls } from './playback-controls'
 type StoryArgs = ComponentProps<typeof PlaybackControls>
 
 export default {
-  title: 'components/PlaybackControls',
+  title: 'components/MusicSheetTile/PlaybackControls',
   component: PlaybackControls,
   beforeEach: () => mockRunningAudioContext(),
   decorators: [
@@ -34,7 +34,12 @@ export const Playing: Story = {
   beforeEach: async ({ parameters: { scope } }) => {
     const infinteSilentProject: Project = {
       ...simpleProjectMock,
-      musicSheet: { endingNote: Number.POSITIVE_INFINITY, notes: {} },
+      musicSheet: {
+        // Be quiet this time, please
+        ...simpleProjectMock.musicSheet,
+        endingNote: Number.POSITIVE_INFINITY,
+        notes: {},
+      },
     }
 
     const state = {

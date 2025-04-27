@@ -7,7 +7,6 @@ import { type FC, memo, useMemo } from 'react'
 import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
 import { NodeCreationDialog } from '#components/node-creation-dialog'
-import { PlaybackControls } from '#components/playback-controls'
 import { type Project, editorModel } from '#model'
 import { EditorPanels } from './editor-panels'
 import { useEditorScope } from './editor-scope'
@@ -58,9 +57,6 @@ const EditorUI = memo(() => (
       <AudioPermissionDialog />
       <NodeCreationDialog />
       <EditorPanels />
-      <div className="-translate-x-1/2 absolute bottom-4 left-1/2">
-        <PlaybackControls />
-      </div>
     </div>
   </Tooltip.Provider>
 ))
