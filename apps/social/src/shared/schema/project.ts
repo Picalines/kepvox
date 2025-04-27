@@ -35,6 +35,8 @@ export const projectSchema = z.object({
   }),
   musicSheet: z
     .object({
+      timeSignature: z.tuple([z.number(), z.number()]).default([4, 4]),
+      beatsPerMinute: z.number().min(1).max(1_000).default(125),
       endingNote: z.number().positive().default(5),
       notes: z.record(
         noteIdSchema,

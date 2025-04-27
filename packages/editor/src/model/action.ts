@@ -1,4 +1,4 @@
-import type { PitchNotation, SynthTime } from '@repo/synth'
+import type { PitchNotation, SynthTime, TimeSignature } from '@repo/synth'
 import type { ConnectionPoint, EdgeId, NodeColor, NodeId, NodeType, NoteId } from './project'
 
 export type ActionPayload =
@@ -34,6 +34,8 @@ export type ActionPayload =
   | { action: 'sheet-note-select'; id: NoteId; selected: boolean }
   | { action: 'sheet-note-move'; id: NoteId; to: { time: SynthTime; pitch: PitchNotation } }
   | { action: 'sheet-note-delete'; id: NoteId }
+  | { action: 'time-signature-set'; timeSignature: TimeSignature }
+  | { action: 'beats-per-minute-set'; beatsPerMinute: number }
   | { action: 'ending-note-set'; time: SynthTime }
 
 export type Action = ActionPayload['action']
@@ -49,5 +51,7 @@ export const TRACKED_EDITOR_ACTIONS: Action[] = [
   'sheet-note-create',
   'sheet-note-move',
   'sheet-note-delete',
+  'time-signature-set',
+  'beats-per-minute-set',
   'ending-note-set',
 ]

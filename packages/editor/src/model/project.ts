@@ -38,6 +38,8 @@ export type Project = {
     >
   }
   musicSheet: {
+    timeSignature: [beatsInBar: number, beatsInNote: number]
+    beatsPerMinute: number
     endingNote: number
     notes: Record<
       NoteId,

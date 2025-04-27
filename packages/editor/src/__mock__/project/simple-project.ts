@@ -26,6 +26,8 @@ export const simpleProjectMock: Project = {
     },
   },
   musicSheet: {
+    timeSignature: [4, 4],
+    beatsPerMinute: 125,
     endingNote: 2,
     notes: {
       'note-1': { synth: 'gen', pitch: 'C4', time: 0, duration: 0.25 },
