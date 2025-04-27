@@ -12,9 +12,12 @@ export const getReactions = async () => {
       const query = (isPositive: boolean) =>
         tx
           .select({
-            publication: {
-              id: tables.publication.id,
-              name: tables.publication.name,
+            id: tables.publication.id,
+            name: tables.publication.name,
+            description: tables.publication.description,
+            author: {
+              name: tables.user.name,
+              avatar: tables.user.image,
             },
           })
           .from(tables.publication)
@@ -26,6 +29,8 @@ export const getReactions = async () => {
               eq(tables.reaction.isPositive, isPositive),
             ),
           )
+          .innerJoin(tables.project, eq(tables.publication.projectId, tables.project.id))
+          .innerJoin(tables.user, eq(tables.project.authorId, tables.user.id))
 
       return { positive: await query(true), negative: await query(false) }
     },
