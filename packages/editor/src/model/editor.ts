@@ -43,7 +43,7 @@ const { $edges: $synthEdges, $nodes: $synthNodes, $activeNode: $activeSynthNode 
 
 const { $activeNodeControls, userSelectedNodeColor } = synthNodePanel
 
-const { $notes: $sheetNotes, $endTime } = musicSheet
+const { $notes: $sheetNotes, $timeSignature, $beatsPerMinute, $endTime } = musicSheet
 
 const {
   $notePreview,
@@ -63,7 +63,9 @@ const { $nodeCreationDialogShown, userCancelledNodeCreation, userSelectedNodePos
 const { userStoppedPlayback, userToggledPlayback } = noteScheduler
 
 export {
+  $activeNodeControls,
   $activeSynthNode,
+  $beatsPerMinute,
   $endTime,
   $hasAudioPermission,
   $isDirty,
@@ -71,7 +73,6 @@ export {
   $isLoaded,
   $isPlaying,
   $isReadonly,
-  $activeNodeControls,
   $nodeCreationDialogShown,
   $notePreview,
   $playhead,
@@ -79,6 +80,7 @@ export {
   $sheetPosition,
   $synthEdges,
   $synthNodes,
+  $timeSignature,
   Gate,
   userCancelledNodeCreation,
   userGrantedAudioPermission,

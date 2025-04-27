@@ -1,6 +1,7 @@
-import { type PitchNotation, SynthTime } from '@repo/synth'
+import { type PitchNotation, Range, SynthTime, TimeSignature } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createStore, sample } from 'effector'
+import { attach } from 'effector/effector.umd'
 import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
@@ -25,15 +26,26 @@ type Params = {
   playback: PlaybackStore
 }
 
+const BEATS_PER_MINUTE_RANGE = new Range(1, 1_000)
+
 export const createMusicSheet = createFactory((params: Params) => {
   const { history, synthTree, playback } = params
 
   const $notes = createStore<ReadonlyMap<NoteId, Note>>(new Map())
+  const $timeSignature = createStore(new TimeSignature(4, 4))
+  const $beatsPerMinute = createStore(125)
   const $endTime = createStore(SynthTime.note.repeat(5))
 
   reset({
     clock: [synthTree.initialized],
-    target: [$notes, $endTime],
+    target: [$notes, $timeSignature, $endTime],
+  })
+
+  const setTempoFx = attach({
+    source: { context: playback.$context, timeSignature: $timeSignature, beatsPerMinute: $beatsPerMinute },
+    effect: ({ context, timeSignature, beatsPerMinute }) => {
+      context?.secondsPerNote.setValueAt(SynthTime.start, timeSignature.bpmToSecondsPerNote(beatsPerMinute))
+    },
   })
 
   const createNoteDispatched = sample({
@@ -118,6 +130,35 @@ export const createMusicSheet = createFactory((params: Params) => {
     },
   })
 
+  const setTimeSignatureDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'time-signature-set',
+  })
+
+  sample({
+    clock: setTimeSignatureDispatched,
+    filter: playback.$isIdle,
+    target: $timeSignature,
+    fn: ({ timeSignature }) => timeSignature,
+  })
+
+  const setBeatsPerMinuteDispatched = sample({
+    clock: history.dispatched,
+    filter: (action: ActionPayload) => action.action === 'beats-per-minute-set',
+  })
+
+  sample({
+    clock: setBeatsPerMinuteDispatched,
+    filter: playback.$isIdle,
+    target: $beatsPerMinute,
+    fn: ({ beatsPerMinute }) => BEATS_PER_MINUTE_RANGE.clamp(beatsPerMinute),
+  })
+
+  sample({
+    clock: [$timeSignature, $beatsPerMinute],
+    target: setTempoFx,
+  })
+
   const setEndingNoteDispatched = sample({
     clock: history.dispatched,
     filter: (action: ActionPayload) => action.action === 'ending-note-set',
@@ -131,7 +172,9 @@ export const createMusicSheet = createFactory((params: Params) => {
   })
 
   return {
-    $notes: readonly($notes),
+    $beatsPerMinute: readonly($beatsPerMinute),
     $endTime: readonly($endTime),
+    $notes: readonly($notes),
+    $timeSignature: readonly($timeSignature),
   }
 })
