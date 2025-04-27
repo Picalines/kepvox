@@ -33,7 +33,9 @@
             "cache": false
         },
 
-        "ts:check": {},
+        "ts:check": {
+            "dependsOn": ["^ts:check"]
+        },
         "//#lint": {},
         "//#ci:check": {},
 
