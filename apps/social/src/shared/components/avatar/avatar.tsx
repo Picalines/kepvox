@@ -26,7 +26,7 @@ export const Root: FC<RootProps> = props => {
   const { image, fallback } = useSlots(children, { image: Image, fallback: Fallback })
 
   return (
-    <RadixAvatar.Root className={cn('relative flex size-6 overflow-hidden rounded-full', className)}>
+    <RadixAvatar.Root className={cn('relative flex size-6 shrink-0 overflow-hidden rounded-full', className)}>
       {image?.props.src && <RadixAvatar.Image src={image.props.src} className="aspect-square size-full" />}
       <RadixAvatar.Fallback className="flex size-full items-center justify-center rounded-full bg-muted">
         {userNameAbbr(fallback.props.userName)}
