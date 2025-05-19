@@ -19,26 +19,30 @@ const NoteFlowNodeComponent: FC<NodeProps<SheetNoteFlowNode>> = props => {
 
   const synthId = note?.synthId ?? ''
 
-  const synth = useStoreMap({
+  const synthNumber = useStoreMap({
     store: editorModel.$synthNodes,
     keys: [synthId],
-    fn: nodes => nodes.get(synthId) ?? null,
+    fn: nodes => nodes.get(synthId)?.number ?? null,
   })
 
-  const { number, color = 'zinc' } = synth ?? {}
+  const synthColor = useStoreMap({
+    store: editorModel.$synthNodes,
+    keys: [synthId],
+    fn: nodes => nodes.get(synthId)?.color ?? 'zinc',
+  })
 
   return (
     <>
       <div
         className={cn(
           'relative flex items-center rounded-md bg-gradient-to-r px-1 ring-offset-background transition-all',
-          SYNTH_COLOR_CLASSNAMES[color],
+          SYNTH_COLOR_CLASSNAMES[synthColor],
           selected && 'ring-2 ring-offset-2',
         )}
         style={{ width, height }}
       >
         <Text color="inherit" className="font-bold">
-          {number ?? <XIcon className="zoom-in-75 fade-in-0 animate-in" />}
+          {synthNumber ?? <XIcon className="zoom-in-75 fade-in-0 animate-in" />}
         </Text>
       </div>
     </>
