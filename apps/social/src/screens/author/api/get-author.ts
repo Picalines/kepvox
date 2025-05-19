@@ -25,7 +25,11 @@ export const getAuthor = async (input: z.infer<typeof inputSchema>) => {
   const { error, author, publications } = await database.transaction(
     async tx => {
       const selectedUsers = await tx
-        .select({ name: tables.user.name, subscribed: isNotNull(tables.subscription.authorId) })
+        .select({
+          name: tables.user.name,
+          avatar: tables.user.image,
+          subscribed: isNotNull(tables.subscription.authorId),
+        })
         .from(tables.user)
         .leftJoin(
           tables.subscription,
@@ -46,12 +50,16 @@ export const getAuthor = async (input: z.infer<typeof inputSchema>) => {
           id: tables.publication.id,
           name: tables.publication.name,
           description: tables.publication.description,
+          createdAt: tables.publication.createdAt,
         })
         .from(tables.publication)
         .innerJoin(tables.project, eq(tables.project.id, tables.publication.projectId))
         .where(eq(tables.project.authorId, authorId))
 
-      return { author, publications }
+      return {
+        author: { ...author, isMe: session?.user.id === authorId },
+        publications,
+      }
     },
     { accessMode: 'read only' },
   )
