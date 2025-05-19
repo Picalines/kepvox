@@ -66,17 +66,13 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: createNodeDispatched,
     source: { nodes: $nodes, context: playback.$context, hasOutputNode: $hasOutputNode },
     target: $nodes,
-    fn: ({ nodes, context, hasOutputNode }, { id, type, position, number, color }) => {
-      if (!context || nodes.has(id) || (hasOutputNode && type === 'output')) {
-        return nodes
-      }
-
-      const synthNode = type === 'output' ? context.output : new NODE_SYNTH_CONSTRUCTORS[type](context)
-
-      const newNodes = new Map(nodes)
-      newNodes.set(id, { id, type, position, synthNode, number, color, selected: false })
-      return newNodes
-    },
+    fn: ({ nodes, context, hasOutputNode }, { id, type, position, number, color }) =>
+      produce(nodes, draft => {
+        if (context && !nodes.has(id) && (!hasOutputNode || type !== 'output')) {
+          const synthNode = type === 'output' ? context.output : new NODE_SYNTH_CONSTRUCTORS[type](context)
+          draft.set(id, { id, type, position, synthNode, number, color, selected: false })
+        }
+      }),
   })
 
   const moveNodeDispatched = sample({
@@ -88,16 +84,13 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: moveNodeDispatched,
     source: $nodes,
     target: $nodes,
-    fn: (nodes, { id, to: position }) => {
-      const node = nodes.get(id)
-      if (!node) {
-        return nodes
-      }
-
-      const newNodes = new Map(nodes)
-      newNodes.set(id, { ...node, position })
-      return newNodes
-    },
+    fn: (nodes, { id, to: position }) =>
+      produce(nodes, draft => {
+        const node = nodes.get(id)
+        if (node) {
+          draft.set(id, { ...node, position })
+        }
+      }),
   })
 
   const deleteNodeDispatched = sample({
@@ -158,32 +151,29 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: createEdgeDispatched,
     source: { nodes: $nodes, edges: $edges },
     target: $edges,
-    fn: ({ nodes, edges }, { id, source, target }) => {
-      const sourceNode = nodes.get(source.node)
-      const targetNode = nodes.get(target.node)
-      if (!sourceNode || !targetNode || edges.has(id)) {
-        return edges
-      }
+    fn: ({ nodes, edges }, { id, source, target }) =>
+      produce(edges, draft => {
+        const sourceNode = nodes.get(source.node)
+        const targetNode = nodes.get(target.node)
+        if (!sourceNode || !targetNode || edges.has(id)) {
+          return
+        }
 
-      const edgeExists = edges
-        .values()
-        .some(edge => connectionPointEquals(edge.source, source) && connectionPointEquals(edge.target, target))
+        const edgeExists = edges
+          .values()
+          .some(edge => connectionPointEquals(edge.source, source) && connectionPointEquals(edge.target, target))
 
-      if (
-        edgeExists ||
-        !isOutputSocketValid(sourceNode.synthNode, source.socket) ||
-        !isInputSocketValid(targetNode.synthNode, target.socket)
-      ) {
-        return edges
-      }
+        if (
+          edgeExists ||
+          !isOutputSocketValid(sourceNode.synthNode, source.socket) ||
+          !isInputSocketValid(targetNode.synthNode, target.socket)
+        ) {
+          return
+        }
 
-      const newEdges = new Map(edges)
-      newEdges.set(id, { id, source, target, selected: false })
-
-      sourceNode.synthNode.connect(targetNode.synthNode, source.socket, target.socket)
-
-      return newEdges
-    },
+        draft.set(id, { id, source, target, selected: false })
+        sourceNode.synthNode.connect(targetNode.synthNode, source.socket, target.socket)
+      }),
   })
 
   const deleteEdgeDispatched = sample({
@@ -195,25 +185,22 @@ export const createSynthTree = createFactory((params: Params) => {
     clock: deleteEdgeDispatched,
     source: { nodes: $nodes, edges: $edges },
     target: $edges,
-    fn: ({ nodes, edges }, { id }) => {
-      const edge = edges.get(id)
-      if (!edge) {
-        return edges
-      }
+    fn: ({ nodes, edges }, { id }) =>
+      produce(edges, draft => {
+        const edge = edges.get(id)
+        if (!edge) {
+          return
+        }
 
-      const sourceNode = nodes.get(edge.source.node)
-      const targetNode = nodes.get(edge.target.node)
-      if (!sourceNode || !targetNode) {
-        return edges
-      }
+        const sourceNode = nodes.get(edge.source.node)
+        const targetNode = nodes.get(edge.target.node)
+        if (!sourceNode || !targetNode) {
+          return
+        }
 
-      const newEdges = new Map(edges)
-      newEdges.delete(id)
-
-      sourceNode.synthNode.disconnect(targetNode.synthNode, edge.source.socket, edge.target.socket)
-
-      return newEdges
-    },
+        draft.delete(id)
+        sourceNode.synthNode.disconnect(targetNode.synthNode, edge.source.socket, edge.target.socket)
+      }),
   })
 
   const selectNodeDispatched = sample({
@@ -226,16 +213,13 @@ export const createSynthTree = createFactory((params: Params) => {
     source: $nodes,
     filter: (nodes, { id }) => nodes.has(id),
     target: $nodes,
-    fn: (nodes, { id, selected }) => {
-      const node = nodes.get(id)
-      if (!node) {
-        return nodes
-      }
-
-      const newNodes = new Map(nodes)
-      newNodes.set(id, { ...node, selected })
-      return newNodes
-    },
+    fn: (nodes, { id, selected }) =>
+      produce(nodes, draft => {
+        const node = draft.get(id)
+        if (node) {
+          node.selected = selected
+        }
+      }),
   })
 
   const selectEdgeDispatched = sample({
@@ -248,16 +232,13 @@ export const createSynthTree = createFactory((params: Params) => {
     source: $edges,
     filter: (edges, { id }) => edges.has(id),
     target: $edges,
-    fn: (edges, { id, selected }) => {
-      const edge = edges.get(id)
-      if (!edge) {
-        return edges
-      }
-
-      const newEdges = new Map(edges)
-      newEdges.set(id, { ...edge, selected })
-      return newEdges
-    },
+    fn: (edges, { id, selected }) =>
+      produce(edges, draft => {
+        const edge = draft.get(id)
+        if (edge) {
+          edge.selected = selected
+        }
+      }),
   })
 
   return {
