@@ -25,6 +25,7 @@ export const SignOutScreen: FC = async () => {
             action={async () => {
               'use server'
               await authServer.api.signOut({ headers: await headers() })
+              redirect('/', RedirectType.push)
             }}
           >
             <Button type="submit" variant="destructive">
