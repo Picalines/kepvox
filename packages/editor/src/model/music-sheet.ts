@@ -2,6 +2,7 @@ import { type PitchNotation, Range, SynthTime, TimeSignature } from '@repo/synth
 import { createFactory } from '@withease/factories'
 import { createStore, sample } from 'effector'
 import { attach } from 'effector/effector.umd'
+import { produce } from 'immer'
 import { readonly, reset, spread } from 'patronum'
 import type { ActionPayload } from './action'
 import type { HistoryStore } from './history'
@@ -57,15 +58,12 @@ export const createMusicSheet = createFactory((params: Params) => {
     clock: createNoteDispatched,
     source: { notes: $notes, nodes: synthTree.$nodes },
     target: $notes,
-    fn: ({ notes, nodes }, { id, synthId, time, duration, pitch }) => {
-      if (notes.has(id) || !nodes.has(synthId)) {
-        return notes
-      }
-
-      const newNotes = new Map(notes)
-      newNotes.set(id, { id, synthId, time, duration, pitch, selected: false })
-      return newNotes
-    },
+    fn: ({ notes, nodes }, { id, synthId, time, duration, pitch }) =>
+      produce(notes, draft => {
+        if (!notes.has(id) && nodes.has(synthId)) {
+          draft.set(id, { id, synthId, time, duration, pitch, selected: false })
+        }
+      }),
   })
 
   const moveNoteDispatched = sample({
@@ -77,16 +75,14 @@ export const createMusicSheet = createFactory((params: Params) => {
     clock: moveNoteDispatched,
     source: $notes,
     target: $notes,
-    fn: (notes, { id, to: { time, pitch } }) => {
-      const note = notes.get(id)
-      if (!note) {
-        return notes
-      }
-
-      const newNotes = new Map(notes)
-      newNotes.set(id, { ...note, time, pitch })
-      return newNotes
-    },
+    fn: (notes, { id, to: { time, pitch } }) =>
+      produce(notes, draft => {
+        const note = draft.get(id)
+        if (note) {
+          note.time = time
+          note.pitch = pitch
+        }
+      }),
   })
 
   const deleteNoteDispatched = sample({
@@ -98,15 +94,10 @@ export const createMusicSheet = createFactory((params: Params) => {
     clock: deleteNoteDispatched,
     source: $notes,
     target: $notes,
-    fn: (notes, { id }) => {
-      if (!notes.has(id)) {
-        return notes
-      }
-
-      const newNotes = new Map(notes)
-      newNotes.delete(id)
-      return newNotes
-    },
+    fn: (notes, { id }) =>
+      produce(notes, draft => {
+        draft.delete(id)
+      }),
   })
 
   const selectNoteDispatched = sample({
@@ -118,16 +109,13 @@ export const createMusicSheet = createFactory((params: Params) => {
     clock: selectNoteDispatched,
     source: $notes,
     target: $notes,
-    fn: (notes, { id, selected }) => {
-      const note = notes.get(id)
-      if (!note) {
-        return notes
-      }
-
-      const newNotes = new Map(notes)
-      newNotes.set(id, { ...note, selected })
-      return newNotes
-    },
+    fn: (notes, { id, selected }) =>
+      produce(notes, draft => {
+        const note = draft.get(id)
+        if (note) {
+          note.selected = selected
+        }
+      }),
   })
 
   const setTimeSignatureDispatched = sample({
