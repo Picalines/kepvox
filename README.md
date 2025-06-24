@@ -2,7 +2,10 @@
 
 [Web audio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) synthesizer inspired by [SunVox](https://www.warmplace.ru/soft/sunvox/index_ru.php)
 
-<img width="1540" alt="image" src="https://github.com/user-attachments/assets/c9f743a8-a303-4bc5-95a1-6292ad2c92b3" />
+<p align="center">
+  <img width="45%" alt="image" src="https://github.com/user-attachments/assets/3b71e24a-355b-4046-90fb-5ef626bcb2c5" />
+  <img width="45%" alt="image" src="https://github.com/user-attachments/assets/4a436cb2-2517-4aa6-b6e7-3496f10756c0" />
+</p>
 
 ## Packages
 
