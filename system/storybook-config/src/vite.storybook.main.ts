@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite'
-import baseSbConfig from '#main/base'
+import baseSbConfig from '#base/main'
 
 const config = {
   ...baseSbConfig,

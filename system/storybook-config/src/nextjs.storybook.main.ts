@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/nextjs'
-import baseSbConfig from '#main/base'
+import baseSbConfig from '#base/main'
 
 const config = {
   ...baseSbConfig,

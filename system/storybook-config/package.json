@@ -5,17 +5,17 @@
     "private": true,
     "type": "module",
     "exports": {
-        "./main/base": "./src/storybook.base.main.ts",
-        "./main/nextjs": "./src/storybook.nextjs.main.ts",
-        "./main/vite": "./src/storybook.vite.main.ts",
+        "./base/main": "./src/base.storybook.main.ts",
         "./merge": "./src/merge-config.ts",
-        "./preview/react": "./src/storybook.preview.react.ts"
+        "./nextjs/main": "./src/nextjs.storybook.main.ts",
+        "./react/preview": "./src/react.storybook.preview.ts",
+        "./vite/main": "./src/vite.storybook.main.ts"
     },
     "scripts": {
         "ts:check": "tsc --noEmit"
     },
     "imports": {
-        "#main/base": "./src/storybook.base.main.ts"
+        "#base/main": "./src/base.storybook.main.ts"
     },
     "devDependencies": {
         "@repo/ts-config": "workspace:*",
