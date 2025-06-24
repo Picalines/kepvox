@@ -2,9 +2,9 @@
     "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 
     "extends": [
-        "./system/biome-config/biome.formatter.json",
-        "./system/biome-config/biome.linter.json",
-        "./system/biome-config/biome.imports.json"
+        "./system/biome-config/formatter.biome.json",
+        "./system/biome-config/linter.biome.json",
+        "./system/biome-config/imports.biome.json"
     ],
 
     "files": {
