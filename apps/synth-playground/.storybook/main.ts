@@ -1,1 +1,1 @@
-export { default } from '@repo/storybook-config/main/nextjs'
+export { default } from '@repo/storybook-config/nextjs/main'

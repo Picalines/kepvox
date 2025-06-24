@@ -1,1 +1,1 @@
-export { default } from '@repo/storybook-config/preview/react'
+export { default } from '@repo/storybook-config/react/preview'
