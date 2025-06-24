@@ -5,9 +5,40 @@ on:
     branches: [ main ]
 
 jobs:
+  detect-changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+      screenshots: ${{ steps.filter.outputs.screenshots }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - '**/*.{js,ts,jsx,tsx,mjs,mts}'
+              - '**/*tsconfig.json'
+              - '**/*package.json'
+            screenshots:
+              - '**/__screenshots__/**'
+              - '**/*playwright*.ts'
+
   biome-check:
     name: Biome check
     runs-on: ubuntu-latest
+
+    needs: detect-changes
+    if: needs.detect-changes.outputs.src == 'true'
 
     steps:
       - name: Checkout
@@ -34,6 +65,9 @@ jobs:
     name: Type check
     runs-on: ubuntu-latest
 
+    needs: detect-changes
+    if: needs.detect-changes.outputs.src == 'true'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,6 +93,9 @@ jobs:
     name: Unit tests
     runs-on: ubuntu-latest
 
+    needs: detect-changes
+    if: needs.detect-changes.outputs.src == 'true'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,6 +120,9 @@ jobs:
   screen-test:
     name: Screen tests
     runs-on: ubuntu-latest
+
+    needs: detect-changes
+    if: needs.detect-changes.outputs.src == 'true' || needs.detect-changes.outputs.screenshots == 'true'
 
     strategy:
       matrix:
