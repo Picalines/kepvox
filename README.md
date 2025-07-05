@@ -7,23 +7,22 @@
   <img width="45%" alt="image" src="https://github.com/user-attachments/assets/4a436cb2-2517-4aa6-b6e7-3496f10756c0" />
 </p>
 
-## Packages
+## Development
 
-## Applications
+### Packages
 
+Applications:
 - **[Social App](./apps/social/README.md)** - Social platform for sharing and discovering tracks (will be reworked)
 - **[Synth Playground](./apps/synth-playground/README.md)** - Interactive playground for experimenting with live coding synthesis
 
-### Core Libraries
+Libraries:
 - **[@repo/synth](./packages/synth/README.md)** - Core synthesizer engine with node-based architecture
 - **[@repo/editor](./packages/editor/README.md)** - Visual node-based editor for creating tracks
 - **[@repo/ui-kit](./packages/ui-kit/README.md)** - UI component library
 - **[@repo/web-audio](./packages/web-audio/README.md)** - Low-level Web Audio API utilities and helpers
 - **[@repo/common](./packages/common/README.md)** - Shared utilities and common functions
 
-## Development
-
-This is a TypeScript monorepo managed with pnpm and Turborepo.
+### Scripts
 
 ```bash
 pnpm install # Install dependencies
