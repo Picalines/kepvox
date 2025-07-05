@@ -6,12 +6,12 @@
     "type": "module",
     "types": "./src/types.d.ts",
     "exports": {
-        "./base": "./src/vite.base.config.js",
-        "./react": "./src/vite.react.config.js",
-        "./storybook": "./src/vite.storybook.config.js"
+        "./base": "./src/base.vite.config.js",
+        "./react": "./src/react.vite.config.js",
+        "./storybook": "./src/storybook.vite.config.js"
     },
     "imports": {
-        "#base": "./src/vite.base.config.js"
+        "#base": "./src/base.vite.config.js"
     },
     "scripts": {
         "ts:check": "tsc --noEmit"
