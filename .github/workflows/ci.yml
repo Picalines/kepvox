@@ -166,3 +166,21 @@ jobs:
           name: ${{ steps.prepare-report-artifact.outputs.name }}-playwright-report
           path: ${{ matrix.package }}/playwright-report/
           retention-days: 30
+
+  verify-pr:
+    name: Verify PR
+    runs-on: ubuntu-latest
+    if: always()
+
+    needs:
+      - biome-check
+      - type-check
+      - unit-test
+      - screen-test
+
+    steps:
+      - name: Check completed jobs
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
+          allowed-skips: ${{ toJSON(needs) }}
