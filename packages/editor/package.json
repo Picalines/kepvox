@@ -40,7 +40,6 @@
         "react-dom": "catalog:"
     },
     "devDependencies": {
-        "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/tailwind-config": "workspace:*",
         "@repo/test-screen": "workspace:*",

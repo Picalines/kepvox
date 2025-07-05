@@ -243,9 +243,6 @@ importers:
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../system/next-config
-      '@repo/playwright-config':
-        specifier: workspace:*
-        version: link:../../system/playwright-config
       '@repo/storybook-config':
         specifier: workspace:*
         version: link:../../system/storybook-config
@@ -349,9 +346,6 @@ importers:
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../system/next-config
-      '@repo/playwright-config':
-        specifier: workspace:*
-        version: link:../../system/playwright-config
       '@repo/storybook-config':
         specifier: workspace:*
         version: link:../../system/storybook-config
@@ -446,9 +440,6 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0(react@19.0.0)
     devDependencies:
-      '@repo/playwright-config':
-        specifier: workspace:*
-        version: link:../../system/playwright-config
       '@repo/storybook-config':
         specifier: workspace:*
         version: link:../../system/storybook-config
@@ -498,9 +489,6 @@ importers:
         specifier: workspace:*
         version: link:../common
     devDependencies:
-      '@repo/playwright-config':
-        specifier: workspace:*
-        version: link:../../system/playwright-config
       '@repo/storybook-config':
         specifier: workspace:*
         version: link:../../system/storybook-config
@@ -604,9 +592,6 @@ importers:
         specifier: 'catalog:'
         version: 3.0.2
     devDependencies:
-      '@repo/playwright-config':
-        specifier: workspace:*
-        version: link:../../system/playwright-config
       '@repo/storybook-config':
         specifier: workspace:*
         version: link:../../system/storybook-config
@@ -680,21 +665,6 @@ importers:
       '@repo/ts-config':
         specifier: workspace:*
         version: link:../ts-config
-      typescript:
-        specifier: 'catalog:'
-        version: 5.7.2
-
-  system/playwright-config:
-    devDependencies:
-      '@playwright/test':
-        specifier: 'catalog:'
-        version: 1.49.1
-      '@repo/ts-config':
-        specifier: workspace:*
-        version: link:../ts-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.10.5
       typescript:
         specifier: 'catalog:'
         version: 5.7.2

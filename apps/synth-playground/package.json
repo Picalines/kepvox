@@ -43,7 +43,6 @@
     "devDependencies": {
         "@effector/swc-plugin": "catalog:",
         "@repo/next-config": "workspace:*",
-        "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/tailwind-config": "workspace:*",
         "@repo/test-screen": "workspace:*",

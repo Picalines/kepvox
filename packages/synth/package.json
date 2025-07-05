@@ -40,7 +40,6 @@
         "@repo/common": "workspace:*"
     },
     "devDependencies": {
-        "@repo/playwright-config": "workspace:*",
         "@repo/storybook-config": "workspace:*",
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
