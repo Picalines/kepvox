@@ -74,7 +74,7 @@ const ControlButton: FC<ControlButtonProps> = ({ Icon, tooltip, onClick }) => {
   return (
     <Tooltip.Root>
       <Tooltip.Trigger>
-        <Button.Root variant="outline" className="relative" onClick={onClick}>
+        <Button.Root variant="outline" action={onClick}>
           <Button.Icon icon={Icon} />
         </Button.Root>
       </Tooltip.Trigger>

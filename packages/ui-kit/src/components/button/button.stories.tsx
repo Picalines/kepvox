@@ -14,7 +14,7 @@ export default {
   title: 'components/Button',
   component: Button.Root,
   args: {
-    onClick: fn(),
+    action: fn(),
   },
 } satisfies Meta<StoryArgs>
 

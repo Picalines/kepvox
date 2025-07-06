@@ -40,8 +40,8 @@ export type RootProps = Overlay<
     children: ReactNode
     className?: string
     disabled?: boolean
-    onClick?: () => void
-    onMouseDown?: () => void
+    eager?: boolean
+    action?: () => void
   }
 >
 
@@ -59,7 +59,7 @@ export const Text = createSlot({ name: 'Text' }).component<TextProps>()
 export const Icon = createSlot({ name: 'Icon' }).component<IconProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { children, className, variant, size, feedback, ...buttonProps } = props
+  const { children, className: classNameProp, variant, size, feedback, eager, action, ...buttonProps } = props
 
   const { text, icon } = useSlots(children, { text: Text, icon: Icon })
 
@@ -67,14 +67,17 @@ export const Root: FC<RootProps> = props => {
     throw new Error(`${Root.displayName} requires ${Text.displayName} or ${Icon.displayName}`)
   }
 
+  const [onClick, onMouseDown] = eager ? [undefined, action] : [action, undefined]
+
   const buttonClassName = buttonVariants({ variant, size, feedback })
+  const className = cn(buttonClassName, classNameProp)
 
   const iconPosition = icon?.props.position ?? 'end'
   const StartIcon = icon && iconPosition === 'start' ? icon.props.icon : null
   const EndIcon = icon && iconPosition === 'end' ? icon.props.icon : null
 
   return (
-    <button {...buttonProps} className={cn(buttonClassName, className)}>
+    <button {...buttonProps} onClick={onClick} onMouseDown={onMouseDown} className={className}>
       {StartIcon && <StartIcon />}
       {text?.children && <span>{text.children}</span>}
       {EndIcon && <EndIcon />}
