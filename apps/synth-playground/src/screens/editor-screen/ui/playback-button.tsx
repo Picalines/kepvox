@@ -15,20 +15,21 @@ export const PlaybackButton = () => {
 
   const disabled = status === 'initializing'
 
-  const Icon = status === 'playing' ? SquareIcon : PlayIcon
-
   return (
     <Tooltip.Root>
       <Tooltip.Trigger>
-        <Button
+        <Button.Root
           onMouseDown={toggled}
           size="lg"
           variant={status === 'playing' ? 'destructive' : 'outline'}
           className="relative"
           disabled={disabled}
         >
-          <Icon className={disabled ? 'animate-pulse' : ''} />
-        </Button>
+          <Button.Icon
+            icon={status === 'playing' ? SquareIcon : PlayIcon}
+            className={disabled ? 'animate-pulse' : undefined}
+          />
+        </Button.Root>
       </Tooltip.Trigger>
       <Tooltip.Content>
         <Text>

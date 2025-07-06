@@ -11,7 +11,9 @@ export default {
   render: ({ title, description, closable, ...args }) => (
     <Dialog.Root {...args}>
       <Dialog.Trigger>
-        <Button id="dialog-trigger">Trigger</Button>
+        <Button.Root>
+          <Button.Text>Trigger</Button.Text>
+        </Button.Root>
       </Dialog.Trigger>
       <Dialog.Title>{title}</Dialog.Title>
       <Dialog.Description>{description}</Dialog.Description>
