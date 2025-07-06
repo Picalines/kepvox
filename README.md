@@ -12,8 +12,8 @@
 ### Packages
 
 Applications:
-- **[Social App](./apps/social/README.md)** - Social platform for sharing and discovering tracks (will be reworked)
-- **[Synth Playground](./apps/synth-playground/README.md)** - Interactive playground for experimenting with live coding synthesis
+- **[Synth Playground](./apps/synth-playground/README.md)** - Interactive playground for experimenting with [synth](./packages/synth/README.md) package
+- *Coming soon*
 
 Libraries:
 - **[@repo/synth](./packages/synth/README.md)** - Core synthesizer engine with node-based architecture
