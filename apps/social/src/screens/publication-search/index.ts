@@ -1,1 +1,0 @@
-export { PublicationSearchScreen } from './ui'

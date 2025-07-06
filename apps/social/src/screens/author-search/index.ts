@@ -1,1 +1,0 @@
-export { AuthorSearchScreen } from './ui'
