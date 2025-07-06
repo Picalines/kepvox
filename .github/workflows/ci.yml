@@ -26,9 +26,12 @@ jobs:
         with:
           filters: |
             src:
-              - '**/*.{js,ts,jsx,tsx,mjs,mts}'
+              - '**/*.{js,ts,jsx,tsx,mjs,mts,css}'
+              - '**/src/**.json'
+              - '**/src/**.yaml'
               - '**/*tsconfig.json'
               - '**/*package.json'
+              - 'pnpm-lock.yaml'
             screenshots:
               - '**/__screenshots__/**'
               - '**/*playwright*.ts'
