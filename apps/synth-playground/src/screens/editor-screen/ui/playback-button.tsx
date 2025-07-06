@@ -21,14 +21,12 @@ export const PlaybackButton = () => {
         <Button.Root
           onMouseDown={toggled}
           size="lg"
-          variant={status === 'playing' ? 'destructive' : 'outline'}
+          variant="outline"
+          feedback={status === 'playing' ? 'negative' : 'none'}
           className="relative"
           disabled={disabled}
         >
-          <Button.Icon
-            icon={status === 'playing' ? SquareIcon : PlayIcon}
-            className={disabled ? 'animate-pulse' : undefined}
-          />
+          <Button.Icon icon={status === 'playing' ? SquareIcon : PlayIcon} />
         </Button.Root>
       </Tooltip.Trigger>
       <Tooltip.Content>

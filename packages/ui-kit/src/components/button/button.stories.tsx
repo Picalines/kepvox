@@ -4,15 +4,9 @@ import { PlayIcon } from '#icons'
 import { Button } from '.'
 
 // See https://github.com/joe-bell/cva/pull/333
-const buttonVariants = [
-  'primary',
-  'secondary',
-  'outline',
-  'ghost',
-  'destructive',
-] satisfies Button.RootProps['variant'][]
-
-const buttonSizes = ['sm', 'md', 'lg'] satisfies Button.RootProps['size'][]
+const variants = ['primary', 'secondary', 'outline', 'ghost'] satisfies Button.RootProps['variant'][]
+const sizes = ['sm', 'md', 'lg'] satisfies Button.RootProps['size'][]
+const feedbacks = ['none', 'positive', 'negative', 'modified'] satisfies Button.RootProps['feedback'][]
 
 type StoryArgs = Button.RootProps
 
@@ -28,15 +22,15 @@ type Story = StoryObj<StoryArgs>
 
 export const Variants: Story = {
   render: buttonArgs => (
-    <>
-      {buttonVariants.map(variant => (
-        <div key={variant} className="mb-2">
-          <Button.Root {...buttonArgs} variant={variant}>
-            <Button.Text>{variant}</Button.Text>
+    <div className="grid w-fit grid-cols-4 gap-2">
+      {variants.map(variant =>
+        feedbacks.map(feedback => (
+          <Button.Root key={variant} {...buttonArgs} variant={variant} feedback={feedback}>
+            <Button.Text>Button</Button.Text>
           </Button.Root>
-        </div>
-      ))}
-    </>
+        )),
+      )}
+    </div>
   ),
 }
 
@@ -51,7 +45,7 @@ export const Disabled: Story = {
 export const Sizes: Story = {
   render: buttonArgs => (
     <>
-      {buttonSizes.map(size => (
+      {sizes.map(size => (
         <div key={size} className="mb-2">
           <Button.Root {...buttonArgs} size={size}>
             <Button.Text>{size}</Button.Text>
@@ -65,17 +59,17 @@ export const Sizes: Story = {
 export const Icon: Story = {
   render: buttonArgs => (
     <div className="grid w-fit grid-cols-3 gap-2">
-      {buttonSizes.map(size =>
+      {sizes.map(size =>
         (
           [
-            ['end', true],
-            ['start', true],
-            [undefined, false],
+            ['end', 'Play'],
+            ['start', 'Play'],
+            [undefined, ''],
           ] as const
-        ).map(([position, hasText]) => (
-          <Button.Root key={size + position + hasText} {...buttonArgs} size={size}>
+        ).map(([position, text]) => (
+          <Button.Root key={size + position + text} {...buttonArgs} size={size}>
             <Button.Icon icon={PlayIcon} position={position} />
-            {hasText && <Button.Text>Play</Button.Text>}
+            <Button.Text>{text}</Button.Text>
           </Button.Root>
         )),
       )}
