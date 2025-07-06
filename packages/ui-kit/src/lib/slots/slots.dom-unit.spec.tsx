@@ -15,6 +15,26 @@ it('should send slot props to parent', () => {
   expect(slot?.props).toStrictEqual({ prop: 42 })
 })
 
+it('should collect slots from fragments', () => {
+  const Slot = createSlot({ name: 'Slot' }).component<{ prop: number }>()
+
+  const {
+    result: {
+      current: { slot },
+    },
+  } = renderHook(() =>
+    useSlots(
+      // biome-ignore lint/complexity/noUselessFragments: fragment is required for the test
+      <>
+        <Slot prop={42} />
+      </>,
+      { slot: Slot },
+    ),
+  )
+
+  expect(slot?.props).toStrictEqual({ prop: 42 })
+})
+
 it('should return null for missing slot', () => {
   const Slot1 = createSlot({ name: 'Slot1' }).component()
   const Slot2 = createSlot({ name: 'Slot2' }).component()
