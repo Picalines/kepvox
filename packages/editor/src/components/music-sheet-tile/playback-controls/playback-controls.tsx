@@ -13,15 +13,17 @@ export const PlaybackControls: FC = () => {
 
   return (
     <div className="w-fit overflow-hidden rounded-md border bg-background">
-      <Button.Root onClick={toggle} size="md" variant="ghost" className="rounded-none">
-        {isPlaying ? (
-          <Button.Icon icon={PauseIcon} className="text-blue-500" />
-        ) : (
-          <Button.Icon icon={PlayIcon} className="text-green-500" />
-        )}
+      <Button.Root
+        onClick={toggle}
+        size="md"
+        variant="ghost"
+        feedback={isPlaying ? 'modified' : 'positive'}
+        className="rounded-none"
+      >
+        <Button.Icon icon={isPlaying ? PauseIcon : PlayIcon} />
       </Button.Root>
-      <Button.Root onClick={stop} size="md" variant="ghost" className="rounded-none">
-        <Button.Icon icon={SquareIcon} className="text-red-500" />
+      <Button.Root onClick={stop} size="md" variant="ghost" feedback="negative" className="rounded-none">
+        <Button.Icon icon={SquareIcon} />
       </Button.Root>
     </div>
   )
