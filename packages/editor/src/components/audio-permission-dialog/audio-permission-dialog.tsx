@@ -6,9 +6,9 @@ import type { FC } from 'react'
 import { editorModel } from '#model'
 
 export const AudioPermissionDialog: FC = () => {
-  const { hasAudioPermission, onConfirmAudio } = useUnit({
+  const { hasAudioPermission, confirmAudio } = useUnit({
     hasAudioPermission: editorModel.$hasAudioPermission,
-    onConfirmAudio: editorModel.userGrantedAudioPermission,
+    confirmAudio: editorModel.userGrantedAudioPermission,
   })
 
   return (
@@ -19,7 +19,7 @@ export const AudioPermissionDialog: FC = () => {
         <Text className="block">
           Your browser has not allowed audio playback. For the editor to work correctly, please allow audio
         </Text>
-        <Button.Root onClick={onConfirmAudio}>
+        <Button.Root action={confirmAudio}>
           <Button.Text>Allow audio</Button.Text>
         </Button.Root>
       </Dialog.Content>

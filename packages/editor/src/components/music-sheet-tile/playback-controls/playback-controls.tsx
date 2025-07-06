@@ -14,7 +14,8 @@ export const PlaybackControls: FC = () => {
   return (
     <div className="w-fit overflow-hidden rounded-md border bg-background">
       <Button.Root
-        onClick={toggle}
+        eager
+        action={toggle}
         size="md"
         variant="ghost"
         feedback={isPlaying ? 'modified' : 'positive'}
@@ -22,7 +23,7 @@ export const PlaybackControls: FC = () => {
       >
         <Button.Icon icon={isPlaying ? PauseIcon : PlayIcon} />
       </Button.Root>
-      <Button.Root onClick={stop} size="md" variant="ghost" feedback="negative" className="rounded-none">
+      <Button.Root eager action={stop} size="md" variant="ghost" feedback="negative" className="rounded-none">
         <Button.Icon icon={SquareIcon} />
       </Button.Root>
     </div>
