@@ -4,6 +4,6 @@ testStoryMatrix({
   meta: {
     title: 'components/Button',
   },
-  stories: ['Primary', 'Secondary', 'Ghost', 'Outline', 'Icon'],
+  stories: ['Variants', 'Disabled', 'Sizes', 'Icon'],
   themes: ['light', 'dark'],
 })
