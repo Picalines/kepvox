@@ -24,7 +24,6 @@ catalog:
   effector-storage: ^7.1.0
   patronum: ^2.3.0
   "@withease/factories": ^1.0.5
-  "@farfetched/core": ^0.13.1
 
   next: ^15.2.4
   "@next/env": ^15.2.4
@@ -35,8 +34,6 @@ catalog:
   tailwind-merge: ^3.0.2
   tw-animate-css: ^1.2.4
   postcss: ^8.4.47
-
-  motion: ^12.6.3
 
   storybook: ^8.6.12
   "@storybook/addon-essentials": ^8.6.12
