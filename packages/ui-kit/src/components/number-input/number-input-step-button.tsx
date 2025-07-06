@@ -13,7 +13,7 @@ export const NumberInputStepButton: FC<Props> = props => {
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const onClick = () => {
+  const onMouseDown = () => {
     const button = buttonRef.current
     const input = button?.parentElement?.querySelector('input')
     if (!button || !input) {
@@ -29,5 +29,5 @@ export const NumberInputStepButton: FC<Props> = props => {
     onValueChange?.(input.valueAsNumber)
   }
 
-  return <button {...buttonProps} ref={buttonRef} onClick={onClick} />
+  return <button {...buttonProps} ref={buttonRef} onMouseDown={onMouseDown} />
 }
