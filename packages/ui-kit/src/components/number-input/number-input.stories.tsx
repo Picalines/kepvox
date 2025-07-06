@@ -8,7 +8,7 @@ type StoryArgs = NumberInput.RootProps & {
 }
 
 export default {
-  title: 'components/NumberInput',
+  title: 'inputs/NumberInput',
   component: NumberInput.Root,
   render: ({ label, ...props }) => (
     <NumberInput.Root {...props}>

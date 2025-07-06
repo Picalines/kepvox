@@ -2,7 +2,7 @@ import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
-    title: 'components/Card',
+    title: 'layout/Card',
   },
   stories: ['Default'],
   themes: ['light', 'dark'],

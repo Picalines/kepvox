@@ -6,7 +6,7 @@ import { Toggle, type ToggleProps } from './toggle'
 type StoryArgs = ToggleProps
 
 export default {
-  title: 'components/Toggle',
+  title: 'inputs/Toggle',
   component: Toggle,
   args: {
     onClick: fn(),

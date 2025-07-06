@@ -6,7 +6,7 @@ import { Slider } from '.'
 type StoryArgs = Slider.RootProps & { label: ReactNode }
 
 export default {
-  title: 'components/Slider',
+  title: 'inputs/Slider',
   component: Slider.Root,
   render: ({ label, ...args }) => (
     <Slider.Root {...args}>

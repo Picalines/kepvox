@@ -6,7 +6,7 @@ import { Separator, type SeparatorProps } from './separator'
 type StoryArgs = SeparatorProps
 
 export default {
-  title: 'components/Separator',
+  title: 'layout/Separator',
   component: Separator,
   render: ({ orientation, ...args }) => (
     <div className={cn('flex size-80 gap-4', orientation === 'horizontal' ? 'flex-col' : 'flex-row')}>

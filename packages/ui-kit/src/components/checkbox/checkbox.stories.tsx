@@ -5,7 +5,7 @@ import { Checkbox } from '.'
 type StoryArgs = Checkbox.RootProps & Partial<{ label: string }>
 
 export default {
-  title: 'components/Checkbox',
+  title: 'inputs/Checkbox',
   component: Checkbox.Root,
   render: ({ label, ...args }) => (
     <Checkbox.Root {...args}>

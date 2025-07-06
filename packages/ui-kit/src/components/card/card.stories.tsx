@@ -7,7 +7,7 @@ import { Heading } from '../heading'
 type StoryArgs = Card.RootProps & Partial<{ title: string; description: string; content: string; footer: string }>
 
 export default {
-  title: 'components/Card',
+  title: 'layout/Card',
   component: Card.Root,
   render: ({ className, title, description, content, footer, ...args }) => (
     <Card.Root {...args} className={cn('max-w-[400px]', className)}>

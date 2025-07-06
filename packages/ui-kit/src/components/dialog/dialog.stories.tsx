@@ -6,7 +6,7 @@ import { Button } from '../button'
 type StoryArgs = Dialog.RootProps & Partial<{ title: string; description: string; closable: boolean }>
 
 export default {
-  title: 'components/Dialog',
+  title: 'layout/Dialog',
   component: Dialog.Root,
   render: ({ title, description, closable, ...args }) => (
     <Dialog.Root {...args}>

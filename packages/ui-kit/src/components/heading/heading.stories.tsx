@@ -5,7 +5,7 @@ import { Heading } from '.'
 type StoryArgs = Heading.RootProps & Partial<{ superTitle: string; title: string; description: string }>
 
 export default {
-  title: 'components/Heading',
+  title: 'typography/Heading',
   component: Heading.Root,
   render: ({ className, superTitle, title, description, ...args }) => (
     <Heading.Root className={className} {...args}>

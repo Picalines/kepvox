@@ -11,7 +11,7 @@ type StoryArgs = Command.RootProps & {
 }
 
 export default {
-  title: 'components/Command',
+  title: 'inputs/Command',
   component: Command.Root,
   render: ({ data, inputDisabled, onSelect, ...props }) => (
     <Command.Root {...props}>

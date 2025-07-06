@@ -6,7 +6,7 @@ type StoryArgs = ScrollArea.RootProps & {
 }
 
 export default {
-  title: 'components/ScrollArea',
+  title: 'layout/ScrollArea',
   component: ScrollArea.Root,
   decorators: [
     Story => (

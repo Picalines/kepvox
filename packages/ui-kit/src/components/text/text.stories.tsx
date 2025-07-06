@@ -7,7 +7,7 @@ type StoryArgs = TextProps & { text: string }
 const fontVariants = ['heading-xl', 'heading-m', 'text-l', 'text-m', 'text-s', 'text-xs'] satisfies TextVariant[]
 
 export default {
-  title: 'components/Text',
+  title: 'typography/Text',
   component: Text,
   render: ({ text, ...args }) => (
     <div className="flex flex-col gap-2">

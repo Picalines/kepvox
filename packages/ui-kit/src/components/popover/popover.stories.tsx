@@ -7,7 +7,7 @@ import { Button } from '../button'
 type StoryArgs = Popover.RootProps & Popover.ContentProps
 
 export default {
-  title: 'components/Popover',
+  title: 'layout/Popover',
   component: Popover.Root,
   render: ({ open, defaultOpen, onOpenChange, ...contentProps }) => (
     <Popover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
