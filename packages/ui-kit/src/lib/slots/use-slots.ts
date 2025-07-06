@@ -1,5 +1,6 @@
 import { assertDefined } from '@repo/common/assert'
-import { Children, type ReactNode } from 'react'
+import { Children, type ReactElement, type ReactNode } from 'react'
+import { isFragment } from 'react-is'
 import { type RenderedSlot, type SlotComponent, type SlotMeta, isSlotElement } from './slot'
 
 // NOTE: we don't use any memoization here, because we want this
@@ -25,20 +26,20 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
     slotNameToResultKey[slot.__slot.name] = outputKey
   }
 
-  Children.forEach(children, child => {
+  forEachNonFragment(children, child => {
     if (child === null || child === undefined || child === false || child === '') {
       return // allow conditional elements
     }
 
     if (!isSlotElement(child)) {
-      throw new Error('non-slot component passed to useSlots')
+      throw new Error(`non-slot component passed to ${useSlots.name}`)
     }
 
     const {
       type: {
         __slot: { name },
       },
-      props: { children, ref, ...props },
+      props: { children: slotChildren, ref, ...props },
       key,
     } = child
 
@@ -47,7 +48,7 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
       throw new Error(`slot '${name}' wasn't defined in the useSlot arguments`)
     }
 
-    const renderedSlot: RenderedSlot<any> = { name, children, props, ref, key }
+    const renderedSlot: RenderedSlot<any> = { name, children: slotChildren, props, ref, key }
 
     if (Array.isArray(collectedSlots[resultKey])) {
       collectedSlots[resultKey].push(renderedSlot)
@@ -69,4 +70,18 @@ export function useSlots<const SlotMap extends Record<string, SlotComponent<any,
 
   // @ts-expect-error: typing this properly seems impossible
   return collectedSlots
+}
+
+const forEachNonFragment = (children: ReactNode, fn: (child: ReactNode) => void) => {
+  Children.forEach(children, child => {
+    if (isFragmentWithChildren(child)) {
+      forEachNonFragment(child.props.children, fn)
+    } else {
+      fn(child)
+    }
+  })
+}
+
+function isFragmentWithChildren(node: unknown): node is ReactElement<{ children: ReactNode }> {
+  return isFragment(node)
 }
