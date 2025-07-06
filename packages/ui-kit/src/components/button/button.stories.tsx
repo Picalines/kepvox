@@ -11,7 +11,7 @@ const feedbacks = ['none', 'positive', 'negative', 'modified'] satisfies Button.
 type StoryArgs = Button.RootProps
 
 export default {
-  title: 'components/Button',
+  title: 'inputs/Button',
   component: Button.Root,
   args: {
     action: fn(),

@@ -10,7 +10,7 @@ type StoryArgs = Tooltip.RootProps &
   }
 
 export default {
-  title: 'components/Tooltip',
+  title: 'layout/Tooltip',
   component: Tooltip.Root,
   render: ({ text, hasArrow, side, align, sideOffset, alignOffset, ...rootProps }) => (
     <Tooltip.Root {...rootProps}>

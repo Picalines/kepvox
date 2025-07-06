@@ -2,7 +2,7 @@ import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
-    title: 'components/Select',
+    title: 'inputs/Select',
   },
   stories: ['Default', 'WithValue', 'Disabled', 'DisabledWithValue'],
   themes: ['light', 'dark'],
@@ -10,7 +10,7 @@ testStoryMatrix({
 
 testStoryMatrix({
   meta: {
-    title: 'components/Select',
+    title: 'inputs/Select',
   },
   stories: ['Open', 'OpenWithValue', 'OpenMany'],
   themes: ['light', 'dark'],

@@ -6,7 +6,7 @@ import { selectGroups } from './__mock__'
 type StoryArgs = { label: string; numberOfGroups: number } & Select.RootProps
 
 export default {
-  title: 'components/Select',
+  title: 'inputs/Select',
   component: Select.Root,
   render: ({ label, numberOfGroups, ...rootProps }) => (
     <Select.Root {...rootProps}>

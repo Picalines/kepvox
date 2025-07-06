@@ -7,7 +7,7 @@ import { Resizable } from '.'
 type StoryArgs = Resizable.GroupProps & { numberOfPanels: number }
 
 export default {
-  title: 'components/Resizable',
+  title: 'layout/Resizable',
   component: Resizable.Group,
   render: ({ numberOfPanels, ...args }) => (
     <Resizable.Group {...args} className={cn('size-full rounded-lg border', args.className)}>
