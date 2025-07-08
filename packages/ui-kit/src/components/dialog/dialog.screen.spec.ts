@@ -9,6 +9,6 @@ testStoryMatrix({
   fullPage: true,
   windowSize: { width: 800, height: 600 },
   act: async page => {
-    await page.locator('#dialog-content').waitFor({ state: 'visible' })
+    await page.getByText('Content').waitFor({ state: 'visible' })
   },
 })

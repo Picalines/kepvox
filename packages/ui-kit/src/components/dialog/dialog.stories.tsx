@@ -1,14 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react'
-
+import { fn } from '@storybook/test'
 import { Dialog } from '.'
 import { Button } from '../button'
 
-type StoryArgs = Dialog.RootProps & Partial<{ title: string; description: string; closable: boolean }>
+type StoryArgs = Dialog.RootProps & {
+  title: string
+  description: string
+  onConfirm: () => void
+}
 
 export default {
   title: 'layout/Dialog',
   component: Dialog.Root,
-  render: ({ title, description, closable, ...args }) => (
+  render: ({ title, description, onConfirm, ...args }) => (
     <Dialog.Root {...args}>
       <Dialog.Trigger>
         <Button.Root>
@@ -17,11 +21,19 @@ export default {
       </Dialog.Trigger>
       <Dialog.Title>{title}</Dialog.Title>
       <Dialog.Description>{description}</Dialog.Description>
-      <Dialog.Content closable={closable}>
-        <span id="dialog-content">Content</span>
-      </Dialog.Content>
+      <Dialog.Content>Content</Dialog.Content>
+      <Dialog.Action key="confirm" close onClick={onConfirm}>
+        Confirm
+      </Dialog.Action>
+      <Dialog.Action key="cancel" variant="secondary" close>
+        Cancel
+      </Dialog.Action>
     </Dialog.Root>
   ),
+  args: {
+    onConfirm: fn(),
+    onOpenChange: fn(),
+  },
   argTypes: {
     open: {
       table: { disable: true },

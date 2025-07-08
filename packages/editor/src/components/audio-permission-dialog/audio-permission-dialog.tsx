@@ -1,6 +1,4 @@
-import { Button } from '@repo/ui-kit/components/button'
 import { Dialog } from '@repo/ui-kit/components/dialog'
-import { Text } from '@repo/ui-kit/components/text'
 import { useUnit } from 'effector-react'
 import type { FC } from 'react'
 import { editorModel } from '#model'
@@ -12,17 +10,15 @@ export const AudioPermissionDialog: FC = () => {
   })
 
   return (
-    <Dialog.Root open={!hasAudioPermission}>
+    <Dialog.Root open={!hasAudioPermission} closable={false}>
       <Dialog.Title>Audio permission</Dialog.Title>
       <Dialog.Description>Attention needed</Dialog.Description>
-      <Dialog.Content closable={false} className="space-y-4">
-        <Text className="block">
-          Your browser has not allowed audio playback. For the editor to work correctly, please allow audio
-        </Text>
-        <Button.Root onClick={confirmAudio}>
-          <Button.Text>Allow audio</Button.Text>
-        </Button.Root>
+      <Dialog.Content>
+        Your browser has not allowed audio playback. For the editor to work correctly, please allow audio
       </Dialog.Content>
+      <Dialog.Action key="allow" onClick={confirmAudio}>
+        Allow audio
+      </Dialog.Action>
     </Dialog.Root>
   )
 }
