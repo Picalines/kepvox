@@ -5,9 +5,8 @@ import type { FC, ReactNode } from 'react'
 
 type Props = {
   children: ReactNode
-  closable?: boolean
-  trapFocus?: boolean
-  className?: string
+  overlayClosable: boolean
+  className: string
 }
 
 type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractOutside']>
@@ -15,13 +14,15 @@ type OnInteractOutside = NonNullable<RadixDialog.DialogContentProps['onInteractO
 const preventClosing: OnInteractOutside = event => event.preventDefault()
 
 export const DialogContent: FC<Props> = props => {
-  const { closable, ...contentProps } = props
+  const { children, overlayClosable, className } = props
 
   return (
     <RadixDialog.Content
-      {...contentProps}
-      onInteractOutside={closable ? undefined : preventClosing}
-      onPointerDownOutside={closable ? undefined : preventClosing}
-    />
+      className={className}
+      onInteractOutside={overlayClosable ? undefined : preventClosing}
+      onPointerDownOutside={overlayClosable ? undefined : preventClosing}
+    >
+      {children}
+    </RadixDialog.Content>
   )
 }
