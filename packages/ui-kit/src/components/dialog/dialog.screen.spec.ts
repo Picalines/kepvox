@@ -2,7 +2,7 @@ import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
-    title: 'layout/Dialog',
+    title: 'inputs/Dialog',
   },
   stories: ['Open'],
   themes: ['light', 'dark'],

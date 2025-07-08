@@ -10,7 +10,7 @@ type StoryArgs = Dialog.RootProps & {
 }
 
 export default {
-  title: 'layout/Dialog',
+  title: 'inputs/Dialog',
   component: Dialog.Root,
   render: ({ title, description, onConfirm, ...args }) => (
     <Dialog.Root {...args}>
