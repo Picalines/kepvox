@@ -10,7 +10,7 @@ import { NodeTile } from './node-tile'
 type StoryArgs = ComponentProps<typeof NodeTile>
 
 export default {
-  title: 'components/NodeTile',
+  title: 'tiles/Node',
   component: NodeTile,
   beforeEach: () => mockRunningAudioContext(),
   decorators: [

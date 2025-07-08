@@ -2,7 +2,7 @@ import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
-    title: 'components/AudioPermissionDialog',
+    title: 'dialogs/AudioPermissionDialog',
   },
   stories: ['Default'],
   themes: ['light'],
