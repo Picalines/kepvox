@@ -41,6 +41,7 @@ export default defineConfig({
           name: 'dom-unit',
           include: ['**/*.dom-unit.spec.ts(x)?'],
           environment: 'jsdom',
+          setupFiles: './vitest.setup.js',
           css: false,
         },
       },
