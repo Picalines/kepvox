@@ -14,7 +14,7 @@ export const NodeCreationDialog: FC = () => {
   })
 
   return (
-    <Dialog.Root open={opened} onOpenChange={cancel}>
+    <Dialog.Root open={opened} onOpenChange={cancel} closable>
       <Dialog.Title>Create Synth node</Dialog.Title>
       <Dialog.Description>Select type</Dialog.Description>
       <Dialog.Content>

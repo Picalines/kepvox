@@ -40,7 +40,7 @@ export const Content = createSlot({ name: 'Content' }).component<ContentProps>()
 export const Action = createSlot({ name: 'Action', repeatable: true }).component<ActionProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { children, closable = true, ...rootProps } = props
+  const { children, closable = false, ...rootProps } = props
 
   const { trigger, title, description, content, actions } = useSlots(children, {
     trigger: Trigger,
