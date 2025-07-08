@@ -10,7 +10,7 @@ import { PlaybackControls } from './playback-controls'
 type StoryArgs = ComponentProps<typeof PlaybackControls>
 
 export default {
-  title: 'components/MusicSheetTile/PlaybackControls',
+  title: 'tiles/MusicSheet/PlaybackControls',
   component: PlaybackControls,
   beforeEach: () => mockRunningAudioContext(),
   decorators: [

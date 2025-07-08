@@ -10,7 +10,7 @@ import { AudioPermissionDialog } from './audio-permission-dialog'
 type StoryArgs = ComponentProps<typeof AudioPermissionDialog>
 
 export default {
-  title: 'components/AudioPermissionDialog',
+  title: 'dialogs/AudioPermissionDialog',
   component: AudioPermissionDialog,
   beforeEach: () => mockSuspendedAudioContext(),
   decorators: [

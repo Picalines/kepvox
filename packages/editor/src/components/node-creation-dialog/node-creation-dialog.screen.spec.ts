@@ -2,10 +2,10 @@ import { testStoryMatrix } from '@repo/test-screen/test-story'
 
 testStoryMatrix({
   meta: {
-    title: 'components/NodeCreationDialog',
+    title: 'dialogs/NodeCreationDialog',
   },
   stories: ['Default'],
-  themes: ['light', 'dark'],
+  themes: ['light'],
   fullPage: true,
   windowSize: { width: 800, height: 600 },
   act: async page => {

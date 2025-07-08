@@ -10,7 +10,7 @@ import { MusicSheetTile } from './music-sheet-tile'
 type StoryArgs = ComponentProps<typeof MusicSheetTile>
 
 export default {
-  title: 'components/MusicSheetTile',
+  title: 'tiles/MusicSheet',
   component: MusicSheetTile,
   beforeEach: () => mockRunningAudioContext(),
   decorators: [

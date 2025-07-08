@@ -10,7 +10,7 @@ import { NodeCreationDialog } from './node-creation-dialog'
 type StoryArgs = ComponentProps<typeof NodeCreationDialog>
 
 export default {
-  title: 'components/NodeCreationDialog',
+  title: 'dialogs/NodeCreationDialog',
   component: NodeCreationDialog,
   beforeEach: () => mockRunningAudioContext(),
   decorators: [
