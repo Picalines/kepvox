@@ -22,10 +22,10 @@ export default {
       <Dialog.Title>{title}</Dialog.Title>
       <Dialog.Description>{description}</Dialog.Description>
       <Dialog.Content>Content</Dialog.Content>
-      <Dialog.Action key="confirm" close onClick={onConfirm}>
+      <Dialog.Action close onClick={onConfirm}>
         Confirm
       </Dialog.Action>
-      <Dialog.Action key="cancel" variant="secondary" close>
+      <Dialog.Action variant="secondary" close>
         Cancel
       </Dialog.Action>
     </Dialog.Root>
