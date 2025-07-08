@@ -10,7 +10,7 @@ export const AudioPermissionDialog: FC = () => {
   })
 
   return (
-    <Dialog.Root open={!hasAudioPermission} closable={false}>
+    <Dialog.Root open={!hasAudioPermission}>
       <Dialog.Title>Audio permission</Dialog.Title>
       <Dialog.Description>Attention needed</Dialog.Description>
       <Dialog.Content>
