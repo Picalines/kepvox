@@ -1,6 +1,7 @@
 import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
 import type { ComponentProps, ComponentType, FC, ReactNode } from 'react'
+import { Text as Typography } from '#components/text'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -82,7 +83,7 @@ export const Root: FC<RootProps> = props => {
   return (
     <button {...buttonProps} className={className}>
       {StartIcon && <StartIcon />}
-      {text?.children && <span>{text.children}</span>}
+      {text?.children && <Typography>{text.children}</Typography>}
       {EndIcon && <EndIcon />}
     </button>
   )
