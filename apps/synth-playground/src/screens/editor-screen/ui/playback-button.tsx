@@ -19,12 +19,11 @@ export const PlaybackButton = () => {
     <Tooltip.Root>
       <Tooltip.Trigger>
         <Button.Root
-          eager
-          action={toggled}
           size="lg"
           variant="outline"
           feedback={status === 'playing' ? 'negative' : 'none'}
           disabled={disabled}
+          onMouseDown={toggled}
         >
           <Button.Icon icon={status === 'playing' ? SquareIcon : PlayIcon} />
         </Button.Root>

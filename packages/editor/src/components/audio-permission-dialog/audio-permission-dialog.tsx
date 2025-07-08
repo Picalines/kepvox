@@ -19,7 +19,7 @@ export const AudioPermissionDialog: FC = () => {
         <Text className="block">
           Your browser has not allowed audio playback. For the editor to work correctly, please allow audio
         </Text>
-        <Button.Root action={confirmAudio}>
+        <Button.Root onClick={confirmAudio}>
           <Button.Text>Allow audio</Button.Text>
         </Button.Root>
       </Dialog.Content>
