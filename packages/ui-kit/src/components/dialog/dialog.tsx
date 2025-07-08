@@ -1,6 +1,6 @@
 import * as RadixDialog from '@radix-ui/react-dialog'
 import type { Overlay } from '@repo/common/typing'
-import type { FC, Key, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 import { Button } from '#components/button'
 import { Heading } from '#components/heading'
 import { XIcon } from '#icons'
@@ -27,7 +27,6 @@ export type ContentProps = { children: ReactNode }
 export type ActionProps = Overlay<
   Pick<Button.RootProps, 'variant' | 'onClick'>,
   {
-    key: Key
     children: string | string[]
     close?: boolean
   }
@@ -50,15 +49,15 @@ export const Root: FC<RootProps> = props => {
     actions: Action,
   })
 
-  const actionButtons = actions.map(({ key, children, props: { close, ...buttonProps } }) => {
+  const actionButtons = actions.map(({ key, children, props: { close, ...buttonProps } }, index) => {
     const button = (
-      <Button.Root variant="primary" {...buttonProps} key={key}>
+      <Button.Root variant="primary" {...buttonProps} key={key ?? index}>
         <Button.Text>{children as string}</Button.Text>
       </Button.Root>
     )
 
     return close ? (
-      <RadixDialog.Close key={key} asChild>
+      <RadixDialog.Close key={key ?? index} asChild>
         {button}
       </RadixDialog.Close>
     ) : (
