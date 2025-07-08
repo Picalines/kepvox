@@ -14,7 +14,8 @@ export default {
   title: 'inputs/Button',
   component: Button.Root,
   args: {
-    action: fn(),
+    onClick: fn(),
+    onMouseDown: fn(),
   },
 } satisfies Meta<StoryArgs>
 
