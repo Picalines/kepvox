@@ -1,6 +1,6 @@
 import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
-import type { ComponentType, FC, ReactNode } from 'react'
+import type { ComponentProps, ComponentType, FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
@@ -59,7 +59,7 @@ export const Text = createSlot({ name: 'Text' }).component<TextProps>()
 export const Icon = createSlot({ name: 'Icon' }).component<IconProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { children, className: classNameProp, variant, size, feedback, eager, action, ...buttonProps } = props
+  const { children, className: classNameProp, variant, size, feedback, eager, action, ...rootProps } = props
 
   const { text, icon } = useSlots(children, { text: Text, icon: Icon })
 
@@ -67,7 +67,10 @@ export const Root: FC<RootProps> = props => {
     throw new Error(`${Root.displayName} requires ${Text.displayName} or ${Icon.displayName}`)
   }
 
-  const [onClick, onMouseDown] = eager ? [undefined, action] : [action, undefined]
+  const buttonProps: ComponentProps<'button'> = {
+    ...rootProps,
+    ...(action ? (eager ? { onMouseDown: action } : { onClick: action }) : {}),
+  }
 
   const buttonClassName = buttonVariants({ variant, size, feedback })
   const className = cn(buttonClassName, classNameProp)
@@ -77,7 +80,7 @@ export const Root: FC<RootProps> = props => {
   const EndIcon = icon && iconPosition === 'end' ? icon.props.icon : null
 
   return (
-    <button {...buttonProps} onClick={onClick} onMouseDown={onMouseDown} className={className}>
+    <button {...buttonProps} className={className}>
       {StartIcon && <StartIcon />}
       {text?.children && <span>{text.children}</span>}
       {EndIcon && <EndIcon />}
