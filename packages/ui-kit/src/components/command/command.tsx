@@ -1,11 +1,9 @@
 import { Command as CmdkCommand } from 'cmdk'
 import { type ChangeEventHandler, type FC, Fragment, type ReactNode } from 'react'
 import { SearchIcon } from '#icons'
-import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
 export type RootProps = {
-  className?: string
   children: ReactNode
 }
 
@@ -48,17 +46,14 @@ export const Label = createSlot({ name: 'Label', required: true }).component<Lab
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children } = props
+  const { children } = props
 
   const { input, empty, groups } = useSlots(children, { input: Input, empty: Empty, groups: Group })
 
   return (
     <CmdkCommand
       loop
-      className={cn(
-        'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
-        className,
-      )}
+      className="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground"
     >
       <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
         <SearchIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
