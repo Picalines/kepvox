@@ -7,7 +7,7 @@ import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
 export type RootProps = Overlay<
-  VariantProps<typeof variants>,
+  VariantProps<typeof triggerVariants>,
   {
     children: ReactNode
     name?: string
@@ -63,8 +63,8 @@ export const Group = createSlot({ name: 'Group', repeatable: true }).component<G
 export const Header = createSlot({ name: 'Header' }).component<HeaderProps>()
 export const Item = createSlot({ name: 'Item', repeatable: true }).component<ItemProps>()
 
-const variants = cva(
-  'flex w-full items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all focus-within:outline-hidden focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed',
+const triggerVariants = cva(
+  'flex w-full min-w-fit items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all focus-within:outline-hidden focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed',
   {
     variants: {
       size: {
@@ -90,7 +90,7 @@ export const Root: FC<RootProps> = props => {
         <div className="relative has-disabled:opacity-50">
           <RadixSelect.Trigger
             aria-labelledby={label ? labelId : undefined}
-            className={cn(variants({ size }), 'peer group', trigger.props.className)}
+            className={cn(triggerVariants({ size }), 'peer group', trigger.props.className)}
           >
             <RadixSelect.Value className="line-clamp-1">{trigger.children}</RadixSelect.Value>
             {label && rootProps.defaultValue === undefined && rootProps.value === undefined && (
