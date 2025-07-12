@@ -18,7 +18,7 @@ export const NodeControlGrid: FC = () => {
   })
 
   return (
-    <ScrollArea.Root className="bg-background">
+    <ScrollArea.Root>
       <ScrollArea.Bar orientation="vertical" />
       <ScrollArea.Content>
         <div className="@container p-3">

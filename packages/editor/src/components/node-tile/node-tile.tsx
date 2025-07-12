@@ -28,8 +28,8 @@ export const NodeTile: FC = () => {
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center border-b bg-background p-3">
+    <div className="flex h-full flex-col bg-background">
+      <div className="flex shrink-0 items-center border-b p-3">
         <NodeHeading />
         <div className="grow" />
         <NodeColorSelect />
