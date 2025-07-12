@@ -12,11 +12,11 @@ export default {
   render: ({ text, ...args }) => (
     <div className="flex flex-col gap-2">
       {fontVariants.map(variant => (
-        <div key={variant}>
-          <Text variant="text-s" color="muted" className="block">
+        <div key={variant} className="flex flex-col">
+          <Text variant="text-s" color="muted">
             {variant}
           </Text>
-          <Text variant={variant} className="block" {...args}>
+          <Text variant={variant} {...args}>
             {text}
           </Text>
         </div>
@@ -24,9 +24,6 @@ export default {
     </div>
   ),
   argTypes: {
-    as: {
-      table: { disable: true },
-    },
     variant: {
       table: { disable: true },
     },
