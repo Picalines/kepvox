@@ -21,13 +21,13 @@ const DIMENSIONS = musicSheetDimensions({
 export const MusicSheetTile: FC = () => {
   return (
     <div className="relative h-full bg-background">
-      <Resizable.Group direction="horizontal" className="isolate">
+      <Resizable.Group direction="horizontal">
         <Resizable.Panel defaultSize={15} maxSize={30}>
           <div className="relative z-1 border-b bg-background" style={{ height: DIMENSIONS.timeline.height }} />
           <MusicSheetPianoRoll dimensions={DIMENSIONS} />
         </Resizable.Panel>
         <Resizable.Handle />
-        <Resizable.Panel defaultSize={85} className="relative">
+        <Resizable.Panel defaultSize={85}>
           <MusicSheetTimeline dimensions={DIMENSIONS} />
           <TimeMarkers />
           <ReactFlowProvider>
