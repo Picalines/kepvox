@@ -1,13 +1,10 @@
-import type { OmitExisting } from '@repo/common/typing'
-import { type ComponentProps, type FC, type ReactNode, useId } from 'react'
+import { type FC, type ReactNode, useId } from 'react'
 import { VDownIcon, VUpIcon } from '#icons'
-import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { NumberInputHeadless } from './number-input-headless'
 import { NumberInputStepButton } from './number-input-step-button'
 
 export type RootProps = {
-  className?: string
   name?: string
   value?: number
   defaultValue?: number
@@ -18,19 +15,19 @@ export type RootProps = {
   children?: ReactNode
 }
 
-export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFor'>
+export type LabelProps = { children: ReactNode }
 
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children, onValueChange, ...inputProps } = props
+  const { children, onValueChange, ...inputProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
   const inputId = useId()
 
   return (
-    <div className={cn('relative h-10', className)}>
+    <div className="relative h-10 min-w-26 basis-0">
       <NumberInputStepButton
         stepDirection="up"
         onValueChange={onValueChange}
@@ -57,12 +54,8 @@ export const Root: FC<RootProps> = props => {
       {label && (
         <label
           {...label.props}
-          ref={label.ref}
           htmlFor={inputId}
-          className={cn(
-            '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-[2px] bg-background text-muted-foreground text-xs transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-xs peer-disabled:text-muted-foreground/50',
-            label.props.className,
-          )}
+          className="-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] rounded-md border-background border-x-[2px] bg-background text-muted-foreground text-xs transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-xs peer-disabled:text-muted-foreground/50"
         >
           {label.children}
         </label>
