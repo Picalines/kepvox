@@ -17,11 +17,9 @@ export const NodeTile: FC = () => {
   if (!hasActiveNode) {
     return (
       <div className="relative size-full bg-background">
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 text-nowrap">
-          <Text color="muted" className="flex flex-col items-center">
-            <MousePointerClickIcon />
-            select node
-          </Text>
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 flex flex-col items-center text-nowrap text-muted-foreground">
+          <MousePointerClickIcon />
+          <Text>select node</Text>
         </div>
       </div>
     )

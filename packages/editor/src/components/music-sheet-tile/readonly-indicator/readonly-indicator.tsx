@@ -11,8 +11,10 @@ export const ReadonlyIndicator: FC = () => {
   }
 
   return (
-    <Text color="accent" weight="medium" className="pointer-events-none select-none rounded-md bg-accent p-1">
-      non-editable
-    </Text>
+    <div className="pointer-events-none select-none rounded-md bg-accent p-1">
+      <Text color="accent" weight="medium">
+        non-editable
+      </Text>
+    </div>
   )
 }
