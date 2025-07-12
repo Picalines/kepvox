@@ -17,9 +17,9 @@ export type RootProps = {
 
 export type TriggerProps = { children: ReactNode }
 
-export type TitleProps = Overlay<Heading.TitleProps, { children: ReactNode }>
+export type TitleProps = { children: ReactNode }
 
-export type DescriptionProps = Overlay<Heading.DescriptionProps, { children: ReactNode }>
+export type DescriptionProps = { children: ReactNode }
 
 export type ContentProps = { children: ReactNode }
 
@@ -79,10 +79,10 @@ export const Root: FC<RootProps> = props => {
             className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-50% data-[state=closed]:slide-out-to-top-50% data-[state=open]:slide-in-from-left-50% data-[state=open]:slide-in-from-top-50% -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 grid w-full max-w-md rounded-lg border bg-background p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=open]:animate-in"
           >
             <Heading.Root>
-              <Heading.Title {...title.props} ref={title.ref}>
+              <Heading.Title {...title.props}>
                 <RadixDialog.Title>{title.children}</RadixDialog.Title>
               </Heading.Title>
-              <Heading.Description {...description.props} ref={description.ref}>
+              <Heading.Description {...description.props}>
                 <RadixDialog.Description>{description.children}</RadixDialog.Description>
               </Heading.Description>
             </Heading.Root>

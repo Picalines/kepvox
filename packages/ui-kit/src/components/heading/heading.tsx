@@ -1,28 +1,36 @@
-import type { Overlay } from '@repo/common/typing'
-import type { ComponentProps, FC, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { Text, type TextProps } from '../text'
 
-export type SuperTitleProps = TextProps
-export type TitleProps = TextProps
-export type DescriptionProps = TextProps
+export type RootProps = {
+  children: ReactNode
+  align?: 'start' | 'center' | 'end'
+}
+
+export type SuperTitleProps = {
+  children: ReactNode
+  color?: TextProps['color']
+}
+
+export type TitleProps = {
+  children: ReactNode
+  color?: TextProps['color']
+}
+
+export type DescriptionProps = {
+  children: ReactNode
+  color?: TextProps['color']
+}
 
 export const SuperTitle = createSlot({ name: 'SuperTitle' }).component<SuperTitleProps>()
+
 export const Title = createSlot({ name: 'Title' }).component<TitleProps>()
+
 export const Description = createSlot({ name: 'Description' }).component<DescriptionProps>()
 
-export type RootProps = Overlay<
-  ComponentProps<'div'>,
-  {
-    children: ReactNode
-    className?: string
-    align?: 'start' | 'center' | 'end'
-  }
->
-
 export const Root: FC<RootProps> = props => {
-  const { children, className, align = 'start', ...rootProps } = props
+  const { children, align = 'start', ...rootProps } = props
 
   const { superTitle, title, description } = useSlots(children, {
     superTitle: SuperTitle,
@@ -37,24 +45,24 @@ export const Root: FC<RootProps> = props => {
   return (
     <div
       {...rootProps}
-      className={cn(
-        'flex flex-col',
-        { 'text-start': align === 'start', 'text-center': align === 'center', 'text-end': align === 'end' },
-        className,
-      )}
+      className={cn('flex flex-col', {
+        'text-start': align === 'start',
+        'text-center': align === 'center',
+        'text-end': align === 'end',
+      })}
     >
       {superTitle && (
-        <Text variant="text-xs" color="muted" {...superTitle.props} ref={superTitle.ref}>
+        <Text variant="text-xs" color="muted" {...superTitle.props}>
           {superTitle.children}
         </Text>
       )}
       {title && (
-        <Text variant="heading-m" {...title.props} ref={title.ref}>
+        <Text variant="heading-m" {...title.props}>
           {title.children}
         </Text>
       )}
       {description && (
-        <Text variant="text-m" color="muted" {...description.props} ref={description.ref}>
+        <Text variant="text-m" color="muted" {...description.props}>
           {description.children}
         </Text>
       )}

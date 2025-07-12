@@ -7,8 +7,8 @@ type StoryArgs = Heading.RootProps & Partial<{ superTitle: string; title: string
 export default {
   title: 'typography/Heading',
   component: Heading.Root,
-  render: ({ className, superTitle, title, description, ...args }) => (
-    <Heading.Root className={className} {...args}>
+  render: ({ superTitle, title, description, ...args }) => (
+    <Heading.Root {...args}>
       {superTitle ? <Heading.SuperTitle>{superTitle}</Heading.SuperTitle> : null}
       {title ? <Heading.Title>{title}</Heading.Title> : null}
       {description ? <Heading.Description>{description}</Heading.Description> : null}

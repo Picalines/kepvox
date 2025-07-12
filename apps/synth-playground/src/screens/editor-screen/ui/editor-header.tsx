@@ -14,7 +14,7 @@ export const EditorHeader: FC = () => {
         <Tooltip.Trigger>
           <Heading.Root>
             <Heading.SuperTitle>@kepvox/synth</Heading.SuperTitle>
-            <Heading.Title variant="text-m">Playground</Heading.Title>
+            <Heading.Title>Playground</Heading.Title>
           </Heading.Root>
         </Tooltip.Trigger>
         <Tooltip.Content>TODO: about</Tooltip.Content>
