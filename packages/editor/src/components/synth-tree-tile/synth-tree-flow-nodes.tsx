@@ -47,24 +47,26 @@ const SynthFlowNodeComponent: FC<NodeProps<SynthFlowNode>> = props => {
 
   return (
     <>
-      <Text
+      <div
         className={cn(
-          '-top-[1rlh] pointer-events-none absolute left-1 font-bold text-muted-foreground transition-all ease-out',
+          '-top-[1rlh] pointer-events-none absolute left-1 transition-all ease-out',
           selected && '-translate-y-1',
         )}
       >
-        {number}
-      </Text>
+        <Text color="muted" weight="bold">
+          {number}
+        </Text>
+      </div>
       <div
         className={cn(
-          'rounded-md border-2 border-accent bg-gradient-to-b p-1 px-2 ring-offset-background transition-all ease-out',
+          'rounded-md border-2 border-accent bg-gradient-to-b p-1 px-2 text-white ring-offset-background transition-all ease-out',
           selected && 'ring-2 ring-offset-2',
           NODE_COLOR_CLASSNAMES[color],
           isPlaying && !outgoingConnections && numberOfOutputs && 'opacity-65',
         )}
         style={{ width: `${width}px`, height: `${height}px` }}
       >
-        <Text className="text-white">{capitalize(type)}</Text>
+        <Text>{capitalize(type)}</Text>
       </div>
       {Array.from({ length: numberOfInputs }).map((_, i) => (
         <Handle key={String(i)} type="target" id={String(i)} position={Position.Left} className="!h-3 !w-3" />

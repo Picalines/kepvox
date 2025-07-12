@@ -1,12 +1,9 @@
 import * as RadixCheckbox from '@radix-ui/react-checkbox'
-import type { OmitExisting } from '@repo/common/typing'
-import { type ComponentProps, type FC, type ReactNode, useId } from 'react'
+import { type FC, type ReactNode, useId } from 'react'
 import { CheckIcon } from '#icons'
-import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
 export type RootProps = {
-  className?: string
   name?: string
   /**
    * @default "on"
@@ -20,19 +17,19 @@ export type RootProps = {
   onCheckedChange?: (checked: boolean) => void
 }
 
-export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFor'>
+export type LabelProps = { children: ReactNode }
 
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children, ...rootProps } = props
+  const { children, ...rootProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
   const checkboxId = useId()
 
   return (
-    <div className={cn('flex items-center space-x-2', className)}>
+    <div className="flex items-center space-x-2">
       <RadixCheckbox.Root
         {...rootProps}
         id={checkboxId}
@@ -43,12 +40,7 @@ export const Root: FC<RootProps> = props => {
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
       {label && (
-        <label
-          {...label.props}
-          ref={label.ref}
-          htmlFor={checkboxId}
-          className={cn('peer-disabled:opacity-50', label.props.className)}
-        >
+        <label {...label.props} htmlFor={checkboxId} className="peer-disabled:opacity-50">
           {label.children}
         </label>
       )}

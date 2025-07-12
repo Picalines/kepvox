@@ -21,8 +21,8 @@ export const NodeHeading: FC<Props> = () => {
 
   return (
     <Heading.Root>
-      <Heading.Title variant="text-s">{capitalize(nodeType)}</Heading.Title>
-      <Heading.Description variant="text-xs">#{nodeNumber}</Heading.Description>
+      <Heading.Title>{capitalize(nodeType)}</Heading.Title>
+      <Heading.Description>#{nodeNumber}</Heading.Description>
     </Heading.Root>
   )
 }

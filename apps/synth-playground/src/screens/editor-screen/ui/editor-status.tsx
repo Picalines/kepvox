@@ -17,9 +17,7 @@ export const EditorStatus: FC = () => {
     return (
       <Heading.Root>
         <Heading.SuperTitle color="destructive">{error.name}:</Heading.SuperTitle>
-        <Heading.Title variant="text-m" color="destructive">
-          {error.message}
-        </Heading.Title>
+        <Heading.Description color="destructive">{error.message}</Heading.Description>
       </Heading.Root>
     )
   }

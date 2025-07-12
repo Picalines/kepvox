@@ -1,7 +1,6 @@
 import type { Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
-import type { ComponentProps, ElementType, FC, ReactNode } from 'react'
-import { cn } from '#lib/classnames'
+import type { FC, ReactNode } from 'react'
 
 const textVariants = cva('', {
   variants: {
@@ -42,11 +41,9 @@ const textVariants = cva('', {
 })
 
 export type TextProps = Overlay<
-  ComponentProps<'span'> | ComponentProps<'label'>,
   VariantProps<typeof textVariants>,
   {
     children?: ReactNode
-    as?: ElementType
   }
 >
 
@@ -57,9 +54,7 @@ export type TextColor = NonNullable<TextProps['color']>
 export type TextWeight = NonNullable<TextProps['weight']>
 
 export const Text: FC<TextProps> = props => {
-  const { as: Element = 'span', className, variant, color, weight, italic, underline, ...elementProps } = props
+  const { variant, color, weight, italic, underline, ...elementProps } = props
 
-  return (
-    <Element {...elementProps} className={cn(textVariants({ variant, color, weight, italic, underline }), className)} />
-  )
+  return <span {...elementProps} className={textVariants({ variant, color, weight, italic, underline })} />
 }

@@ -8,6 +8,7 @@ export {
   ChevronLeftIcon as VLeftIcon,
   ChevronRightIcon as VRightIcon,
   ChevronUpIcon as VUpIcon,
+  CircleAlertIcon,
   CircleHelpIcon,
   CirclePlusIcon,
   Columns3Icon,

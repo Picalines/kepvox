@@ -10,11 +10,6 @@ export default {
   args: {
     centered: false,
   },
-  argTypes: {
-    className: {
-      table: { disable: true },
-    },
-  },
 } satisfies Meta<StoryArgs>
 
 type Story = StoryObj<StoryArgs>

@@ -41,12 +41,7 @@ export const TempoControls: FC = () => {
           </Select.Group>
         </Select.Content>
       </Select.Root>
-      <NumberInput.Root
-        value={beatsPerMinute}
-        onValueChange={onBeatsPerMinuteChange}
-        disabled={isReadonly}
-        className="w-30"
-      >
+      <NumberInput.Root value={beatsPerMinute} onValueChange={onBeatsPerMinuteChange} disabled={isReadonly}>
         <NumberInput.Label>BPM</NumberInput.Label>
       </NumberInput.Root>
     </>

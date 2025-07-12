@@ -32,20 +32,18 @@ const NoteFlowNodeComponent: FC<NodeProps<SheetNoteFlowNode>> = props => {
   })
 
   return (
-    <>
-      <div
-        className={cn(
-          'relative flex items-center rounded-md bg-gradient-to-r px-1 ring-offset-background transition-all',
-          SYNTH_COLOR_CLASSNAMES[synthColor],
-          selected && 'ring-2 ring-offset-2',
-        )}
-        style={{ width, height }}
-      >
-        <Text color="inherit" className="font-bold">
-          {synthNumber ?? <XIcon className="zoom-in-75 fade-in-0 animate-in" />}
-        </Text>
-      </div>
-    </>
+    <div
+      className={cn(
+        'relative flex items-center rounded-md bg-gradient-to-r px-1 ring-offset-background transition-all',
+        SYNTH_COLOR_CLASSNAMES[synthColor],
+        selected && 'ring-2 ring-offset-2',
+      )}
+      style={{ width, height }}
+    >
+      <Text color="inherit" weight="bold">
+        {synthNumber ?? <XIcon className="zoom-in-75 fade-in-0 animate-in" />}
+      </Text>
+    </div>
   )
 }
 
