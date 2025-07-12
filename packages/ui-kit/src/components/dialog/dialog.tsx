@@ -4,7 +4,6 @@ import type { FC, ReactNode } from 'react'
 import { Button } from '#components/button'
 import { Heading } from '#components/heading'
 import { XIcon } from '#icons'
-import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 import { DialogContent } from './dialog-content'
 
@@ -73,11 +72,7 @@ export const Root: FC<RootProps> = props => {
         </RadixDialog.Trigger>
       )}
       <RadixDialog.Portal>
-        <RadixDialog.Overlay
-          className={cn(
-            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 animate-in bg-black/80 data-[state=closed]:animate-out',
-          )}
-        />
+        <RadixDialog.Overlay className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 animate-in bg-black/80 data-[state=closed]:animate-out" />
         {(content || actionButtons.length > 0) && (
           <DialogContent
             overlayClosable={closable}
