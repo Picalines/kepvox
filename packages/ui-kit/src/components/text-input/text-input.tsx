@@ -1,13 +1,10 @@
-import type { OmitExisting } from '@repo/common/typing'
-import { type ComponentProps, type FC, type ReactNode, useId } from 'react'
-import { cn } from '#lib/classnames'
+import { type FC, type ReactNode, useId } from 'react'
 import { createSlot, useSlots } from '#lib/slots'
 import { TextInputHeadless } from './text-input-headless'
 
 export type InputType = 'text' | 'password'
 
 export type RootProps = {
-  className?: string
   name?: string
   value?: string
   defaultValue?: string
@@ -18,19 +15,19 @@ export type RootProps = {
   children?: ReactNode
 }
 
-export type LabelProps = OmitExisting<ComponentProps<'label'>, 'color' | 'htmlFor'>
+export type LabelProps = { children: ReactNode }
 
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children, ...inputProps } = props
+  const { children, ...inputProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
   const inputId = useId()
 
   return (
-    <div className={cn('relative', className)}>
+    <div className="relative">
       <TextInputHeadless
         {...inputProps}
         id={inputId}
@@ -40,12 +37,8 @@ export const Root: FC<RootProps> = props => {
       {label && (
         <label
           {...label.props}
-          ref={label.ref}
           htmlFor={inputId}
-          className={cn(
-            '-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-[2px] bg-background text-muted-foreground text-sm transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-sm peer-disabled:text-muted-foreground/50',
-            label.props.className,
-          )}
+          className="-translate-y-1/2 peer-focus-visible:-top-1 pointer-events-none absolute top-0 left-3 origin-left translate-x-[-2px] border-background border-x-[2px] bg-background text-muted-foreground text-sm transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus-visible:text-ring peer-focus-visible:text-sm peer-disabled:text-muted-foreground/50"
         >
           {label.children}
         </label>
