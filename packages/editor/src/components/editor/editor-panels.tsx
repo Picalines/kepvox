@@ -9,8 +9,8 @@ import { editorModel } from '#model'
 
 export const EditorPanels: FC = () => {
   return (
-    <Resizable.Group direction="vertical" className="h-full w-full">
-      <Resizable.Panel defaultSize={50} className="relative">
+    <Resizable.Group direction="vertical">
+      <Resizable.Panel defaultSize={50}>
         <LoaderFallback>
           <MusicSheetTile />
         </LoaderFallback>
@@ -18,13 +18,13 @@ export const EditorPanels: FC = () => {
       <Resizable.Handle />
       <Resizable.Panel defaultSize={50}>
         <Resizable.Group direction="horizontal">
-          <Resizable.Panel defaultSize={25} className="relative">
+          <Resizable.Panel defaultSize={25}>
             <LoaderFallback>
               <NodeTile />
             </LoaderFallback>
           </Resizable.Panel>
           <Resizable.Handle />
-          <Resizable.Panel defaultSize={75} className="relative">
+          <Resizable.Panel defaultSize={75}>
             <LoaderFallback>
               <SynthTreeTile />
             </LoaderFallback>
