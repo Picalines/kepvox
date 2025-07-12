@@ -5,7 +5,6 @@ import { cn } from '#lib/classnames'
 import { createSlot, useSlots } from '#lib/slots'
 
 export type RootProps = {
-  className?: string
   name?: string
   value?: number
   defaultValue?: number
@@ -23,7 +22,7 @@ export type LabelProps = { children: ReactNode }
 export const Label = createSlot({ name: 'Label' }).component<LabelProps>()
 
 export const Root: FC<RootProps> = props => {
-  const { className, children, value, defaultValue, onValueChange: onValueChangeProp, ...sliderProps } = props
+  const { children, value, defaultValue, onValueChange: onValueChangeProp, ...sliderProps } = props
 
   const { label } = useSlots(children, { label: Label })
 
@@ -46,7 +45,7 @@ export const Root: FC<RootProps> = props => {
   )
 
   return (
-    <div className={cn('relative', className)}>
+    <div className="relative">
       <RadixSlider.Root
         {...sliderProps}
         value={value !== undefined ? [value] : undefined}
