@@ -58,7 +58,7 @@ export const testStory = (params: TestStoryParams) => {
 
       while (true) {
         try {
-          await page.goto(storyUrl.toString())
+          await page.goto(storyUrl)
 
           await page
             .locator('#storybook-root > *')
