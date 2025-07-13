@@ -13,7 +13,6 @@
         "test:unit": "vitest run",
         "test:screen": "PLAYWRIGHT_PORT=6001 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
-        "playwright:install": "playwright install chromium --with-deps",
         "playwright:server": "pnpm run dev:storybook"
     },
     "exports": {
@@ -71,7 +70,6 @@
         "@types/react": "catalog:",
         "@types/react-is": "catalog:",
         "jsdom": "catalog:",
-        "playwright": "catalog:",
         "storybook": "catalog:",
         "typescript": "catalog:",
         "vitest": "catalog:"

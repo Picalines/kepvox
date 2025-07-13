@@ -14,7 +14,6 @@
         "test:screen": "PLAYWRIGHT_PORT=6004 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
         "ts:check": "tsc --noEmit",
-        "playwright:install": "playwright install chromium --with-deps",
         "playwright:server": "pnpm run dev:storybook"
     },
     "imports": {
@@ -51,7 +50,6 @@
         "@testing-library/user-event": "catalog:",
         "@types/react": "catalog:",
         "jsdom": "catalog:",
-        "playwright": "catalog:",
         "storybook": "catalog:",
         "typescript": "catalog:"
     }

@@ -6,6 +6,13 @@
     "globalPassThroughEnv": ["TMPDIR"],
 
     "tasks": {
+        "//#lint": {},
+        "//#format": {},
+        "//#fix": {},
+        "//#fix-unsafe": {},
+        "//#ci:check": {},
+        "//#test:screen:install-playwright": { "cache": false },
+
         "start": {
             "persistent": true,
             "cache": false,
@@ -22,26 +29,17 @@
         "test:unit": {},
         "test:screen": {
             "cache": false,
-            "dependsOn": ["^build", "playwright:install", "test:screen:setup"]
+            "dependsOn": ["//#test:screen:install-playwright", "^build", "test:screen:setup"]
         },
         "test:screen:update": {
             "cache": false,
-            "dependsOn": ["^build", "playwright:install", "test:screen:setup"]
+            "dependsOn": ["//#test:screen:install-playwright", "^build", "test:screen:setup"]
         },
         "test:screen:setup": {},
-        "playwright:install": {
-            "cache": false
-        },
 
         "ts:check": {
             "dependsOn": ["^ts:check"]
         },
-        "//#lint": {},
-        "//#ci:check": {},
-
-        "//#format": {},
-        "//#fix": {},
-        "//#fix-unsafe": {},
 
         "dev": {
             "cache": false,
