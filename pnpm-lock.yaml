@@ -93,9 +93,6 @@ catalogs:
     patronum:
       specifier: ^2.3.0
       version: 2.3.0
-    playwright:
-      specifier: ^1.49.1
-      version: 1.49.1
     react:
       specifier: ^19.0.0
       version: 19.0.0
@@ -146,6 +143,9 @@ importers:
       lefthook:
         specifier: ^1.7.9
         version: 1.7.9
+      playwright:
+        specifier: ^1.49.1
+        version: 1.49.1
       turbo:
         specifier: ^2.5.0
         version: 2.5.0
@@ -237,9 +237,6 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.0.2(@types/react@19.0.2)
-      playwright:
-        specifier: 'catalog:'
-        version: 1.49.1
       storybook:
         specifier: 'catalog:'
         version: 8.6.12
@@ -334,9 +331,6 @@ importers:
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
-      playwright:
-        specifier: 'catalog:'
-        version: 1.49.1
       storybook:
         specifier: 'catalog:'
         version: 8.6.12
@@ -371,9 +365,6 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.0.2
-      playwright:
-        specifier: 'catalog:'
-        version: 1.49.1
       react:
         specifier: 'catalog:'
         version: 19.0.0
@@ -492,9 +483,6 @@ importers:
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
-      playwright:
-        specifier: 'catalog:'
-        version: 1.49.1
       storybook:
         specifier: 'catalog:'
         version: 8.6.12

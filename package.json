@@ -6,19 +6,20 @@
     "description": "Web audio synthesizer inspired by SunVox",
     "scripts": {
         "build": "turbo build --",
-        "start": "turbo start --",
-        "test:unit": "turbo run test:unit --",
-        "test:screen": "turbo run test:screen --",
-        "ts:check": "turbo run ts:check --",
-        "lint": "biome lint .",
         "ci:check": "biome check .",
         "ci:pre-commit": "biome check --write",
-        "format": "biome format --write .",
+        "dev": "turbo dev --",
+        "dev:storybook": "turbo dev:storybook --",
+        "dev:unit": "turbo dev:unit --",
         "fix": "biome check --write .",
         "fix-unsafe": "biome check --write --unsafe .",
-        "dev": "turbo dev --",
-        "dev:unit": "turbo dev:unit --",
-        "dev:storybook": "turbo dev:storybook --"
+        "format": "biome format --write .",
+        "lint": "biome lint .",
+        "start": "turbo start --",
+        "test:screen": "turbo run test:screen --",
+        "test:screen:install-playwright": "playwright install chromium --with-deps",
+        "test:unit": "turbo run test:unit --",
+        "ts:check": "turbo run ts:check --"
     },
     "keywords": [],
     "author": "picalines",
@@ -27,6 +28,7 @@
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "lefthook": "^1.7.9",
+        "playwright": "^1.49.1",
         "turbo": "^2.5.0"
     }
 }
