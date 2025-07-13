@@ -11,9 +11,8 @@
         "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
         "test:unit": "vitest run",
-        "test:screen": "PLAYWRIGHT_PORT=6001 playwright test",
-        "test:screen:update": "pnpm run test:screen --update-snapshots",
-        "playwright:server": "pnpm run dev:storybook"
+        "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6001 playwright test",
+        "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
     "exports": {
         "./style.css": "./src/styles/index.css",

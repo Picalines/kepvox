@@ -1,5 +1,9 @@
 import { type PlaywrightTestConfig, devices } from '@playwright/test'
 
+if (!process.env.PLAYWRIGHT_SERVER || !process.env.PLAYWRIGHT_PORT) {
+  throw new Error('missing PLAYWRIGHT_SERVER and PLAYWRIGHT_PORT environment variables')
+}
+
 const config: PlaywrightTestConfig = {
   testDir: '.',
   outputDir: './test-results',
@@ -48,7 +52,7 @@ const config: PlaywrightTestConfig = {
   workers: process.env.CI ? undefined : 8,
 
   webServer: {
-    command: 'pnpm run playwright:server',
+    command: `pnpm run ${process.env.PLAYWRIGHT_SERVER}`,
     port: Number(process.env.PLAYWRIGHT_PORT),
     reuseExistingServer: !process.env.CI,
     stdout: 'ignore',
