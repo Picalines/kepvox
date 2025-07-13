@@ -11,9 +11,8 @@
         "build": "next build",
         "start": "next start",
         "ts:check": "tsc --noEmit",
-        "test:screen": "PLAYWRIGHT_PORT=6002 playwright test",
+        "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6002 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
-        "playwright:server": "pnpm run dev:storybook",
         "setup:copy-synth-dts": "node ./scripts/copy-synth-dts.js"
     },
     "imports": {
