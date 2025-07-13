@@ -12,6 +12,12 @@ const config = {
   core: {
     builder: '@storybook/builder-vite',
   },
+
+  viteFinal: config => {
+    config.server ??= {}
+    config.server.allowedHosts = true
+    return config
+  },
 } satisfies StorybookConfig
 
 export default config
