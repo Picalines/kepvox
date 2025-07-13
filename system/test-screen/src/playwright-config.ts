@@ -4,6 +4,8 @@ if (!process.env.PLAYWRIGHT_SERVER || !process.env.PLAYWRIGHT_PORT) {
   throw new Error('missing PLAYWRIGHT_SERVER and PLAYWRIGHT_PORT environment variables')
 }
 
+const baseURL = `http://0.0.0.0:${process.env.PLAYWRIGHT_PORT}`
+
 const config: PlaywrightTestConfig = {
   testDir: '.',
   outputDir: './test-results',
@@ -25,6 +27,7 @@ const config: PlaywrightTestConfig = {
 
   use: {
     channel: 'chromium',
+    baseURL,
     locale: 'en-US',
     headless: true,
     viewport: { width: 1280, height: 720 },
@@ -48,12 +51,12 @@ const config: PlaywrightTestConfig = {
     },
   ],
 
-  retries: 2,
+  retries: 0,
   workers: process.env.CI ? undefined : 8,
 
   webServer: {
     command: `pnpm run ${process.env.PLAYWRIGHT_SERVER}`,
-    port: Number(process.env.PLAYWRIGHT_PORT),
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     stdout: 'ignore',
     stderr: 'pipe',
