@@ -1,4 +1,4 @@
-name: CI
+name: Verify PR
 
 on:
   pull_request:
