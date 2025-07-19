@@ -11,7 +11,7 @@ node_modules
 *.tsbuildinfo
 .next
 next-env.d.ts
-dist
+out
 
 # testing
 coverage
