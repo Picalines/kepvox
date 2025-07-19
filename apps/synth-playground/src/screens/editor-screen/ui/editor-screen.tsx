@@ -1,5 +1,3 @@
-'use server'
-
 import type { FC } from 'react'
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
