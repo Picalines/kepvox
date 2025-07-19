@@ -7,6 +7,11 @@
   <img width="45%" alt="image" src="https://github.com/user-attachments/assets/4a436cb2-2517-4aa6-b6e7-3496f10756c0" />
 </p>
 
+<p align="center">
+  <a href="https://picalines.github.io/kepvox/synth-playground/" style="text-decoration: none">
+    <img alt="synth package playground" src="https://img.shields.io/badge/synth_package_playground-black?style=for-the-badge&logo=github&link=https%3A%2F%2Fpicalines.github.io%2Fkepvox%2Fsynth-playground"></a>
+</p>
+
 ## Development
 
 ### Packages
