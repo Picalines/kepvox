@@ -12,7 +12,7 @@
         "dev:storybook": "storybook dev -p 6004 --no-open",
         "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6004 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "imports": {
         "#components/*": "./src/components/*/index.ts",

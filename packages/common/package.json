@@ -15,7 +15,7 @@
     },
     "scripts": {
         "dev:unit": "vitest watch",
-        "ts:check": "tsc --noEmit",
+        "lint:ts": "tsc --noEmit",
         "test:unit": "vitest run"
     },
     "imports": {

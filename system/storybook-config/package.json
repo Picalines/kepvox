@@ -12,7 +12,7 @@
         "./vite/main": "./src/vite.storybook.main.ts"
     },
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "imports": {
         "#base/main": "./src/base.storybook.main.ts"

@@ -8,7 +8,7 @@
         ".": "./src/next-config.ts"
     },
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "peerDependencies": {
         "@effector/swc-plugin": "catalog:",
