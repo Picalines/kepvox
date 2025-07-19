@@ -1,6 +1,6 @@
-# Synth Playground
+# Editor (standalone)
 
-![GitHub Pages Deployment](https://img.shields.io/badge/available_on_pages-black?style=for-the-badge&logo=github&link=https%3A%2F%2Fpicalines.github.io%2Fkepvox%2Feditor)
+[![GitHub Pages Deployment](https://img.shields.io/badge/available_on_pages-black?style=for-the-badge&logo=github)](https://picalines.github.io/kepvox/editor)
 
 Standalone version of the [editor](../../packages/editor/README.md) built as a static page
 
