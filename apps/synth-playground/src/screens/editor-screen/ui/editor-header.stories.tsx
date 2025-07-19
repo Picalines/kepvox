@@ -4,8 +4,8 @@ import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { allSettled, fork } from 'effector'
 import { Provider } from 'effector-react'
 import type { ComponentProps } from 'react'
+import { model } from '../model'
 import { EditorHeader } from './editor-header'
-import { EditorScreenGate } from './editor-screen-gate'
 
 type StoryArgs = ComponentProps<typeof EditorHeader>
 
@@ -20,7 +20,7 @@ export default {
     Story => (
       <Tooltip.Provider>
         <Provider value={scope}>
-          <EditorScreenGate />
+          <model.Gate />
           <div className="flex h-20 flex-col">
             <Story />
           </div>
