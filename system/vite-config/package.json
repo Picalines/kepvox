@@ -15,7 +15,7 @@
         "#base": "./src/base.vite.config.js"
     },
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
         "@repo/ts-config": "workspace:*",

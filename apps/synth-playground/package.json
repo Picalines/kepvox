@@ -9,7 +9,7 @@
         "dev:storybook": "NODE_ENV=development storybook dev -p 6002 --no-open",
         "build": "next build",
         "start": "next start",
-        "ts:check": "tsc --noEmit",
+        "lint:ts": "tsc --noEmit",
         "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6002 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
         "setup:copy-synth-dts": "node ./scripts/copy-synth-dts.js"

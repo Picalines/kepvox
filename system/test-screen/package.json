@@ -9,7 +9,7 @@
         "./test-story": "./src/test-story.ts"
     },
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "peerDependencies": {
         "@storybook/react": "catalog:"

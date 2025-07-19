@@ -5,7 +5,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "ts:check": "tsc --noEmit"
+        "lint:ts": "tsc --noEmit"
     },
     "exports": {
         "./draw": "./src/draw/index.ts",
