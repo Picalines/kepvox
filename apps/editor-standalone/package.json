@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "editor-standalone",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev:next": "NODE_ENV=development next dev -p 3002",
+        "dev:storybook": "NODE_ENV=development storybook dev -p 6005 --no-open",
+        "build": "next build",
+        "start": "next start",
+        "lint:ts": "tsc --noEmit",
+        "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6005 playwright test",
+        "test:screen:update": "pnpm run test:screen --update-snapshots"
+    },
+    "imports": {
+        "#screens/*": "./src/screens/*/index.ts"
+    },
+    "dependencies": {
+        "@effector/next": "catalog:",
+        "@repo/editor": "workspace:*",
+        "@repo/ui-kit": "workspace:*",
+        "@withease/factories": "catalog:",
+        "effector": "catalog:",
+        "effector-react": "catalog:",
+        "effector-storage": "catalog:",
+        "next": "catalog:",
+        "patronum": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "use-sync-external-store": "catalog:"
+    },
+    "devDependencies": {
+        "@effector/swc-plugin": "catalog:",
+        "@repo/next-config": "workspace:*",
+        "@repo/storybook-config": "workspace:*",
+        "@repo/tailwind-config": "workspace:*",
+        "@repo/test-screen": "workspace:*",
+        "@repo/ts-config": "workspace:*",
+        "@repo/vite-config": "workspace:*",
+        "@storybook/react": "catalog:",
+        "@tailwindcss/postcss": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "storybook": "catalog:",
+        "typescript": "catalog:"
+    }
+}
