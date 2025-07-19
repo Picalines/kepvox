@@ -21,7 +21,7 @@
         "start:setup": {},
 
         "build": {
-            "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+            "outputs": ["out/**", ".next/**", "!.next/cache/**"],
             "dependsOn": ["^build", "build:setup"]
         },
         "build:setup": {},

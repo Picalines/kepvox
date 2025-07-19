@@ -10,13 +10,13 @@
     "files": {
         "include": ["./*.json", "apps/**", "packages/**", "system/**"],
         "ignore": [
-            ".turbo/**",
             ".next/**",
-            "dist/**",
-            "target/**",
+            ".turbo/**",
+            "out/**",
+            "playwright-report/**",
             "public/**",
-            "test-results/**",
-            "playwright-report/**"
+            "target/**",
+            "test-results/**"
         ]
     }
 }

@@ -16,7 +16,7 @@
 
         "setup:copy-synth-dts": {
             "dependsOn": ["@repo/synth#build"],
-            "inputs": ["../../packages/synth/dist/**"],
+            "inputs": ["../../packages/synth/out/**"],
             "outputs": ["./public/synth.d.ts.txt"]
         }
     }
