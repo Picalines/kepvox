@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
     swcPlugins: [['@effector/swc-plugin', {}]],
   },
 
-  output: 'standalone',
-
   webpack: (config, { dev }) => {
     config.module.rules.push({
       test: /^.+\.txt$/,
