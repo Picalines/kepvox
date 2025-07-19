@@ -8,15 +8,12 @@
     ],
 
     "files": {
-        "include": ["./*.json", "apps/**", "packages/**", "system/**"],
-        "ignore": [
-            ".next/**",
-            ".turbo/**",
-            "out/**",
-            "playwright-report/**",
-            "public/**",
-            "target/**",
-            "test-results/**"
-        ]
+        "include": ["./*.json", "apps/**", "packages/**", "system/**"]
+    },
+
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
     }
 }
