@@ -6,7 +6,6 @@
     "type": "module",
     "sideEffects": ["**/*.css"],
     "scripts": {
-        "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6001 --no-open",
         "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",

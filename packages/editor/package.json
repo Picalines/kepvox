@@ -9,7 +9,6 @@
         "./meta": "./src/meta/index.ts"
     },
     "scripts": {
-        "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6004 --no-open",
         "test:screen": "PLAYWRIGHT_SERVER=dev:storybook PLAYWRIGHT_PORT=6004 playwright test",
         "test:screen:update": "pnpm run test:screen --update-snapshots",
