@@ -44,13 +44,13 @@ jobs:
           mv apps/synth-playground/out gh-pages-out/synth-playground
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: gh-pages-out
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
