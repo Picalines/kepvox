@@ -164,9 +164,16 @@ export const createSerializer = createFactory((params: Params) => {
     isOpened && props ? props.serializationTimeout : -1,
   )
 
+  const $serializationHandlerExists = combine(
+    gate.$isOpened,
+    gate.$props,
+    (isOpened, props) => isOpened && Boolean(props?.onSerialized),
+  )
+
   sample({
     clock: trackedActionDispatched,
     filter: and(
+      $serializationHandlerExists,
       $isLoaded,
       $changeTimeout.map(t => t >= 0),
     ),
