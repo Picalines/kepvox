@@ -35,11 +35,11 @@ export const MusicSheetTile: FC = () => {
           </ReactFlowProvider>
         </Resizable.Panel>
       </Resizable.Group>
-      <div className="absolute right-2 bottom-2 z-1 flex justify-end gap-2">
+      <div className="absolute right-2 bottom-2 z-20 flex justify-end gap-2">
         <TempoControls />
         <PlaybackControls />
       </div>
-      <div className="absolute top-1 right-1 z-1">
+      <div className="absolute top-1 right-1 z-20">
         <ReadonlyIndicator />
       </div>
     </div>
