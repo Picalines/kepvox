@@ -24,12 +24,5 @@ reverb.connect(context.output)
 
 ## Development
 
-```bash
-# Start Storybook
-pnpm dev
-
-# Run tests
-pnpm test:unit
-pnpm test:screen
-```
+See [the root README](../../README.md) for a list of available scripts
 

@@ -31,14 +31,14 @@ Libraries:
 
 ```bash
 pnpm install # Install dependencies
+pnpm add turbo --global # Use turbo to run scripts
 
-pnpm dev # Start all development servers
+turbo dev # Start all development servers
 
-pnpm test:unit # Run unit tests
-pnpm test:screen # Run playwright tests
+turbo test:unit # Run unit tests
+turbo test:screen # Run playwright tests
 
-# Formatting and linting with Biome
-pnpm format
-pnpm lint
-pnpm fix
+turbo lint # Check formatting and types
+turbo lint:fix # Fix formatting
+turbo lint:fix-unsafe # Apply potentially breaking fixes if available
 ```

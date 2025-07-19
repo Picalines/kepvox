@@ -14,11 +14,5 @@ declare const project: Project = {/* ... */}
 
 ## Development
 
-```bash
-# Start Storybook for component development
-pnpm dev
-
-# Run tests
-pnpm test:screen
-```
+See [the root README](../../README.md) for a list of available scripts
 
