@@ -1,14 +1,16 @@
+'use client'
+
 import type { FC } from 'react'
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
+import { model } from '../model'
 import { CodeEditor } from './code-editor'
 import { EditorHeader } from './editor-header'
-import { EditorScreenGate } from './editor-screen-gate'
 
-export const EditorScreen: FC = async () => {
+export const EditorScreen: FC = () => {
   return (
     <Tooltip.Provider>
-      <EditorScreenGate />
+      <model.Gate />
       <div className="flex h-screen flex-col">
         <EditorHeader />
         <CodeEditor className="flex-grow" />
