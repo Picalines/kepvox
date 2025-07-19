@@ -39,11 +39,12 @@ jobs:
         run: pnpm install
 
       - name: Build apps
-        run: pnpm exec turbo build --filter=synth-playground
+        run: pnpm exec turbo build -F=synth-playground -F=editor-standalone
 
       - name: Prepare Pages artifact
         run: |
           mkdir gh-pages-out
+          mv apps/editor-standalone/out gh-pages-out/editor
           mv apps/synth-playground/out gh-pages-out/synth-playground
 
       - name: Upload Pages artifact
