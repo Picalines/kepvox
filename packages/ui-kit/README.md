@@ -4,12 +4,5 @@ UI component library created with [shadcn/ui](https://ui.shadcn.com/docs/compone
 
 ## Development
 
-```bash
-# Start Storybook
-pnpm dev
-
-# Run tests
-pnpm test:unit
-pnpm test:screen
-```
+See [the root README](../../README.md) for a list of available scripts
 
