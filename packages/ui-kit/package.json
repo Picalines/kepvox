@@ -17,7 +17,6 @@
         "./style.css": "./src/styles/index.css",
         "./classnames": "./src/lib/classnames.ts",
         "./slots": "./src/lib/slots/index.ts",
-        "./hocs": "./src/lib/hocs/index.ts",
         "./types": "./src/lib/types.ts",
         "./components/*": "./src/components/*/index.ts",
         "./icons": "./src/icons/index.ts",
@@ -28,7 +27,6 @@
         "#config/vite": "./vite.config.js",
         "#icons": "./src/icons/index.ts",
         "#lib/classnames": "./src/lib/classnames.ts",
-        "#lib/hocs": "./src/lib/hocs/index.ts",
         "#lib/slots": "./src/lib/slots/index.ts"
     },
     "dependencies": {
