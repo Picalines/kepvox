@@ -5,7 +5,6 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "turbo run --ui=stream dev:next dev:storybook",
         "dev:next": "NODE_ENV=development next dev -p 3001",
         "dev:storybook": "NODE_ENV=development storybook dev -p 6002 --no-open",
         "build": "next build",

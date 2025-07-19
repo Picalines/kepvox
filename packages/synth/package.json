@@ -13,7 +13,6 @@
     },
     "scripts": {
         "build": "tsup",
-        "dev": "pnpm run dev:storybook",
         "dev:storybook": "storybook dev -p 6003 --no-open",
         "dev:unit": "vitest watch",
         "ts:check": "tsc --noEmit",
