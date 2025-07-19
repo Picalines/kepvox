@@ -5,10 +5,9 @@
     "private": true,
     "description": "Web audio synthesizer inspired by SunVox",
     "scripts": {
-        "lint:biome": "biome check .",
-        "lint:fix": "biome check --write .",
-        "lint:fix-unsafe": "biome check --write --unsafe .",
-        "pre-commit": "biome check --write",
+        "lint:biome": "biome check",
+        "lint:fix": "biome check --write",
+        "lint:fix-unsafe": "biome check --write --unsafe",
         "test:screen:install-playwright": "playwright install chromium --with-deps"
     },
     "keywords": [],
