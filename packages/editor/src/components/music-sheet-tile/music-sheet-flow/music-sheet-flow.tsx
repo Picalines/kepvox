@@ -1,5 +1,5 @@
 import { assertDefined } from '@repo/common/assert'
-import { SynthTime } from '@repo/synth'
+import { Time } from '@repo/synth'
 import {
   type CoordinateExtent,
   type NodeOrigin,
@@ -62,7 +62,7 @@ export const MusicSheetFlow: FC<Props> = props => {
       if (isHoveringFlow.current) {
         requestActions(
           changes
-            .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: SynthTime.eighth.toNotes(), change }))
+            .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: Time.eighth.toNotes(), change }))
             .filter(action => action !== null),
         )
       }

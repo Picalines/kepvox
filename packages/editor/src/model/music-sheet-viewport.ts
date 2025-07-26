@@ -1,5 +1,5 @@
 import { step } from '@repo/common/math'
-import { GeneratorSynthNode, Notes, type PitchNotation, SynthTime } from '@repo/synth'
+import { GeneratorSynthNode, Notes, type PitchNotation, Time } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { combine, createEvent, createStore, sample } from 'effector'
 import { nanoid } from 'nanoid'
@@ -13,8 +13,8 @@ export type MusicSheetPreviewStore = ReturnType<typeof createMusicSheetViewport>
 
 export type NotePreview = {
   pitch: PitchNotation
-  time: SynthTime
-  duration: SynthTime
+  time: Time
+  duration: Time
 }
 
 export type SheetViewportPosition = {
@@ -23,8 +23,8 @@ export type SheetViewportPosition = {
   zoom: number
 }
 
-const DEFAULT_PREVIEW_DURATION = SynthTime.quarter
-const MIN_PREVIEW_DURATION = SynthTime.sixteenth
+const DEFAULT_PREVIEW_DURATION = Time.quarter
+const MIN_PREVIEW_DURATION = Time.sixteenth
 
 type Params = {
   gate: EditorGate
@@ -36,7 +36,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   const { gate, history, synthTree } = params
 
   const $position = createStore<SheetViewportPosition>({ x: 0, y: 0, zoom: 1 })
-  const $timeSnapping = createStore(SynthTime.quarter)
+  const $timeSnapping = createStore(Time.quarter)
   const $notePreviewPosition = createStore<Pick<NotePreview, 'pitch' | 'time'> | null>(null)
   const $notePreviewDuration = createStore(DEFAULT_PREVIEW_DURATION)
 
@@ -50,8 +50,8 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   )
 
   const userMovedSheet = createEvent<SheetViewportPosition>()
-  const userMovedNotePreview = createEvent<{ pitch: PitchNotation; time: SynthTime }>()
-  const userStretchedNotePreview = createEvent<{ until: SynthTime }>()
+  const userMovedNotePreview = createEvent<{ pitch: PitchNotation; time: Time }>()
+  const userStretchedNotePreview = createEvent<{ until: Time }>()
   const userHidNotePreview = createEvent()
   const userRequestedANote = createEvent()
 
@@ -63,7 +63,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
     target: $notePreviewPosition,
     fn: (snapping, { pitch, time }) => ({
       pitch,
-      time: SynthTime.fromNotes(Notes.orClamp(step(time.toNotes(), snapping.toNotes()))),
+      time: Time.atNote(Notes.orClamp(step(time.toNotes(), snapping.toNotes()))),
     }),
   })
 
@@ -85,7 +85,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
 
       const cellWidth = snapping.toNotes()
       const snappedNotes = Math.ceil(until.sub(time).toNotes() / cellWidth) * cellWidth
-      return MIN_PREVIEW_DURATION.max(SynthTime.fromNotes(Notes.orClamp(snappedNotes)))
+      return MIN_PREVIEW_DURATION.max(Time.atNote(Notes.orClamp(snappedNotes)))
     },
   })
 

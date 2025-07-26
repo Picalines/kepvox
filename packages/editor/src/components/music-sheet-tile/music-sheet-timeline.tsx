@@ -1,4 +1,4 @@
-import { Notes, Range, SynthTime } from '@repo/synth'
+import { Notes, Range, Time } from '@repo/synth'
 import { useUnit } from 'effector-react'
 import { type FC, type MouseEventHandler, useCallback, useId, useMemo, useRef } from 'react'
 import { editorModel } from '#model'
@@ -21,7 +21,7 @@ export const MusicSheetTimeline: FC<Props> = props => {
 
   const containerRef = useRef<SVGSVGElement>(null)
 
-  const wholeNoteWidth = dimensions.note.width(SynthTime.note)
+  const wholeNoteWidth = dimensions.note.width(Time.note)
 
   const onClick = useCallback<MouseEventHandler>(
     event => {
@@ -30,7 +30,7 @@ export const MusicSheetTimeline: FC<Props> = props => {
         return
       }
 
-      const time = SynthTime.fromNotes(
+      const time = Time.atNote(
         Notes.orClamp(
           Range.positive.clamp(event.clientX - container.getBoundingClientRect().left - position.x) / wholeNoteWidth,
         ),

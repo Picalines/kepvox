@@ -6,7 +6,7 @@ import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
-import type { SynthTime } from '#time'
+import type { Time } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { SynthNode } from '../synth-node'
@@ -144,7 +144,7 @@ export class GeneratorSynthNode extends SynthNode {
     this.context.stopped.watchUntil(this.disposed, mute)
   }
 
-  attackAt(time: SynthTime, frequency: Hertz) {
+  attackAt(time: Time, frequency: Hertz) {
     const voice = this.#voices.find(voice => voice.adsr.state.valueAt(time) === 'idle') ?? assertedAt(this.#voices, 0)
 
     voice.frequency.holdValueAt(time)
@@ -152,7 +152,7 @@ export class GeneratorSynthNode extends SynthNode {
     voice.adsr.attackAt(time)
   }
 
-  releaseAt(time: SynthTime, frequency?: Hertz) {
+  releaseAt(time: Time, frequency?: Hertz) {
     const voices =
       frequency === undefined
         ? this.#voices
@@ -169,7 +169,7 @@ export class GeneratorSynthNode extends SynthNode {
     }
   }
 
-  muteAt(time: SynthTime) {
+  muteAt(time: Time) {
     for (const voice of this.#voices) {
       voice.adsr.muteAt(time)
       voice.frequency.holdValueAt(time)

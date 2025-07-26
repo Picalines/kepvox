@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Factor, Hertz, Seconds } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
@@ -92,7 +92,7 @@ export const Limited: Story = {
       oscillator.frequency.initialValue = Hertz(4)
 
       gain.factor.initialValue = Factor(0)
-      gain.factor.curve.rampValueUntil(SynthTime.half, Factor(1))
+      gain.factor.curve.rampValueUntil(Time.half, Factor(1))
     },
   },
 }

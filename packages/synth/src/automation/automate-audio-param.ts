@@ -2,7 +2,7 @@ import type { ReadonlyAutomationCurve } from '#automation'
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import type { Signal } from '#signal'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import type { UnitName, UnitValue } from '#units'
 
 type Params<TUnit extends UnitName> = {
@@ -19,7 +19,7 @@ type Params<TUnit extends UnitName> = {
   /**
    * Change the curve value before sending it to AudioParam
    */
-  map?: (curveValue: UnitValue<TUnit>, time: SynthTime) => number
+  map?: (curveValue: UnitValue<TUnit>, time: Time) => number
 }
 
 /**
@@ -31,7 +31,7 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
 
   const audioContext = context[INTERNAL_AUDIO_CONTEXT]
 
-  const scheduleEvents = (start: SynthTime) => {
+  const scheduleEvents = (start: Time) => {
     const skippedSeconds = context.secondsPerNote.areaBefore(start)
 
     const now = audioContext.currentTime
@@ -57,7 +57,7 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
 
   const stopAudio = () => {
     audioParam.cancelScheduledValues(0)
-    audioParam.value = map(curve.valueAt(SynthTime.start), SynthTime.start)
+    audioParam.value = map(curve.valueAt(Time.start), Time.start)
   }
 
   context.playing.watchUntil(until, ({ start }) => scheduleEvents(start))

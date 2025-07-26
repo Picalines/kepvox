@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react'
 import type { SynthContext } from '#context'
 import { Pitch } from '#pitch'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Factor, Normal, Notes, Seconds } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
@@ -56,7 +56,7 @@ const createGenerator = (params: CreateGeneratorParams) => {
 export const Default: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const generator = createGenerator({
         context,
@@ -67,17 +67,17 @@ export const Default: Story = {
         waveShape: 'triangle',
       })
 
-      generator.attackAt(SynthTime.start, Pitch.frequency('C1'))
-      generator.releaseAt(SynthTime.note.repeat(3), Pitch.frequency('C1'))
+      generator.attackAt(Time.start, Pitch.frequency('C1'))
+      generator.releaseAt(Time.note.repeat(3), Pitch.frequency('C1'))
     },
   },
 }
 
 export const Polyphony: Story = {
   args: {
-    timeMarkers: [SynthTime.note.repeat(3), SynthTime.note.repeat(4)],
+    timeMarkers: [Time.note.repeat(3), Time.note.repeat(4)],
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 6))
+      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 6))
 
       const gain = new GainSynthNode(context)
       gain.factor.initialValue = Factor(1)
@@ -93,10 +93,10 @@ export const Polyphony: Story = {
         destination: gain,
       })
 
-      generator.attackAt(SynthTime.start, Pitch.frequency('C1'))
-      generator.releaseAt(SynthTime.note.repeat(3), Pitch.frequency('C1'))
+      generator.attackAt(Time.start, Pitch.frequency('C1'))
+      generator.releaseAt(Time.note.repeat(3), Pitch.frequency('C1'))
 
-      generator.attackAt(SynthTime.note.repeat(3), Pitch.frequency('A5'))
+      generator.attackAt(Time.note.repeat(3), Pitch.frequency('A5'))
     },
   },
 }

@@ -1,4 +1,4 @@
-import { type PitchNotation, Range, SynthTime, TimeSignature } from '@repo/synth'
+import { type PitchNotation, Range, Time, TimeSignature } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { createStore, sample } from 'effector'
 import { attach } from 'effector/effector.umd'
@@ -13,8 +13,8 @@ import type { SynthTreeStore } from './synth-tree'
 export type Note = {
   id: NoteId
   synthId: NodeId
-  time: SynthTime
-  duration: SynthTime
+  time: Time
+  duration: Time
   pitch: PitchNotation
   selected: boolean
 }
@@ -35,7 +35,7 @@ export const createMusicSheet = createFactory((params: Params) => {
   const $notes = createStore<ReadonlyMap<NoteId, Note>>(new Map())
   const $timeSignature = createStore(new TimeSignature(4, 4))
   const $beatsPerMinute = createStore(125)
-  const $endTime = createStore(SynthTime.note.repeat(5))
+  const $endTime = createStore(Time.note.repeat(5))
 
   reset({
     clock: [synthTree.initialized],
@@ -45,7 +45,7 @@ export const createMusicSheet = createFactory((params: Params) => {
   const setTempoFx = attach({
     source: { context: playback.$context, timeSignature: $timeSignature, beatsPerMinute: $beatsPerMinute },
     effect: ({ context, timeSignature, beatsPerMinute }) => {
-      context?.secondsPerNote.setValueAt(SynthTime.start, timeSignature.bpmToSecondsPerNote(beatsPerMinute))
+      context?.secondsPerNote.setValueAt(Time.start, timeSignature.bpmToSecondsPerNote(beatsPerMinute))
     },
   })
 

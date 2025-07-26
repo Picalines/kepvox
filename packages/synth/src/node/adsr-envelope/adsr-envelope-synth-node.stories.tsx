@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
 import type { SynthContext } from '#context'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Normal, Notes, Seconds } from '#units'
 import { ConstantSynthNode } from '../constant'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
@@ -55,9 +55,9 @@ const createEnvelope = (params: CreateEnvelopeParams) => {
 
 export const Default: Story = {
   args: {
-    timeMarkers: [SynthTime.note, SynthTime.note.repeat(2), SynthTime.note.repeat(3)],
+    timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
         context,
@@ -67,17 +67,17 @@ export const Default: Story = {
         release: Notes(1),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
     },
   },
 }
 
 export const Chained: Story = {
   args: {
-    timeMarkers: [SynthTime.note.repeat(3)],
+    timeMarkers: [Time.note.repeat(3)],
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1 / 8))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 8))
 
       const envelope = createEnvelope({
         context,
@@ -87,20 +87,20 @@ export const Chained: Story = {
         release: Notes(1),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
-      envelope.attackAt(SynthTime.note.repeat(3))
-      envelope.releaseAt(SynthTime.note.repeat(7))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
+      envelope.attackAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.note.repeat(7))
     },
   },
 }
 
 export const Oscillator: Story = {
   args: {
-    timeMarkers: [SynthTime.note, SynthTime.note.repeat(2), SynthTime.note.repeat(3)],
+    timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
         context,
@@ -111,8 +111,8 @@ export const Oscillator: Story = {
         source: new OscillatorSynthNode(context),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
     },
   },
 }
@@ -120,7 +120,7 @@ export const Oscillator: Story = {
 export const NoAttack: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
         context,
@@ -130,8 +130,8 @@ export const NoAttack: Story = {
         release: Notes(1),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
     },
   },
 }
@@ -139,7 +139,7 @@ export const NoAttack: Story = {
 export const NoDecay: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const envelope = createEnvelope({
         context,
@@ -149,8 +149,8 @@ export const NoDecay: Story = {
         release: Notes(1),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
     },
   },
 }
@@ -158,7 +158,7 @@ export const NoDecay: Story = {
 export const NoRelease: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const envelope = createEnvelope({
         context,
@@ -168,8 +168,8 @@ export const NoRelease: Story = {
         release: Notes(0),
       })
 
-      envelope.attackAt(SynthTime.start)
-      envelope.releaseAt(SynthTime.note.repeat(3))
+      envelope.attackAt(Time.start)
+      envelope.releaseAt(Time.note.repeat(3))
     },
   },
 }

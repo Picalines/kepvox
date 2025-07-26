@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Factor, Seconds } from '#units'
 import { ConstantSynthNode } from './constant-synth-node'
 
@@ -45,11 +45,11 @@ export const LinearRamp: Story = {
   args: {
     duration: Seconds(1),
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
       const constant = new ConstantSynthNode(context)
       constant.connect(context.output)
       constant.value.initialValue = Factor(0)
-      constant.value.curve.rampValueUntil(SynthTime.note, Factor(1))
+      constant.value.curve.rampValueUntil(Time.note, Factor(1))
     },
   },
 }

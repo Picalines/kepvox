@@ -1,13 +1,13 @@
 import { assertDefined, assertUnreachable, assertedAt } from '@repo/common/assert'
 import { isNonEmpty } from '@repo/common/predicate'
 import { Signal } from '#signal'
-import type { SynthTime } from '#time'
+import type { Time } from '#time'
 import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timeline'
 
 export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTimeline<TEvent> {
   readonly #changed = Signal.controlled<{ event: TEvent }>()
 
-  readonly #cancelled = Signal.controlled<{ after: SynthTime }>()
+  readonly #cancelled = Signal.controlled<{ after: Time }>()
 
   readonly #events: TEvent[] = []
 
@@ -19,7 +19,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     return this.#cancelled.signal
   }
 
-  get timeRange(): [start: SynthTime, end: SynthTime] {
+  get timeRange(): [start: Time, end: Time] {
     if (!this.#events.length) {
       throw new Error(`${EventTimeline.name} has no events`)
     }
@@ -30,7 +30,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
   }
 
   /**
-   * Merges given event with an existing one at the {@link SynthTime}
+   * Merges given event with an existing one at the {@link Time}
    */
   mergeEvent(event: TEvent) {
     const lastEventIndex = this.#eventIndexBeforeOrAt(event.time)
@@ -53,7 +53,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     this.#changed.emit({ event: newEvent })
   }
 
-  cancelEventsAfter(time: SynthTime) {
+  cancelEventsAfter(time: Time) {
     const cutIndex = this.#eventIndexAfter(time)
     if (cutIndex !== null) {
       this.#events.splice(cutIndex)
@@ -61,41 +61,41 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     }
   }
 
-  eventAt(time: SynthTime): TEvent | null {
+  eventAt(time: Time): TEvent | null {
     return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
   }
 
-  eventBefore(time: SynthTime): TEvent | null {
+  eventBefore(time: Time): TEvent | null {
     return this.#events[this.#eventIndexBefore(time) ?? -1] ?? null
   }
 
-  eventBeforeOrAt(time: SynthTime): TEvent | null {
+  eventBeforeOrAt(time: Time): TEvent | null {
     return this.#events[this.#eventIndexBeforeOrAt(time) ?? -1] ?? null
   }
 
-  eventAfter(time: SynthTime): TEvent | null {
+  eventAfter(time: Time): TEvent | null {
     return this.#events[this.#eventIndexAfter(time) ?? -1] ?? null
   }
 
-  eventAfterOrAt(time: SynthTime): TEvent | null {
+  eventAfterOrAt(time: Time): TEvent | null {
     return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
   }
 
-  *eventsAfter(time: SynthTime): Generator<TEvent, void, undefined> {
+  *eventsAfter(time: Time): Generator<TEvent, void, undefined> {
     const startIndex = this.#eventIndexAfter(time) ?? this.#events.length
     for (let i = startIndex; i < this.#events.length; i++) {
       yield assertedAt(this.#events, i)
     }
   }
 
-  *eventsBefore(time: SynthTime): Generator<TEvent, void, undefined> {
+  *eventsBefore(time: Time): Generator<TEvent, void, undefined> {
     const stopIndex = this.#eventIndexBefore(time) ?? -1
     for (let i = 0; i <= stopIndex; i++) {
       yield assertedAt(this.#events, i)
     }
   }
 
-  *eventsInRange(start: SynthTime, end: SynthTime): Generator<TEvent, void, undefined> {
+  *eventsInRange(start: Time, end: Time): Generator<TEvent, void, undefined> {
     const startIndex = this.#eventIndexAfterOrAt(start) ?? 0
     const endIndex = this.#eventIndexBeforeOrAt(end) ?? this.#events.length - 1
     for (let i = startIndex; i <= endIndex; i++) {
@@ -103,11 +103,11 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     }
   }
 
-  eventSpan(time: SynthTime): [TEvent | null, TEvent | null] {
+  eventSpan(time: Time): [TEvent | null, TEvent | null] {
     return [this.eventBeforeOrAt(time), this.eventAfter(time)]
   }
 
-  #eventIndexBeforeOrAt(time: SynthTime): number | null {
+  #eventIndexBeforeOrAt(time: Time): number | null {
     const events = this.#events
     if (!isNonEmpty(events)) {
       return null
@@ -147,7 +147,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     assertUnreachable(`${EventTimeline} search failed`)
   }
 
-  #eventIndexBefore(time: SynthTime): number | null {
+  #eventIndexBefore(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
     return lastIndex !== null
       ? this.#events[lastIndex]?.time.equals(time)
@@ -156,7 +156,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
       : null
   }
 
-  #eventIndexAfterOrAt(time: SynthTime): number | null {
+  #eventIndexAfterOrAt(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
     return lastIndex !== null
       ? this.#events[lastIndex]?.time.isBefore(time)
@@ -165,7 +165,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
       : null
   }
 
-  #eventIndexAfter(time: SynthTime): number | null {
+  #eventIndexAfter(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
     return lastIndex !== null ? this.#eventIndexOrNull(lastIndex + 1) : null
   }
