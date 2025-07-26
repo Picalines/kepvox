@@ -2,9 +2,9 @@ import { AutomationCurve, automateAudioParam } from '#automation'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import { Range } from '#math'
 import { OutputSynthNode } from '#node'
+import { Signal } from '#signal'
 import { SynthTime } from '#time'
 import { Notes, Seconds } from '#units'
-import { Signal } from '#util/signal'
 import { createSeededRandom } from './seeded-random'
 
 export type SynthContextOpts = {

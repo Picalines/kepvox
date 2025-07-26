@@ -1,4 +1,4 @@
-import { Signal } from '#util/signal'
+import { Signal } from '#signal'
 import { SYNTH_PARAM_TYPE, SynthParam, type SynthParamOpts } from './synth-param'
 
 export type EnumSynthParamOpts<V extends string> = SynthParamOpts & {

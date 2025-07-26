@@ -1,5 +1,5 @@
+import type { Signal } from '#signal'
 import type { SynthTime } from '#time'
-import type { Signal } from '#util/signal'
 
 export type TimedEvent = {
   time: SynthTime
