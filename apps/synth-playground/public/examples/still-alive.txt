@@ -1,4 +1,4 @@
-import { GeneratorSynthNode, GainSynthNode, SynthTime as T, Factor, Pitch, PitchNotation } from 'synth'
+import { GeneratorSynthNode, GainSynthNode, Time as T, Factor, Pitch, PitchNotation } from 'synth'
 import { context } from 'synth/playground'
 
 const generator = new GeneratorSynthNode(context, { maxPolyphony: 16 })

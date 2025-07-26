@@ -1,4 +1,4 @@
-import { OscillatorSynthNode, ADSREnvelopeSynthNode, SynthTime, Seconds, Hertz, Notes, Normal, Pitch } from 'synth'
+import { OscillatorSynthNode, ADSREnvelopeSynthNode, Time, Seconds, Hertz, Notes, Normal, Pitch } from 'synth'
 import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
@@ -9,17 +9,17 @@ envelope.connect(context.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.waveShape.value = 'sawtooth'
-envelope.attack.initialValue = SynthTime.note.toNotes()
-envelope.decay.initialValue = SynthTime.note.toNotes()
+envelope.attack.initialValue = Time.note.toNotes()
+envelope.decay.initialValue = Time.note.toNotes()
 envelope.sustain.initialValue = Normal(0.5)
-envelope.release.initialValue = SynthTime.note.toNotes()
+envelope.release.initialValue = Time.note.toNotes()
 
-let time = SynthTime.start
+let time = Time.start
 for (let i = 0; i < 5; i++) {
   envelope.attackAt(time)
-  time = time.add(SynthTime.note)
+  time = time.add(Time.note)
   envelope.releaseAt(time)
-  time = time.add(SynthTime.note)
+  time = time.add(Time.note)
   oscillator.frequency.curve.rampValueUntil(time, Hertz(440 + 40 * i))
   context.secondsPerNote.rampValueUntil(time, Seconds(1 / (i + 1)))
 }

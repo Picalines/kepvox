@@ -1,4 +1,4 @@
-import { OscillatorSynthNode, SynthTime, Pitch } from 'synth'
+import { OscillatorSynthNode, Time, Pitch } from 'synth'
 import { context } from 'synth/playground'
 
 const oscillator = new OscillatorSynthNode(context)
@@ -6,5 +6,5 @@ const oscillator = new OscillatorSynthNode(context)
 oscillator.connect(context.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
-oscillator.frequency.curve.holdValueAt(SynthTime.half)
-oscillator.frequency.curve.rampValueUntil(SynthTime.note, Pitch.frequency('A5'))
+oscillator.frequency.curve.holdValueAt(Time.half)
+oscillator.frequency.curve.rampValueUntil(Time.note, Pitch.frequency('A5'))
