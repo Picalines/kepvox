@@ -13,7 +13,7 @@ export default {
   component: WaveformStory,
   args: {
     numberOfChannels: 1,
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
   },
   parameters: {
     layout: 'fullscreen',
@@ -25,13 +25,13 @@ type Story = StoryObj<StoryArgs>
 export const HalfFactor: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
 
       const constant = new ConstantSynthNode(context)
-      constant.value.initialValue = Factor.orThrow(1)
+      constant.value.initialValue = Factor(1)
 
       const gain = new GainSynthNode(context)
-      gain.factor.initialValue = Factor.orThrow(0.5)
+      gain.factor.initialValue = Factor(0.5)
 
       constant.connect(gain)
       gain.connect(context.output)
@@ -42,13 +42,13 @@ export const HalfFactor: Story = {
 export const Decibel: Story = {
   args: {
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
 
       const constant = new ConstantSynthNode(context)
-      constant.value.initialValue = Factor.orThrow(1)
+      constant.value.initialValue = Factor(1)
 
       const gain = new GainSynthNode(context)
-      gain.decibels.initialValue = Decibels.orThrow(0)
+      gain.decibels.initialValue = Decibels(0)
       gain.decibels.curve.rampValueUntil(SynthTime.note, Decibels.orThrow(-30), 'exponential')
 
       constant.connect(gain)

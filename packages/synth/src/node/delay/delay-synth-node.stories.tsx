@@ -14,7 +14,7 @@ export default {
   title: 'nodes/Delay',
   component: WaveformStory,
   args: {
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
     numberOfChannels: 2,
     waveformDetails: 0.1,
   },
@@ -29,11 +29,11 @@ export const Default: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'triangle'
-      oscillator.frequency.initialValue = Hertz.orThrow(2)
+      oscillator.frequency.initialValue = Hertz(2)
 
       const delay = new DelaySynthNode(context)
       delay.delayRight.initialValue = SynthTime.quarter.toNotes()
@@ -48,21 +48,21 @@ export const WithOriginal: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'sine'
-      oscillator.frequency.initialValue = Hertz.orThrow(4)
+      oscillator.frequency.initialValue = Hertz(4)
 
       const delay = new DelaySynthNode(context)
-      delay.dry.initialValue = Normal.orThrow(1)
-      delay.wetLeft.initialValue = Normal.orThrow(0.5)
-      delay.wetRight.initialValue = Normal.orThrow(0.5)
+      delay.dry.initialValue = Normal(1)
+      delay.wetLeft.initialValue = Normal(0.5)
+      delay.wetRight.initialValue = Normal(0.5)
       delay.delayLeft.initialValue = SynthTime.quarter.toNotes()
       delay.delayRight.initialValue = SynthTime.half.toNotes()
 
       const gain = new GainSynthNode(context)
-      gain.factor.initialValue = Factor.orThrow(0.5)
+      gain.factor.initialValue = Factor(0.5)
 
       oscillator.connect(delay)
       delay.connect(gain)

@@ -44,14 +44,14 @@ export class ReverbSynthNode extends SynthNode {
     this.duration = new NumberSynthParam({
       node: this,
       unit: 'seconds',
-      initialValue: Seconds.orThrow(1),
+      initialValue: Seconds(1),
       range: Range.positive,
     })
 
     this.decay = new NumberSynthParam({
       node: this,
       unit: 'factor',
-      initialValue: Factor.orThrow(2),
+      initialValue: Factor(2),
       range: Range.positiveNonZero,
     })
 

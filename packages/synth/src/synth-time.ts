@@ -1,17 +1,17 @@
 import { Notes, Ticks } from '#units'
 
-const TICKS_IN_NOTE = Ticks.orThrow(64)
+const TICKS_IN_NOTE = Ticks(64)
 
 export class SynthTime {
-  static readonly start = new SynthTime(Ticks.orThrow(0))
+  static readonly start = new SynthTime(Ticks(0))
 
-  static readonly note = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE))
-  static readonly half = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 2))
-  static readonly quarter = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 4))
-  static readonly eighth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 8))
-  static readonly sixteenth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 16))
-  static readonly thirtySecond = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 32))
-  static readonly sixtyFourth = new SynthTime(Ticks.orThrow(TICKS_IN_NOTE / 64))
+  static readonly note = new SynthTime(Ticks(TICKS_IN_NOTE))
+  static readonly half = new SynthTime(Ticks(TICKS_IN_NOTE / 2))
+  static readonly quarter = new SynthTime(Ticks(TICKS_IN_NOTE / 4))
+  static readonly eighth = new SynthTime(Ticks(TICKS_IN_NOTE / 8))
+  static readonly sixteenth = new SynthTime(Ticks(TICKS_IN_NOTE / 16))
+  static readonly thirtySecond = new SynthTime(Ticks(TICKS_IN_NOTE / 32))
+  static readonly sixtyFourth = new SynthTime(Ticks(TICKS_IN_NOTE / 64))
 
   readonly #ticks: Ticks
 

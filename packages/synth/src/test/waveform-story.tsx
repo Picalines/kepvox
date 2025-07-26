@@ -53,7 +53,7 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
       numberOfChannels,
       seconds: duration,
       audioTree: audioContext => {
-        const synthContext = new SynthContext(audioContext, { lookAhead: Seconds.orThrow(0) })
+        const synthContext = new SynthContext(audioContext, { lookAhead: Seconds(0) })
         synthTree(synthContext, synthTreeProps)
         secondMarkers.push(...noteMakers.map(time => synthContext.secondsPerNote.areaBefore(time)))
         synthContext.play()

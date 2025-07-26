@@ -13,7 +13,7 @@ export default {
   title: 'nodes/Oscillator',
   component: WaveformStory,
   args: {
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
     numberOfChannels: 1,
     waveformDetails: 0.1,
     maxAmplitude: DEFAULT_SOURCE_GAIN,
@@ -31,7 +31,7 @@ export const Default: Story = {
       const oscillator = new OscillatorSynthNode(context)
       oscillator.connect(context.output)
       oscillator.waveShape.value = 'triangle'
-      oscillator.frequency.initialValue = Hertz.orThrow(440)
+      oscillator.frequency.initialValue = Hertz(440)
     },
   },
 }
@@ -42,7 +42,7 @@ export const Triangle: Story = {
       const oscillator = new OscillatorSynthNode(context)
       oscillator.connect(context.output)
       oscillator.waveShape.value = 'triangle'
-      oscillator.frequency.initialValue = Hertz.orThrow(4)
+      oscillator.frequency.initialValue = Hertz(4)
     },
   },
 }
@@ -53,7 +53,7 @@ export const Sine: Story = {
       const oscillator = new OscillatorSynthNode(context)
       oscillator.connect(context.output)
       oscillator.waveShape.value = 'sine'
-      oscillator.frequency.initialValue = Hertz.orThrow(2)
+      oscillator.frequency.initialValue = Hertz(2)
     },
   },
 }
@@ -64,7 +64,7 @@ export const Sawtooth: Story = {
       const oscillator = new OscillatorSynthNode(context)
       oscillator.connect(context.output)
       oscillator.waveShape.value = 'sawtooth'
-      oscillator.frequency.initialValue = Hertz.orThrow(4)
+      oscillator.frequency.initialValue = Hertz(4)
     },
   },
 }
@@ -75,7 +75,7 @@ export const Square: Story = {
       const oscillator = new OscillatorSynthNode(context)
       oscillator.connect(context.output)
       oscillator.waveShape.value = 'square'
-      oscillator.frequency.initialValue = Hertz.orThrow(4)
+      oscillator.frequency.initialValue = Hertz(4)
     },
   },
 }
@@ -89,10 +89,10 @@ export const Limited: Story = {
       gain.connect(context.output)
 
       oscillator.waveShape.value = 'triangle'
-      oscillator.frequency.initialValue = Hertz.orThrow(4)
+      oscillator.frequency.initialValue = Hertz(4)
 
-      gain.factor.initialValue = Factor.orThrow(0)
-      gain.factor.curve.rampValueUntil(SynthTime.half, Factor.orThrow(1))
+      gain.factor.initialValue = Factor(0)
+      gain.factor.curve.rampValueUntil(SynthTime.half, Factor(1))
     },
   },
 }

@@ -52,14 +52,14 @@ export class GeneratorSynthNode extends SynthNode {
     this.attack = new CurveSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Notes.orThrow(0),
+      initialValue: Notes(0),
       range: Range.positive,
     })
 
     this.decay = new CurveSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Notes.orThrow(0),
+      initialValue: Notes(0),
       range: Range.positive,
     })
 
@@ -72,7 +72,7 @@ export class GeneratorSynthNode extends SynthNode {
     this.release = new CurveSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Notes.orThrow(0),
+      initialValue: Notes(0),
       range: Range.positive,
     })
 

@@ -11,7 +11,7 @@ oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.waveShape.value = 'sawtooth'
 envelope.attack.initialValue = SynthTime.note.toNotes()
 envelope.decay.initialValue = SynthTime.note.toNotes()
-envelope.sustain.initialValue = Normal.orThrow(0.5)
+envelope.sustain.initialValue = Normal(0.5)
 envelope.release.initialValue = SynthTime.note.toNotes()
 
 let time = SynthTime.start
@@ -20,6 +20,6 @@ for (let i = 0; i < 5; i++) {
   time = time.add(SynthTime.note)
   envelope.releaseAt(time)
   time = time.add(SynthTime.note)
-  oscillator.frequency.curve.rampValueUntil(time, Hertz.orThrow(440 + 40 * i))
-  context.secondsPerNote.rampValueUntil(time, Seconds.orThrow(1 / (i + 1)))
+  oscillator.frequency.curve.rampValueUntil(time, Hertz(440 + 40 * i))
+  context.secondsPerNote.rampValueUntil(time, Seconds(1 / (i + 1)))
 }

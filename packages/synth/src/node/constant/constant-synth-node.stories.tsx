@@ -11,7 +11,7 @@ export default {
   title: 'nodes/Constant',
   component: WaveformStory,
   args: {
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
     numberOfChannels: 1,
   },
   parameters: {
@@ -26,7 +26,7 @@ export const Default: Story = {
     synthTree: context => {
       const constant = new ConstantSynthNode(context)
       constant.connect(context.output)
-      constant.value.initialValue = Factor.orThrow(1)
+      constant.value.initialValue = Factor(1)
     },
   },
 }
@@ -36,20 +36,20 @@ export const Half: Story = {
     synthTree: context => {
       const constant = new ConstantSynthNode(context)
       constant.connect(context.output)
-      constant.value.initialValue = Factor.orThrow(0.5)
+      constant.value.initialValue = Factor(0.5)
     },
   },
 }
 
 export const LinearRamp: Story = {
   args: {
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1))
+      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
       const constant = new ConstantSynthNode(context)
       constant.connect(context.output)
-      constant.value.initialValue = Factor.orThrow(0)
-      constant.value.curve.rampValueUntil(SynthTime.note, Factor.orThrow(1))
+      constant.value.initialValue = Factor(0)
+      constant.value.curve.rampValueUntil(SynthTime.note, Factor(1))
     },
   },
 }
