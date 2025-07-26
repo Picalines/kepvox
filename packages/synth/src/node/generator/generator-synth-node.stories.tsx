@@ -16,7 +16,7 @@ export default {
   title: 'nodes/Generator',
   component: WaveformStory,
   args: {
-    duration: Seconds.orThrow(1),
+    duration: Seconds(1),
     numberOfChannels: 1,
     waveformDetails: 0.1,
     maxAmplitude: DEFAULT_SOURCE_GAIN,
@@ -60,10 +60,10 @@ export const Default: Story = {
 
       const generator = createGenerator({
         context,
-        attack: Notes.orThrow(1),
-        decay: Notes.orThrow(1),
-        sustain: Normal.orThrow(0.5),
-        release: Notes.orThrow(1),
+        attack: Notes(1),
+        decay: Notes(1),
+        sustain: Normal(0.5),
+        release: Notes(1),
         waveShape: 'triangle',
       })
 
@@ -80,15 +80,15 @@ export const Polyphony: Story = {
       context.secondsPerNote.setValueAt(SynthTime.start, Seconds.orThrow(1 / 6))
 
       const gain = new GainSynthNode(context)
-      gain.factor.initialValue = Factor.orThrow(1)
+      gain.factor.initialValue = Factor(1)
       gain.connect(context.output)
 
       const generator = createGenerator({
         context,
-        attack: Notes.orThrow(1),
-        decay: Notes.orThrow(1),
-        sustain: Normal.orThrow(0.5),
-        release: Notes.orThrow(1),
+        attack: Notes(1),
+        decay: Notes(1),
+        sustain: Normal(0.5),
+        release: Notes(1),
         waveShape: 'sine',
         destination: gain,
       })

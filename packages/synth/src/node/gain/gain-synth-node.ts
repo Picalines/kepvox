@@ -20,14 +20,14 @@ export class GainSynthNode extends SynthNode {
     this.decibels = new CurveSynthParam({
       node: this,
       unit: 'decibels',
-      initialValue: Decibels.orThrow(0),
+      initialValue: Decibels(0),
       automate: { param: decibelGain.gain, map: decibels => 10 ** (decibels / 20) },
     })
 
     this.factor = new CurveSynthParam({
       node: this,
       unit: 'factor',
-      initialValue: Factor.orThrow(1),
+      initialValue: Factor(1),
       range: Range.positive,
       automate: { param: factorGain.gain },
     })

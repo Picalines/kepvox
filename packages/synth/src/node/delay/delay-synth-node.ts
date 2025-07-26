@@ -6,7 +6,7 @@ import type { SynthTime } from '#time'
 import { Normal, Notes, Seconds } from '#units'
 import { SynthNode } from '../synth-node'
 
-const MAX_DELAY = Seconds.orThrow(60)
+const MAX_DELAY = Seconds(60)
 
 export class DelaySynthNode extends SynthNode {
   readonly delayLeft: CurveSynthParam<'notes'>
@@ -47,7 +47,7 @@ export class DelaySynthNode extends SynthNode {
     this.delayLeft = new CurveSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Notes.orThrow(0),
+      initialValue: Notes(0),
       range: Range.positive,
       automate: { param: delayLeft.delayTime, map: mapNotesToSeconds },
     })
@@ -55,7 +55,7 @@ export class DelaySynthNode extends SynthNode {
     this.delayRight = new CurveSynthParam({
       node: this,
       unit: 'notes',
-      initialValue: Notes.orThrow(0),
+      initialValue: Notes(0),
       range: Range.positive,
       automate: { param: delayRight.delayTime, map: mapNotesToSeconds },
     })
@@ -63,21 +63,21 @@ export class DelaySynthNode extends SynthNode {
     this.dry = new CurveSynthParam({
       node: this,
       unit: 'normal',
-      initialValue: Normal.orThrow(0),
+      initialValue: Normal(0),
       automate: { param: dryGain.gain },
     })
 
     this.wetLeft = new CurveSynthParam({
       node: this,
       unit: 'normal',
-      initialValue: Normal.orThrow(1),
+      initialValue: Normal(1),
       automate: { param: gainLeft.gain },
     })
 
     this.wetRight = new CurveSynthParam({
       node: this,
       unit: 'normal',
-      initialValue: Normal.orThrow(1),
+      initialValue: Normal(1),
       automate: { param: gainRight.gain },
     })
   }

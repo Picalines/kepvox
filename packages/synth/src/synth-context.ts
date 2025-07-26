@@ -52,8 +52,8 @@ export class SynthContext {
   readonly #output: OutputSynthNode
 
   #state: SynthState = 'idle'
-  #playbackSkippedSeconds = Seconds.orThrow(0)
-  #playbackStartTime = Seconds.orThrow(0)
+  #playbackSkippedSeconds = Seconds(0)
+  #playbackStartTime = Seconds(0)
 
   /**
    * Dummy audio node for {@link elapsedNotes}. We use its AudioParam
@@ -145,7 +145,7 @@ export class SynthContext {
 
   get elapsedNotes(): Notes {
     if (this.state !== 'playing') {
-      return Notes.orThrow(0)
+      return Notes(0)
     }
 
     const elapsedSeconds = this.elapsedSeconds

@@ -15,7 +15,7 @@ export class ConstantSynthNode extends SynthNode {
     this.value = new CurveSynthParam({
       node: this,
       unit: 'factor',
-      initialValue: Factor.orThrow(1),
+      initialValue: Factor(1),
       automate: { param: constantSource.offset },
     })
 
