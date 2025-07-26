@@ -14,8 +14,10 @@ jobs:
       pull-requests: read
 
     outputs:
-      src: ${{ steps.filter.outputs.src }}
-      screenshots: ${{ steps.filter.outputs.screenshots }}
+      lint: ${{ steps.filter.outputs.lint }}
+      screen-test: ${{ steps.filter.outputs.screen-test }}
+      unit-test: ${{ steps.filter.outputs.unit-test }}
+      build: ${{ steps.filter.outputs.build }}
 
     steps:
       - name: Checkout
@@ -25,23 +27,26 @@ jobs:
         id: filter
         with:
           filters: |
-            src:
-              - '**/*.{js,ts,jsx,tsx,mjs,mts,css}'
-              - '**/src/**.json'
-              - '**/src/**.yaml'
-              - '**/*tsconfig.json'
-              - '**/*package.json'
+            lint:
+              - '**/*.{js,ts,jsx,tsx,mjs,mts,css,json}'
               - 'pnpm-lock.yaml'
-            screenshots:
+            screen-test:
+              - '**/*.{js,ts,jsx,tsx,mjs,mts,css,json}'
               - '**/__screenshots__/**'
-              - '**/*playwright*.ts'
+              - 'pnpm-lock.yaml'
+            unit-test:
+              - '**/*.{js,ts,jsx,tsx,mjs,mts,css,json}'
+              - 'pnpm-lock.yaml'
+            build:
+              - '**/*.{js,ts,jsx,tsx,mjs,mts,css,json}'
+              - 'pnpm-lock.yaml'
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
 
     needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true'
+    if: needs.detect-changes.outputs.lint == 'true'
 
     steps:
       - name: Checkout
@@ -69,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
 
     needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true'
+    if: needs.detect-changes.outputs.unit-test == 'true'
 
     steps:
       - name: Checkout
@@ -97,7 +102,7 @@ jobs:
     runs-on: macos-latest
 
     needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true' || needs.detect-changes.outputs.screenshots == 'true'
+    if: needs.detect-changes.outputs.screen-test == 'true'
 
     strategy:
       matrix:
@@ -147,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
 
     needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true'
+    if: needs.detect-changes.outputs.build == 'true'
 
     steps:
       - name: Checkout
