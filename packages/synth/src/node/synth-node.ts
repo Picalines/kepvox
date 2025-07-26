@@ -1,6 +1,6 @@
 import { assertDefined } from '@repo/common/assert'
 import type { SynthContext } from '#context'
-import { Signal } from '#util/signal'
+import { Signal } from '#signal'
 import { SynthNodeSocket } from './synth-node-socket'
 
 export type SynthNodeOpts = {

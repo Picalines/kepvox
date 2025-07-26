@@ -29,10 +29,10 @@
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
         "#pitch": "./src/pitch.ts",
+        "#signal": "./src/signal/index.ts",
         "#test": "./src/test/index.ts",
         "#time": "./src/synth-time.ts",
-        "#units": "./src/units.ts",
-        "#util/*": "./src/util/*/index.ts"
+        "#units": "./src/units.ts"
     },
     "dependencies": {
         "@repo/common": "workspace:*"

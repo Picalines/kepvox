@@ -1,6 +1,6 @@
 import { Range } from '#math'
+import { Signal } from '#signal'
 import { Unit, type UnitName, type UnitValue } from '#units'
-import { Signal } from '#util/signal'
 import { SYNTH_PARAM_TYPE, SynthParam, type SynthParamOpts } from './synth-param'
 
 export type NumberSynthParamOpts<TUnit extends UnitName> = SynthParamOpts & {

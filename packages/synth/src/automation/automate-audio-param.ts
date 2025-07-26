@@ -1,9 +1,9 @@
 import type { ReadonlyAutomationCurve } from '#automation'
 import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
+import type { Signal } from '#signal'
 import { SynthTime } from '#time'
 import type { UnitName, UnitValue } from '#units'
-import type { Signal } from '#util/signal'
 
 type Params<TUnit extends UnitName> = {
   context: SynthContext
