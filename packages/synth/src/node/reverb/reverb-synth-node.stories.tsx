@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Factor, Hertz, Normal, Seconds } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
@@ -28,9 +28,9 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     duration: Seconds(4.5),
-    timeMarkers: [SynthTime.quarter, SynthTime.note],
+    timeMarkers: [Time.quarter, Time.note],
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(4))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'triangle'
@@ -38,7 +38,7 @@ export const Default: Story = {
 
       const gate = new GainSynthNode(context)
       gate.factor.initialValue = Factor(0.8)
-      gate.factor.curve.setValueAt(SynthTime.quarter, Factor(0))
+      gate.factor.curve.setValueAt(Time.quarter, Factor(0))
 
       const reverb = new ReverbSynthNode(context)
       reverb.decay.value = Factor(1)
@@ -55,7 +55,7 @@ export const Wet: Story = {
   args: {
     duration: Seconds(4.5),
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(4))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(4))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'triangle'

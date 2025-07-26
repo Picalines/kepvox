@@ -6,3 +6,5 @@
 export const INTERNAL_AUDIO_CONTEXT: unique symbol = Symbol('SynthContext.internal.audioContext')
 
 export const INTERNAL_LOOK_AHEAD: unique symbol = Symbol('SynthContext.internal.lookAhead')
+
+export const INTERNAL_UNIT: unique symbol = Symbol('unit')

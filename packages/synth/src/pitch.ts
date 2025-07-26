@@ -63,7 +63,7 @@ const createPitchTable = () => {
         octaveHalfIntervals,
         halfIntervals,
         isAccidental: pitchName.endsWith('#'),
-        hertz: Hertz.orThrow(OCTAVE0_HERTZ[pitchName] * 2 ** octave),
+        hertz: Hertz(OCTAVE0_HERTZ[pitchName] * 2 ** octave),
         midi: midiNote,
       }
 

@@ -1,23 +1,23 @@
 import type { Signal } from '#signal'
-import type { SynthTime } from '#time'
+import type { Time } from '#time'
 
 export type TimedEvent = {
-  time: SynthTime
+  time: Time
 }
 
 export type ReadonlyEventTimeline<TEvent extends TimedEvent> = {
-  get timeRange(): [start: SynthTime, end: SynthTime]
+  get timeRange(): [start: Time, end: Time]
   get changed(): Signal<{ event: TEvent }>
-  get cancelled(): Signal<{ after: SynthTime }>
+  get cancelled(): Signal<{ after: Time }>
 
-  eventAt(time: SynthTime): TEvent | null
-  eventBefore(time: SynthTime): TEvent | null
-  eventBeforeOrAt(time: SynthTime): TEvent | null
-  eventAfter(time: SynthTime): TEvent | null
-  eventAfterOrAt(time: SynthTime): TEvent | null
+  eventAt(time: Time): TEvent | null
+  eventBefore(time: Time): TEvent | null
+  eventBeforeOrAt(time: Time): TEvent | null
+  eventAfter(time: Time): TEvent | null
+  eventAfterOrAt(time: Time): TEvent | null
 
-  eventsAfter(time: SynthTime): Iterable<TEvent>
-  eventsBefore(time: SynthTime): Iterable<TEvent>
-  eventsInRange(start: SynthTime, end: SynthTime): Iterable<TEvent>
-  eventSpan(time: SynthTime): [beforeOrAt: TEvent | null, after: TEvent | null]
+  eventsAfter(time: Time): Iterable<TEvent>
+  eventsBefore(time: Time): Iterable<TEvent>
+  eventsInRange(start: Time, end: Time): Iterable<TEvent>
+  eventSpan(time: Time): [beforeOrAt: TEvent | null, after: TEvent | null]
 }

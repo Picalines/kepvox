@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
 import { WaveformStory } from '#test'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Factor, Hertz, Normal, Seconds } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { GainSynthNode } from '../gain'
@@ -29,14 +29,14 @@ export const Default: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(2)
 
       const delay = new DelaySynthNode(context)
-      delay.delayRight.initialValue = SynthTime.quarter.toNotes()
+      delay.delayRight.initialValue = Time.quarter.toNotes()
 
       oscillator.connect(delay)
       delay.connect(context.output)
@@ -48,7 +48,7 @@ export const WithOriginal: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: context => {
-      context.secondsPerNote.setValueAt(SynthTime.start, Seconds(1))
+      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
       const oscillator = new OscillatorSynthNode(context)
       oscillator.waveShape.value = 'sine'
@@ -58,8 +58,8 @@ export const WithOriginal: Story = {
       delay.dry.initialValue = Normal(1)
       delay.wetLeft.initialValue = Normal(0.5)
       delay.wetRight.initialValue = Normal(0.5)
-      delay.delayLeft.initialValue = SynthTime.quarter.toNotes()
-      delay.delayRight.initialValue = SynthTime.half.toNotes()
+      delay.delayLeft.initialValue = Time.quarter.toNotes()
+      delay.delayRight.initialValue = Time.half.toNotes()
 
       const gain = new GainSynthNode(context)
       gain.factor.initialValue = Factor(0.5)

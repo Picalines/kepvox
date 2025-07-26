@@ -1,4 +1,4 @@
-import { Notes, Pitch, type PitchNotation, Range, SynthTime } from '@repo/synth'
+import { Notes, Pitch, type PitchNotation, Range, Time } from '@repo/synth'
 
 const HIGHEST_PITCH: PitchNotation = 'B9'
 
@@ -35,10 +35,10 @@ export const musicSheetDimensions = (params: Params) => {
     },
     note: {
       height: halfStepHeightPx,
-      width: (duration: SynthTime) => duration.toNotes() * wholeNoteWidthPx,
-      left: (time: SynthTime) => time.toNotes() * wholeNoteWidthPx,
+      width: (duration: Time) => duration.toNotes() * wholeNoteWidthPx,
+      left: (time: Time) => time.toNotes() * wholeNoteWidthPx,
       top: (pitch: PitchNotation) => (Pitch.midi(HIGHEST_PITCH) - Pitch.midi(pitch)) * halfStepHeightPx,
-      time: (left: number) => SynthTime.fromNotes(Notes.orClamp(Range.positive.clamp(left / wholeNoteWidthPx))),
+      time: (left: number) => Time.atNote(Notes.orClamp(Range.positive.clamp(left / wholeNoteWidthPx))),
       pitch: (top: number) =>
         Pitch.parseMidi(Pitch.midiRange.clamp(-top / halfStepHeightPx + Pitch.midi(HIGHEST_PITCH), 'ceil')).notation,
     },

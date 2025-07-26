@@ -1,6 +1,6 @@
 import { assertDefined } from '@repo/common/assert'
 import { Range } from '#math'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { EventTimeline } from './event-timeline'
 import type { AutomationCurveEvent, InterpolationMethod, ReadonlyAutomationCurve } from './readonly-automation-curve'
@@ -40,7 +40,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
 
     this.#timeline.changed.watch(({ event }) => this.#updateAreaAround(event))
 
-    this.setValueAt(SynthTime.start, initialValue)
+    this.setValueAt(Time.start, initialValue)
   }
 
   get unit(): TUnit {
@@ -72,7 +72,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
    *
    * Second {@link setValueAt} call overrides the first one. Doesn't cancel the {@link rampValueUntil}
    */
-  setValueAt(time: SynthTime, value: UnitValue<TUnit>) {
+  setValueAt(time: Time, value: UnitValue<TUnit>) {
     this.#timeline.mergeEvent({ time, value: this.#processValue(value) })
   }
 
@@ -85,7 +85,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
    *
    * Second {@link rampValueUntil} overrides the ramp method and value. Doesn't cancel the {@link setValueAt}
    */
-  rampValueUntil(end: SynthTime, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
+  rampValueUntil(end: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
     const leftValue = this.#processValue(value)
 
     const existingEvent = this.eventAt(end)
@@ -100,7 +100,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
    *
    * @returns the value
    */
-  holdValueAt(time: SynthTime): UnitValue<TUnit> {
+  holdValueAt(time: Time): UnitValue<TUnit> {
     const value = this.valueAt(time)
     this.#timeline.mergeEvent({ time, value })
     this.#timeline.cancelEventsAfter(time)
@@ -110,7 +110,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   /**
    * @returns curve value at a given time
    */
-  valueAt(time: SynthTime): UnitValue<TUnit> {
+  valueAt(time: Time): UnitValue<TUnit> {
     const [before, after] = this.eventSpan(time)
 
     if (!before && after) {
@@ -137,7 +137,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     ) as UnitValue<TUnit>
   }
 
-  areaBefore(time: SynthTime): number {
+  areaBefore(time: Time): number {
     const lastEvent = this.eventBeforeOrAt(time)
     if (!lastEvent) {
       throw new Error("can't evaluate area before start")
@@ -151,39 +151,39 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     return beforeArea + this.#spanAreaAt(this.eventSpan(time), time)
   }
 
-  eventAt(time: SynthTime) {
+  eventAt(time: Time) {
     return this.#timeline.eventAt(time)
   }
 
-  eventBefore(time: SynthTime) {
+  eventBefore(time: Time) {
     return this.#timeline.eventBefore(time)
   }
 
-  eventBeforeOrAt(time: SynthTime) {
+  eventBeforeOrAt(time: Time) {
     return this.#timeline.eventBeforeOrAt(time)
   }
 
-  eventAfter(time: SynthTime) {
+  eventAfter(time: Time) {
     return this.#timeline.eventAfter(time)
   }
 
-  eventAfterOrAt(time: SynthTime) {
+  eventAfterOrAt(time: Time) {
     return this.#timeline.eventAfterOrAt(time)
   }
 
-  eventsAfter(time: SynthTime) {
+  eventsAfter(time: Time) {
     return this.#timeline.eventsAfter(time)
   }
 
-  eventsBefore(time: SynthTime) {
+  eventsBefore(time: Time) {
     return this.#timeline.eventsBefore(time)
   }
 
-  eventsInRange(start: SynthTime, end: SynthTime) {
+  eventsInRange(start: Time, end: Time) {
     return this.#timeline.eventsInRange(start, end)
   }
 
-  eventSpan(time: SynthTime) {
+  eventSpan(time: Time) {
     return this.#timeline.eventSpan(time)
   }
 
@@ -206,7 +206,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     }
   }
 
-  #spanAreaAt(span: [AutomationCurveEvent<TUnit> | null, AutomationCurveEvent<TUnit> | null], time: SynthTime): number {
+  #spanAreaAt(span: [AutomationCurveEvent<TUnit> | null, AutomationCurveEvent<TUnit> | null], time: Time): number {
     const [start, end] = span
 
     if (!start && end) {

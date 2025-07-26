@@ -4,7 +4,7 @@ import {
   Notes,
   NumberSynthParam,
   type SynthNode,
-  SynthTime,
+  Time,
   TimeSignature,
 } from '@repo/synth'
 import { createFactory } from '@withease/factories'
@@ -37,7 +37,7 @@ export const createSerializer = createFactory((params: Params) => {
 
     dispatch({ action: 'time-signature-set', timeSignature: new TimeSignature(...project.musicSheet.timeSignature) })
     dispatch({ action: 'beats-per-minute-set', beatsPerMinute: project.musicSheet.beatsPerMinute })
-    dispatch({ action: 'ending-note-set', time: SynthTime.fromNotes(Notes.orClamp(project.musicSheet.endingNote)) })
+    dispatch({ action: 'ending-note-set', time: Time.atNote(Notes.orClamp(project.musicSheet.endingNote)) })
 
     for (const [nodeId, node] of Object.entries(project.synthTree.nodes)) {
       const { type, position, number, color } = node
@@ -58,8 +58,8 @@ export const createSerializer = createFactory((params: Params) => {
         action: 'sheet-note-create',
         id: noteId,
         synthId,
-        time: SynthTime.fromNotes(Notes.orClamp(time)),
-        duration: SynthTime.fromNotes(Notes.orClamp(duration)),
+        time: Time.atNote(Notes.orClamp(time)),
+        duration: Time.atNote(Notes.orClamp(duration)),
         pitch,
       })
     }

@@ -3,7 +3,7 @@ import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import { Range } from '#math'
 import { OutputSynthNode } from '#node'
 import { Signal } from '#signal'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Notes, Seconds } from '#units'
 import { createSeededRandom } from './seeded-random'
 
@@ -41,7 +41,7 @@ export class SynthContext {
    */
   readonly random: () => number
 
-  readonly #playing = Signal.controlled<{ start: SynthTime }>()
+  readonly #playing = Signal.controlled<{ start: Time }>()
   readonly #stopped = Signal.controlled<{}>()
   readonly #stateChanged = Signal.controlled<{}>()
   readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
@@ -57,7 +57,7 @@ export class SynthContext {
 
   /**
    * Dummy audio node for {@link elapsedNotes}. We use its AudioParam
-   * to map seconds to {@link SynthTime}.
+   * to map seconds to {@link Time}.
    */
   readonly #notesPerSecondNode: PannerNode
 
@@ -168,14 +168,14 @@ export class SynthContext {
   /**
    * @returns number of seconds that would've played at a given note
    */
-  durationAt(time: SynthTime): Seconds {
+  durationAt(time: Time): Seconds {
     return Seconds.orThrow(this.secondsPerNote.areaBefore(time))
   }
 
   /**
    * NOTE: may be called multiple times without {@link SynthContext.stop}
    */
-  play(start = SynthTime.start) {
+  play(start = Time.start) {
     this.#assertNotDisposed()
     this.stop()
 

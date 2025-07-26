@@ -1,4 +1,4 @@
-import { GeneratorSynthNode, Pitch, SynthTime } from '@repo/synth'
+import { GeneratorSynthNode, Pitch, Time } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEvent, sample } from 'effector'
 import { condition, spread } from 'patronum'
@@ -25,7 +25,7 @@ export const createNoteScheduler = createFactory((params: Params) => {
     effect: ({ notes, nodes }) => {
       for (const node of nodes.values()) {
         if (node.synthNode instanceof GeneratorSynthNode) {
-          node.synthNode.muteAt(SynthTime.start)
+          node.synthNode.muteAt(Time.start)
         }
       }
 
@@ -58,7 +58,7 @@ export const createNoteScheduler = createFactory((params: Params) => {
   sample({
     clock: userStoppedPlayback,
     target: spread({ stopped: playback.stopped, playhead: playback.userSetPlayhead }),
-    fn: () => ({ stopped: undefined, playhead: SynthTime.start }),
+    fn: () => ({ stopped: undefined, playhead: Time.start }),
   })
 
   return {

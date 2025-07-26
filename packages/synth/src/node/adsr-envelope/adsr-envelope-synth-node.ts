@@ -3,7 +3,7 @@ import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam } from '#param'
-import type { SynthTime } from '#time'
+import type { Time } from '#time'
 import { Normal, Notes } from '#units'
 import { SynthNode } from '../synth-node'
 
@@ -62,11 +62,11 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     })
   }
 
-  attackAt(start: SynthTime) {
+  attackAt(start: Time) {
     this.#adsrCurve.attackAt(start)
   }
 
-  releaseAt(start: SynthTime) {
+  releaseAt(start: Time) {
     this.#adsrCurve.releaseAt(start)
   }
 }

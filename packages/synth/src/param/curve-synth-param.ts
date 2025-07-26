@@ -1,6 +1,6 @@
 import { AutomationCurve, automateAudioParam } from '#automation'
 import { Range } from '#math'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Unit, type UnitName, type UnitValue } from '#units'
 import { SYNTH_PARAM_TYPE, SynthParam, type SynthParamOpts } from './synth-param'
 
@@ -10,7 +10,7 @@ export type CurveSynthParamOpts<TUnit extends UnitName> = SynthParamOpts & {
   unit: TUnit
   initialValue: UnitValue<TUnit>
   range?: Range
-  automate?: { param: AudioParam; map?: (value: UnitValue<TUnit>, time: SynthTime) => number }
+  automate?: { param: AudioParam; map?: (value: UnitValue<TUnit>, time: Time) => number }
 }
 
 export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
@@ -68,10 +68,10 @@ export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
   }
 
   get initialValue() {
-    return this.curve.valueAt(SynthTime.start)
+    return this.curve.valueAt(Time.start)
   }
 
   set initialValue(value: UnitValue<TUnit>) {
-    this.curve.setValueAt(SynthTime.start, value)
+    this.curve.setValueAt(Time.start, value)
   }
 }

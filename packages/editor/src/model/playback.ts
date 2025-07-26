@@ -1,4 +1,4 @@
-import { SynthContext, type SynthState, SynthTime } from '@repo/synth'
+import { SynthContext, type SynthState, Time } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
 import { and, condition, interval, not, readonly, spread } from 'patronum'
@@ -18,16 +18,16 @@ export const createPlayback = createFactory((params: Params) => {
   const $hasAudioPermission = createStore(true) // Assume that it's there
   const $context = createStore<SynthContext | null>(null)
   const $state = restore(stateChanged, 'disposed')
-  const $duration = createStore(SynthTime.note)
-  const $playhead = createStore(SynthTime.start)
+  const $duration = createStore(Time.note)
+  const $playhead = createStore(Time.start)
 
   const userGrantedAudioPermission = createEvent()
-  const userSetPlayhead = createEvent<SynthTime>()
+  const userSetPlayhead = createEvent<Time>()
 
   const initialized = createEvent<SynthContext>()
   const started = createEvent()
   const stopped = createEvent()
-  const durationSet = createEvent<SynthTime>()
+  const durationSet = createEvent<Time>()
   const disposed = createEvent()
 
   const $isIdle = combine($state, state => state === 'idle')
@@ -112,7 +112,7 @@ export const createPlayback = createFactory((params: Params) => {
     clock: started,
     filter: $isPlayheadAtEnd,
     target: $playhead,
-    fn: () => SynthTime.start,
+    fn: () => Time.start,
   })
 
   sample({ clock: started, filter: $isIdle, target: playFx })
@@ -132,7 +132,7 @@ export const createPlayback = createFactory((params: Params) => {
     source: $context,
     filter: Boolean,
     target: $playhead,
-    fn: ({ elapsedNotes }) => SynthTime.fromNotes(elapsedNotes),
+    fn: ({ elapsedNotes }) => Time.atNote(elapsedNotes),
   })
 
   sample({ clock: durationSet, filter: $isIdle, target: $duration })
@@ -142,7 +142,7 @@ export const createPlayback = createFactory((params: Params) => {
     filter: $isIdle,
     source: $duration,
     target: $playhead,
-    fn: (duration, time) => SynthTime.start.max(duration.min(time)),
+    fn: (duration, time) => Time.start.max(duration.min(time)),
   })
 
   sample({

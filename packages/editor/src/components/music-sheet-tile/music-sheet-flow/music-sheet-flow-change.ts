@@ -1,5 +1,5 @@
 import { step } from '@repo/common/math'
-import { Notes, SynthTime } from '@repo/synth'
+import { Notes, Time } from '@repo/synth'
 import type { NodeChange as FlowNodeChange } from '@xyflow/react'
 import type { ActionPayload } from '#model'
 import type { MusicSheetDimensions } from '../music-sheet-dimensions'
@@ -22,7 +22,7 @@ export const musicSheetNodeChangeToAction = (params: MapNodeChangeParams): Actio
 
       const { x, y } = position
 
-      const time = SynthTime.fromNotes(Notes.orClamp(step(dimensions.note.time(x).toNotes(), timeStep)))
+      const time = Time.atNote(Notes.orClamp(step(dimensions.note.time(x).toNotes(), timeStep)))
       const pitch = dimensions.note.pitch(y)
 
       return { action: 'sheet-note-move', id, to: { time, pitch } }

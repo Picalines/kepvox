@@ -1,5 +1,5 @@
 import { assertDefined } from '@repo/common/assert'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { EventTimeline } from './event-timeline'
 import type { EnumAutomationEvent, ReadonlyEnumAutomation } from './readonly-enum-automation'
 
@@ -18,7 +18,7 @@ export class EnumAutomation<E extends string> implements ReadonlyEnumAutomation<
 
     this.values = [...values]
 
-    this.setValueAt(SynthTime.start, initialValue)
+    this.setValueAt(Time.start, initialValue)
   }
 
   get timeRange() {
@@ -33,57 +33,57 @@ export class EnumAutomation<E extends string> implements ReadonlyEnumAutomation<
     return this.#timeline.cancelled
   }
 
-  setValueAt(time: SynthTime, value: E) {
+  setValueAt(time: Time, value: E) {
     this.#timeline.mergeEvent({ time, value })
   }
 
-  holdValueAt(time: SynthTime) {
+  holdValueAt(time: Time) {
     const value = this.valueAt(time)
     this.#timeline.mergeEvent({ time, value })
     this.#timeline.cancelEventsAfter(time)
     return value
   }
 
-  valueAt(time: SynthTime): E {
+  valueAt(time: Time): E {
     const [beforeOrAt, after] = this.eventSpan(time)
     const value = beforeOrAt?.value ?? after?.value
     assertDefined(value)
     return value
   }
 
-  eventAt(time: SynthTime) {
+  eventAt(time: Time) {
     return this.#timeline.eventAt(time)
   }
 
-  eventBefore(time: SynthTime) {
+  eventBefore(time: Time) {
     return this.#timeline.eventBefore(time)
   }
 
-  eventBeforeOrAt(time: SynthTime) {
+  eventBeforeOrAt(time: Time) {
     return this.#timeline.eventBeforeOrAt(time)
   }
 
-  eventAfter(time: SynthTime) {
+  eventAfter(time: Time) {
     return this.#timeline.eventAfter(time)
   }
 
-  eventAfterOrAt(time: SynthTime) {
+  eventAfterOrAt(time: Time) {
     return this.#timeline.eventAfterOrAt(time)
   }
 
-  eventsAfter(time: SynthTime) {
+  eventsAfter(time: Time) {
     return this.#timeline.eventsAfter(time)
   }
 
-  eventsBefore(time: SynthTime) {
+  eventsBefore(time: Time) {
     return this.#timeline.eventsBefore(time)
   }
 
-  eventsInRange(start: SynthTime, end: SynthTime) {
+  eventsInRange(start: Time, end: Time) {
     return this.#timeline.eventsInRange(start, end)
   }
 
-  eventSpan(time: SynthTime) {
+  eventSpan(time: Time) {
     return this.#timeline.eventSpan(time)
   }
 }

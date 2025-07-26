@@ -31,7 +31,7 @@
         "#pitch": "./src/pitch.ts",
         "#signal": "./src/signal/index.ts",
         "#test": "./src/test/index.ts",
-        "#time": "./src/synth-time.ts",
+        "#time": "./src/time.ts",
         "#units": "./src/units.ts"
     },
     "dependencies": {

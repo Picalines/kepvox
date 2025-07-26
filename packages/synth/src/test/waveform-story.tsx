@@ -3,14 +3,14 @@ import { resample } from '@repo/web-audio/math'
 import { renderAudioOffline } from '@repo/web-audio/offline'
 import { useCallback, useEffect, useRef } from 'react'
 import { SynthContext } from '#context'
-import type { SynthTime } from '#time'
+import type { Time } from '#time'
 import { Seconds } from '#units'
 
 type Props<T> = {
   synthTree: (synthContext: SynthContext, props: T) => void
   props: T
   duration: Seconds
-  timeMarkers?: SynthTime[]
+  timeMarkers?: Time[]
   numberOfChannels?: number
   sampleRate?: number
   waveformDetails?: number

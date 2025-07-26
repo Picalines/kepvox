@@ -1,5 +1,5 @@
 import { EnumAutomation, type ReadonlyEnumAutomation } from '#automation'
-import { SynthTime } from '#time'
+import { Time } from '#time'
 import { Normal } from '#units'
 import { AutomationCurve } from './automation-curve'
 import type { ReadonlyAutomationCurve } from './readonly-automation-curve'
@@ -57,12 +57,12 @@ export class ADSRAutomationCurve {
   /**
    * @returns time at which the attack (more specifically, decay) will end
    */
-  attackAt(start: SynthTime) {
+  attackAt(start: Time) {
     const attackDuration = this.#attack.valueAt(start)
-    const attackEnd = start.add(SynthTime.fromNotes(attackDuration))
+    const attackEnd = start.add(Time.atNote(attackDuration))
 
     const decayDuration = this.#decay.valueAt(attackEnd)
-    const decayEnd = attackEnd.add(SynthTime.fromNotes(decayDuration))
+    const decayEnd = attackEnd.add(Time.atNote(decayDuration))
 
     const sustainLevel = this.#sustain.valueAt(decayEnd)
     const attackValue = decayDuration > 0 ? Normal.max : sustainLevel
@@ -95,9 +95,9 @@ export class ADSRAutomationCurve {
   /**
    * @returns time at which the release will end
    */
-  releaseAt(start: SynthTime) {
+  releaseAt(start: Time) {
     const releaseDuration = this.#release.valueAt(start)
-    const releaseEnd = start.add(SynthTime.fromNotes(releaseDuration))
+    const releaseEnd = start.add(Time.atNote(releaseDuration))
 
     const gain = this.#gain
     const state = this.#state
@@ -121,7 +121,7 @@ export class ADSRAutomationCurve {
     return releaseEnd
   }
 
-  muteAt(time: SynthTime) {
+  muteAt(time: Time) {
     const gain = this.#gain
     const state = this.#state
 
