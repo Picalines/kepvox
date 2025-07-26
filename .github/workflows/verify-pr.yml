@@ -142,6 +142,34 @@ jobs:
           path: ${{ matrix.package }}/playwright-report/
           retention-days: 30
 
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    needs: detect-changes
+    if: needs.detect-changes.outputs.src == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm exec turbo build
+
   verify-pr:
     name: Verify PR
     runs-on: ubuntu-latest
@@ -151,6 +179,7 @@ jobs:
       - lint
       - unit-test
       - screen-test
+      - build
 
     steps:
       - name: Check completed jobs
