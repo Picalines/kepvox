@@ -125,23 +125,30 @@ export class GeneratorSynthNode extends SynthNode {
       updateWaveShape()
       this.waveShape.changed.watch(updateWaveShape)
 
-      oscillator.start()
-      this.disposed.watch(() => oscillator.stop())
+      synth.playing.toggle(
+        this.disposed,
+        () => oscillator.start(),
+        () => oscillator.stop(),
+      )
 
       return { frequency, adsr }
     })
 
-    const mute = () => {
-      master.gain.value = 0
-    }
+    // this.synth.playing.watch(() => console.log('playing'))
+    // this.synth.stopped.watch(() => console.log('stopped'))
 
-    const unmute = () => {
-      master.gain.value = DEFAULT_SOURCE_GAIN
-    }
-
-    mute()
-    this.synth.playing.watchUntil(this.disposed, unmute)
-    this.synth.stopped.watchUntil(this.disposed, mute)
+    master.gain.value = 0
+    this.synth.playing.toggle(
+      this.synth.stopped,
+      () => {
+        // console.log('master on')
+        master.gain.value = DEFAULT_SOURCE_GAIN
+      },
+      () => {
+        // console.log('master off')
+        master.gain.value = 0
+      },
+    )
   }
 
   attackAt(time: Time, frequency: Hertz) {

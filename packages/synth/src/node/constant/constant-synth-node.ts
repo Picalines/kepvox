@@ -19,6 +19,10 @@ export class ConstantSynthNode extends SynthNode {
       automate: { param: constantSource.offset },
     })
 
-    constantSource.start()
+    synth.playing.toggle(
+      this.disposed,
+      () => constantSource.start(),
+      () => constantSource.stop(),
+    )
   }
 }
