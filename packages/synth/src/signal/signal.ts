@@ -30,39 +30,18 @@ export class Signal<TParam> {
     }
   }
 
-  static combine<TParam>(signals: Signal<TParam>[]): Signal<TParam> {
-    const { signal, emit } = Signal.controlled<TParam>()
-
-    for (const parentSignal of signals) {
-      parentSignal.watch(emit)
-    }
-
-    return signal
-  }
-
   get emitted() {
     return this.#emitted
   }
 
+  get watched() {
+    return this.#listeners.length > 0
+  }
+
   watch(listener: (param: TParam) => void) {
-    if (this.#once && this.#emitted) {
-      return
+    if (this.#active) {
+      this.#listeners.push(listener)
     }
-
-    this.#listeners.push(listener)
-  }
-
-  watchUntil(cancelSignal: Signal<any>, listener: (param: TParam) => void) {
-    if ((cancelSignal.#once && cancelSignal.#emitted) || (this.#once && this.#emitted)) {
-      return
-    }
-
-    this.watch(listener)
-    cancelSignal.watch(() => this.cancel(listener))
-  }
-
-  chain(signal: SignalController<TParam>) {
-    this.watch(param => signal.emit(param))
   }
 
   cancel(listener: (param: TParam) => void) {
@@ -72,25 +51,67 @@ export class Signal<TParam> {
     }
   }
 
+  watchUntil(cancelSignal: Signal<any>, listener: (param: TParam) => void) {
+    if (!this.#active || !cancelSignal.#active) {
+      return
+    }
+
+    const cancel = () => {
+      this.cancel(listener)
+      cancelSignal.cancel(cancel)
+    }
+
+    this.watch(listener)
+    cancelSignal.watch(cancel)
+  }
+
+  toggle<TUndoParam>(
+    undoSignal: Signal<TUndoParam>,
+    applyListener: (param: TParam) => void,
+    undoListener: (param: TUndoParam) => void,
+  ) {
+    if (!this.#active || !undoSignal.#active) {
+      return
+    }
+
+    const apply = (param: TParam) => {
+      this.cancel(apply)
+      if (undoSignal.#active) {
+        applyListener(param)
+        undoSignal.watch(undo)
+      }
+    }
+
+    const undo = (param: TUndoParam) => {
+      undoSignal.cancel(undo)
+      undoListener(param)
+      if (this.#active) {
+        this.watch(apply)
+      }
+    }
+
+    this.watch(apply)
+  }
+
+  get #active() {
+    return !(this.#once && this.#emitted)
+  }
+
   #cancelAll() {
     this.#listeners.length = 0
   }
 
   #emit(param: TParam) {
-    if (this.#once && this.#emitted) {
+    if (!this.#active) {
       return
     }
 
     this.#emitted = true
 
-    if (this.#reverseOrder) {
-      for (let index = this.#listeners.length - 1; index >= 0; index--) {
-        this.#listeners[index]?.(param)
-      }
-    } else {
-      for (const listener of this.#listeners) {
-        listener(param)
-      }
+    const listeners = this.#reverseOrder ? this.#listeners.toReversed() : this.#listeners.slice()
+
+    for (const listener of listeners) {
+      listener(param)
     }
 
     if (this.#once) {

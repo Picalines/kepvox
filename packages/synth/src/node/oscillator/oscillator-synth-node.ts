@@ -22,8 +22,6 @@ export class OscillatorSynthNode extends SynthNode {
     oscillator.connect(merger, 0, 1)
     merger.connect(master)
 
-    oscillator.start()
-
     super({ synth, inputs: [], outputs: [master] })
 
     this.waveShape = new EnumSynthParam({
@@ -46,19 +44,21 @@ export class OscillatorSynthNode extends SynthNode {
       automate: { param: oscillator.frequency },
     })
 
-    const unmuteOscillator = () => {
-      master.gain.value = DEFAULT_SOURCE_GAIN
-    }
+    synth.playing.toggle(
+      this.disposed,
+      () => oscillator.start(),
+      () => oscillator.stop(),
+    )
 
-    const muteOscillator = () => {
-      master.gain.value = 0
-    }
-
-    muteOscillator()
-
-    this.synth.playing.watchUntil(this.disposed, unmuteOscillator)
-    this.synth.stopped.watchUntil(this.disposed, muteOscillator)
-
-    this.disposed.watch(() => oscillator.stop())
+    master.gain.value = 0
+    synth.playing.toggle(
+      synth.stopped,
+      () => {
+        master.gain.value = DEFAULT_SOURCE_GAIN
+      },
+      () => {
+        master.gain.value = 0
+      },
+    )
   }
 }
