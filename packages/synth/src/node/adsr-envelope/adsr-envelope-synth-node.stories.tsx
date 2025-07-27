@@ -139,7 +139,7 @@ export const NoAttack: Story = {
 export const NoDecay: Story = {
   args: {
     synthTree: synth => {
-      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
         synth,
@@ -158,7 +158,7 @@ export const NoDecay: Story = {
 export const NoRelease: Story = {
   args: {
     synthTree: synth => {
-      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
         synth,

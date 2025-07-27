@@ -78,7 +78,7 @@ export class Synth {
 
     this.playing.watch(({ start }) => {
       this.#playbackSkippedSeconds = this.durationAt(start)
-      this.#playbackStartTime = Seconds.orThrow(this.#audioContext.currentTime + this.#lookAhead)
+      this.#playbackStartTime = Seconds(this.#audioContext.currentTime + this.#lookAhead)
     })
 
     this.secondsPerNote.changed.watch(() => this.stop())
@@ -136,7 +136,7 @@ export class Synth {
   }
 
   get elapsedSeconds(): Seconds {
-    return Seconds.orThrow(
+    return Seconds(
       this.state === 'playing'
         ? this.#playbackSkippedSeconds + Math.max(0, this.#audioContext.currentTime - this.#playbackStartTime)
         : 0,
@@ -155,21 +155,21 @@ export class Synth {
     // See the constructor. If the tempo automation is active,
     // use its current value as the result
     if (elapsedSeconds <= tempoAutomationEndSeconds) {
-      return Notes.orThrow(this.#notesPerSecondNode.positionX.value)
+      return Notes(this.#notesPerSecondNode.positionX.value)
     }
 
     // If the tempo automation have ended, we know that the elapsedNotes should
     // increase linearly, and the "slope" is determined by secondsPerNote
     const constantNoteDuration = this.secondsPerNote.valueAt(tempoAutomationEnd)
     const secondsSinceAutomationEnd = elapsedSeconds - tempoAutomationEndSeconds
-    return Notes.orThrow(tempoAutomationEnd.toNotes() + secondsSinceAutomationEnd / constantNoteDuration)
+    return Notes(tempoAutomationEnd.toNotes() + secondsSinceAutomationEnd / constantNoteDuration)
   }
 
   /**
    * @returns number of seconds that would've played at a given note
    */
   durationAt(time: Time): Seconds {
-    return Seconds.orThrow(this.secondsPerNote.areaBefore(time))
+    return Seconds(this.secondsPerNote.areaBefore(time))
   }
 
   /**

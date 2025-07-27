@@ -56,7 +56,7 @@ const createGenerator = (params: CreateGeneratorParams) => {
 export const Default: Story = {
   args: {
     synthTree: synth => {
-      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const generator = createGenerator({
         synth,
@@ -77,7 +77,7 @@ export const Polyphony: Story = {
   args: {
     timeMarkers: [Time.note.repeat(3), Time.note.repeat(4)],
     synthTree: synth => {
-      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 6))
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 6))
 
       const gain = new GainSynthNode(synth)
       gain.factor.initialValue = Factor(1)
