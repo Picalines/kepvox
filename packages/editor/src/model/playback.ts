@@ -1,7 +1,7 @@
 import { Synth, type SynthState, Time } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
-import { and, condition, interval, not, readonly, spread } from 'patronum'
+import { and, condition, interval, readonly, spread } from 'patronum'
 import type { EditorGate } from './gate'
 
 export type PlaybackStore = ReturnType<typeof createPlayback>
@@ -15,13 +15,11 @@ export const createPlayback = createFactory((params: Params) => {
 
   const stateChanged = createEvent<SynthState>()
 
-  const $hasAudioPermission = createStore(true) // Assume that it's there
   const $synth = createStore<Synth | null>(null)
   const $state = restore(stateChanged, 'disposed')
   const $duration = createStore(Time.note)
   const $playhead = createStore(Time.start)
 
-  const userGrantedAudioPermission = createEvent()
   const userSetPlayhead = createEvent<Time>()
 
   const initialized = createEvent<Synth>()
@@ -33,18 +31,12 @@ export const createPlayback = createFactory((params: Params) => {
   const $isIdle = combine($state, state => state === 'idle')
   const $isPlaying = combine($state, state => state === 'playing')
 
-  const AUDIO_NOT_ALLOWED = new Error()
-
   const initFx = createEffect(() => {
     if (typeof window === 'undefined') {
       return null
     }
 
     const audioContext = new AudioContext()
-    if (audioContext.state === 'suspended') {
-      throw AUDIO_NOT_ALLOWED
-    }
-
     const synth = new Synth(audioContext)
 
     const scopedStateChanged = scopeBind(stateChanged)
@@ -81,20 +73,6 @@ export const createPlayback = createFactory((params: Params) => {
     if: gate.$isOpened,
     then: initFx,
     else: disposed,
-  })
-
-  sample({
-    clock: initFx.failData,
-    filter: error => error === AUDIO_NOT_ALLOWED,
-    target: $hasAudioPermission,
-    fn: () => false,
-  })
-
-  sample({
-    clock: userGrantedAudioPermission,
-    filter: not($hasAudioPermission),
-    target: spread({ hasAudioPermission: $hasAudioPermission, init: initFx }),
-    fn: () => ({ hasAudioPermission: true, init: undefined }),
   })
 
   sample({ clock: initFx.doneData, target: $synth })
@@ -152,7 +130,6 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   return {
-    $hasAudioPermission: readonly($hasAudioPermission),
     $isIdle: readonly($isIdle),
     $isPlaying: readonly($isPlaying),
     $playhead: readonly($playhead),
@@ -162,7 +139,6 @@ export const createPlayback = createFactory((params: Params) => {
     initialized,
     started,
     stopped,
-    userGrantedAudioPermission,
     userSetPlayhead,
   }
 })

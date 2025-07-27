@@ -37,7 +37,7 @@ const { $isExternalLoading, $isReadonly, Gate } = gate
 
 const { userRequestedActions } = history
 
-const { $hasAudioPermission, $isPlaying, $playhead, userGrantedAudioPermission, userSetPlayhead } = playback
+const { $isPlaying, $playhead, userSetPlayhead } = playback
 
 const { $edges: $synthEdges, $nodes: $synthNodes, $activeNode: $activeSynthNode } = synthTree
 
@@ -67,7 +67,6 @@ export {
   $activeSynthNode,
   $beatsPerMinute,
   $endTime,
-  $hasAudioPermission,
   $isDirty,
   $isExternalLoading,
   $isLoaded,
@@ -83,7 +82,6 @@ export {
   $timeSignature,
   Gate,
   userCancelledNodeCreation,
-  userGrantedAudioPermission,
   userHidNotePreview,
   userMovedNotePreview,
   userMovedSheet,
