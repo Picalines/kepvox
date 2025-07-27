@@ -1,11 +1,11 @@
 import { OscillatorSynthNode, ADSREnvelopeSynthNode, Time, Seconds, Hertz, Notes, Normal, Pitch } from 'synth'
-import { context } from 'synth/playground'
+import { synth } from 'synth/playground'
 
-const oscillator = new OscillatorSynthNode(context)
-const envelope = new ADSREnvelopeSynthNode(context)
+const oscillator = new OscillatorSynthNode(synth)
+const envelope = new ADSREnvelopeSynthNode(synth)
 
 oscillator.connect(envelope)
-envelope.connect(context.output)
+envelope.connect(synth.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.waveShape.value = 'sawtooth'
@@ -21,5 +21,5 @@ for (let i = 0; i < 5; i++) {
   envelope.releaseAt(time)
   time = time.add(Time.note)
   oscillator.frequency.curve.rampValueUntil(time, Hertz(440 + 40 * i))
-  context.secondsPerNote.rampValueUntil(time, Seconds(1 / (i + 1)))
+  synth.secondsPerNote.rampValueUntil(time, Seconds(1 / (i + 1)))
 }

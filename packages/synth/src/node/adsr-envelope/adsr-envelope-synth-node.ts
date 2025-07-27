@@ -1,8 +1,8 @@
 import { ADSRAutomationCurve, automateAudioParam } from '#automation'
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam } from '#param'
+import type { Synth } from '#synth'
 import type { Time } from '#time'
 import { Normal, Notes } from '#units'
 import { SynthNode } from '../synth-node'
@@ -15,10 +15,10 @@ export class ADSREnvelopeSynthNode extends SynthNode {
 
   readonly #adsrCurve
 
-  constructor(context: SynthContext) {
-    const gainNode = context[INTERNAL_AUDIO_CONTEXT].createGain()
+  constructor(synth: Synth) {
+    const gainNode = synth[INTERNAL_AUDIO_CONTEXT].createGain()
 
-    super({ context, inputs: [gainNode], outputs: [gainNode] })
+    super({ synth, inputs: [gainNode], outputs: [gainNode] })
 
     this.attack = new CurveSynthParam({
       node: this,
@@ -55,7 +55,7 @@ export class ADSREnvelopeSynthNode extends SynthNode {
     })
 
     automateAudioParam({
-      context,
+      synth,
       audioParam: gainNode.gain,
       curve: this.#adsrCurve.gain,
       until: this.disposed,

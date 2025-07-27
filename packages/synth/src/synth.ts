@@ -7,7 +7,7 @@ import { Time } from '#time'
 import { Notes, Seconds } from '#units'
 import { createSeededRandom } from './seeded-random'
 
-export type SynthContextOpts = {
+export type SynthOpts = {
   /**
    * A small time interval used to offset from `currentTime`
    *
@@ -21,14 +21,14 @@ export type SynthContextOpts = {
   lookAhead?: Seconds
   /**
    * A number that determines all random computations during audio scheduling.
-   * See {@link SynthContext.random}
+   * See {@link Synth.random}
    */
   randomSeed?: number
 }
 
 export type SynthState = 'idle' | 'playing' | 'disposed'
 
-export class SynthContext {
+export class Synth {
   /**
    * AutomationCurve that maps whole notes to seconds.
    * {@link AutomationCurve.areaBefore} gives you the number of seconds
@@ -61,7 +61,7 @@ export class SynthContext {
    */
   readonly #notesPerSecondNode: PannerNode
 
-  constructor(audioContext: AudioContext | OfflineAudioContext, opts?: SynthContextOpts) {
+  constructor(audioContext: AudioContext | OfflineAudioContext, opts?: SynthOpts) {
     const { lookAhead = 0.1, randomSeed = 0 } = opts ?? {}
 
     this.#audioContext = audioContext
@@ -88,7 +88,7 @@ export class SynthContext {
     this.disposed.watch(() => this.#notesPerSecondNode.disconnect())
 
     automateAudioParam({
-      context: this,
+      synth: this,
       audioParam: this.#notesPerSecondNode.positionX,
       curve: this.secondsPerNote,
       map: (_, time) => time.toNotes(),
@@ -173,7 +173,7 @@ export class SynthContext {
   }
 
   /**
-   * NOTE: may be called multiple times without {@link SynthContext.stop}
+   * NOTE: may be called multiple times without {@link Synth.stop}
    */
   play(start = Time.start) {
     this.#assertNotDisposed()
@@ -194,7 +194,7 @@ export class SynthContext {
   }
 
   /**
-   * Disposes all SynthNodes associated with the context
+   * Disposes all SynthNodes associated with the synth
    */
   dispose() {
     this.stop()
@@ -217,7 +217,7 @@ export class SynthContext {
 
   #assertNotDisposed() {
     if (this.#disposed.signal.emitted) {
-      throw new Error('the SynthContext is used while being disposed')
+      throw new Error('the Synth is used while being disposed')
     }
   }
 }

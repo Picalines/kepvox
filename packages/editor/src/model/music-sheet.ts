@@ -43,9 +43,9 @@ export const createMusicSheet = createFactory((params: Params) => {
   })
 
   const setTempoFx = attach({
-    source: { context: playback.$context, timeSignature: $timeSignature, beatsPerMinute: $beatsPerMinute },
-    effect: ({ context, timeSignature, beatsPerMinute }) => {
-      context?.secondsPerNote.setValueAt(Time.start, timeSignature.bpmToSecondsPerNote(beatsPerMinute))
+    source: { synth: playback.$synth, timeSignature: $timeSignature, beatsPerMinute: $beatsPerMinute },
+    effect: ({ synth, timeSignature, beatsPerMinute }) => {
+      synth?.secondsPerNote.setValueAt(Time.start, timeSignature.bpmToSecondsPerNote(beatsPerMinute))
     },
   })
 

@@ -1,10 +1,10 @@
 import { assertDefined } from '@repo/common/assert'
-import type { SynthContext } from '#context'
 import { Signal } from '#signal'
+import type { Synth } from '#synth'
 import { SynthNodeSocket } from './synth-node-socket'
 
 export type SynthNodeOpts = {
-  context: SynthContext
+  synth: Synth
 
   /**
    * A SynthNode is a group of native AudioNodes. To manage
@@ -22,7 +22,7 @@ export type SynthNodeOpts = {
 }
 
 export abstract class SynthNode {
-  readonly context: SynthContext
+  readonly synth: Synth
 
   readonly #inputs: readonly SynthNodeSocket[]
   readonly #outputs: readonly SynthNodeSocket[]
@@ -30,11 +30,11 @@ export abstract class SynthNode {
   readonly #disposed = Signal.controlled<null>({ once: true, reverseOrder: true })
 
   constructor(opts: SynthNodeOpts) {
-    const { context, inputs, outputs } = opts
+    const { synth, inputs, outputs } = opts
 
-    this.context = context
+    this.synth = synth
 
-    this.context.disposed.watchUntil(this.disposed, this.dispose.bind(this))
+    this.synth.disposed.watchUntil(this.disposed, this.dispose.bind(this))
 
     this.#inputs = inputs.map(audioNode => new SynthNodeSocket({ type: 'input', synthNode: this, audioNode }))
     this.#outputs = outputs.map(audioNode => new SynthNodeSocket({ type: 'output', synthNode: this, audioNode }))

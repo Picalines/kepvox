@@ -1,11 +1,11 @@
 import { assertedAt } from '@repo/common/assert'
 import { isOneOf } from '@repo/common/predicate'
 import { ADSRAutomationCurve, AutomationCurve, automateAudioParam } from '#automation'
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
+import type { Synth } from '#synth'
 import type { Time } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
@@ -37,17 +37,17 @@ export class GeneratorSynthNode extends SynthNode {
 
   readonly #voices: GeneratorVoice[]
 
-  constructor(context: SynthContext, opts?: GeneratorSynthNodeOpts) {
+  constructor(synth: Synth, opts?: GeneratorSynthNodeOpts) {
     const { maxPolyphony = 16 } = opts ?? {}
 
-    const audioContext = context[INTERNAL_AUDIO_CONTEXT]
+    const audioContext = synth[INTERNAL_AUDIO_CONTEXT]
 
     const steroMerger = audioContext.createChannelMerger(2)
     const master = audioContext.createGain()
 
     steroMerger.connect(master)
 
-    super({ context, inputs: [], outputs: [master] })
+    super({ synth, inputs: [], outputs: [master] })
 
     this.attack = new CurveSynthParam({
       node: this,
@@ -105,14 +105,14 @@ export class GeneratorSynthNode extends SynthNode {
       })
 
       automateAudioParam({
-        context,
+        synth,
         audioParam: oscillator.frequency,
         curve: frequency,
         until: this.disposed,
       })
 
       automateAudioParam({
-        context,
+        synth,
         audioParam: gain.gain,
         curve: adsr.gain,
         until: this.disposed,
@@ -140,8 +140,8 @@ export class GeneratorSynthNode extends SynthNode {
     }
 
     mute()
-    this.context.playing.watchUntil(this.disposed, unmute)
-    this.context.stopped.watchUntil(this.disposed, mute)
+    this.synth.playing.watchUntil(this.disposed, unmute)
+    this.synth.stopped.watchUntil(this.disposed, mute)
   }
 
   attackAt(time: Time, frequency: Hertz) {

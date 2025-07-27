@@ -1,7 +1,7 @@
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam, NumberSynthParam } from '#param'
+import type { Synth } from '#synth'
 import { Factor, Normal, Seconds } from '#units'
 import { SynthNode } from '../synth-node'
 
@@ -12,8 +12,8 @@ export class ReverbSynthNode extends SynthNode {
   readonly duration
   readonly decay
 
-  constructor(context: SynthContext) {
-    const audioContext = context[INTERNAL_AUDIO_CONTEXT]
+  constructor(synth: Synth) {
+    const audioContext = synth[INTERNAL_AUDIO_CONTEXT]
 
     const input = audioContext.createGain()
     const output = audioContext.createGain()
@@ -25,7 +25,7 @@ export class ReverbSynthNode extends SynthNode {
     input.connect(dryGain).connect(output)
     input.connect(convolver).connect(wetGain).connect(output)
 
-    super({ context, inputs: [input], outputs: [output] })
+    super({ synth, inputs: [input], outputs: [output] })
 
     this.dry = new CurveSynthParam({
       node: this,
@@ -58,7 +58,7 @@ export class ReverbSynthNode extends SynthNode {
     const updateImpulseBuffer = () => {
       convolver.buffer = makeImpulseBuffer({
         audioContext,
-        random: this.context.random,
+        random: this.synth.random,
         seconds: this.duration.value,
         decay: this.decay.value,
       })

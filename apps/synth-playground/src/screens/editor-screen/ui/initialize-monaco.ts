@@ -36,7 +36,7 @@ export const initializeMonaco = (params: Params) => {
 const loadTypesccriptLibs = (monaco: Monaco) => {
   const declarations = [
     `declare module 'synth' {\n${synthPackageDts}\n}`,
-    `declare module 'synth/playground' {\nimport { SynthContext } from 'synth';\nexport declare const context: SynthContext\n}`,
+    `declare module 'synth/playground' {\nimport { Synth } from 'synth';\nexport declare const synth: Synth\n}`,
   ]
 
   for (const dts of declarations) {

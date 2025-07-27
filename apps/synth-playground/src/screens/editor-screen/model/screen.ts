@@ -17,7 +17,7 @@ const { $example, exampleSelected } = invoke(createExampleSelector)
 const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor)
 
 const {
-  $synthContext,
+  $synth,
   $isPlaying,
   $elapsedSeconds,
   $elapsedNotes,
@@ -60,9 +60,9 @@ sample({
 })
 
 sample({
-  clock: $synthContext,
+  clock: $synth,
   target: jsModulesChanged,
-  fn: context => ({ synth: synthModule, 'synth/playground': { context } }),
+  fn: synth => ({ synth: synthModule, 'synth/playground': { synth } }),
 })
 
 sample({

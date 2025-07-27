@@ -1,12 +1,12 @@
 import type { ReadonlyAutomationCurve } from '#automation'
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT, INTERNAL_LOOK_AHEAD } from '#internal-symbols'
 import type { Signal } from '#signal'
+import type { Synth } from '#synth'
 import { Time } from '#time'
 import type { UnitName, UnitValue } from '#units'
 
 type Params<TUnit extends UnitName> = {
-  context: SynthContext
+  synth: Synth
   audioParam: AudioParam
   /**
    * Source of automation events
@@ -27,22 +27,22 @@ type Params<TUnit extends UnitName> = {
  * Schedules events from {@link AutomationCurve} to {@link AudioParam}
  */
 export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>) => {
-  const { context, audioParam, curve, until, map = x => x } = params
+  const { synth, audioParam, curve, until, map = x => x } = params
 
-  const audioContext = context[INTERNAL_AUDIO_CONTEXT]
+  const audioContext = synth[INTERNAL_AUDIO_CONTEXT]
 
   const scheduleEvents = (start: Time) => {
-    const skippedSeconds = context.secondsPerNote.areaBefore(start)
+    const skippedSeconds = synth.secondsPerNote.areaBefore(start)
 
     const now = audioContext.currentTime
-    const ahead = now + context[INTERNAL_LOOK_AHEAD]
+    const ahead = now + synth[INTERNAL_LOOK_AHEAD]
 
     const initialValue = map(curve.valueAt(start), start)
     audioParam.setValueAtTime(initialValue, now)
     audioParam.setValueAtTime(initialValue, ahead)
 
     for (const event of curve.eventsAfter(start)) {
-      const time = ahead + (context.secondsPerNote.areaBefore(event.time) - skippedSeconds)
+      const time = ahead + (synth.secondsPerNote.areaBefore(event.time) - skippedSeconds)
 
       if (event.ramp) {
         const rampFunc =
@@ -60,6 +60,6 @@ export const automateAudioParam = <TUnit extends UnitName>(params: Params<TUnit>
     audioParam.value = map(curve.valueAt(Time.start), Time.start)
   }
 
-  context.playing.watchUntil(until, ({ start }) => scheduleEvents(start))
-  context.stopped.watchUntil(until, stopAudio)
+  synth.playing.watchUntil(until, ({ start }) => scheduleEvents(start))
+  synth.stopped.watchUntil(until, stopAudio)
 }

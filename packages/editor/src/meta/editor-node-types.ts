@@ -4,7 +4,7 @@ import {
   GeneratorSynthNode,
   OscillatorSynthNode,
   ReverbSynthNode,
-  type SynthContext,
+  type Synth,
   type SynthNode,
 } from '@repo/synth'
 
@@ -16,4 +16,4 @@ export const NODE_SYNTH_CONSTRUCTORS = {
   generator: GeneratorSynthNode,
   oscillator: OscillatorSynthNode,
   reverb: ReverbSynthNode,
-} satisfies Partial<Record<(typeof NODE_TYPES)[number], { new (context: SynthContext): SynthNode }>>
+} satisfies Partial<Record<(typeof NODE_TYPES)[number], { new (synth: Synth): SynthNode }>>

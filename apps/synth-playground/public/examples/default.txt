@@ -1,9 +1,9 @@
 import { OscillatorSynthNode, Time, Pitch } from 'synth'
-import { context } from 'synth/playground'
+import { synth } from 'synth/playground'
 
-const oscillator = new OscillatorSynthNode(context)
+const oscillator = new OscillatorSynthNode(synth)
 
-oscillator.connect(context.output)
+oscillator.connect(synth.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.frequency.curve.holdValueAt(Time.half)
