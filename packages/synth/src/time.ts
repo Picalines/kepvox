@@ -48,7 +48,7 @@ export class Time {
   }
 
   toNotes(): Notes {
-    return Notes.orThrow(this.#ticks / TICKS_IN_NOTE)
+    return Notes(this.#ticks / TICKS_IN_NOTE)
   }
 
   /**
