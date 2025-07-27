@@ -5,6 +5,8 @@
 
     "globalPassThroughEnv": ["TMPDIR"],
 
+    "concurrency": "16",
+
     "tasks": {
         "lint": { "dependsOn": ["//#lint:biome", "lint:ts"] },
         "lint:ts": { "dependsOn": ["^lint:ts"] },
