@@ -1,4 +1,4 @@
-import { SynthContext, type SynthState, Time } from '@repo/synth'
+import { Synth, type SynthState, Time } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, combine, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
 import { and, condition, interval, not, readonly, spread } from 'patronum'
@@ -16,7 +16,7 @@ export const createPlayback = createFactory((params: Params) => {
   const stateChanged = createEvent<SynthState>()
 
   const $hasAudioPermission = createStore(true) // Assume that it's there
-  const $context = createStore<SynthContext | null>(null)
+  const $synth = createStore<Synth | null>(null)
   const $state = restore(stateChanged, 'disposed')
   const $duration = createStore(Time.note)
   const $playhead = createStore(Time.start)
@@ -24,7 +24,7 @@ export const createPlayback = createFactory((params: Params) => {
   const userGrantedAudioPermission = createEvent()
   const userSetPlayhead = createEvent<Time>()
 
-  const initialized = createEvent<SynthContext>()
+  const initialized = createEvent<Synth>()
   const started = createEvent()
   const stopped = createEvent()
   const durationSet = createEvent<Time>()
@@ -35,7 +35,7 @@ export const createPlayback = createFactory((params: Params) => {
 
   const AUDIO_NOT_ALLOWED = new Error()
 
-  const initContextFx = createEffect(() => {
+  const initFx = createEffect(() => {
     if (typeof window === 'undefined') {
       return null
     }
@@ -45,27 +45,27 @@ export const createPlayback = createFactory((params: Params) => {
       throw AUDIO_NOT_ALLOWED
     }
 
-    const synthContext = new SynthContext(audioContext)
+    const synth = new Synth(audioContext)
 
     const scopedStateChanged = scopeBind(stateChanged)
-    synthContext.stateChanged.watch(() => scopedStateChanged(synthContext.state))
+    synth.stateChanged.watch(() => scopedStateChanged(synth.state))
 
-    return synthContext
+    return synth
   })
 
   const playFx = attach({
-    source: { context: $context, playhead: $playhead },
-    effect: ({ context, playhead }) => context?.play(playhead),
+    source: { synth: $synth, playhead: $playhead },
+    effect: ({ synth, playhead }) => synth?.play(playhead),
   })
 
   const stopFx = attach({
-    source: $context,
-    effect: context => context?.stop(),
+    source: $synth,
+    effect: synth => synth?.stop(),
   })
 
   const disposeFx = attach({
-    source: $context,
-    effect: context => context?.dispose(),
+    source: $synth,
+    effect: synth => synth?.dispose(),
   })
 
   sample({
@@ -79,12 +79,12 @@ export const createPlayback = createFactory((params: Params) => {
   condition({
     source: gate.$isOpened,
     if: gate.$isOpened,
-    then: initContextFx,
+    then: initFx,
     else: disposed,
   })
 
   sample({
-    clock: initContextFx.failData,
+    clock: initFx.failData,
     filter: error => error === AUDIO_NOT_ALLOWED,
     target: $hasAudioPermission,
     fn: () => false,
@@ -93,17 +93,17 @@ export const createPlayback = createFactory((params: Params) => {
   sample({
     clock: userGrantedAudioPermission,
     filter: not($hasAudioPermission),
-    target: spread({ hasAudioPermission: $hasAudioPermission, init: initContextFx }),
+    target: spread({ hasAudioPermission: $hasAudioPermission, init: initFx }),
     fn: () => ({ hasAudioPermission: true, init: undefined }),
   })
 
-  sample({ clock: initContextFx.doneData, target: $context })
+  sample({ clock: initFx.doneData, target: $synth })
 
   sample({
-    clock: $context,
+    clock: $synth,
     filter: Boolean,
     target: spread({ initialized, state: $state }),
-    fn: context => ({ initialized: context, state: context.state }),
+    fn: synth => ({ initialized: synth, state: synth.state }),
   })
 
   const $isPlayheadAtEnd = combine($duration, $playhead, (duration, playhead) => playhead.isAfterOrAt(duration))
@@ -129,7 +129,7 @@ export const createPlayback = createFactory((params: Params) => {
 
   sample({
     clock: tick,
-    source: $context,
+    source: $synth,
     filter: Boolean,
     target: $playhead,
     fn: ({ elapsedNotes }) => Time.atNote(elapsedNotes),
@@ -152,11 +152,11 @@ export const createPlayback = createFactory((params: Params) => {
   })
 
   return {
-    $context: readonly($context),
     $hasAudioPermission: readonly($hasAudioPermission),
     $isIdle: readonly($isIdle),
     $isPlaying: readonly($isPlaying),
     $playhead: readonly($playhead),
+    $synth: readonly($synth),
     disposed,
     durationSet,
     initialized,

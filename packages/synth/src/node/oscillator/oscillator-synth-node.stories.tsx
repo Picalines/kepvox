@@ -27,9 +27,9 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.connect(context.output)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      oscillator.connect(synth.output)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(440)
     },
@@ -38,9 +38,9 @@ export const Default: Story = {
 
 export const Triangle: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.connect(context.output)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      oscillator.connect(synth.output)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(4)
     },
@@ -49,9 +49,9 @@ export const Triangle: Story = {
 
 export const Sine: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.connect(context.output)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      oscillator.connect(synth.output)
       oscillator.waveShape.value = 'sine'
       oscillator.frequency.initialValue = Hertz(2)
     },
@@ -60,9 +60,9 @@ export const Sine: Story = {
 
 export const Sawtooth: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.connect(context.output)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      oscillator.connect(synth.output)
       oscillator.waveShape.value = 'sawtooth'
       oscillator.frequency.initialValue = Hertz(4)
     },
@@ -71,9 +71,9 @@ export const Sawtooth: Story = {
 
 export const Square: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      oscillator.connect(context.output)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      oscillator.connect(synth.output)
       oscillator.waveShape.value = 'square'
       oscillator.frequency.initialValue = Hertz(4)
     },
@@ -82,11 +82,11 @@ export const Square: Story = {
 
 export const Limited: Story = {
   args: {
-    synthTree: context => {
-      const oscillator = new OscillatorSynthNode(context)
-      const gain = new GainSynthNode(context)
+    synthTree: synth => {
+      const oscillator = new OscillatorSynthNode(synth)
+      const gain = new GainSynthNode(synth)
       oscillator.connect(gain)
-      gain.connect(context.output)
+      gain.connect(synth.output)
 
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(4)

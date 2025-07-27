@@ -1,4 +1,4 @@
-import { SynthContext, type SynthState } from '@repo/synth'
+import { Synth, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
 import { interval, not, readonly, spread } from 'patronum'
@@ -6,7 +6,7 @@ import { interval, not, readonly, spread } from 'patronum'
 export const createSynth = createFactory(() => {
   const stateChanged = createEvent<SynthState>()
 
-  const $synthContext = createStore<SynthContext | null>(null)
+  const $synth = createStore<Synth | null>(null)
 
   const $state = restore(stateChanged, 'disposed')
   const $isPlaying = $state.map(state => state === 'playing')
@@ -18,32 +18,32 @@ export const createSynth = createFactory(() => {
   const started = createEvent()
   const reset = createEvent()
 
-  const initContextFx = createEffect(() => {
+  const initFx = createEffect(() => {
     if (typeof window === 'undefined') {
       return null
     }
 
-    const synthContext = new SynthContext(new AudioContext())
+    const synth = new Synth(new AudioContext())
 
     const scopedStateChanged = scopeBind(stateChanged)
-    synthContext.stateChanged.watch(() => scopedStateChanged(synthContext.state))
+    synth.stateChanged.watch(() => scopedStateChanged(synth.state))
 
-    return synthContext
+    return synth
   })
 
   const playFx = attach({
-    source: $synthContext,
-    effect: synthContext => synthContext?.play(),
+    source: $synth,
+    effect: synth => synth?.play(),
   })
 
   const disposeFx = attach({
-    source: $synthContext,
-    effect: synthContext => synthContext?.dispose(),
+    source: $synth,
+    effect: synth => synth?.dispose(),
   })
 
   sample({
     clock: initialized,
-    target: initContextFx,
+    target: initFx,
   })
 
   sample({
@@ -58,12 +58,12 @@ export const createSynth = createFactory(() => {
 
   sample({
     clock: disposeFx.finally,
-    target: initContextFx,
+    target: initFx,
   })
 
   sample({
-    clock: initContextFx.doneData,
-    target: $synthContext,
+    clock: initFx.doneData,
+    target: $synth,
   })
 
   const { tick } = interval({
@@ -76,10 +76,10 @@ export const createSynth = createFactory(() => {
 
   sample({
     clock: tick,
-    source: $synthContext,
-    fn: context => ({
-      elapsedSeconds: context?.elapsedSeconds ?? 0,
-      elapsedNotes: context?.elapsedNotes ?? 0,
+    source: $synth,
+    fn: synth => ({
+      elapsedSeconds: synth?.elapsedSeconds ?? 0,
+      elapsedNotes: synth?.elapsedNotes ?? 0,
     }),
     target: spread({
       elapsedSeconds: $elapsedSeconds,
@@ -88,12 +88,12 @@ export const createSynth = createFactory(() => {
   })
 
   return {
-    $isPlaying: readonly($isPlaying),
-    $synthContext: readonly($synthContext),
-    $elapsedSeconds: readonly($elapsedSeconds),
     $elapsedNotes: readonly($elapsedNotes),
+    $elapsedSeconds: readonly($elapsedSeconds),
+    $isPlaying: readonly($isPlaying),
+    $synth: readonly($synth),
     initialized,
-    started,
     reset,
+    started,
   }
 })

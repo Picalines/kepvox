@@ -1,7 +1,7 @@
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam } from '#param'
+import type { Synth } from '#synth'
 import { Decibels, Factor } from '#units'
 import { SynthNode } from '../synth-node'
 
@@ -9,13 +9,13 @@ export class GainSynthNode extends SynthNode {
   readonly decibels: CurveSynthParam<'decibels'>
   readonly factor: CurveSynthParam<'factor'>
 
-  constructor(context: SynthContext) {
-    const decibelGain = context[INTERNAL_AUDIO_CONTEXT].createGain()
-    const factorGain = context[INTERNAL_AUDIO_CONTEXT].createGain()
+  constructor(synth: Synth) {
+    const decibelGain = synth[INTERNAL_AUDIO_CONTEXT].createGain()
+    const factorGain = synth[INTERNAL_AUDIO_CONTEXT].createGain()
 
     decibelGain.connect(factorGain)
 
-    super({ context, inputs: [decibelGain], outputs: [factorGain] })
+    super({ synth, inputs: [decibelGain], outputs: [factorGain] })
 
     this.decibels = new CurveSynthParam({
       node: this,

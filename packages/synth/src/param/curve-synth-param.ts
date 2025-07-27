@@ -27,7 +27,7 @@ export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
       range: rangeParam = Range.any,
     } = opts
 
-    const { context } = node
+    const { synth } = node
 
     if (audioParam && synthAudioParams.has(audioParam)) {
       throw new Error(`the ${AudioParam.name} already has an associated ${CurveSynthParam.name}`)
@@ -50,7 +50,7 @@ export class CurveSynthParam<TUnit extends UnitName> extends SynthParam {
       synthAudioParams.add(audioParam)
 
       automateAudioParam({
-        context,
+        synth,
         audioParam,
         curve,
         until: node.disposed,

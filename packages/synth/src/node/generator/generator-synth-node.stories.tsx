@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
-import type { SynthContext } from '#context'
 import { Pitch } from '#pitch'
+import type { Synth } from '#synth'
 import { WaveformStory } from '#test'
 import { Time } from '#time'
 import { Factor, Normal, Notes, Seconds } from '#units'
@@ -29,7 +29,7 @@ export default {
 type Story = StoryObj<StoryArgs>
 
 type CreateGeneratorParams = {
-  context: SynthContext
+  synth: Synth
   attack?: Notes
   decay?: Notes
   sustain?: Normal
@@ -39,10 +39,10 @@ type CreateGeneratorParams = {
 }
 
 const createGenerator = (params: CreateGeneratorParams) => {
-  const { context, attack, decay, sustain, release, waveShape, destination } = params
+  const { synth, attack, decay, sustain, release, waveShape, destination } = params
 
-  const generator = new GeneratorSynthNode(context)
-  generator.connect(destination ?? context.output)
+  const generator = new GeneratorSynthNode(synth)
+  generator.connect(destination ?? synth.output)
 
   generator.attack.initialValue = attack ?? generator.attack.initialValue
   generator.decay.initialValue = decay ?? generator.decay.initialValue
@@ -55,11 +55,11 @@ const createGenerator = (params: CreateGeneratorParams) => {
 
 export const Default: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const generator = createGenerator({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),
@@ -76,15 +76,15 @@ export const Default: Story = {
 export const Polyphony: Story = {
   args: {
     timeMarkers: [Time.note.repeat(3), Time.note.repeat(4)],
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 6))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 6))
 
-      const gain = new GainSynthNode(context)
+      const gain = new GainSynthNode(synth)
       gain.factor.initialValue = Factor(1)
-      gain.connect(context.output)
+      gain.connect(synth.output)
 
       const generator = createGenerator({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),

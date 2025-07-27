@@ -11,15 +11,15 @@ Core synthesizer engine
 ## Usage
 
 ```typescript
-import { SynthContext, Node, Param } from '@repo/synth'
+import { Synth, OscillatorNode, ReverbSynthNode } from '@repo/synth'
 
-const context = new SynthContext(new AudioContext())
+const synth = new Synth(new AudioContext())
 
-const oscillator = new OscillatorNode(context)
-const reverb = new ReverbNode(context)
+const oscillator = new OscillatorNode(synth)
+const reverb = new ReverbSynthNode(synth)
 
 oscillator.connect(reverb)
-reverb.connect(context.output)
+reverb.connect(synth.output)
 ```
 
 ## Development

@@ -1,11 +1,11 @@
 import { GeneratorSynthNode, GainSynthNode, Time as T, Factor, Pitch, PitchNotation } from 'synth'
-import { context } from 'synth/playground'
+import { synth } from 'synth/playground'
 
-const generator = new GeneratorSynthNode(context, { maxPolyphony: 16 })
-const gain = new GainSynthNode(context)
+const generator = new GeneratorSynthNode(synth, { maxPolyphony: 16 })
+const gain = new GainSynthNode(synth)
 
 generator.connect(gain)
-gain.connect(context.output)
+gain.connect(synth.output)
 
 generator.waveShape.value = 'triangle'
 generator.attack.initialValue = T.sixteenth.toNotes()

@@ -24,35 +24,35 @@ type Story = StoryObj<StoryArgs>
 
 export const HalfFactor: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
-      const constant = new ConstantSynthNode(context)
+      const constant = new ConstantSynthNode(synth)
       constant.value.initialValue = Factor(1)
 
-      const gain = new GainSynthNode(context)
+      const gain = new GainSynthNode(synth)
       gain.factor.initialValue = Factor(0.5)
 
       constant.connect(gain)
-      gain.connect(context.output)
+      gain.connect(synth.output)
     },
   },
 }
 
 export const Decibel: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
-      const constant = new ConstantSynthNode(context)
+      const constant = new ConstantSynthNode(synth)
       constant.value.initialValue = Factor(1)
 
-      const gain = new GainSynthNode(context)
+      const gain = new GainSynthNode(synth)
       gain.decibels.initialValue = Decibels(0)
       gain.decibels.curve.rampValueUntil(Time.note, Decibels.orThrow(-30), 'exponential')
 
       constant.connect(gain)
-      gain.connect(context.output)
+      gain.connect(synth.output)
     },
   },
 }

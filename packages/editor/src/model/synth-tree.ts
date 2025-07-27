@@ -64,12 +64,12 @@ export const createSynthTree = createFactory((params: Params) => {
 
   sample({
     clock: createNodeDispatched,
-    source: { nodes: $nodes, context: playback.$context, hasOutputNode: $hasOutputNode },
+    source: { nodes: $nodes, synth: playback.$synth, hasOutputNode: $hasOutputNode },
     target: $nodes,
-    fn: ({ nodes, context, hasOutputNode }, { id, type, position, number, color }) =>
+    fn: ({ nodes, synth, hasOutputNode }, { id, type, position, number, color }) =>
       produce(nodes, draft => {
-        if (context && !nodes.has(id) && (!hasOutputNode || type !== 'output')) {
-          const synthNode = type === 'output' ? context.output : new NODE_SYNTH_CONSTRUCTORS[type](context)
+        if (synth && !nodes.has(id) && (!hasOutputNode || type !== 'output')) {
+          const synthNode = type === 'output' ? synth.output : new NODE_SYNTH_CONSTRUCTORS[type](synth)
           draft.set(id, { id, type, position, synthNode, number, color, selected: false })
         }
       }),

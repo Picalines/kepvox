@@ -19,7 +19,7 @@ export class TimeSignature {
   }
 
   /**
-   * Useful for {@link SynthContext.secondsPerNote}
+   * Useful for {@link Synth.secondsPerNote}
    */
   bpmToSecondsPerNote(bpm: number): Seconds {
     return Seconds.orClamp((60 / Range.positiveNonZero.clamp(bpm)) * this.beatsInNote)

@@ -21,7 +21,7 @@ export abstract class SynthParam {
     this.node = node
   }
 
-  get context() {
-    return this.node.context
+  get synth() {
+    return this.node.synth
   }
 }

@@ -2,12 +2,12 @@ import { drawWaveform } from '@repo/web-audio/draw'
 import { resample } from '@repo/web-audio/math'
 import { renderAudioOffline } from '@repo/web-audio/offline'
 import { useCallback, useEffect, useRef } from 'react'
-import { SynthContext } from '#context'
+import { Synth } from '#synth'
 import type { Time } from '#time'
 import { Seconds } from '#units'
 
 type Props<T> = {
-  synthTree: (synthContext: SynthContext, props: T) => void
+  synthTree: (synth: Synth, props: T) => void
   props: T
   duration: Seconds
   timeMarkers?: Time[]
@@ -53,10 +53,10 @@ export const WaveformStory = <T = {}>(props: Props<T>) => {
       numberOfChannels,
       seconds: duration,
       audioTree: audioContext => {
-        const synthContext = new SynthContext(audioContext, { lookAhead: Seconds(0) })
-        synthTree(synthContext, synthTreeProps)
-        secondMarkers.push(...noteMakers.map(time => synthContext.secondsPerNote.areaBefore(time)))
-        synthContext.play()
+        const synth = new Synth(audioContext, { lookAhead: Seconds(0) })
+        synthTree(synth, synthTreeProps)
+        secondMarkers.push(...noteMakers.map(time => synth.secondsPerNote.areaBefore(time)))
+        synth.play()
       },
     })
 

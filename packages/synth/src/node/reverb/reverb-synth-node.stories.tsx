@@ -29,24 +29,24 @@ export const Default: Story = {
   args: {
     duration: Seconds(4.5),
     timeMarkers: [Time.quarter, Time.note],
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(4))
 
-      const oscillator = new OscillatorSynthNode(context)
+      const oscillator = new OscillatorSynthNode(synth)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(8)
 
-      const gate = new GainSynthNode(context)
+      const gate = new GainSynthNode(synth)
       gate.factor.initialValue = Factor(0.8)
       gate.factor.curve.setValueAt(Time.quarter, Factor(0))
 
-      const reverb = new ReverbSynthNode(context)
+      const reverb = new ReverbSynthNode(synth)
       reverb.decay.value = Factor(1)
       reverb.duration.value = Seconds(3)
 
       oscillator.connect(gate)
       gate.connect(reverb)
-      reverb.connect(context.output)
+      reverb.connect(synth.output)
     },
   },
 }
@@ -54,19 +54,19 @@ export const Default: Story = {
 export const Wet: Story = {
   args: {
     duration: Seconds(4.5),
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(4))
 
-      const oscillator = new OscillatorSynthNode(context)
+      const oscillator = new OscillatorSynthNode(synth)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(1)
 
-      const reverb = new ReverbSynthNode(context)
+      const reverb = new ReverbSynthNode(synth)
       reverb.dry.initialValue = Normal.min
       reverb.duration.value = Seconds(1)
 
       oscillator.connect(reverb)
-      reverb.connect(context.output)
+      reverb.connect(synth.output)
     },
   },
 }

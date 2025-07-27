@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ComponentProps } from 'react'
-import type { SynthContext } from '#context'
+import type { Synth } from '#synth'
 import { WaveformStory } from '#test'
 import { Time } from '#time'
 import { Normal, Notes, Seconds } from '#units'
@@ -28,7 +28,7 @@ export default {
 type Story = StoryObj<StoryArgs>
 
 type CreateEnvelopeParams = {
-  context: SynthContext
+  synth: Synth
   attack?: Notes
   decay?: Notes
   sustain?: Normal
@@ -37,12 +37,12 @@ type CreateEnvelopeParams = {
 }
 
 const createEnvelope = (params: CreateEnvelopeParams) => {
-  const { context, attack, decay, sustain, release, source: sourceParam } = params
+  const { synth, attack, decay, sustain, release, source: sourceParam } = params
 
-  const envelope = new ADSREnvelopeSynthNode(context)
-  envelope.connect(context.output)
+  const envelope = new ADSREnvelopeSynthNode(synth)
+  envelope.connect(synth.output)
 
-  const source = sourceParam ?? new ConstantSynthNode(context)
+  const source = sourceParam ?? new ConstantSynthNode(synth)
   source.connect(envelope)
 
   envelope.attack.initialValue = attack ?? envelope.attack.initialValue
@@ -56,11 +56,11 @@ const createEnvelope = (params: CreateEnvelopeParams) => {
 export const Default: Story = {
   args: {
     timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),
@@ -76,11 +76,11 @@ export const Default: Story = {
 export const Chained: Story = {
   args: {
     timeMarkers: [Time.note.repeat(3)],
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 8))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 8))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),
@@ -99,16 +99,16 @@ export const Oscillator: Story = {
   args: {
     timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
     maxAmplitude: DEFAULT_SOURCE_GAIN,
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),
         release: Notes(1),
-        source: new OscillatorSynthNode(context),
+        source: new OscillatorSynthNode(synth),
       })
 
       envelope.attackAt(Time.start)
@@ -119,11 +119,11 @@ export const Oscillator: Story = {
 
 export const NoAttack: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(0),
         decay: Notes(1),
         sustain: Normal(0.5),
@@ -138,11 +138,11 @@ export const NoAttack: Story = {
 
 export const NoDecay: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(0),
         sustain: Normal(0.5),
@@ -157,11 +157,11 @@ export const NoDecay: Story = {
 
 export const NoRelease: Story = {
   args: {
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds.orThrow(1 / 4))
 
       const envelope = createEnvelope({
-        context,
+        synth,
         attack: Notes(1),
         decay: Notes(1),
         sustain: Normal(0.5),

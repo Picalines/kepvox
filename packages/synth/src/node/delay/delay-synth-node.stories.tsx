@@ -28,18 +28,18 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
-      const oscillator = new OscillatorSynthNode(context)
+      const oscillator = new OscillatorSynthNode(synth)
       oscillator.waveShape.value = 'triangle'
       oscillator.frequency.initialValue = Hertz(2)
 
-      const delay = new DelaySynthNode(context)
+      const delay = new DelaySynthNode(synth)
       delay.delayRight.initialValue = Time.quarter.toNotes()
 
       oscillator.connect(delay)
-      delay.connect(context.output)
+      delay.connect(synth.output)
     },
   },
 }
@@ -47,26 +47,26 @@ export const Default: Story = {
 export const WithOriginal: Story = {
   args: {
     maxAmplitude: DEFAULT_SOURCE_GAIN,
-    synthTree: context => {
-      context.secondsPerNote.setValueAt(Time.start, Seconds(1))
+    synthTree: synth => {
+      synth.secondsPerNote.setValueAt(Time.start, Seconds(1))
 
-      const oscillator = new OscillatorSynthNode(context)
+      const oscillator = new OscillatorSynthNode(synth)
       oscillator.waveShape.value = 'sine'
       oscillator.frequency.initialValue = Hertz(4)
 
-      const delay = new DelaySynthNode(context)
+      const delay = new DelaySynthNode(synth)
       delay.dry.initialValue = Normal(1)
       delay.wetLeft.initialValue = Normal(0.5)
       delay.wetRight.initialValue = Normal(0.5)
       delay.delayLeft.initialValue = Time.quarter.toNotes()
       delay.delayRight.initialValue = Time.half.toNotes()
 
-      const gain = new GainSynthNode(context)
+      const gain = new GainSynthNode(synth)
       gain.factor.initialValue = Factor(0.5)
 
       oscillator.connect(delay)
       delay.connect(gain)
-      gain.connect(context.output)
+      gain.connect(synth.output)
     },
   },
 }

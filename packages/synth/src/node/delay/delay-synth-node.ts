@@ -1,7 +1,7 @@
-import type { SynthContext } from '#context'
 import { INTERNAL_AUDIO_CONTEXT } from '#internal-symbols'
 import { Range } from '#math'
 import { CurveSynthParam } from '#param'
+import type { Synth } from '#synth'
 import type { Time } from '#time'
 import { Normal, Notes, Seconds } from '#units'
 import { SynthNode } from '../synth-node'
@@ -16,8 +16,8 @@ export class DelaySynthNode extends SynthNode {
   readonly wetLeft: CurveSynthParam<'normal'>
   readonly wetRight: CurveSynthParam<'normal'>
 
-  constructor(context: SynthContext) {
-    const audioContext = context[INTERNAL_AUDIO_CONTEXT]
+  constructor(synth: Synth) {
+    const audioContext = synth[INTERNAL_AUDIO_CONTEXT]
 
     const input = audioContext.createGain()
     const output = audioContext.createGain()
@@ -40,9 +40,9 @@ export class DelaySynthNode extends SynthNode {
 
     merger.connect(output)
 
-    super({ context, inputs: [input], outputs: [output] })
+    super({ synth, inputs: [input], outputs: [output] })
 
-    const mapNotesToSeconds = (notes: Notes, time: Time) => context.secondsPerNote.valueAt(time) * notes
+    const mapNotesToSeconds = (notes: Notes, time: Time) => synth.secondsPerNote.valueAt(time) * notes
 
     this.delayLeft = new CurveSynthParam({
       node: this,

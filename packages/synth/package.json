@@ -23,13 +23,13 @@
     "imports": {
         "#automation": "./src/automation/internals.ts",
         "#branded": "./src/branded.ts",
-        "#context": "./src/synth-context.ts",
         "#internal-symbols": "./src/internal-symbols.ts",
         "#math": "./src/math/index.ts",
         "#node": "./src/node/index.ts",
         "#param": "./src/param/index.ts",
         "#pitch": "./src/pitch.ts",
         "#signal": "./src/signal/index.ts",
+        "#synth": "./src/synth.ts",
         "#test": "./src/test/index.ts",
         "#time": "./src/time.ts",
         "#units": "./src/units.ts"
