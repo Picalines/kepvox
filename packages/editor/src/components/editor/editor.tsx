@@ -4,7 +4,6 @@ import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { fork } from 'effector'
 import { Provider } from 'effector-react'
 import { type FC, memo, useMemo } from 'react'
-import { AudioPermissionDialog } from '#components/audio-permission-dialog'
 import { LoadingIndicator } from '#components/loading-indicator'
 import { NodeCreationDialog } from '#components/node-creation-dialog'
 import { type Project, editorModel } from '#model'
@@ -54,7 +53,6 @@ const EditorUI = memo(() => (
   <Tooltip.Provider>
     <div className="relative size-full">
       <LoadingIndicator />
-      <AudioPermissionDialog />
       <NodeCreationDialog />
       <EditorPanels />
     </div>

@@ -173,11 +173,16 @@ export class Synth {
   }
 
   /**
-   * NOTE: may be called multiple times without {@link Synth.stop}
+   * Starts scheduled time events. Calls {@link Synth#stop} and {@link AudioContext#resume} when needed
+   * @returns a Promise that resolves then the state becomes 'playing'
    */
-  play(start = Time.start) {
+  async play(start = Time.start) {
     this.#assertNotDisposed()
     this.stop()
+
+    if (this.#audioContext instanceof AudioContext && this.#audioContext.state === 'suspended') {
+      await this.#audioContext.resume()
+    }
 
     this.#state = 'playing'
     this.#playing.emit({ start })
