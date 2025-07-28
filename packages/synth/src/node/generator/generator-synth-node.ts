@@ -134,18 +134,13 @@ export class GeneratorSynthNode extends SynthNode {
       return { frequency, adsr }
     })
 
-    // this.synth.playing.watch(() => console.log('playing'))
-    // this.synth.stopped.watch(() => console.log('stopped'))
-
     master.gain.value = 0
     this.synth.playing.toggle(
       this.synth.stopped,
       () => {
-        // console.log('master on')
         master.gain.value = DEFAULT_SOURCE_GAIN
       },
       () => {
-        // console.log('master off')
         master.gain.value = 0
       },
     )
