@@ -1,121 +1,36 @@
-import * as synthModule from '@repo/synth'
 import { invoke } from '@withease/factories'
-import { combine, createEvent, sample } from 'effector'
 import { createGate } from 'effector-react'
-import { persist as persistInQuery } from 'effector-storage/query'
-import { and, equals, not } from 'patronum'
-import { base64Url } from '#shared/lib/base64-url'
 import { createCodeEditor } from './code-editor'
-import { createExampleSelector } from './examples'
+import { createExampleLoader } from './example-loader'
 import { createJsRunner } from './js-runner'
+import { createPlayback } from './playback'
 import { createSynth } from './synth'
 
-const Gate = createGate()
+const Gate = createGate<{}>()
 
-const { $example, exampleSelected } = invoke(createExampleSelector)
+const codeEditor = invoke(createCodeEditor, { gate: Gate })
+const jsRunner = invoke(createJsRunner, { gate: Gate })
+const synth = invoke(createSynth, { gate: Gate })
+const playback = invoke(createPlayback, { codeEditor, synth, jsRunner })
+const exampleLoader = invoke(createExampleLoader, { codeEditor })
 
-const { $code, $isReadonly, codeChanged } = invoke(createCodeEditor)
-
-const {
-  $synth,
-  $isPlaying,
-  $elapsedSeconds,
-  $elapsedNotes,
-  initialized: synthSetup,
-  started: synthStarted,
-  reset: synthReset,
-} = invoke(createSynth)
-
-const {
-  $state: $jsState,
-  $error: $jsError,
-  initialized: jsRunnerSetup,
-  jsModulesChanged,
-  jsCodeSubmitted,
-  jsCodeRan,
-} = invoke(createJsRunner)
-
-const playbackToggled = createEvent()
-
-const $status = combine($jsState, $isPlaying, (jsState, isPlaying) => {
-  if (jsState === 'initializing') {
-    return 'initializing' as const
-  }
-
-  if (isPlaying) {
-    return 'playing' as const
-  }
-
-  return 'ready' as const
-})
-
-sample({
-  clock: Gate.open,
-  target: [jsRunnerSetup, synthSetup],
-})
-
-sample({
-  clock: Gate.close,
-  target: synthReset,
-})
-
-sample({
-  clock: $synth,
-  target: jsModulesChanged,
-  fn: synth => ({ synth: synthModule, 'synth/playground': { synth } }),
-})
-
-sample({
-  clock: playbackToggled,
-  filter: equals($status, 'ready'),
-  source: $code,
-  target: jsCodeSubmitted,
-})
-
-sample({
-  clock: playbackToggled,
-  filter: $isPlaying,
-  target: synthReset,
-})
-
-sample({
-  clock: jsCodeRan,
-  filter: and(not($isPlaying), equals($jsError, null)),
-  target: synthStarted,
-})
-
-sample({
-  clock: combine({ isPlaying: $isPlaying, jsState: $jsState }),
-  target: $isReadonly,
-  fn: ({ isPlaying, jsState }) => isPlaying || jsState === 'running',
-})
-
-sample({
-  clock: $example,
-  target: codeChanged,
-  fn: ({ code }) => code,
-})
-
-persistInQuery({
-  key: 'code',
-  source: $code,
-  pickup: Gate.open,
-  target: codeChanged,
-  serialize: base64Url.encode,
-  deserialize: base64Url.decode,
-  timeout: 10,
-})
+const { $code, $isReadonly, userChangedCode } = codeEditor
+const { $elapsedSeconds, $elapsedNotes } = synth
+const { $error: $jsError } = jsRunner
+const { $status, userToggledPlayback } = playback
+const { $examplesDialogShown, userSelectedAnExample, userToggledExamplesDialog } = exampleLoader
 
 export {
-  Gate,
   $code,
+  $elapsedNotes,
+  $elapsedSeconds,
+  $examplesDialogShown,
   $isReadonly,
   $jsError,
   $status,
-  $example,
-  $elapsedSeconds,
-  $elapsedNotes,
-  exampleSelected,
-  codeChanged,
-  playbackToggled,
+  Gate,
+  userChangedCode,
+  userSelectedAnExample,
+  userToggledExamplesDialog,
+  userToggledPlayback,
 }

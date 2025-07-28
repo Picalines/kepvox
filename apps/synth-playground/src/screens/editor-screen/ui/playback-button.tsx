@@ -10,7 +10,7 @@ import { model } from '../model'
 export const PlaybackButton = () => {
   const { status, toggled } = useUnit({
     status: model.$status,
-    toggled: model.playbackToggled,
+    toggled: model.userToggledPlayback,
   })
 
   const disabled = status === 'initializing'

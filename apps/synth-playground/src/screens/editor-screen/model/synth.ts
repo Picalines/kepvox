@@ -1,9 +1,18 @@
 import { Synth, type SynthState } from '@repo/synth'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample, scopeBind } from 'effector'
+import type { Gate } from 'effector-react'
 import { interval, not, readonly, spread } from 'patronum'
 
-export const createSynth = createFactory(() => {
+export type SynthStore = ReturnType<typeof createSynth>
+
+type Params = {
+  gate: Gate
+}
+
+export const createSynth = createFactory((params: Params) => {
+  const { gate } = params
+
   const stateChanged = createEvent<SynthState>()
 
   const $synth = createStore<Synth | null>(null)
@@ -14,7 +23,6 @@ export const createSynth = createFactory(() => {
   const $elapsedSeconds = createStore(0)
   const $elapsedNotes = createStore(0)
 
-  const initialized = createEvent()
   const started = createEvent()
   const reset = createEvent()
 
@@ -41,30 +49,14 @@ export const createSynth = createFactory(() => {
     effect: synth => synth?.dispose(),
   })
 
-  sample({
-    clock: initialized,
-    target: initFx,
-  })
+  sample({ clock: gate.open, target: initFx })
+  sample({ clock: initFx.doneData, target: $synth })
+  sample({ clock: gate.close, target: disposeFx })
 
-  sample({
-    clock: started,
-    target: playFx,
-  })
+  sample({ clock: reset, target: disposeFx })
+  sample({ clock: disposeFx.finally, target: initFx })
 
-  sample({
-    clock: reset,
-    target: disposeFx,
-  })
-
-  sample({
-    clock: disposeFx.finally,
-    target: initFx,
-  })
-
-  sample({
-    clock: initFx.doneData,
-    target: $synth,
-  })
+  sample({ clock: started, target: playFx })
 
   const { tick } = interval({
     timeout: 50,
@@ -92,7 +84,6 @@ export const createSynth = createFactory(() => {
     $elapsedSeconds: readonly($elapsedSeconds),
     $isPlaying: readonly($isPlaying),
     $synth: readonly($synth),
-    initialized,
     reset,
     started,
   }

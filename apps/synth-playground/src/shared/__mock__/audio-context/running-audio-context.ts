@@ -7,8 +7,9 @@ export const mockRunningAudioContext = () => {
 
   window.AudioContext = new Proxy(RealAudioContext, {
     construct: (target, args) => {
-      return Object.defineProperty(new target(...args), 'state', {
-        get: () => 'running',
+      return Object.defineProperties(new target(...args), {
+        state: { get: () => 'running' },
+        currentTime: { get: () => 0 },
       })
     },
   })
