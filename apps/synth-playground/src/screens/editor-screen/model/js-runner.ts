@@ -1,13 +1,21 @@
 import initSwc, { transform } from '@swc/wasm-web'
 import { createFactory } from '@withease/factories'
 import { attach, createEffect, createEvent, createStore, restore, sample } from 'effector'
+import type { Gate } from 'effector-react'
 import { equals, not, readonly, spread } from 'patronum'
 
-export const createJsRunner = createFactory(() => {
+export type JsRunnerStore = ReturnType<typeof createJsRunner>
+
+type Params = {
+  gate: Gate
+}
+
+export const createJsRunner = createFactory((params: Params) => {
+  const { gate } = params
+
   const $state = createStore<'initializing' | 'ready' | 'running'>('initializing')
   const $error = createStore<null | Error>(null)
 
-  const initialized = createEvent()
   const jsModulesChanged = createEvent<Record<string, object>>()
   const jsCodeSubmitted = createEvent<string>()
   const jsCodeRan = createEvent()
@@ -54,21 +62,18 @@ export const createJsRunner = createFactory(() => {
     },
   })
 
-  sample({
-    clock: initialized,
-    target: initFx,
+  const logErrorFx = attach({
+    source: $error,
+    effect: error => {
+      if (error) {
+        console.error(`${error.name}:`, error.message)
+      }
+    },
   })
 
-  sample({
-    clock: initFx.done,
-    target: $state,
-    fn: () => 'ready' as const,
-  })
-
-  sample({
-    clock: initFx.failData,
-    target: $error,
-  })
+  sample({ clock: gate.open, target: initFx })
+  sample({ clock: initFx.done, target: $state, fn: () => 'ready' as const })
+  sample({ clock: initFx.failData, target: $error })
 
   sample({
     clock: jsCodeSubmitted,
@@ -81,32 +86,14 @@ export const createJsRunner = createFactory(() => {
     }),
   })
 
-  sample({
-    clock: runFx.failData,
-    target: $error,
-  })
-
-  sample({
-    clock: runFx.finally,
-    target: $state,
-    fn: () => 'ready' as const,
-  })
-
-  sample({
-    clock: runFx.finally,
-    target: jsCodeRan,
-  })
-
-  $error.watch(error => {
-    if (error) {
-      console.error(`${error.name}:`, error.message)
-    }
-  })
+  sample({ clock: runFx.failData, target: $error })
+  sample({ clock: runFx.finally, target: $state, fn: () => 'ready' as const })
+  sample({ clock: runFx.finally, target: jsCodeRan })
+  sample({ clock: $error, target: logErrorFx })
 
   return {
     $state: readonly($state),
     $error: readonly($error),
-    initialized,
     jsModulesChanged,
     jsCodeSubmitted,
     jsCodeRan,

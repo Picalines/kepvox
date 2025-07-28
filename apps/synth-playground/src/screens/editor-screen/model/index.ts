@@ -1,2 +1,2 @@
 export * as model from './screen'
-export * from './examples'
+export { EXAMPLE_NAMES } from './examples'

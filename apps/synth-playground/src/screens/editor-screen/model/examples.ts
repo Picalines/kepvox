@@ -1,37 +1,13 @@
-import { createFactory } from '@withease/factories'
-import { createEvent, createStore, sample } from 'effector'
-import { readonly } from 'patronum'
-import bpmRampExample from '#public/examples/bpm-ramp.txt'
-import defaultExample from '#public/examples/default.txt'
-import stilAliveExample from '#public/examples/still-alive.txt'
+import BPM_RAMP_EXAMPLE from '#public/examples/bpm-ramp.txt'
+import DEFAULT_EXAMPLE from '#public/examples/default.txt'
+import STILL_ALIVE_EXAMPLE from '#public/examples/still-alive.txt'
 
 export const EXAMPLES = {
-  default: defaultExample,
-  'bpm-ramp': bpmRampExample,
-  'still-alive': stilAliveExample,
+  default: DEFAULT_EXAMPLE,
+  'bpm-ramp': BPM_RAMP_EXAMPLE,
+  'still-alive': STILL_ALIVE_EXAMPLE,
 } as const
 
-type ExampleName = keyof typeof EXAMPLES
+export type ExampleName = keyof typeof EXAMPLES
 
-type Example = {
-  name: ExampleName
-  code: string
-}
-
-export const createExampleSelector = createFactory(() => {
-  const $example = createStore<Example>({ name: 'default', code: EXAMPLES.default })
-
-  const exampleSelected = createEvent<ExampleName>()
-
-  sample({
-    clock: exampleSelected,
-    filter: exampleName => exampleName in EXAMPLES,
-    fn: exampleName => ({ name: exampleName, code: EXAMPLES[exampleName] }),
-    target: $example,
-  })
-
-  return {
-    $example: readonly($example),
-    exampleSelected,
-  }
-})
+export const EXAMPLE_NAMES = Object.keys(EXAMPLES) as ExampleName[]

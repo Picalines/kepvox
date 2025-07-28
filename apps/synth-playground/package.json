@@ -15,9 +15,9 @@
         "setup:copy-synth-dts": "node ./scripts/copy-synth-dts.js"
     },
     "imports": {
+        "#public/*": "./public/*",
         "#screens/*": "./src/screens/*/index.ts",
-        "#shared/lib/*": "./src/shared/lib/*/index.ts",
-        "#public/*": "./public/*"
+        "#shared/*": "./src/shared/*/index.ts"
     },
     "dependencies": {
         "@effector/next": "catalog:",

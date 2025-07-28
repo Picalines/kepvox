@@ -21,8 +21,8 @@ export const CodeEditor: FC<Props> = props => {
   const { value, isReadonly, onChangeModel, onPlaybackToggle } = useUnit({
     value: model.$code,
     isReadonly: model.$isReadonly,
-    onChangeModel: model.codeChanged,
-    onPlaybackToggle: model.playbackToggled,
+    onChangeModel: model.userChangedCode,
+    onPlaybackToggle: model.userToggledPlayback,
   })
 
   const onChange = useCallback<OnMonacoChange>(newValue => onChangeModel(newValue ?? ''), [onChangeModel])
