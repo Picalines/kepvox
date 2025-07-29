@@ -3,12 +3,12 @@
 import { Editor } from '@repo/editor'
 import type { FC } from 'react'
 import { defaultProject } from '../model'
-import { EditorMenubar } from './editor-menubar'
+import { EditorHeader } from './editor-header'
 
 export const EditorScreen: FC = () => {
   return (
     <div className="flex h-screen w-screen flex-col">
-      <EditorMenubar />
+      <EditorHeader />
       <Editor initialProject={defaultProject} />
     </div>
   )
