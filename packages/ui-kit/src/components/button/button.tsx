@@ -1,4 +1,4 @@
-import type { Overlay } from '@repo/common/typing'
+import type { OmitExisting, Overlay } from '@repo/common/typing'
 import { type VariantProps, cva } from 'class-variance-authority'
 import type { ComponentType, FC, MouseEventHandler, ReactNode } from 'react'
 import { Text as Typography } from '#components/text'
@@ -16,9 +16,9 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent',
       },
       size: {
-        sm: 'h-8 gap-1 px-1.5 text-sm [&:has(svg:only-child)]:px-2.5 [&_svg]:size-3',
-        md: 'h-10 gap-1.5 px-3 py-2 text-base [&:has(svg:only-child)]:py-3 [&_svg]:size-4',
-        lg: 'h-12 gap-2 px-4.5 text-lg [&:has(svg:only-child)]:px-3.5 [&_svg]:size-5',
+        sm: 'h-8 gap-1 px-1.5 text-sm [&_svg]:size-3',
+        md: 'h-10 gap-1.5 px-3 py-2 text-base [&_svg]:size-4',
+        lg: 'h-12 gap-2 px-4.5 text-lg [&_svg]:size-5',
       },
       feedback: {
         none: '',
@@ -26,7 +26,13 @@ const buttonVariants = cva(
         negative: 'text-red-500',
         modified: 'text-blue-500',
       },
+      _iconOnly: { true: '', false: '' },
     },
+    compoundVariants: [
+      { _iconOnly: true, size: 'sm', class: 'px-2.5' },
+      { _iconOnly: true, size: 'md', class: 'py-3' },
+      { _iconOnly: true, size: 'lg', class: 'px-3.5' },
+    ],
     defaultVariants: {
       variant: 'primary',
       size: 'md',
@@ -36,7 +42,7 @@ const buttonVariants = cva(
 )
 
 export type RootProps = Overlay<
-  VariantProps<typeof buttonVariants>,
+  OmitExisting<VariantProps<typeof buttonVariants>, '_iconOnly'>,
   {
     children: ReactNode
     className?: string
@@ -68,7 +74,7 @@ export const Root: FC<RootProps> = props => {
     throw new Error(`${Root.displayName} requires ${Text.displayName} or ${Icon.displayName}`)
   }
 
-  const buttonClassName = buttonVariants({ variant, size, feedback })
+  const buttonClassName = buttonVariants({ variant, size, feedback, _iconOnly: Boolean(icon && !text) })
   const className = cn(buttonClassName, classNameProp)
 
   const iconPosition = icon?.props.position ?? 'end'
