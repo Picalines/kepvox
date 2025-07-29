@@ -16,8 +16,7 @@ export const initializeMonaco = (params: Params) => {
   loadTypesccriptLibs(monaco)
 
   editor.updateOptions({
-    fontSize: 16,
-    theme: 'vs-dark',
+    fontSize: 14,
     minimap: { enabled: false },
   })
 
