@@ -4,7 +4,7 @@ import type { Gate } from 'effector-react'
 import { persist as persistInQuery } from 'effector-storage/query'
 import { not, readonly } from 'patronum'
 import INITIAL_CODE from '#public/initial-code.txt'
-import { base64Url } from '#shared/base64-url'
+import { base64Url } from '#shared/lib/base64-url'
 
 export type CodeEditorStore = ReturnType<typeof createCodeEditor>
 
