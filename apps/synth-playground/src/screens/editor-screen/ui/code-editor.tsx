@@ -1,19 +1,21 @@
 'use client'
 
-import { type FC, useCallback } from 'react'
-
 import {
   Editor as MonacoEditor,
   type OnChange as OnMonacoChange,
   type OnMount as OnMonacoMount,
 } from '@monaco-editor/react'
+import { type Theme, Themed } from '@repo/ui-kit/components/theme'
 import { useUnit } from 'effector-react'
+import { type FC, useCallback } from 'react'
 import { model } from '../model'
 import { initializeMonaco } from './initialize-monaco'
 
 type Props = {
   className?: string
 }
+
+const MONACO_THEMES: Record<Theme, string> = { light: 'vs-light', dark: 'vs-dark' }
 
 export const CodeEditor: FC<Props> = props => {
   const { className } = props
@@ -36,13 +38,18 @@ export const CodeEditor: FC<Props> = props => {
 
   return (
     <div className={className}>
-      <MonacoEditor
-        onMount={onMount}
-        value={value}
-        onChange={onChange}
-        defaultLanguage="typescript"
-        options={{ automaticLayout: true, readOnly: isReadonly }}
-      />
+      <Themed>
+        {theme => (
+          <MonacoEditor
+            onMount={onMount}
+            value={value}
+            onChange={onChange}
+            defaultLanguage="typescript"
+            theme={theme && MONACO_THEMES[theme]}
+            options={{ automaticLayout: true, readOnly: isReadonly }}
+          />
+        )}
+      </Themed>
     </div>
   )
 }
