@@ -23,8 +23,8 @@ export type SheetViewportPosition = {
   zoom: number
 }
 
-const DEFAULT_PREVIEW_DURATION = Time.quarter
-const MIN_PREVIEW_DURATION = Time.sixteenth
+const DEFAULT_PREVIEW_DURATION = Time.n4
+const MIN_PREVIEW_DURATION = Time.n16
 
 type Params = {
   gate: EditorGate
@@ -36,7 +36,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
   const { gate, history, synthTree } = params
 
   const $position = createStore<SheetViewportPosition>({ x: 0, y: 0, zoom: 1 })
-  const $timeSnapping = createStore(Time.quarter)
+  const $timeSnapping = createStore(Time.n4)
   const $notePreviewPosition = createStore<Pick<NotePreview, 'pitch' | 'time'> | null>(null)
   const $notePreviewDuration = createStore(DEFAULT_PREVIEW_DURATION)
 

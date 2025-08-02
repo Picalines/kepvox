@@ -17,7 +17,7 @@ export const createPlayback = createFactory((params: Params) => {
 
   const $synth = createStore<Synth | null>(null)
   const $state = restore(stateChanged, 'disposed')
-  const $duration = createStore(Time.note)
+  const $duration = createStore(Time.n1)
   const $playhead = createStore(Time.start)
 
   const userSetPlayhead = createEvent<Time>()

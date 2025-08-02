@@ -55,7 +55,7 @@ const createEnvelope = (params: CreateEnvelopeParams) => {
 
 export const Default: Story = {
   args: {
-    timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
+    timeMarkers: [Time.n1, Time.n1.repeat(2), Time.n1.repeat(3)],
     synthTree: synth => {
       synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
 
@@ -68,14 +68,14 @@ export const Default: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(3))
     },
   },
 }
 
 export const Chained: Story = {
   args: {
-    timeMarkers: [Time.note.repeat(3)],
+    timeMarkers: [Time.n1.repeat(3)],
     synthTree: synth => {
       synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 8))
 
@@ -88,16 +88,16 @@ export const Chained: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
-      envelope.attackAt(Time.note.repeat(3))
-      envelope.releaseAt(Time.note.repeat(7))
+      envelope.releaseAt(Time.n1.repeat(3))
+      envelope.attackAt(Time.n1.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(7))
     },
   },
 }
 
 export const Oscillator: Story = {
   args: {
-    timeMarkers: [Time.note, Time.note.repeat(2), Time.note.repeat(3)],
+    timeMarkers: [Time.n1, Time.n1.repeat(2), Time.n1.repeat(3)],
     maxAmplitude: DEFAULT_SOURCE_GAIN,
     synthTree: synth => {
       synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 4))
@@ -112,7 +112,7 @@ export const Oscillator: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(3))
     },
   },
 }
@@ -131,7 +131,7 @@ export const NoAttack: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(3))
     },
   },
 }
@@ -150,7 +150,7 @@ export const NoDecay: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(3))
     },
   },
 }
@@ -169,7 +169,7 @@ export const NoRelease: Story = {
       })
 
       envelope.attackAt(Time.start)
-      envelope.releaseAt(Time.note.repeat(3))
+      envelope.releaseAt(Time.n1.repeat(3))
     },
   },
 }

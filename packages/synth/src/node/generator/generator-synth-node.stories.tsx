@@ -68,14 +68,14 @@ export const Default: Story = {
       })
 
       generator.attackAt(Time.start, Pitch.frequency('C1'))
-      generator.releaseAt(Time.note.repeat(3), Pitch.frequency('C1'))
+      generator.releaseAt(Time.n1.repeat(3), Pitch.frequency('C1'))
     },
   },
 }
 
 export const Polyphony: Story = {
   args: {
-    timeMarkers: [Time.note.repeat(3), Time.note.repeat(4)],
+    timeMarkers: [Time.n1.repeat(3), Time.n1.repeat(4)],
     synthTree: synth => {
       synth.secondsPerNote.setValueAt(Time.start, Seconds(1 / 6))
 
@@ -94,9 +94,9 @@ export const Polyphony: Story = {
       })
 
       generator.attackAt(Time.start, Pitch.frequency('C1'))
-      generator.releaseAt(Time.note.repeat(3), Pitch.frequency('C1'))
+      generator.releaseAt(Time.n1.repeat(3), Pitch.frequency('C1'))
 
-      generator.attackAt(Time.note.repeat(3), Pitch.frequency('A5'))
+      generator.attackAt(Time.n1.repeat(3), Pitch.frequency('A5'))
     },
   },
 }

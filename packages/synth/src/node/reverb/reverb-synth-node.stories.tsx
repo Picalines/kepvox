@@ -28,7 +28,7 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     duration: Seconds(4.5),
-    timeMarkers: [Time.quarter, Time.note],
+    timeMarkers: [Time.n4, Time.n1],
     synthTree: synth => {
       synth.secondsPerNote.setValueAt(Time.start, Seconds(4))
 
@@ -38,7 +38,7 @@ export const Default: Story = {
 
       const gate = new GainSynthNode(synth)
       gate.factor.initialValue = Factor(0.8)
-      gate.factor.curve.setValueAt(Time.quarter, Factor(0))
+      gate.factor.curve.setValueAt(Time.n4, Factor(0))
 
       const reverb = new ReverbSynthNode(synth)
       reverb.decay.value = Factor(1)

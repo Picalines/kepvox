@@ -21,7 +21,7 @@ export const MusicSheetTimeline: FC<Props> = props => {
 
   const containerRef = useRef<SVGSVGElement>(null)
 
-  const wholeNoteWidth = dimensions.note.width(Time.note)
+  const wholeNoteWidth = dimensions.note.width(Time.n1)
 
   const onClick = useCallback<MouseEventHandler>(
     event => {
