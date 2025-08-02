@@ -63,7 +63,7 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
     target: $notePreviewPosition,
     fn: (snapping, { pitch, time }) => ({
       pitch,
-      time: Time.atNote(Notes.orClamp(step(time.toNotes(), snapping.toNotes()))),
+      time: Time.atNote(Notes.orClamp(step(time.notes, snapping.notes))),
     }),
   })
 
@@ -83,8 +83,8 @@ export const createMusicSheetViewport = createFactory((params: Params) => {
         return duration
       }
 
-      const cellWidth = snapping.toNotes()
-      const snappedNotes = Math.ceil(until.sub(time).toNotes() / cellWidth) * cellWidth
+      const cellWidth = snapping.notes
+      const snappedNotes = Math.ceil(until.sub(time).notes / cellWidth) * cellWidth
       return MIN_PREVIEW_DURATION.max(Time.atNote(Notes.orClamp(snappedNotes)))
     },
   })

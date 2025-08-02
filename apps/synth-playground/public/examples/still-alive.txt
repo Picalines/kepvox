@@ -8,8 +8,8 @@ generator.connect(gain)
 gain.connect(synth.output)
 
 generator.waveShape.value = 'triangle'
-generator.attack.initialValue = T.n16.toNotes()
-generator.release.initialValue = T.n8.toNotes()
+generator.attack.initialValue = T.n16.notes
+generator.release.initialValue = T.n8.notes
 
 gain.factor.initialValue = Factor.orClamp(0.5)
 

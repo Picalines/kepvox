@@ -117,14 +117,14 @@ export const createSerializer = createFactory((params: Params) => {
         musicSheet: {
           timeSignature: [timeSignature.beatsInBar, timeSignature.beatsInNote],
           beatsPerMinute,
-          endingNote: endTime.toNotes(),
+          endingNote: endTime.notes,
           notes: Object.fromEntries(
             notes.entries().map(([id, { synthId, time, duration, pitch }]) => [
               id,
               {
                 synth: synthId,
-                time: time.toNotes(),
-                duration: duration.toNotes(),
+                time: time.notes,
+                duration: duration.notes,
                 pitch,
               },
             ]),

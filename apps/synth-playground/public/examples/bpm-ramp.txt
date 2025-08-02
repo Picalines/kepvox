@@ -9,10 +9,10 @@ envelope.connect(synth.output)
 
 oscillator.frequency.initialValue = Pitch.frequency('A4')
 oscillator.waveShape.value = 'sawtooth'
-envelope.attack.initialValue = Time.n1.toNotes()
-envelope.decay.initialValue = Time.n1.toNotes()
+envelope.attack.initialValue = Time.n1.notes
+envelope.decay.initialValue = Time.n1.notes
 envelope.sustain.initialValue = Normal(0.5)
-envelope.release.initialValue = Time.n1.toNotes()
+envelope.release.initialValue = Time.n1.notes
 
 let time = Time.start
 for (let i = 0; i < 5; i++) {
