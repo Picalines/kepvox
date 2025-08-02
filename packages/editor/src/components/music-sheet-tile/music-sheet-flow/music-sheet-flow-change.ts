@@ -22,7 +22,7 @@ export const musicSheetNodeChangeToAction = (params: MapNodeChangeParams): Actio
 
       const { x, y } = position
 
-      const time = Time.atNote(Notes.orClamp(step(dimensions.note.time(x).toNotes(), timeStep)))
+      const time = Time.atNote(Notes.orClamp(step(dimensions.note.time(x).notes, timeStep)))
       const pitch = dimensions.note.pitch(y)
 
       return { action: 'sheet-note-move', id, to: { time, pitch } }

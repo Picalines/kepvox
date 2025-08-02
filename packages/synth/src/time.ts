@@ -27,6 +27,19 @@ export class Time {
     return Time.n1.repeat(notes)
   }
 
+  get notes(): Notes {
+    return Notes(this.#ticks / TICKS_IN_NOTE)
+  }
+
+  /**
+   * Intended for serialization. Don't rely on how long ticks are,
+   * it's easier to use relative note values. Change the time signature if you
+   * want to speed up your composition
+   */
+  get ticks(): Ticks {
+    return this.#ticks
+  }
+
   add(time: Time): Time {
     return new Time(Ticks.orClamp(this.#ticks + time.#ticks))
   }
@@ -45,19 +58,6 @@ export class Time {
 
   repeat(times: number): Time {
     return new Time(Ticks.orClamp(this.#ticks * times))
-  }
-
-  toNotes(): Notes {
-    return Notes(this.#ticks / TICKS_IN_NOTE)
-  }
-
-  /**
-   * Intended for serialization. Don't rely on how long ticks are,
-   * it's easier to use relative note values. Change the time signature if you
-   * want to speed up your composition
-   */
-  toTicks(): Ticks {
-    return this.#ticks
   }
 
   equals(time: Time) {

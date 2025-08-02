@@ -36,7 +36,7 @@ export const Default: Story = {
       oscillator.frequency.initialValue = Hertz(2)
 
       const delay = new DelaySynthNode(synth)
-      delay.delayRight.initialValue = Time.n4.toNotes()
+      delay.delayRight.initialValue = Time.n4.notes
 
       oscillator.connect(delay)
       delay.connect(synth.output)
@@ -58,8 +58,8 @@ export const WithOriginal: Story = {
       delay.dry.initialValue = Normal(1)
       delay.wetLeft.initialValue = Normal(0.5)
       delay.wetRight.initialValue = Normal(0.5)
-      delay.delayLeft.initialValue = Time.n4.toNotes()
-      delay.delayRight.initialValue = Time.n2.toNotes()
+      delay.delayLeft.initialValue = Time.n4.notes
+      delay.delayRight.initialValue = Time.n2.notes
 
       const gain = new GainSynthNode(synth)
       gain.factor.initialValue = Factor(0.5)

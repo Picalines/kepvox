@@ -129,11 +129,11 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     }
 
     return interpolationTable[after.ramp.method](
-      before.time.toNotes(),
+      before.time.notes,
       before.value,
-      after.time.toNotes(),
+      after.time.notes,
       after.ramp.value,
-      time.toNotes(),
+      time.notes,
     ) as UnitValue<TUnit>
   }
 
@@ -214,7 +214,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     }
 
     if (start && !end) {
-      return (time.toNotes() - start.time.toNotes()) * start.value
+      return (time.notes - start.time.notes) * start.value
     }
 
     if (!start || !end) {
@@ -222,20 +222,14 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     }
 
     if (!end.ramp) {
-      return (time.toNotes() - start.time.toNotes()) * start.value
+      return (time.notes - start.time.notes) * start.value
     }
 
     return interpolationAreaTable[end.ramp.method](
-      start.time.toNotes(),
+      start.time.notes,
       start.value,
-      time.toNotes(),
-      interpolationTable[end.ramp.method](
-        start.time.toNotes(),
-        start.value,
-        end.time.toNotes(),
-        end.ramp.value,
-        time.toNotes(),
-      ),
+      time.notes,
+      interpolationTable[end.ramp.method](start.time.notes, start.value, end.time.notes, end.ramp.value, time.notes),
     )
   }
 }

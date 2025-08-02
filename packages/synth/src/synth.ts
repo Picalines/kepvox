@@ -91,7 +91,7 @@ export class Synth {
       synth: this,
       audioParam: this.#notesPerSecondNode.positionX,
       curve: this.secondsPerNote,
-      map: (_, time) => time.toNotes(),
+      map: (_, time) => time.notes,
       until: this.disposed,
     })
 
@@ -162,7 +162,7 @@ export class Synth {
     // increase linearly, and the "slope" is determined by secondsPerNote
     const constantNoteDuration = this.secondsPerNote.valueAt(tempoAutomationEnd)
     const secondsSinceAutomationEnd = elapsedSeconds - tempoAutomationEndSeconds
-    return Notes(tempoAutomationEnd.toNotes() + secondsSinceAutomationEnd / constantNoteDuration)
+    return Notes(tempoAutomationEnd.notes + secondsSinceAutomationEnd / constantNoteDuration)
   }
 
   /**

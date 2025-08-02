@@ -35,8 +35,8 @@ export const musicSheetDimensions = (params: Params) => {
     },
     note: {
       height: halfStepHeightPx,
-      width: (duration: Time) => duration.toNotes() * wholeNoteWidthPx,
-      left: (time: Time) => time.toNotes() * wholeNoteWidthPx,
+      width: (duration: Time) => duration.notes * wholeNoteWidthPx,
+      left: (time: Time) => time.notes * wholeNoteWidthPx,
       top: (pitch: PitchNotation) => (Pitch.midi(HIGHEST_PITCH) - Pitch.midi(pitch)) * halfStepHeightPx,
       time: (left: number) => Time.atNote(Notes.orClamp(Range.positive.clamp(left / wholeNoteWidthPx))),
       pitch: (top: number) =>

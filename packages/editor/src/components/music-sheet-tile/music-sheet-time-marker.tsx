@@ -22,7 +22,7 @@ export const MusicSheetTimeMarker: FC<Props> = props => {
         '-translate-x-1/2 pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-accent transition-colors',
         className,
       )}
-      style={{ left: position.x + time.toNotes() * dimensions.note.width(Time.n1) }}
+      style={{ left: position.x + time.notes * dimensions.note.width(Time.n1) }}
     />
   )
 }

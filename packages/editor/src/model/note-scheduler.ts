@@ -29,7 +29,7 @@ export const createNoteScheduler = createFactory((params: Params) => {
         }
       }
 
-      const sortedNotes = [...notes.values()].sort((a, b) => a.time.toNotes() - b.time.toNotes())
+      const sortedNotes = [...notes.values()].sort((a, b) => a.time.notes - b.time.notes)
 
       for (const note of sortedNotes) {
         const synth = nodes.get(note.synthId)?.synthNode
