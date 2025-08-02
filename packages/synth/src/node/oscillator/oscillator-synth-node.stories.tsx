@@ -92,7 +92,7 @@ export const Limited: Story = {
       oscillator.frequency.initialValue = Hertz(4)
 
       gain.factor.initialValue = Factor(0)
-      gain.factor.curve.rampValueUntil(Time.half, Factor(1))
+      gain.factor.curve.rampValueUntil(Time.n2, Factor(1))
     },
   },
 }

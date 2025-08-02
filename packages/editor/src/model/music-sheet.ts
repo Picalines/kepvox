@@ -35,7 +35,7 @@ export const createMusicSheet = createFactory((params: Params) => {
   const $notes = createStore<ReadonlyMap<NoteId, Note>>(new Map())
   const $timeSignature = createStore(new TimeSignature(4, 4))
   const $beatsPerMinute = createStore(125)
-  const $endTime = createStore(Time.note.repeat(5))
+  const $endTime = createStore(Time.n1.repeat(5))
 
   reset({
     clock: [synthTree.initialized],

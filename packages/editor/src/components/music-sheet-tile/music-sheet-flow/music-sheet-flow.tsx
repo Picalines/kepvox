@@ -62,7 +62,7 @@ export const MusicSheetFlow: FC<Props> = props => {
       if (isHoveringFlow.current) {
         requestActions(
           changes
-            .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: Time.eighth.toNotes(), change }))
+            .map(change => musicSheetNodeChangeToAction({ dimensions, timeStep: Time.n8.toNotes(), change }))
             .filter(action => action !== null),
         )
       }

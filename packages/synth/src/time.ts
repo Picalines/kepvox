@@ -5,13 +5,13 @@ const TICKS_IN_NOTE = 64
 export class Time {
   static readonly start = new Time(Ticks(0))
 
-  static readonly note = new Time(Ticks(TICKS_IN_NOTE))
-  static readonly half = new Time(Ticks(TICKS_IN_NOTE / 2))
-  static readonly quarter = new Time(Ticks(TICKS_IN_NOTE / 4))
-  static readonly eighth = new Time(Ticks(TICKS_IN_NOTE / 8))
-  static readonly sixteenth = new Time(Ticks(TICKS_IN_NOTE / 16))
-  static readonly thirtySecond = new Time(Ticks(TICKS_IN_NOTE / 32))
-  static readonly sixtyFourth = new Time(Ticks(TICKS_IN_NOTE / 64))
+  static readonly n1 = new Time(Ticks(TICKS_IN_NOTE))
+  static readonly n2 = new Time(Ticks(TICKS_IN_NOTE / 2))
+  static readonly n4 = new Time(Ticks(TICKS_IN_NOTE / 4))
+  static readonly n8 = new Time(Ticks(TICKS_IN_NOTE / 8))
+  static readonly n16 = new Time(Ticks(TICKS_IN_NOTE / 16))
+  static readonly n32 = new Time(Ticks(TICKS_IN_NOTE / 32))
+  static readonly n64 = new Time(Ticks(TICKS_IN_NOTE / 64))
 
   readonly #ticks: Ticks
 
@@ -24,7 +24,7 @@ export class Time {
   }
 
   static atNote(notes: Notes) {
-    return Time.note.repeat(notes)
+    return Time.n1.repeat(notes)
   }
 
   add(time: Time): Time {
