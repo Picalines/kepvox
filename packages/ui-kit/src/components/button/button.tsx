@@ -74,7 +74,7 @@ export const Root: FC<RootProps> = props => {
     throw new Error(`${Root.displayName} requires ${Text.displayName} or ${Icon.displayName}`)
   }
 
-  const buttonClassName = buttonVariants({ variant, size, feedback, _iconOnly: Boolean(icon && !text) })
+  const buttonClassName = buttonVariants({ variant, size, feedback, _iconOnly: Boolean(icon && !text?.children) })
   const className = cn(buttonClassName, classNameProp)
 
   const iconPosition = icon?.props.position ?? 'end'
