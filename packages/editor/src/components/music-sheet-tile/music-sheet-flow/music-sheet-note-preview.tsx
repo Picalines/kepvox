@@ -39,7 +39,7 @@ export const MusicSheetNotePreview: FC<Props> = props => {
         )}
         style={positionStyles.current}
       >
-        <Text color="muted">{pitch.current}</Text>
+        <Text color="muted">{pitch.current.toUpperCase()}</Text>
       </div>
     </ViewportPortal>
   )

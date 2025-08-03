@@ -64,7 +64,7 @@ const PianoRollOctave: FC<PianoRollOctaveProps> = props => {
               bottom: isAccidental ? keyIndex * lineHeight : 'auto',
             }}
           >
-            {name}
+            {name.toUpperCase()}
             {octave}
           </button>
         )
