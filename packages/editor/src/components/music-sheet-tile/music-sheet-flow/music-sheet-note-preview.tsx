@@ -1,9 +1,8 @@
-import type { PitchNotation } from '@repo/synth'
 import { cn } from '@repo/ui-kit/classnames'
 import { Text } from '@repo/ui-kit/components/text'
 import { ViewportPortal } from '@xyflow/react'
 import { useUnit } from 'effector-react'
-import { type CSSProperties, type FC, useRef } from 'react'
+import type { CSSProperties, FC } from 'react'
 import { editorModel } from '#model'
 import type { MusicSheetDimensions } from '../music-sheet-dimensions'
 
@@ -14,20 +13,17 @@ type Props = {
 export const MusicSheetNotePreview: FC<Props> = props => {
   const { dimensions } = props
 
-  const { preview } = useUnit({ preview: editorModel.$notePreview })
+  const preview = useUnit(editorModel.$notePreview)
 
-  const pitch = useRef<PitchNotation>('c0')
-  const positionStyles = useRef<CSSProperties>({ display: 'none' })
-
-  if (preview) {
-    pitch.current = preview.pitch
-    positionStyles.current = {
-      left: dimensions.note.left(preview.time),
-      top: dimensions.note.top(preview.pitch),
-      width: dimensions.note.width(preview.duration),
-      height: dimensions.note.height,
-    }
-  }
+  const pitch = preview?.pitch ?? 'c0'
+  const positionStyles: CSSProperties = preview
+    ? {
+        left: dimensions.note.left(preview.time),
+        top: dimensions.note.top(preview.pitch),
+        width: dimensions.note.width(preview.duration),
+        height: dimensions.note.height,
+      }
+    : { display: 'none' }
 
   return (
     <ViewportPortal>
@@ -37,9 +33,9 @@ export const MusicSheetNotePreview: FC<Props> = props => {
           preview && 'animate-in',
           !preview && 'animate-out',
         )}
-        style={positionStyles.current}
+        style={positionStyles}
       >
-        <Text color="muted">{pitch.current.toUpperCase()}</Text>
+        <Text color="muted">{pitch.toUpperCase()}</Text>
       </div>
     </ViewportPortal>
   )
