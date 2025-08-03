@@ -1,10 +1,9 @@
+import { assertDefined } from '@repo/common/assert'
 import { Notes, Pitch, type PitchNotation, Range, Time } from '@repo/synth'
 
-const HIGHEST_PITCH: PitchNotation = 'B9'
-
-const LOWEST_PITCH: PitchNotation = 'C0'
-
-export const NOTE_HALF_STEPS = Pitch.midi(HIGHEST_PITCH) - Pitch.midi(LOWEST_PITCH) + 1
+const HIGHEST_PITCH: PitchNotation = 'b9'
+const LOWEST_PITCH: PitchNotation = 'c0'
+const NOTE_HALF_STEPS = Pitch[HIGHEST_PITCH].midi - Pitch[LOWEST_PITCH].midi + 1
 
 export type MusicSheetDimensions = ReturnType<typeof musicSheetDimensions>
 
@@ -37,10 +36,14 @@ export const musicSheetDimensions = (params: Params) => {
       height: halfStepHeightPx,
       width: (duration: Time) => duration.notes * wholeNoteWidthPx,
       left: (time: Time) => time.notes * wholeNoteWidthPx,
-      top: (pitch: PitchNotation) => (Pitch.midi(HIGHEST_PITCH) - Pitch.midi(pitch)) * halfStepHeightPx,
+      top: (pitch: PitchNotation) => (Pitch[HIGHEST_PITCH].midi - Pitch[pitch].midi) * halfStepHeightPx,
       time: (left: number) => Time.atNote(Notes.orClamp(Range.positive.clamp(left / wholeNoteWidthPx))),
-      pitch: (top: number) =>
-        Pitch.parseMidi(Pitch.midiRange.clamp(-top / halfStepHeightPx + Pitch.midi(HIGHEST_PITCH), 'ceil')).notation,
+      pitch: (top: number) => {
+        const nearestMidi = Math.ceil(-top / halfStepHeightPx + Pitch[HIGHEST_PITCH].midi)
+        const midiPitch = Pitch[nearestMidi]
+        assertDefined(midiPitch)
+        return midiPitch.notation
+      },
     },
   } as const
 }

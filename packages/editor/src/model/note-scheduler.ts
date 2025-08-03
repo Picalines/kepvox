@@ -35,9 +35,9 @@ export const createNoteScheduler = createFactory((params: Params) => {
         const synth = nodes.get(note.synthId)?.synthNode
 
         if (synth instanceof GeneratorSynthNode) {
-          const frequency = Pitch.frequency(note.pitch)
-          synth.attackAt(note.time, frequency)
-          synth.releaseAt(note.time.add(note.duration), frequency)
+          const { hertz } = Pitch[note.pitch]
+          synth.attackAt(note.time, hertz)
+          synth.releaseAt(note.time.add(note.duration), hertz)
         }
       }
     },

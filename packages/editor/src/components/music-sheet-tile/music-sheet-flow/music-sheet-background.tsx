@@ -51,7 +51,7 @@ const SheetPattern: FC<PatternProps> = props => {
             y={index}
             width="100%"
             height={1}
-            className={Pitch.parseName(name).isAccidental ? 'fill-secondary/50' : 'fill-background'}
+            className={Pitch[name].isAccidental ? 'fill-secondary/50' : 'fill-background'}
           />
         ))}
       </pattern>

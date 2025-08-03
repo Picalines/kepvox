@@ -41,11 +41,11 @@ export class Time {
   }
 
   add(time: Time): Time {
-    return new Time(Ticks.orClamp(this.#ticks + time.#ticks))
+    return new Time(Ticks(this.#ticks + time.#ticks))
   }
 
   sub(time: Time): Time {
-    return new Time(Ticks.orClamp(this.#ticks - time.#ticks))
+    return new Time(Ticks(this.#ticks - time.#ticks))
   }
 
   min(time: Time): Time {
@@ -57,7 +57,7 @@ export class Time {
   }
 
   repeat(times: number): Time {
-    return new Time(Ticks.orClamp(this.#ticks * times))
+    return new Time(Ticks(this.#ticks * times))
   }
 
   equals(time: Time) {

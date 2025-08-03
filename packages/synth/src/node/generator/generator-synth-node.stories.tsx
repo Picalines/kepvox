@@ -67,8 +67,8 @@ export const Default: Story = {
         waveShape: 'triangle',
       })
 
-      generator.attackAt(Time.start, Pitch.frequency('C1'))
-      generator.releaseAt(Time.n1.repeat(3), Pitch.frequency('C1'))
+      generator.attackAt(Time.start, Pitch.c1.hertz)
+      generator.releaseAt(Time.n1.repeat(3), Pitch.c1.hertz)
     },
   },
 }
@@ -93,10 +93,10 @@ export const Polyphony: Story = {
         destination: gain,
       })
 
-      generator.attackAt(Time.start, Pitch.frequency('C1'))
-      generator.releaseAt(Time.n1.repeat(3), Pitch.frequency('C1'))
+      generator.attackAt(Time.start, Pitch.c1.hertz)
+      generator.releaseAt(Time.n1.repeat(3), Pitch.c1.hertz)
 
-      generator.attackAt(Time.n1.repeat(3), Pitch.frequency('A5'))
+      generator.attackAt(Time.n1.repeat(3), Pitch.a5.hertz)
     },
   },
 }

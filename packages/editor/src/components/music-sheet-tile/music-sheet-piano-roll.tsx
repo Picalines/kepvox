@@ -1,4 +1,4 @@
-import { Pitch, type PitchName, type PitchOctave } from '@repo/synth'
+import { Pitch, type PitchNote, type PitchOctave } from '@repo/synth'
 import { cn } from '@repo/ui-kit/classnames'
 import { useUnit } from 'effector-react'
 import { type FC, useMemo } from 'react'
@@ -29,7 +29,7 @@ export const MusicSheetPianoRoll: FC<PianoRollProps> = props => {
   )
 }
 
-const FULL_STEP_PITCHES: PitchName[] = ['D', 'G', 'A']
+const FULL_STEP_PITCHES: PitchNote[] = ['d', 'g', 'a']
 
 type PianoRollOctaveProps = {
   dimensions: MusicSheetDimensions
@@ -44,7 +44,7 @@ const PianoRollOctave: FC<PianoRollOctaveProps> = props => {
   return (
     <div className="relative flex flex-col-reverse" style={{ height: dimensions.octave.height }}>
       {Pitch.names.map((name, keyIndex) => {
-        const { isAccidental } = Pitch.parseName(name)
+        const { isAccidental } = Pitch[name]
 
         const lineScale = FULL_STEP_PITCHES.includes(name) ? 2 : 1.5
 
