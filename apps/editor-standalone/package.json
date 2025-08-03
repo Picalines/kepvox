@@ -14,7 +14,8 @@
         "test:screen:update": "pnpm run test:screen --update-snapshots"
     },
     "imports": {
-        "#screens/*": "./src/screens/*/index.ts"
+        "#screens/*": "./src/screens/*/index.ts",
+        "#shared/lib/*": "./src/shared/lib/*/index.ts"
     },
     "dependencies": {
         "@effector/next": "catalog:",
@@ -24,6 +25,7 @@
         "effector": "catalog:",
         "effector-react": "catalog:",
         "effector-storage": "catalog:",
+        "nanoid": "catalog:",
         "next": "catalog:",
         "patronum": "catalog:",
         "react": "catalog:",

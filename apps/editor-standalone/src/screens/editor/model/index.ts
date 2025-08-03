@@ -1,1 +1,1 @@
-export { defaultProject } from './default-project'
+export * as model from './screen'
