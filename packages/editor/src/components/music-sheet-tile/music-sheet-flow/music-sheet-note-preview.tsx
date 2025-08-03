@@ -33,7 +33,7 @@ export const MusicSheetNotePreview: FC<Props> = props => {
     <ViewportPortal>
       <div
         className={cn(
-          'zoom-in-75 zoom-out-75 fade-out relative flex items-center rounded-md border-2 border-muted-foreground border-dashed fill-mode-forwards px-2 transition-all duration-75 ease-out',
+          'zoom-in-75 zoom-out-75 fade-out relative flex items-center rounded-md border-2 border-muted-foreground border-dashed fill-mode-forwards px-2',
           preview && 'animate-in',
           !preview && 'animate-out',
         )}
