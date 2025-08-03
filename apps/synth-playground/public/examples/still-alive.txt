@@ -1,4 +1,4 @@
-import { GeneratorSynthNode, GainSynthNode, Time as T, Factor, Pitch, PitchNotation } from 'synth'
+import { GeneratorSynthNode, GainSynthNode, Time as T, Factor, Pitch as P } from 'synth'
 import { synth } from 'synth/playground'
 
 const generator = new GeneratorSynthNode(synth, { maxPolyphony: 16 })
@@ -11,66 +11,61 @@ generator.waveShape.value = 'triangle'
 generator.attack.initialValue = T.n16.notes
 generator.release.initialValue = T.n8.notes
 
-gain.factor.initialValue = Factor.orClamp(0.5)
-
-const play = (time: T, note: PitchNotation, duration: T) => {
-    generator.attackAt(time, Pitch.frequency(note))
-    generator.releaseAt(time.add(duration), Pitch.frequency(note))
-}
+gain.factor.initialValue = Factor(0.5)
 
 // "Still alive" © Valve
-const notes: [PitchNotation | null, T][] = [
-    ['C4',  T.n4],
-    ['F4',  T.n4],
-    ['E4',  T.n8],
-    ['D4',  T.n8],
-    ['D4',  T.n8],
-    ['C4',  T.n8],
-    ['D4',  T.n8],
-    ['C4',  T.n8],
-    ['C4',  T.n4],
-    ['C4',  T.n8],
-    [null,  T.n8],
-    ['A3',  T.n8],
-    ['A#3', T.n8],
-    ['C4',  T.n4],
-    ['F4',  T.n4],
-    ['G4',  T.n8],
-    ['F4',  T.n8],
-    ['E4',  T.n8],
-    ['D4',  T.n8],
-    ['D4',  T.n8],
-    ['E4',  T.n8],
-    ['F4',  T.n4],
-    ['F4',  T.n8],
-    [null,  T.n8],
-    ['G4',  T.n8],
-    ['A4',  T.n8],
-    ['A#4', T.n8],
-    ['A#4', T.n8],
-    ['A4',  T.n4],
-    ['G4',  T.n4],
-    ['F4',  T.n8],
-    ['G4',  T.n8],
-    ['A4',  T.n8],
-    ['A4',  T.n8],
-    ['G4',  T.n4],
-    ['F4',  T.n4],
-    ['D4',  T.n8],
-    ['C4',  T.n8],
-    ['D4',  T.n8],
-    ['F4',  T.n8],
-    ['F4',  T.n8],
-    ['E4',  T.n4],
-    ['E4',  T.n8],
-    ['F#4', T.n8],
-    ['F#4', T.n4],
-]
+const notes = [
+    [P.c4, T.n4],
+    [P.f4, T.n4],
+    [P.e4, T.n8],
+    [P.d4, T.n8],
+    [P.d4, T.n8],
+    [P.c4, T.n8],
+    [P.d4, T.n8],
+    [P.c4, T.n8],
+    [P.c4, T.n4],
+    [P.c4, T.n8],
+    ['no', T.n8],
+    [P.a3, T.n8],
+    [P.A3, T.n8],
+    [P.c4, T.n4],
+    [P.f4, T.n4],
+    [P.g4, T.n8],
+    [P.f4, T.n8],
+    [P.e4, T.n8],
+    [P.d4, T.n8],
+    [P.d4, T.n8],
+    [P.e4, T.n8],
+    [P.f4, T.n4],
+    [P.f4, T.n8],
+    ['no', T.n8],
+    [P.g4, T.n8],
+    [P.a4, T.n8],
+    [P.A4, T.n8],
+    [P.A4, T.n8],
+    [P.a4, T.n4],
+    [P.g4, T.n4],
+    [P.f4, T.n8],
+    [P.g4, T.n8],
+    [P.a4, T.n8],
+    [P.a4, T.n8],
+    [P.g4, T.n4],
+    [P.f4, T.n4],
+    [P.d4, T.n8],
+    [P.c4, T.n8],
+    [P.d4, T.n8],
+    [P.f4, T.n8],
+    [P.f4, T.n8],
+    [P.e4, T.n4],
+    [P.e4, T.n8],
+    [P.F4, T.n8],
+    [P.F4, T.n4],
+] as const
 
 let time = T.start
-for (const [note, duration] of notes) {
-    if (note !== null) {
-        play(time, note, duration)
+for (const [pitch, duration] of notes) {
+    if (pitch !== 'no') {
+        generator.attackAtFor(time, duration.notes, pitch.hertz)
     }
     time = time.add(duration)
 }

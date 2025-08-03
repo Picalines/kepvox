@@ -1,132 +1,112 @@
-import { assertDefined } from '@repo/common/assert'
-import { IntRange } from '#math'
 import { Hertz } from '#units'
 
-const PITCH_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const
-
-export type PitchName = (typeof PITCH_NAMES)[number]
-
+const PITCH_NOTES = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'] as const
 const PITCH_OCTAVES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const
 
+export type PitchNote = (typeof PITCH_NOTES)[number]
 export type PitchOctave = (typeof PITCH_OCTAVES)[number]
+export type PitchNotation = `${PitchNote}${PitchOctave}`
 
-export type PitchNotation = `${PitchName}${PitchOctave}`
-
-type NotationMeta = Readonly<{
-  notation: PitchNotation
-  name: PitchName
-  octave: PitchOctave
-  octaveHalfIntervals: number
-  halfIntervals: number
-  isAccidental: boolean
-  hertz: Hertz
-  midi: number
-}>
-
-type PitchNameMeta = Readonly<{
-  name: PitchName
-  isAccidental: boolean
-}>
-
-const OCTAVE0_HERTZ: Record<PitchName, number> = {
-  C: 16.35,
-  'C#': 17.32,
-  D: 18.35,
-  'D#': 19.45,
-  E: 20.6,
-  F: 21.83,
-  'F#': 23.12,
-  G: 24.5,
-  'G#': 25.96,
-  A: 27.5,
-  'A#': 29.14,
-  B: 30.87,
+type PitchMeta = {
+  readonly notation: PitchNotation
+  readonly note: PitchNote
+  readonly octave: PitchOctave
+  readonly octaveHalfIntervals: number
+  readonly halfIntervals: number
+  readonly isAccidental: boolean
+  readonly hertz: Hertz
+  readonly midi: number
 }
 
-const createPitchTable = () => {
-  const byNotation = new Map<PitchNotation, NotationMeta>()
-  const byMidi = new Map<number, NotationMeta>()
+type PitchNoteMeta = {
+  readonly note: PitchNote
+  readonly isAccidental: boolean
+}
 
-  let halfIntervals = 0
-  let midiNote = 16 // MIDI code for C0
+const OCTAVE0_HERTZ: Record<PitchNote, number> = {
+  c: 16.35,
+  'c#': 17.32,
+  d: 18.35,
+  'd#': 19.45,
+  e: 20.6,
+  f: 21.83,
+  'f#': 23.12,
+  g: 24.5,
+  'g#': 25.96,
+  a: 27.5,
+  'a#': 29.14,
+  b: 30.87,
+}
+
+type PitchNoteAlias<N extends PitchNote> = N extends `${infer L}#` ? Uppercase<L> : never
+type PitchNotationAlias<P extends PitchNotation> = P extends `${infer L}#${infer O}` ? `${Uppercase<L>}${O}` : never
+
+type AliasedPitchNote = PitchNote | PitchNoteAlias<PitchNote>
+type AliasedPitchNotation = PitchNotation | PitchNotationAlias<PitchNotation>
+
+type PitchTable = {
+  [N in AliasedPitchNotation]: PitchMeta
+} & {
+  [N in AliasedPitchNote]: PitchNoteMeta
+} & {
+  [M: number]: PitchMeta | undefined
+  names: typeof PITCH_NOTES
+  octaves: typeof PITCH_OCTAVES
+}
+
+const createPitchTable = (): Readonly<PitchTable> => {
+  const table = {
+    names: PITCH_NOTES,
+    octaves: PITCH_OCTAVES,
+  } as PitchTable
+
+  for (const note of PITCH_NOTES) {
+    const isAccidental = note.includes('#')
+
+    const noteMeta: PitchNoteMeta = { note, isAccidental }
+
+    table[note] = noteMeta
+
+    if (isAccidental) {
+      table[note.slice(0, 1).toUpperCase() as AliasedPitchNote] = noteMeta
+    }
+  }
 
   for (const octave of PITCH_OCTAVES) {
     let octaveHalfIntervals = 0
 
-    for (const pitchName of PITCH_NAMES) {
-      const notation: PitchNotation = `${pitchName}${octave}`
+    for (const note of PITCH_NOTES) {
+      const notation: PitchNotation = `${note}${octave}`
+      const halfIntervals = octave * 12 + octaveHalfIntervals
 
-      const meta: NotationMeta = {
+      const pitchMeta: PitchMeta = {
         notation,
-        name: pitchName,
+        note,
         octave,
         octaveHalfIntervals,
         halfIntervals,
-        isAccidental: pitchName.endsWith('#'),
-        hertz: Hertz(OCTAVE0_HERTZ[pitchName] * 2 ** octave),
-        midi: midiNote,
+        isAccidental: note.includes('#'),
+        hertz: Hertz(OCTAVE0_HERTZ[note] * 2 ** octave),
+        midi: halfIntervals + 12, // C0 is MIDI note 12
       }
 
-      byNotation.set(notation, meta)
-      byMidi.set(midiNote, meta)
+      table[notation] = pitchMeta
 
-      halfIntervals++
+      if (note.includes('#')) {
+        const sharpNoteAlias = notation.slice(0, 1).toUpperCase() as AliasedPitchNote
+        const aliasNotation: AliasedPitchNotation = `${sharpNoteAlias}${octave}`
+        table[aliasNotation] = pitchMeta
+      }
+
+      table[pitchMeta.midi] = pitchMeta
+
       octaveHalfIntervals++
-      midiNote++
     }
   }
 
-  return { byNotation, byMidi } as const
+  return table
 }
 
-const createPitchNameTable = () => {
-  const byName = new Map<PitchName, PitchNameMeta>()
-
-  for (const name of PITCH_NAMES) {
-    byName.set(name, { name, isAccidental: name.endsWith('#') })
-  }
-
-  return { byName } as const
-}
-
-const PITCH_TABLE = createPitchTable()
-const PITCH_NAME_TABLE = createPitchNameTable()
-
-const LOWEST_PITCH = PITCH_TABLE.byNotation.get('C0')
-const HIGHEST_PITCH = PITCH_TABLE.byNotation.get('B9')
-assertDefined(LOWEST_PITCH)
-assertDefined(HIGHEST_PITCH)
-
-export const Pitch = {
-  names: PITCH_NAMES,
-  octaves: PITCH_OCTAVES,
-
-  lowest: LOWEST_PITCH,
-  highest: HIGHEST_PITCH,
-
-  midiRange: new IntRange(LOWEST_PITCH.midi, HIGHEST_PITCH.midi),
-
-  isNotation: (str: string): str is PitchNotation => PITCH_TABLE.byNotation.has(str as PitchNotation),
-
-  parseNotation: (notation: PitchNotation): NotationMeta => {
-    const meta = PITCH_TABLE.byNotation.get(notation)
-    assertDefined(meta)
-    return meta
-  },
-
-  parseMidi: (midi: number): NotationMeta => {
-    const meta = PITCH_TABLE.byMidi.get(midi)
-    assertDefined(meta)
-    return meta
-  },
-
-  parseName: (name: PitchName): PitchNameMeta => {
-    const meta = PITCH_NAME_TABLE.byName.get(name)
-    assertDefined(meta)
-    return meta
-  },
-
-  frequency: (notation: PitchNotation) => Pitch.parseNotation(notation).hertz,
-
-  midi: (notation: PitchNotation) => Pitch.parseNotation(notation).midi,
-}
+export const Pitch = createPitchTable()
+export type Pitch = PitchMeta
+export type PitchBase = PitchNoteMeta

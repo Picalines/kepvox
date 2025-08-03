@@ -30,10 +30,10 @@ export const simpleProjectMock: Project = {
     beatsPerMinute: 125,
     endingNote: 2,
     notes: {
-      'note-1': { synth: 'gen', pitch: 'C4', time: 0, duration: 0.25 },
-      'note-2': { synth: 'gen', pitch: 'E4', time: 0.25, duration: 0.25 },
-      'note-3': { synth: 'gen', pitch: 'D4', time: 0.5, duration: 0.25 },
-      'note-4': { synth: 'gen', pitch: 'F4', time: 0.75, duration: 0.25 },
+      'note-1': { synth: 'gen', pitch: 'c4', time: 0, duration: 0.25 },
+      'note-2': { synth: 'gen', pitch: 'e4', time: 0.25, duration: 0.25 },
+      'note-3': { synth: 'gen', pitch: 'd4', time: 0.5, duration: 0.25 },
+      'note-4': { synth: 'gen', pitch: 'f4', time: 0.75, duration: 0.25 },
     },
   },
 }

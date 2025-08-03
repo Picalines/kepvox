@@ -7,7 +7,7 @@ const envelope = new ADSREnvelopeSynthNode(synth)
 oscillator.connect(envelope)
 envelope.connect(synth.output)
 
-oscillator.frequency.initialValue = Pitch.frequency('A4')
+oscillator.frequency.initialValue = Pitch.a4.hertz
 oscillator.waveShape.value = 'sawtooth'
 envelope.attack.initialValue = Time.n1.notes
 envelope.decay.initialValue = Time.n1.notes

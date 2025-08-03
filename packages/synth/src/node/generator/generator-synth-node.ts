@@ -6,7 +6,7 @@ import { Range } from '#math'
 import { CurveSynthParam, EnumSynthParam } from '#param'
 import { Pitch } from '#pitch'
 import type { Synth } from '#synth'
-import type { Time } from '#time'
+import { Time } from '#time'
 import { type Hertz, Normal, Notes } from '#units'
 import { DEFAULT_SOURCE_GAIN } from '../constants'
 import { SynthNode } from '../synth-node'
@@ -94,7 +94,7 @@ export class GeneratorSynthNode extends SynthNode {
 
       const frequency = new AutomationCurve({
         unit: 'hertz',
-        initialValue: Pitch.frequency('C0'),
+        initialValue: Pitch.c0.hertz,
       })
 
       const adsr = new ADSRAutomationCurve({
@@ -168,6 +168,14 @@ export class GeneratorSynthNode extends SynthNode {
 
     for (const voice of voices) {
       voice?.adsr.releaseAt(time)
+    }
+  }
+
+  attackAtFor(time: Time, notes: Notes, frequency: Hertz) {
+    const endTime = time.add(Time.atNote(notes))
+    if (endTime.isAfter(time)) {
+      this.attackAt(time, frequency)
+      this.releaseAt(endTime, frequency)
     }
   }
 

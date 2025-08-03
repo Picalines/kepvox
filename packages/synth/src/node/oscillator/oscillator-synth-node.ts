@@ -40,7 +40,7 @@ export class OscillatorSynthNode extends SynthNode {
     this.frequency = new CurveSynthParam({
       node: this,
       unit: 'hertz',
-      initialValue: Pitch.frequency('A4'),
+      initialValue: Pitch.a4.hertz,
       automate: { param: oscillator.frequency },
     })
 

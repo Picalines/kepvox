@@ -16,7 +16,7 @@ export const MusicSheetNotePreview: FC<Props> = props => {
 
   const { preview } = useUnit({ preview: editorModel.$notePreview })
 
-  const pitch = useRef<PitchNotation>('C0')
+  const pitch = useRef<PitchNotation>('c0')
   const positionStyles = useRef<CSSProperties>({ display: 'none' })
 
   if (preview) {
