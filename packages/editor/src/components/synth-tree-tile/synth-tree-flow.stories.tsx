@@ -1,24 +1,27 @@
+import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import type { Meta, StoryObj } from '@storybook/react'
 import { allSettled, fork } from 'effector'
 import type { ComponentProps } from 'react'
 import { simpleProjectMock } from '#__mock__/project'
 import { EditorScope } from '#components/editor'
 import { editorModel } from '#model'
-import { NodeTile } from './node-tile'
+import { SynthTreeTile } from './synth-tree-tile'
 
-type StoryArgs = ComponentProps<typeof NodeTile>
+type StoryArgs = ComponentProps<typeof SynthTreeTile>
 
 export default {
-  title: 'tiles/Node',
-  component: NodeTile,
+  title: 'tiles/SynthTree',
+  component: SynthTreeTile,
   decorators: [
     (Story, { parameters: { scope } }) => (
-      <EditorScope scope={scope}>
-        <Story />
-      </EditorScope>
+      <Tooltip.Provider>
+        <EditorScope scope={scope}>
+          <Story />
+        </EditorScope>
+      </Tooltip.Provider>
     ),
     Story => (
-      <div className="h-128 w-64 border">
+      <div className="h-128 border bg-background">
         <Story />
       </div>
     ),
