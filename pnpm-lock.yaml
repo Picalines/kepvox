@@ -173,6 +173,9 @@ importers:
       effector-storage:
         specifier: 'catalog:'
         version: 7.1.0(effector@23.3.0)
+      nanoid:
+        specifier: 'catalog:'
+        version: 5.1.5
       next:
         specifier: 'catalog:'
         version: 15.2.4(@babel/core@7.26.0)(@playwright/test@1.49.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
