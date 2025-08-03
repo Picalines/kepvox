@@ -33,7 +33,7 @@ export const createSynthTreeViewport = createFactory((params: Params) => {
     filter: serializer.$isLoaded,
     source: synthTree.$nodes,
     target: $nextNodeNumber,
-    fn: nodes => nodes.size,
+    fn: nodes => nodes.size + 1,
   })
 
   sample({
