@@ -4,14 +4,7 @@ import baseSbConfig from '#base/main'
 const config = {
   ...baseSbConfig,
 
-  framework: {
-    name: '@storybook/react-vite',
-    options: {},
-  },
-
-  core: {
-    builder: '@storybook/builder-vite',
-  },
+  framework: '@storybook/react-vite',
 
   viteFinal: config => {
     config.server ??= {}

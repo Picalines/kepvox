@@ -1,15 +1,16 @@
 type GetStoryUrlParams = {
   title: string
   story: string
+  theme: string
 }
 
 export const getStoryUrl = (params: GetStoryUrlParams) => {
-  const { title, story } = params
+  const { title, story, theme } = params
 
   const searchParams = new URLSearchParams([
     ['id', storyId(title, story)],
     ['viewMode', 'story'],
-    ['globals', ''],
+    ['globals', `theme:${theme}`],
   ])
 
   return `/iframe.html?${searchParams}`

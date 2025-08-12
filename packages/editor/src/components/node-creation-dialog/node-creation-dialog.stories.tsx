@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { allSettled, fork } from 'effector'
 import type { ComponentProps } from 'react'
 import { mockRunningAudioContext } from '#__mock__/audio-context'

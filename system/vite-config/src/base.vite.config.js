@@ -20,7 +20,7 @@ export default defineConfig({
     root: './src',
     globals: false,
 
-    workspace: [
+    projects: [
       {
         extends: true,
         test: {

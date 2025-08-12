@@ -1,5 +1,4 @@
 import { type Page, expect, test } from '@playwright/test'
-import type { Meta } from '@storybook/react'
 import { getStoryUrl } from './story-url'
 
 type Theme = 'light' | 'dark'
@@ -9,7 +8,7 @@ type Size = { width: number; height: number }
 type PageAction = (page: Page) => Promise<void> | void
 
 type TestStoryParams = {
-  meta: Pick<Meta, 'title' | 'component'>
+  meta: { title: string }
   story: string
   skip?: { reason: string }
   windowSize?: Size
@@ -26,7 +25,7 @@ const MAX_CONNECTION_ATTEMPTS = 5
 
 export const testStory = (params: TestStoryParams) => {
   const {
-    meta,
+    meta: { title },
     story,
     skip,
     windowSize,
@@ -37,12 +36,7 @@ export const testStory = (params: TestStoryParams) => {
     act,
   } = params
 
-  const title = meta.title ?? meta.component?.displayName
-  if (!title) {
-    throw new Error("story title couldn't be determined")
-  }
-
-  const storyUrl = getStoryUrl({ title, story })
+  const storyUrl = getStoryUrl({ title, story, theme })
 
   const testName = [story, windowSize ? `${windowSize.width}x${windowSize.height}` : null, theme]
     .filter(Boolean)
@@ -92,10 +86,6 @@ export const testStory = (params: TestStoryParams) => {
         await page.locator('body').evaluate((body, color) => {
           body.style.backgroundColor = color
         }, backgroundColor)
-      }
-
-      if (theme === 'dark') {
-        await page.locator(':root').evaluate(root => root.classList.add('dark'))
       }
 
       const target = page.locator(selector)
