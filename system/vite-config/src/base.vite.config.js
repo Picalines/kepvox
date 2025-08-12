@@ -17,7 +17,7 @@ export default defineConfig({
   },
 
   test: {
-    root: './src',
+    root: '.',
     globals: false,
 
     projects: [
