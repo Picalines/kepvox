@@ -2,5 +2,9 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "@repo/ts-config/react.tsconfig.json",
     "include": ["**/*.js", "**/*.ts", "**/*.tsx", ".storybook/**/*.ts"],
-    "exclude": ["node_modules", "out"]
+    "exclude": ["node_modules", "out"],
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "out"
+    }
 }
