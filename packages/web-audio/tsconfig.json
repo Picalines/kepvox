@@ -1,6 +1,10 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "@repo/ts-config/base.tsconfig.json",
-    "include": ["**/*.js", "**/*.ts"],
-    "exclude": ["node_modules", "out"]
+    "include": ["**/*.js", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules", "out"],
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "out"
+    }
 }
