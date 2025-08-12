@@ -4,10 +4,7 @@ import baseSbConfig from '#base/main'
 const config = {
   ...baseSbConfig,
 
-  framework: {
-    name: '@storybook/nextjs',
-    options: {},
-  },
+  framework: '@storybook/nextjs',
 
   core: {
     builder: '@storybook/builder-webpack5',

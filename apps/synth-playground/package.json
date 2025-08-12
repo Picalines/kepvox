@@ -45,7 +45,7 @@
         "@repo/test-screen": "workspace:*",
         "@repo/ts-config": "workspace:*",
         "@repo/vite-config": "workspace:*",
-        "@storybook/react": "catalog:",
+        "@storybook/nextjs": "catalog:",
         "@tailwindcss/postcss": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "catalog:",

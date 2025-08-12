@@ -8,8 +8,9 @@
         "./base/main": "./src/base.storybook.main.ts",
         "./merge": "./src/merge-config.ts",
         "./nextjs/main": "./src/nextjs.storybook.main.ts",
-        "./react/preview": "./src/react.storybook.preview.ts",
-        "./vite/main": "./src/vite.storybook.main.ts"
+        "./nextjs/preview": "./src/nextjs.storybook.preview.ts",
+        "./vite/main": "./src/vite.storybook.main.ts",
+        "./vite/preview": "./src/vite.storybook.preview.ts"
     },
     "scripts": {
         "lint:ts": "tsc --noEmit"
@@ -19,12 +20,9 @@
     },
     "devDependencies": {
         "@repo/ts-config": "workspace:*",
-        "@storybook/addon-essentials": "catalog:",
-        "@storybook/addon-interactions": "catalog:",
         "@storybook/addon-links": "catalog:",
         "@storybook/addon-themes": "catalog:",
         "@storybook/nextjs": "catalog:",
-        "@storybook/react": "catalog:",
         "@storybook/react-vite": "catalog:",
         "@types/react": "catalog:",
         "storybook": "catalog:",

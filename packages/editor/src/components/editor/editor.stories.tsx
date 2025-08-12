@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { fn } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
+import { fn } from 'storybook/test'
 import { simpleProjectMock } from '#__mock__/project'
 import { Editor } from './editor'
 

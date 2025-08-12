@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { cn } from '#lib/classnames'
 import { Separator, type SeparatorProps } from './separator'

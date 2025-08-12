@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 import { Tooltip } from '@repo/ui-kit/components/tooltip'
 import { allSettled, fork } from 'effector'

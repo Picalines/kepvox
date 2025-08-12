@@ -1,1 +1,1 @@
-export { default } from '@repo/storybook-config/react/preview'
+export { default } from '@repo/storybook-config/vite/preview'

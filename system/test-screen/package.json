@@ -11,9 +11,6 @@
     "scripts": {
         "lint:ts": "tsc --noEmit"
     },
-    "peerDependencies": {
-        "@storybook/react": "catalog:"
-    },
     "devDependencies": {
         "@playwright/test": "catalog:",
         "@repo/ts-config": "workspace:*",
