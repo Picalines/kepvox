@@ -1,7 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "@repo/ts-config/nextjs.tsconfig.json",
-    "include": ["**/*.js", "**/*.ts", "**/*.tsx", ".storybook/**/*.ts", "next-env.d.ts", ".next/types/**/*.ts"],
+    "include": ["*.js", "*.ts", ".next/types/**/*.ts", ".storybook/**/*", "src/**/*"],
     "exclude": ["node_modules", "out"],
     "compilerOptions": {
         "rootDir": ".",
