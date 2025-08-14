@@ -41,7 +41,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
 
     if (lastEventIndex === null) {
       newEvent = event
-      this.#events.push(newEvent)
+      this.#events.unshift(newEvent)
     } else if (lastEvent?.time.equals(event.time)) {
       newEvent = { ...lastEvent, ...event }
       this.#events.splice(lastEventIndex, 1, newEvent)
