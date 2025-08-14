@@ -95,15 +95,24 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   }
 
   /**
-   * Cancels events after the specified time and inserts an
-   * event that will hold the old value at the time
+   * Stops a ramp by inserting an event at a specified time. Replaces the next
+   * ramp with {@link setValueAt} event
    *
-   * @returns the value
+   * Think "keep the old ramp but stop at the specified time"
+   *
+   * @returns a held value
    */
   holdValueAt(time: Time): UnitValue<TUnit> {
     const value = this.valueAt(time)
-    this.#timeline.mergeEvent({ time, value })
-    this.#timeline.cancelEventsAfter(time)
+    const nextEvent = this.#timeline.eventAfter(time)
+
+    if (nextEvent?.ramp) {
+      this.#timeline.mergeEvent({ time, value, ramp: { ...nextEvent.ramp, value } })
+      this.#timeline.mergeEvent({ ...nextEvent, ramp: undefined })
+    } else {
+      this.#timeline.mergeEvent({ time, value })
+    }
+
     return value
   }
 

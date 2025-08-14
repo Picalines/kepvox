@@ -148,19 +148,42 @@ describe('AutomationCurve', () => {
   })
 
   describe('holdValueAt', () => {
-    it('should freeze value at specified time', () => {
+    it('should stop a linear ramp', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0.0),
+      })
+
+      curve.rampValueUntil(Time.n1, Normal(1.0), 'linear')
+      curve.holdValueAt(Time.n2)
+
+      expect(curve.valueAt(Time.n4)).toBe(0.25)
+      expect(curve.valueAt(Time.n2)).toBe(0.5)
+    })
+
+    it('should insert an event', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0.0),
+      })
+
+      curve.holdValueAt(Time.n1)
+      curve.holdValueAt(Time.n2)
+      const insertedEvents = Array.from(curve.eventsAfter(Time.start))
+
+      expect(insertedEvents).toHaveLength(2)
+    })
+
+    it('should not modify value from the next event', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
         initialValue: Normal(0.0),
       })
 
       curve.rampValueUntil(Time.n1, Normal(1.0))
-      curve.setValueAt(Time.n1.add(Time.n4), Normal(0.5))
+      curve.holdValueAt(Time.n2)
 
-      expect(curve.holdValueAt(Time.n2)).toBe(0.5)
-      expect(curve.valueAt(Time.n2)).toBe(0.5)
-      expect(curve.valueAt(Time.n1)).toBe(0.5)
-      expect(curve.eventAt(Time.n1.add(Time.n4))).toBeNull()
+      expect(curve.valueAt(Time.n1)).toBe(1)
     })
 
     it('should return the held value', () => {
@@ -169,7 +192,21 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0.3),
       })
 
-      expect(curve.holdValueAt(Time.n4)).toBe(0.3)
+      const held = curve.holdValueAt(Time.n4)
+      expect(held).toBe(0.3)
+    })
+
+    it('should cancel a ramp when called on its start', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0.0),
+      })
+
+      curve.rampValueUntil(Time.n1, Normal(1.0), 'linear')
+      curve.holdValueAt(Time.start)
+
+      expect(curve.valueAt(Time.n2)).toBe(0)
+      expect(curve.valueAt(Time.n1)).toBe(1)
     })
   })
 

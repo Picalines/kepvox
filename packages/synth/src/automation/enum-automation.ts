@@ -40,7 +40,6 @@ export class EnumAutomation<E extends string> implements ReadonlyEnumAutomation<
   holdValueAt(time: Time) {
     const value = this.valueAt(time)
     this.#timeline.mergeEvent({ time, value })
-    this.#timeline.cancelEventsAfter(time)
     return value
   }
 
