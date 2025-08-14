@@ -188,10 +188,6 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     return this.#timeline.eventsBefore(time)
   }
 
-  eventsInRange(start: Time, end: Time) {
-    return this.#timeline.eventsInRange(start, end)
-  }
-
   eventSpan(time: Time) {
     return this.#timeline.eventSpan(time)
   }

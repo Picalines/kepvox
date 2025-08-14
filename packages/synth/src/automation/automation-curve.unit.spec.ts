@@ -369,23 +369,6 @@ describe('AutomationCurve', () => {
       expect(event?.time).toEqual(Time.n2)
     })
 
-    it('should find events in range', () => {
-      const curve = new AutomationCurve({
-        unit: 'normal',
-        initialValue: Normal(0.2),
-      })
-
-      curve.setValueAt(Time.n4, Normal(0.5))
-      curve.setValueAt(Time.n2, Normal(0.8))
-      curve.setValueAt(Time.n1, Normal(0.3))
-
-      const events = Array.from(curve.eventsInRange(Time.n8, Time.n2.add(Time.n8)))
-
-      expect(events).toHaveLength(2) // n4 and n2 events
-      expect(events[0]?.time).toEqual(Time.n4)
-      expect(events[1]?.time).toEqual(Time.n2)
-    })
-
     it('should find event span around time', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
