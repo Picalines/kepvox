@@ -62,7 +62,8 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
   }
 
   eventAt(time: Time): TEvent | null {
-    return this.#events[this.#eventIndexAfterOrAt(time) ?? -1] ?? null
+    const lastEvent = this.#events[this.#eventIndexBeforeOrAt(time) ?? -1] ?? null
+    return lastEvent?.time.equals(time) ? lastEvent : null
   }
 
   eventBefore(time: Time): TEvent | null {
