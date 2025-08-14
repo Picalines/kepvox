@@ -7,7 +7,7 @@ import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timelin
 export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTimeline<TEvent> {
   readonly #changed = Signal.controlled<{ event: TEvent }>()
 
-  readonly #cancelled = Signal.controlled<{ after: Time }>()
+  readonly #cancelled = Signal.controlled<{ after: Time; until?: Time }>()
 
   readonly #events: TEvent[] = []
 
@@ -58,6 +58,19 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     if (cutIndex !== null) {
       this.#events.splice(cutIndex)
       this.#cancelled.emit({ after: time })
+    }
+  }
+
+  cancelEventsAfterUntil(after: Time, until: Time) {
+    if (!until.isAfter(after)) {
+      return
+    }
+
+    const afterIndex = this.#eventIndexAfter(after)
+    const untilIndex = this.#eventIndexBefore(until)
+    if (afterIndex !== null && untilIndex !== null) {
+      this.#events.splice(afterIndex, untilIndex - afterIndex + 1)
+      this.#cancelled.emit({ after, until })
     }
   }
 

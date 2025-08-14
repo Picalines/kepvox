@@ -8,7 +8,7 @@ export type TimedEvent = {
 export type ReadonlyEventTimeline<TEvent extends TimedEvent> = {
   get timeRange(): [start: Time, end: Time]
   get changed(): Signal<{ event: TEvent }>
-  get cancelled(): Signal<{ after: Time }>
+  get cancelled(): Signal<{ after: Time; until?: Time }>
 
   eventAt(time: Time): TEvent | null
   eventBefore(time: Time): TEvent | null

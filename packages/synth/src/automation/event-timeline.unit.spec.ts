@@ -197,6 +197,73 @@ describe('EventTimeline', () => {
     })
   })
 
+  describe('cancelEventsAfterUntil', () => {
+    it('should remove events in specified range', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 'before' })
+      timeline.mergeEvent({ time: Time.n8, id: 'first' })
+      timeline.mergeEvent({ time: Time.n4, id: 'middle' })
+      timeline.mergeEvent({ time: Time.n2, id: 'middle' })
+      timeline.mergeEvent({ time: Time.n1, id: 'last' })
+      timeline.mergeEvent({ time: Time.n1.repeat(2), id: 'after' })
+
+      timeline.cancelEventsAfterUntil(Time.n8, Time.n1)
+
+      const events = Array.from(timeline.eventsBefore(Time.n1.repeat(10)))
+      expect(events).toMatchObject([{ id: 'before' }, { id: 'first' }, { id: 'last' }, { id: 'after' }])
+    })
+
+    it('should keep two neighbor events', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.n2, id: 'left' })
+      timeline.mergeEvent({ time: Time.n1, id: 'right' })
+
+      timeline.cancelEventsAfterUntil(Time.n2, Time.n1)
+
+      const events = Array.from(timeline.eventsBefore(Time.n1.repeat(10)))
+      expect(events).toMatchObject([{ id: 'left' }, { id: 'right' }])
+    })
+
+    it('should keep events when the parameters are equal', () => {
+      const timeline = new EventTimeline<TestEvent>()
+      const callback = vi.fn()
+
+      timeline.cancelled.watch(callback)
+      timeline.mergeEvent({ time: Time.n1, id: 'kept' })
+      timeline.cancelEventsAfterUntil(Time.n1, Time.n1)
+
+      expect(timeline.eventAt(Time.n1)).toMatchObject({ id: 'kept' })
+      expect(callback).not.toHaveBeenCalled()
+    })
+
+    it('should keep events when the until parameter is before the after parameter', () => {
+      const timeline = new EventTimeline<TestEvent>()
+      const callback = vi.fn()
+
+      timeline.cancelled.watch(callback)
+      timeline.mergeEvent({ time: Time.n2, id: 'kept' })
+      timeline.cancelEventsAfterUntil(Time.n1, Time.n2)
+
+      expect(timeline.eventAt(Time.n2)).toMatchObject({ id: 'kept' })
+      expect(callback).not.toHaveBeenCalled()
+    })
+
+    it('should emit the cancelled signal with both time parameters', () => {
+      const timeline = new EventTimeline<TestEvent>()
+      const callback = vi.fn()
+
+      timeline.cancelled.watch(callback)
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+      timeline.mergeEvent({ time: Time.n4, id: 2 })
+      timeline.mergeEvent({ time: Time.n1, id: 3 })
+      timeline.cancelEventsAfterUntil(Time.start, Time.n1)
+
+      expect(callback).toHaveBeenCalledWith({ after: Time.start, until: Time.n1 })
+    })
+  })
+
   describe('eventsAfter', () => {
     it('should yield events after specified time', () => {
       const timeline = new EventTimeline<TestEvent>()
