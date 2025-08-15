@@ -45,53 +45,82 @@ describe('AutomationCurve', () => {
     it('should set value at specific time', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
-        initialValue: Normal(0.5),
+        initialValue: Normal(0),
       })
 
-      curve.setValueAt(Time.n4, Normal(0.8))
+      curve.setValueAt(Time.n2, Normal(1))
 
-      expect(curve.valueAt(Time.n4)).toBe(0.8)
-      expect(curve.valueAt(Time.start)).toBe(0.5)
-    })
-
-    it('should retain value after time marker', () => {
-      const curve = new AutomationCurve({
-        unit: 'normal',
-        initialValue: Normal(0.2),
-      })
-
-      curve.setValueAt(Time.n4, Normal(0.8))
-
-      expect(curve.valueAt(Time.n8)).toBe(0.2)
-      expect(curve.valueAt(Time.n4)).toBe(0.8)
-      expect(curve.valueAt(Time.n2)).toBe(0.8)
-      expect(curve.valueAt(Time.n1)).toBe(0.8)
+      expect(curve.valueAt(Time.start)).toBe(0)
+      expect(curve.valueAt(Time.n4)).toBe(0)
+      expect(curve.valueAt(Time.n2)).toBe(1)
+      expect(curve.valueAt(Time.n1)).toBe(1)
     })
 
     it('should override previous value at same time', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
-        initialValue: Normal(0.5),
+        initialValue: Normal(0),
       })
 
-      curve.setValueAt(Time.n4, Normal(0.3))
-      curve.setValueAt(Time.n4, Normal(0.7))
+      curve.setValueAt(Time.n1, Normal(0.25))
+      curve.setValueAt(Time.n1, Normal(0.5))
 
-      expect(curve.valueAt(Time.n4)).toBe(0.7)
+      expect(curve.valueAt(Time.n1)).toBe(0.5)
     })
 
-    it('should emit change events', () => {
+    it('should emit the changed signal', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
-        initialValue: Normal(0.5),
+        initialValue: Normal(0),
       })
 
-      const changeHandler = vi.fn()
-      curve.changed.watch(changeHandler)
+      const onChanged = vi.fn()
+      curve.changed.watch(onChanged)
+      curve.setValueAt(Time.n4, Normal(0.5))
 
-      curve.setValueAt(Time.n4, Normal(0.8))
+      expect(onChanged).toHaveBeenCalledWith({ time: Time.n4, value: Normal(0.5) })
+    })
 
-      expect(changeHandler).toHaveBeenCalled()
+    it('should keep the next event', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.setValueAt(Time.n1, Normal(1))
+      curve.setValueAt(Time.n2, Normal(0.5))
+
+      expect(curve.valueAt(Time.n2)).toBe(0.5)
+      expect(curve.valueAt(Time.n2.add(Time.n4))).toBe(0.5)
+      expect(curve.valueAt(Time.n1)).toBe(1)
+    })
+
+    it('should cancel a ramp at its start', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.rampValueUntil(Time.n1, Normal(1))
+      curve.setValueAt(Time.start, Normal(0))
+
+      expect(curve.valueAt(Time.n2)).toBe(0)
+      expect(curve.valueAt(Time.n1)).toBe(1)
+    })
+
+    it('should stop a ramp between events', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.rampValueUntil(Time.n1, Normal(1), 'linear')
+      curve.setValueAt(Time.n2, Normal(0.75))
+
+      expect(curve.valueAt(Time.n4)).toBe(0.25)
+      expect(curve.valueAt(Time.n2)).toBe(0.75)
+      expect(curve.valueAt(Time.n2.add(Time.n4))).toBe(0.75)
+      expect(curve.valueAt(Time.n1)).toBe(1)
     })
   })
 

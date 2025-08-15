@@ -68,12 +68,28 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   }
 
   /**
-   * Schedules an event, when value will instantly jump to the specified value
+   * Schedules an event where the curve would instantly jump to and stay at the
+   * value. Keeps a ramp until the specified time
    *
-   * Second {@link setValueAt} call overrides the first one. Doesn't cancel the {@link rampValueUntil}
+   * Note that the {@link rampValueUntil} method also schedules an event and it
+   * will not be canceled
    */
   setValueAt(time: Time, value: UnitValue<TUnit>) {
-    this.#timeline.mergeEvent({ time, value: this.#processValue(value) })
+    const rightValue = this.#processValue(value)
+    const [beforeOrAtEvent, afterEvent] = this.#timeline.eventSpan(time)
+
+    if (!beforeOrAtEvent || !afterEvent?.ramp) {
+      this.#timeline.mergeEvent({ time, value: rightValue })
+      return
+    }
+
+    if (time.isAfter(beforeOrAtEvent.time)) {
+      const leftValue = this.valueAt(time)
+      const ramp = { method: afterEvent.ramp.method, value: leftValue }
+      this.#timeline.mergeEvent({ time, ramp, value: rightValue })
+    }
+
+    this.#timeline.mergeEvent({ ...afterEvent, ramp: undefined })
   }
 
   /**
