@@ -155,25 +155,31 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
 
   #eventIndexBefore(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null
-      ? this.#events[lastIndex]?.time.equals(time)
-        ? this.#eventIndexOrNull(lastIndex - 1)
-        : lastIndex
-      : null
+    if (lastIndex === null) {
+      return null
+    }
+
+    const lastEvent = assertedAt(this.#events, lastIndex)
+    return lastEvent.time.equals(time) ? this.#eventIndexOrNull(lastIndex - 1) : lastIndex
   }
 
   #eventIndexAfterOrAt(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null
-      ? this.#events[lastIndex]?.time.isBefore(time)
-        ? this.#eventIndexOrNull(lastIndex + 1)
-        : lastIndex
-      : null
+    if (lastIndex === null) {
+      return this.#eventIndexOrNull(0)
+    }
+
+    const lastEvent = assertedAt(this.#events, lastIndex)
+    return lastEvent.time.equals(time) ? lastIndex : this.#eventIndexOrNull(lastIndex + 1)
   }
 
   #eventIndexAfter(time: Time): number | null {
     const lastIndex = this.#eventIndexBeforeOrAt(time)
-    return lastIndex !== null ? this.#eventIndexOrNull(lastIndex + 1) : null
+    if (lastIndex === null) {
+      return this.#eventIndexOrNull(0)
+    }
+
+    return this.#eventIndexOrNull(lastIndex + 1)
   }
 
   #eventIndexOrNull(index: number): number | null {
