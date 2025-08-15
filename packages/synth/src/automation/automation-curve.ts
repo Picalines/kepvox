@@ -90,6 +90,31 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   }
 
   /**
+   * Modifies the curve so that it stays at the specified value inside a given
+   * range. Doesn't touch the values and ramps around the range
+   */
+  setValueAtUntil(at: Time, until: Time, value: UnitValue<TUnit>) {
+    if (until.isBeforeOrAt(at)) {
+      return
+    }
+
+    const middleValue = this.#processValue(value)
+    const leftValue = this.valueAt(at)
+    const rightValue = this.valueAt(until)
+    const leftCutEvent = this.#timeline.eventAfterOrAt(at)
+
+    this.#timeline.mergeEvent({
+      time: at,
+      value: middleValue,
+      ramp: leftCutEvent?.ramp ? { method: leftCutEvent.ramp.method, value: leftValue } : undefined,
+    })
+
+    this.#timeline.mergeEvent({ time: until, value: rightValue })
+
+    this.#timeline.cancelEventsAfterUntil(at, until)
+  }
+
+  /**
    * Schedules an event, when the value will stop approaching the specified
    * value. Doesn't change the curve value after the time
    */

@@ -123,6 +123,51 @@ describe('AutomationCurve', () => {
     })
   })
 
+  describe('setValueAtUntil', () => {
+    it('should set the value inside a range', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), Normal(1))
+
+      expect(curve.valueAt(Time.start)).toBe(0)
+      expect(curve.valueAt(Time.n2)).toBe(1)
+      expect(curve.valueAt(Time.n1)).toBe(0)
+    })
+
+    it('should keep ramps around range edges', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.rampValueTo(Time.n2, Normal(1), 'linear')
+      curve.rampValueTo(Time.n1, Normal(0), 'linear')
+      curve.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), Normal(0.33))
+
+      expect(curve.valueAt(Time.n8)).toBe(0.25)
+      expect(curve.valueAt(Time.n4)).toBe(0.33)
+      expect(curve.valueAt(Time.n1.sub(Time.n8))).toBe(0.25)
+    })
+
+    it('should keep an outer ramp', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      curve.rampValueTo(Time.n1, Normal(1), 'linear')
+      curve.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), Normal(0.333))
+
+      expect(curve.valueAt(Time.n8)).toBe(0.125)
+      expect(curve.valueAt(Time.n4)).toBe(0.333)
+      expect(curve.valueAt(Time.n1.sub(Time.n4))).toBe(0.75)
+      expect(curve.valueAt(Time.n1)).toBe(1)
+    })
+  })
+
   describe('rampValueUntil', () => {
     it('should create linear ramp by default', () => {
       const curve = new AutomationCurve({
