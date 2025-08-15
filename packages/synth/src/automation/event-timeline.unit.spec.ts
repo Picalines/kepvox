@@ -42,7 +42,7 @@ describe('EventTimeline', () => {
       timeline.changed.watch(callback)
       timeline.mergeEvent({ time: Time.n2, id: 1 })
 
-      expect(callback).toHaveBeenCalledWith({ event: { time: Time.n2, id: 1 } })
+      expect(callback).toHaveBeenCalledWith({ time: Time.n2, id: 1 })
     })
   })
 

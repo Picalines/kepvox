@@ -5,7 +5,7 @@ import type { Time } from '#time'
 import type { ReadonlyEventTimeline, TimedEvent } from './readonly-event-timeline'
 
 export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTimeline<TEvent> {
-  readonly #changed = Signal.controlled<{ event: TEvent }>()
+  readonly #changed = Signal.controlled<TEvent>()
 
   readonly #cancelled = Signal.controlled<{ after: Time; until?: Time }>()
 
@@ -50,7 +50,7 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
       this.#events.splice(lastEventIndex + 1, 0, newEvent)
     }
 
-    this.#changed.emit({ event: newEvent })
+    this.#changed.emit(newEvent)
   }
 
   cancelEventsAfter(time: Time) {

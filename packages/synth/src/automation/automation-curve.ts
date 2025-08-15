@@ -38,7 +38,7 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     this.#unit = unit
     this.#valueRange = commonRange
 
-    this.#timeline.changed.watch(({ event }) => this.#updateAreaAround(event))
+    this.#timeline.changed.watch(event => this.#updateAreaAround(event))
 
     this.setValueAt(Time.start, initialValue)
   }
