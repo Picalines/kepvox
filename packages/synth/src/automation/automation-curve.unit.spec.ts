@@ -214,14 +214,14 @@ describe('AutomationCurve', () => {
     it('should return constant value when no interpolation', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
-        initialValue: Normal(0.3),
+        initialValue: Normal(0),
       })
 
-      curve.setValueAt(Time.n4, Normal(0.8))
+      curve.setValueAt(Time.n4, Normal(1))
 
-      expect(curve.valueAt(Time.n8)).toBe(0.3)
-      expect(curve.valueAt(Time.n4)).toBe(0.8)
-      expect(curve.valueAt(Time.n2)).toBe(0.8)
+      expect(curve.valueAt(Time.n8)).toBe(0)
+      expect(curve.valueAt(Time.n4)).toBe(1)
+      expect(curve.valueAt(Time.n2)).toBe(1)
     })
 
     it('should interpolate during linear ramp', () => {
@@ -252,6 +252,15 @@ describe('AutomationCurve', () => {
       expect(curve.valueAt(Time.n2)).toBe(2.0)
       expect(curve.valueAt(Time.n1.sub(Time.n4))).toBeCloseTo(2.828, 3)
       expect(curve.valueAt(Time.n1)).toBe(4.0)
+    })
+
+    it('should interpolate a value before the first event', () => {
+      const curve = new AutomationCurve({
+        unit: 'factor',
+        initialValue: Factor(1),
+      })
+
+      expect(curve.valueAt(Time.n1.repeat(-1))).toBe(1)
     })
   })
 
