@@ -54,31 +54,18 @@ describe('EnumAutomation', () => {
     })
   })
 
-  describe('holdValueAt', () => {
-    it('should hold current value at specified time', () => {
+  describe('setValueAtUntil', () => {
+    it('should set the value inside a range', () => {
       const automation = new EnumAutomation({
-        values: ['sin', 'cos', 'saw'] as const,
+        values: ['sin', 'cos'] as const,
         initialValue: 'sin',
       })
 
-      automation.setValueAt(Time.n2, 'cos')
-      const heldValue = automation.holdValueAt(Time.n4)
+      automation.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), 'cos')
 
-      expect(heldValue).toBe('sin')
-      expect(automation.valueAt(Time.n4)).toBe('sin')
-    })
-
-    it('should return and set the held value', () => {
-      const automation = new EnumAutomation({
-        values: ['sin', 'cos', 'saw'] as const,
-        initialValue: 'sin',
-      })
-
-      automation.setValueAt(Time.n4, 'cos')
-      const heldValue = automation.holdValueAt(Time.n2)
-
-      expect(heldValue).toBe('cos')
+      expect(automation.valueAt(Time.start)).toBe('sin')
       expect(automation.valueAt(Time.n2)).toBe('cos')
+      expect(automation.valueAt(Time.n1)).toBe('sin')
     })
   })
 

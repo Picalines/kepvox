@@ -37,10 +37,16 @@ export class EnumAutomation<E extends string> implements ReadonlyEnumAutomation<
     this.#timeline.mergeEvent({ time, value })
   }
 
-  holdValueAt(time: Time) {
-    const value = this.valueAt(time)
-    this.#timeline.mergeEvent({ time, value })
-    return value
+  setValueAtUntil(at: Time, until: Time, value: E) {
+    if (until.isBeforeOrAt(at)) {
+      return
+    }
+
+    const rightValue = this.valueAt(until)
+
+    this.#timeline.mergeEvent({ time: at, value })
+    this.#timeline.mergeEvent({ time: until, value: rightValue })
+    this.#timeline.cancelEventsAfterUntil(at, until)
   }
 
   valueAt(time: Time): E {
