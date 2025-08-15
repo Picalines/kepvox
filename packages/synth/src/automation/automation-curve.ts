@@ -70,9 +70,6 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   /**
    * Schedules an event where the curve would instantly jump to and stay at the
    * value. Keeps a ramp until the specified time
-   *
-   * Note that the {@link rampValueUntil} method also schedules an event and it
-   * will not be canceled
    */
   setValueAt(time: Time, value: UnitValue<TUnit>) {
     const rightValue = this.#processValue(value)
@@ -93,61 +90,49 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   }
 
   /**
-   * Schedules an event, when the value will *stop ramping* to the specified value
-   *
-   * The curve will approach to the value up until the time, but exactly at that point
-   * some other event might override the value. If there's no event at the time the value
-   * will settle at the ramp value
-   *
-   * Second {@link rampValueUntil} overrides the ramp method and value. Doesn't cancel the {@link setValueAt}
+   * Schedules an event, when the value will stop approaching the specified
+   * value. Doesn't change the curve value after the time
    */
-  rampValueUntil(end: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
-    const leftValue = this.#processValue(value)
+  rampValueUntil(time: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
+    const beforeOrAtEvent = this.#timeline.eventBeforeOrAt(time)
+    if (!beforeOrAtEvent) {
+      return
+    }
 
-    const existingEvent = this.eventAt(end)
-    const rightValue = existingEvent?.value ?? leftValue
+    if (beforeOrAtEvent.time.equals(time)) {
+      if (!this.#timeline.eventBefore(time)) {
+        return
+      }
 
-    this.#timeline.mergeEvent({ time: end, ramp: { value: leftValue, method }, value: rightValue })
+      const ramp = { method, value: this.#processValue(value) }
+      this.#timeline.mergeEvent({ ...beforeOrAtEvent, ramp })
+      return
+    }
+
+    const rightValue = this.valueAt(time)
+    const ramp = { method, value: this.#processValue(value) }
+    this.#timeline.mergeEvent({ time, value: rightValue, ramp })
   }
 
   /**
-   * Stops a ramp by inserting an event at a specified time. Replaces the next
-   * ramp with {@link setValueAt} event
-   *
-   * Think "keep the old ramp but stop at the specified time"
-   *
-   * @returns a held value
+   * Like {@link rampValueUntil} but changes the curve value from the specified time
    */
-  holdValueAt(time: Time): UnitValue<TUnit> {
-    const value = this.valueAt(time)
-    const nextEvent = this.#timeline.eventAfter(time)
-
-    if (nextEvent?.ramp) {
-      this.#timeline.mergeEvent({ time, value, ramp: { ...nextEvent.ramp, value } })
-      this.#timeline.mergeEvent({ ...nextEvent, ramp: undefined })
-    } else {
-      this.#timeline.mergeEvent({ time, value })
-    }
-
-    return value
+  rampValueTo(time: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
+    this.rampValueUntil(time, value, method)
+    this.setValueAt(time, value)
   }
 
   /**
    * @returns curve value at a given time
    */
   valueAt(time: Time): UnitValue<TUnit> {
-    const [before, after] = this.eventSpan(time)
+    const [before, after] = this.#timeline.eventSpan(time)
 
-    if (!before && after) {
-      return after.value
+    if (!before || !after) {
+      const value = before?.value ?? after?.value
+      assertDefined(value)
+      return value
     }
-
-    if (before && !after) {
-      return before.value
-    }
-
-    assertDefined(before)
-    assertDefined(after)
 
     if (!after.ramp) {
       return before.value
