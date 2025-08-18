@@ -115,36 +115,40 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
   }
 
   /**
-   * Schedules an event, when the value will stop approaching the specified
-   * value. Doesn't change the curve value after the time
+   * Creates a ramp between two specified moments that interpolates the value
+   * from the starting moment to the specified value on the ending moment
+   *
+   * This method is exclusive, so the curve will not continue to have the value
+   * after the ending moment
    */
-  rampValueUntil(time: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
-    const beforeOrAtEvent = this.#timeline.eventBeforeOrAt(time)
-    if (!beforeOrAtEvent) {
+  rampValueAtUntil(start: Time, end: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
+    if (start.isAfterOrAt(end)) {
       return
     }
 
-    if (beforeOrAtEvent.time.equals(time)) {
-      if (!this.#timeline.eventBefore(time)) {
-        return
-      }
+    const rampValue = this.#processValue(value)
+    const leftValue = this.valueAt(start)
+    const rightValue = this.valueAt(end)
+    const leftCutEvent = this.#timeline.eventAfterOrAt(start)
 
-      const ramp = { method, value: this.#processValue(value) }
-      this.#timeline.mergeEvent({ ...beforeOrAtEvent, ramp })
-      return
-    }
+    this.#timeline.mergeEvent({
+      time: start,
+      value: leftValue,
+      ramp: leftCutEvent?.ramp ? { method: leftCutEvent.ramp.method, value: leftValue } : undefined,
+    })
 
-    const rightValue = this.valueAt(time)
-    const ramp = { method, value: this.#processValue(value) }
-    this.#timeline.mergeEvent({ time, value: rightValue, ramp })
+    this.#timeline.mergeEvent({ time: end, value: rightValue, ramp: { method, value: rampValue } })
+
+    this.#timeline.cancelEventsAfterUntil(start, end)
   }
 
-  /**
-   * Like {@link rampValueUntil} but changes the curve value from the specified time
-   */
-  rampValueTo(time: Time, value: UnitValue<TUnit>, method: InterpolationMethod = 'linear') {
-    this.rampValueUntil(time, value, method)
-    this.setValueAt(time, value)
+  rampValueAtTo(start: Time, end: Time, value: UnitValue<TUnit>, method?: InterpolationMethod) {
+    if (start.isAfter(end)) {
+      return
+    }
+
+    this.rampValueAtUntil(start, end, value, method)
+    this.setValueAt(end, value)
   }
 
   /**

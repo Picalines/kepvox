@@ -101,7 +101,7 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(1))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1))
       curve.setValueAt(Time.start, Normal(0))
 
       expect(curve.valueAt(Time.n2)).toBe(0)
@@ -113,7 +113,7 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(1), 'linear')
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1), 'linear')
       curve.setValueAt(Time.n2, Normal(0.75))
 
       expect(curve.valueAt(Time.n4)).toBe(0.25)
@@ -143,8 +143,8 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0),
       })
 
-      curve.rampValueTo(Time.n2, Normal(1), 'linear')
-      curve.rampValueTo(Time.n1, Normal(0), 'linear')
+      curve.rampValueAtTo(Time.start, Time.n2, Normal(1), 'linear')
+      curve.rampValueAtUntil(Time.n2, Time.n1, Normal(0), 'linear')
       curve.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), Normal(0.33))
 
       expect(curve.valueAt(Time.n8)).toBe(0.25)
@@ -158,7 +158,7 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0),
       })
 
-      curve.rampValueTo(Time.n1, Normal(1), 'linear')
+      curve.rampValueAtTo(Time.start, Time.n1, Normal(1), 'linear')
       curve.setValueAtUntil(Time.n4, Time.n1.sub(Time.n4), Normal(0.333))
 
       expect(curve.valueAt(Time.n8)).toBe(0.125)
@@ -168,14 +168,14 @@ describe('AutomationCurve', () => {
     })
   })
 
-  describe('rampValueUntil', () => {
+  describe('rampValueAtUntil', () => {
     it('should create linear ramp by default', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
         initialValue: Normal(0.0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(1.0))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1.0))
 
       expect(curve.valueAt(Time.start)).toBe(0.0)
       expect(curve.valueAt(Time.n2)).toBe(0.5)
@@ -188,20 +188,20 @@ describe('AutomationCurve', () => {
         initialValue: Factor(1.0),
       })
 
-      curve.rampValueUntil(Time.n1, Factor(4.0), 'exponential')
+      curve.rampValueAtUntil(Time.start, Time.n1, Factor(4.0), 'exponential')
 
       expect(curve.valueAt(Time.start)).toBe(1.0)
       expect(curve.valueAt(Time.n2)).toBe(2.0)
     })
 
-    it('should not override existing curve value', () => {
+    it('should not override existing curve value at end', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
         initialValue: Normal(0.0),
       })
 
       curve.setValueAt(Time.n1, Normal(1))
-      curve.rampValueUntil(Time.n1, Normal(0.5))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(0.5))
 
       expect(curve.valueAt(Time.n2)).toBe(0.25)
       expect(curve.valueAt(Time.n1)).toBe(1)
@@ -213,23 +213,10 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0.0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(0.5), 'linear')
-      curve.rampValueUntil(Time.n1, Normal(1.0), 'exponential')
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(0.5), 'linear')
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1.0), 'exponential')
 
       expect(curve.valueAt(Time.n2)).not.toBe(0.25)
-    })
-
-    it('should not add ramp before the first event', () => {
-      const curve = new AutomationCurve({
-        unit: 'normal',
-        initialValue: Normal(0.0),
-      })
-
-      const onChanged = vi.fn()
-      curve.changed.watch(onChanged)
-      curve.rampValueUntil(Time.n1.repeat(-1), Normal(1))
-
-      expect(onChanged).not.toHaveBeenCalled()
     })
 
     it('emits a changed signal when the ramp is added', () => {
@@ -240,7 +227,7 @@ describe('AutomationCurve', () => {
 
       const onChanged = vi.fn()
       curve.changed.watch(onChanged)
-      curve.rampValueUntil(Time.n1, Normal(1))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1))
 
       expect(onChanged).toHaveBeenCalledWith({
         time: Time.n1,
@@ -248,32 +235,45 @@ describe('AutomationCurve', () => {
         ramp: { value: Normal(1), method: 'linear' },
       })
     })
+
+    it('should not change curve if called with same time arguments', () => {
+      const curve = new AutomationCurve({
+        unit: 'normal',
+        initialValue: Normal(0),
+      })
+
+      const onChanged = vi.fn()
+      curve.changed.watch(onChanged)
+      curve.rampValueAtUntil(Time.n2, Time.n2, Normal(1))
+
+      expect(onChanged).not.toHaveBeenCalled()
+    })
   })
 
-  describe('rampValueTo', () => {
-    it('should set the curve value after a ramp end', () => {
+  describe('rampValueAtTo', () => {
+    it('should override the curve value after a ramp end', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
         initialValue: Normal(0.0),
       })
 
-      curve.rampValueTo(Time.n1, Normal(1))
+      curve.rampValueAtTo(Time.start, Time.n1, Normal(1))
 
       expect(curve.valueAt(Time.n2)).toBe(0.5)
       expect(curve.valueAt(Time.n1)).toBe(1)
     })
 
-    it('should set the curve value before the first event', () => {
+    it('should set value if called with same time arguments', () => {
       const curve = new AutomationCurve({
         unit: 'normal',
-        initialValue: Normal(0.0),
+        initialValue: Normal(0),
       })
 
-      curve.rampValueTo(Time.n1.repeat(-1), Normal(1))
+      curve.rampValueAtTo(Time.n2, Time.n2, Normal(1))
 
-      expect(curve.valueAt(Time.n1.repeat(-2))).toBe(1)
-      expect(curve.valueAt(Time.n1.repeat(-1))).toBe(1)
       expect(curve.valueAt(Time.start)).toBe(0)
+      expect(curve.valueAt(Time.n2)).toBe(1)
+      expect(curve.valueAt(Time.n1)).toBe(1)
     })
   })
 
@@ -297,7 +297,7 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0.0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(1.0))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1.0))
 
       expect(curve.valueAt(Time.start)).toBe(0.0)
       expect(curve.valueAt(Time.n4)).toBe(0.25)
@@ -311,7 +311,7 @@ describe('AutomationCurve', () => {
         initialValue: Factor(1.0),
       })
 
-      curve.rampValueUntil(Time.n1, Factor(4.0), 'exponential')
+      curve.rampValueAtUntil(Time.start, Time.n1, Factor(4.0), 'exponential')
 
       expect(curve.valueAt(Time.start)).toBe(1.0)
       // biome-ignore lint/suspicious/noApproximativeNumericConstant:
@@ -346,7 +346,7 @@ describe('AutomationCurve', () => {
         initialValue: Normal(0.0),
       })
 
-      curve.rampValueUntil(Time.n1, Normal(1.0))
+      curve.rampValueAtUntil(Time.start, Time.n1, Normal(1.0))
 
       expect(curve.areaBefore(Time.n1)).toBe(0.5) // triangle area: (0 + 1) / 2 * 1
     })
@@ -357,7 +357,7 @@ describe('AutomationCurve', () => {
         initialValue: Factor(1.0),
       })
 
-      curve.rampValueUntil(Time.n1, Factor(4.0), 'exponential')
+      curve.rampValueAtUntil(Time.start, Time.n1, Factor(4.0), 'exponential')
       expect(curve.areaBefore(Time.n1)).toBeCloseTo(2.164, 3)
     })
 

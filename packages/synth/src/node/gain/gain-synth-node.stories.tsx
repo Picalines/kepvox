@@ -49,7 +49,7 @@ export const Decibel: Story = {
 
       const gain = new GainSynthNode(synth)
       gain.decibels.initialValue = Decibels(0)
-      gain.decibels.curve.rampValueUntil(Time.n1, Decibels(-30), 'exponential')
+      gain.decibels.curve.rampValueAtUntil(Time.start, Time.n1, Decibels(-30), 'exponential')
 
       constant.connect(gain)
       gain.connect(synth.output)

@@ -55,7 +55,7 @@ export class ADSRAutomationCurve {
   }
 
   /**
-   * @returns time at which the attack (more specifically, decay) will end
+   * @returns time at which the sustain will start
    */
   attackAt(start: Time) {
     const attackDuration = this.#attack.valueAt(start)
@@ -67,27 +67,13 @@ export class ADSRAutomationCurve {
     const sustainLevel = this.#sustain.valueAt(decayEnd)
     const attackValue = decayDuration > 0 ? Normal.max : sustainLevel
 
-    const gain = this.#gain
-    const state = this.#state
+    this.#state.setValueAtUntil(start, decayEnd, 'attack')
+    this.#state.setValueAt(attackEnd, 'decay')
+    this.#state.setValueAt(decayEnd, 'sustain')
 
-    gain.holdValueAt(start)
-    state.holdValueAt(start)
-
-    state.setValueAt(start, 'attack')
-    if (attackDuration > 0) {
-      gain.rampValueUntil(attackEnd, attackValue, 'linear')
-    } else {
-      gain.setValueAt(attackEnd, attackValue)
-    }
-
-    state.setValueAt(attackEnd, 'decay')
-    if (decayDuration > 0) {
-      gain.rampValueUntil(decayEnd, sustainLevel, 'linear')
-    } else {
-      gain.setValueAt(decayEnd, sustainLevel)
-    }
-
-    state.setValueAt(decayEnd, 'sustain')
+    this.#gain.setValueAtUntil(start, decayEnd, this.#gain.valueAt(start))
+    this.#gain.rampValueAtTo(start, attackEnd, attackValue, 'linear')
+    this.#gain.rampValueAtTo(attackEnd, decayEnd, sustainLevel)
 
     return decayEnd
   }
@@ -96,39 +82,19 @@ export class ADSRAutomationCurve {
    * @returns time at which the release will end
    */
   releaseAt(start: Time) {
-    const releaseDuration = this.#release.valueAt(start)
-    const releaseEnd = start.add(Time.atNote(releaseDuration))
-
-    const gain = this.#gain
-    const state = this.#state
-
-    state.holdValueAt(start)
-    gain.holdValueAt(start)
-
-    if (state.valueAt(start) === 'idle') {
+    if (this.#state.valueAt(start) === 'idle') {
       return start
     }
 
-    state.setValueAt(start, 'release')
-    if (releaseDuration > 0) {
-      gain.rampValueUntil(releaseEnd, Normal.min)
-    } else {
-      gain.setValueAt(releaseEnd, Normal.min)
-    }
+    const releaseDuration = this.#release.valueAt(start)
+    const releaseEnd = start.add(Time.atNote(releaseDuration))
 
-    state.setValueAt(releaseEnd, 'idle')
+    this.#state.setValueAtUntil(start, releaseEnd, 'release')
+    this.#state.setValueAt(releaseEnd, 'idle')
+
+    this.#gain.setValueAtUntil(start, releaseEnd, this.#gain.valueAt(start))
+    this.#gain.rampValueAtTo(start, releaseEnd, Normal.min)
 
     return releaseEnd
-  }
-
-  muteAt(time: Time) {
-    const gain = this.#gain
-    const state = this.#state
-
-    gain.holdValueAt(time)
-    state.holdValueAt(time)
-
-    gain.setValueAt(time, Normal.min)
-    state.setValueAt(time, 'idle')
   }
 }

@@ -49,7 +49,7 @@ export const LinearRamp: Story = {
       const constant = new ConstantSynthNode(synth)
       constant.connect(synth.output)
       constant.value.initialValue = Factor(0)
-      constant.value.curve.rampValueUntil(Time.n1, Factor(1))
+      constant.value.curve.rampValueAtUntil(Time.start, Time.n1, Factor(1))
     },
   },
 }
