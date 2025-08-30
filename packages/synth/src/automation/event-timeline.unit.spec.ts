@@ -290,6 +290,32 @@ describe('EventTimeline', () => {
     })
   })
 
+  describe('eventsAfterOrAt', () => {
+    it('should yield events after or at specified time', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+      timeline.mergeEvent({ time: Time.n2, id: 2 })
+      timeline.mergeEvent({ time: Time.n1, id: 3 })
+
+      const events = Array.from(timeline.eventsAfterOrAt(Time.n2))
+
+      expect(events).toHaveLength(2)
+      expect(events[0]).toMatchObject({ id: 2 })
+      expect(events[1]).toMatchObject({ id: 3 })
+    })
+
+    it('should yield empty when no events after or at time', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+
+      const events = Array.from(timeline.eventsAfterOrAt(Time.n2))
+
+      expect(events).toHaveLength(0)
+    })
+  })
+
   describe('eventsBefore', () => {
     it('should yield events before specified time', () => {
       const timeline = new EventTimeline<TestEvent>()
@@ -311,6 +337,32 @@ describe('EventTimeline', () => {
       timeline.mergeEvent({ time: Time.n2, id: 1 })
 
       const events = Array.from(timeline.eventsBefore(Time.start))
+
+      expect(events).toHaveLength(0)
+    })
+  })
+
+  describe('eventsBeforeOrAt', () => {
+    it('should yield events before or at specified time', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+      timeline.mergeEvent({ time: Time.n2, id: 2 })
+      timeline.mergeEvent({ time: Time.n1, id: 3 })
+
+      const events = Array.from(timeline.eventsBeforeOrAt(Time.n2))
+
+      expect(events).toHaveLength(2)
+      expect(events[0]).toMatchObject({ id: 1 })
+      expect(events[1]).toMatchObject({ id: 2 })
+    })
+
+    it('should yield empty when no events before or at time', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.n2, id: 1 })
+
+      const events = Array.from(timeline.eventsBeforeOrAt(Time.start))
 
       expect(events).toHaveLength(0)
     })

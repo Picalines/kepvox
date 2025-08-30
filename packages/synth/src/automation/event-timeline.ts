@@ -102,8 +102,22 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     }
   }
 
+  *eventsAfterOrAt(time: Time): Generator<TEvent, void, undefined> {
+    const startIndex = this.#eventIndexAfterOrAt(time) ?? this.#events.length
+    for (let i = startIndex; i < this.#events.length; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
   *eventsBefore(time: Time): Generator<TEvent, void, undefined> {
     const stopIndex = this.#eventIndexBefore(time) ?? -1
+    for (let i = 0; i <= stopIndex; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
+  *eventsBeforeOrAt(time: Time): Generator<TEvent, void, undefined> {
+    const stopIndex = this.#eventIndexBeforeOrAt(time) ?? -1
     for (let i = 0; i <= stopIndex; i++) {
       yield assertedAt(this.#events, i)
     }

@@ -214,8 +214,16 @@ export class AutomationCurve<TUnit extends UnitName> implements ReadonlyAutomati
     return this.#timeline.eventsAfter(time)
   }
 
+  eventsAfterOrAt(time: Time) {
+    return this.#timeline.eventsAfterOrAt(time)
+  }
+
   eventsBefore(time: Time) {
     return this.#timeline.eventsBefore(time)
+  }
+
+  eventsBeforeOrAt(time: Time) {
+    return this.#timeline.eventsBeforeOrAt(time)
   }
 
   eventSpan(time: Time) {
