@@ -30,7 +30,7 @@ describe('EventTimeline', () => {
       timeline.mergeEvent({ time: Time.n2, id: 2 })
       timeline.mergeEvent({ time: Time.start, id: 1 })
 
-      const events = Array.from(timeline.eventsBefore(Time.n1.repeat(2)))
+      const events = Array.from(timeline.eventsAfterOrAt(Time.start))
 
       expect(events).toMatchObject([{ id: 1 }, { id: 2 }, { id: 3 }])
     })
@@ -210,7 +210,7 @@ describe('EventTimeline', () => {
 
       timeline.cancelEventsAfterUntil(Time.n8, Time.n1)
 
-      const events = Array.from(timeline.eventsBefore(Time.n1.repeat(10)))
+      const events = Array.from(timeline.eventsAfterOrAt(Time.start))
       expect(events).toMatchObject([{ id: 'before' }, { id: 'first' }, { id: 'last' }, { id: 'after' }])
     })
 
@@ -222,7 +222,7 @@ describe('EventTimeline', () => {
 
       timeline.cancelEventsAfterUntil(Time.n2, Time.n1)
 
-      const events = Array.from(timeline.eventsBefore(Time.n1.repeat(10)))
+      const events = Array.from(timeline.eventsAfterOrAt(Time.start))
       expect(events).toMatchObject([{ id: 'left' }, { id: 'right' }])
     })
 
@@ -327,8 +327,8 @@ describe('EventTimeline', () => {
       const events = Array.from(timeline.eventsBefore(Time.n1))
 
       expect(events).toHaveLength(2)
-      expect(events[0]).toMatchObject({ id: 1 })
-      expect(events[1]).toMatchObject({ id: 2 })
+      expect(events[0]).toMatchObject({ id: 2 })
+      expect(events[1]).toMatchObject({ id: 1 })
     })
 
     it('should yield empty when no events before time', () => {
@@ -353,8 +353,8 @@ describe('EventTimeline', () => {
       const events = Array.from(timeline.eventsBeforeOrAt(Time.n2))
 
       expect(events).toHaveLength(2)
-      expect(events[0]).toMatchObject({ id: 1 })
-      expect(events[1]).toMatchObject({ id: 2 })
+      expect(events[0]).toMatchObject({ id: 2 })
+      expect(events[1]).toMatchObject({ id: 1 })
     })
 
     it('should yield empty when no events before or at time', () => {
