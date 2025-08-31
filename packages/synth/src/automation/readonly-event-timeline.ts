@@ -16,9 +16,10 @@ export type ReadonlyEventTimeline<TEvent extends TimedEvent> = {
   eventAfter(time: Time): TEvent | null
   eventAfterOrAt(time: Time): TEvent | null
 
-  eventsAfter(time: Time): Iterable<TEvent>
-  eventsAfterOrAt(time: Time): Iterable<TEvent>
-  eventsBefore(time: Time): Iterable<TEvent>
-  eventsBeforeOrAt(time: Time): Iterable<TEvent>
+  eventsAfter(time: Time): IteratorObject<TEvent>
+  eventsAfterOrAt(time: Time): IteratorObject<TEvent>
+  eventsBefore(time: Time): IteratorObject<TEvent>
+  eventsBeforeOrAt(time: Time): IteratorObject<TEvent>
+  eventsAfterUntil(after: Time, until: Time): IteratorObject<TEvent>
   eventSpan(time: Time): [beforeOrAt: TEvent | null, after: TEvent | null]
 }

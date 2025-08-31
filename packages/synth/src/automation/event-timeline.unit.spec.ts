@@ -368,6 +368,52 @@ describe('EventTimeline', () => {
     })
   })
 
+  describe('eventsAfterUntil', () => {
+    it('should yield events after and before specified times', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+      timeline.mergeEvent({ time: Time.n2, id: 2 })
+      timeline.mergeEvent({ time: Time.n1, id: 3 })
+
+      const events = Array.from(timeline.eventsAfterUntil(Time.start, Time.n1))
+
+      expect(events).toHaveLength(1)
+      expect(events[0]).toMatchObject({ id: 2 })
+    })
+
+    it('should yield no events when called between events', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+      timeline.mergeEvent({ time: Time.n1, id: 3 })
+
+      const events = Array.from(timeline.eventsAfterUntil(Time.start, Time.n1))
+
+      expect(events).toHaveLength(0)
+    })
+
+    it('should yield no events when called before all events', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.n1, id: 1 })
+
+      const events = Array.from(timeline.eventsAfterUntil(Time.start, Time.n2))
+
+      expect(events).toHaveLength(0)
+    })
+
+    it('should yield no events when called after all events', () => {
+      const timeline = new EventTimeline<TestEvent>()
+
+      timeline.mergeEvent({ time: Time.start, id: 1 })
+
+      const events = Array.from(timeline.eventsAfterUntil(Time.n2, Time.n1))
+
+      expect(events).toHaveLength(0)
+    })
+  })
+
   describe('eventSpan', () => {
     it('should return events before/at and after specified time', () => {
       const timeline = new EventTimeline<TestEvent>()

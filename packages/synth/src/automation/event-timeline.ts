@@ -123,6 +123,14 @@ export class EventTimeline<TEvent extends TimedEvent> implements ReadonlyEventTi
     }
   }
 
+  *eventsAfterUntil(after: Time, until: Time): Generator<TEvent, void, undefined> {
+    const startIndex = this.#eventIndexAfter(after) ?? this.#events.length
+    const stopIndex = this.#eventIndexBefore(until) ?? -1
+    for (let i = startIndex; i <= stopIndex; i++) {
+      yield assertedAt(this.#events, i)
+    }
+  }
+
   eventSpan(time: Time): [TEvent | null, TEvent | null] {
     return [this.eventBeforeOrAt(time), this.eventAfter(time)]
   }

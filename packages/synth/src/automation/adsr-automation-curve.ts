@@ -1,4 +1,5 @@
 import { EnumAutomation, type ReadonlyEnumAutomation } from '#automation'
+import { Signal } from '#signal'
 import { Time } from '#time'
 import { Normal } from '#units'
 import { AutomationCurve } from './automation-curve'
@@ -23,6 +24,9 @@ export class ADSRAutomationCurve {
   readonly #sustain: ReadonlyAutomationCurve<'normal'>
   readonly #release: ReadonlyAutomationCurve<'notes'>
 
+  readonly #stripAdded = Signal.controlled<{ attack: Time; release: Time }>()
+  readonly #stripRemoved = Signal.controlled<{ attack: Time; release: Time }>()
+
   constructor(opts: ADSRAutomationCurveOpts) {
     const { attack, decay, sustain, release } = opts
 
@@ -30,15 +34,8 @@ export class ADSRAutomationCurve {
       throw new Error(`${ADSRAutomationCurve.name} doesn't support negative attack / decay / release durations`)
     }
 
-    this.#state = new EnumAutomation({
-      values: ADSR_CURVE_STATES,
-      initialValue: 'idle',
-    })
-
-    this.#gain = new AutomationCurve({
-      unit: 'normal',
-      initialValue: Normal.min,
-    })
+    this.#state = new EnumAutomation({ values: ADSR_CURVE_STATES, initialValue: 'idle' })
+    this.#gain = new AutomationCurve({ unit: 'normal', initialValue: Normal.min })
 
     this.#attack = attack
     this.#decay = decay
@@ -54,12 +51,21 @@ export class ADSRAutomationCurve {
     return this.#gain
   }
 
-  /**
-   * @returns time at which the sustain will start
-   */
-  attackAt(start: Time) {
-    const attackDuration = this.#attack.valueAt(start)
-    const attackEnd = start.add(Time.atNote(attackDuration))
+  get stripAdded() {
+    return this.#stripAdded.signal
+  }
+
+  get stripRemoved() {
+    return this.#stripRemoved.signal
+  }
+
+  triggerAtUntil(attack: Time, release: Time) {
+    if (release.isBeforeOrAt(attack)) {
+      return
+    }
+
+    const attackDuration = this.#attack.valueAt(attack)
+    const attackEnd = attack.add(Time.atNote(attackDuration))
 
     const decayDuration = this.#decay.valueAt(attackEnd)
     const decayEnd = attackEnd.add(Time.atNote(decayDuration))
@@ -67,34 +73,18 @@ export class ADSRAutomationCurve {
     const sustainLevel = this.#sustain.valueAt(decayEnd)
     const attackValue = decayDuration > 0 ? Normal.max : sustainLevel
 
-    this.#state.setValueAtUntil(start, decayEnd, 'attack')
+    const releaseDuration = this.#release.valueAt(release)
+    const releaseEnd = release.add(Time.atNote(releaseDuration))
+
+    this.#state.setValueAtUntil(attack, releaseEnd, 'attack')
     this.#state.setValueAt(attackEnd, 'decay')
     this.#state.setValueAt(decayEnd, 'sustain')
-
-    this.#gain.setValueAtUntil(start, decayEnd, this.#gain.valueAt(start))
-    this.#gain.rampValueAtTo(start, attackEnd, attackValue, 'linear')
-    this.#gain.rampValueAtTo(attackEnd, decayEnd, sustainLevel)
-
-    return decayEnd
-  }
-
-  /**
-   * @returns time at which the release will end
-   */
-  releaseAt(start: Time) {
-    if (this.#state.valueAt(start) === 'idle') {
-      return start
-    }
-
-    const releaseDuration = this.#release.valueAt(start)
-    const releaseEnd = start.add(Time.atNote(releaseDuration))
-
-    this.#state.setValueAtUntil(start, releaseEnd, 'release')
+    this.#state.setValueAt(release, 'release')
     this.#state.setValueAt(releaseEnd, 'idle')
 
-    this.#gain.setValueAtUntil(start, releaseEnd, this.#gain.valueAt(start))
-    this.#gain.rampValueAtTo(start, releaseEnd, Normal.min)
-
-    return releaseEnd
+    this.#gain.setValueAtUntil(attack, releaseEnd, this.#gain.valueAt(attack))
+    this.#gain.rampValueAtTo(attack, attackEnd, attackValue, 'linear')
+    this.#gain.rampValueAtTo(attackEnd, decayEnd, sustainLevel, 'linear')
+    this.#gain.rampValueAtTo(release, releaseEnd, Normal.min, 'linear')
   }
 }

@@ -27,6 +27,7 @@ export default defineConfig({
           name: 'unit',
           include: ['**/*.unit.spec.ts(x)?'],
           environment: 'node',
+          setupFiles: './vitest.setup.js',
           css: false,
           typecheck: {
             enabled: true,
